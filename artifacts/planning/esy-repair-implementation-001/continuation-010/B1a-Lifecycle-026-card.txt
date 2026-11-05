@@ -1,0 +1,834 @@
+SOURCE AUTHORING ONLY. Read/edit/write only; never execute code. Implement exactly this one card. You are in a disposable candidate workspace. Absolute artifact paths in card are provenance; their full required content is included below because sandbox denies outside access. Report a precise blocker rather than broadening scope.
+{
+  "card_id": "B1a-E2E-026-owned-process-lifecycle",
+  "finding_ids": [
+    "B1a-E2E-025-owned-process-lifecycle"
+  ],
+  "parent_revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+  "inputs": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/result-manifest.json",
+      "sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/tests/e2e/test_review_adapter_e2e.py",
+      "sha256": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/scripts/esy-repair/claude-worker.sh",
+      "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/scripts/esy-repair/codex-worker.sh",
+      "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/B1a-E2E-025-card.txt",
+      "sha256": "c1a7d55fb1f75acf4b954516e8afb2c1dec638a1c26c83fa23f1a5bbd2c509c5"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json",
+      "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+    }
+  ],
+  "allowed_paths": [
+    "tests/e2e/test_review_adapter_e2e.py"
+  ],
+  "prerequisites": [
+    "Root verifies the complete parent manifest, the supplied hashes, the exact candidate copy, and reconciled launch/time budgets before dispatch.",
+    "Authoring uses the authorized coding worker with read/edit/write tools only. Do not execute Python, shell, tests, compilers, subprocesses, Docker, provider CLIs, or project helpers as a coding-worker action.",
+    "B1a-E2E-025 remains unsafe to execute. This card grants source authoring only. Independent Astra source review and separate outer execution-wrapper review precede any later root-run public E2E."
+  ],
+  "required_behavior": [
+    "Repair only owned-process lifecycle in bounded_run and the minimum public probe plumbing needed to exercise it. Retain original response fixtures, arity matrix, record collection, receipt behavior and diagnostic policy for their separately assigned cards; do not claim those findings resolved.",
+    "Initialize cleanup state before spawning. From the instant Popen succeeds, every selector construction, pipe setup, registration, collection, and finalization operation must belong to an auditable cleanup policy. Selector creation must no longer sit outside that policy. A spawn failure must not signal a nonexistent child.",
+    "Create each invocation in its own session, keep the actual child ownership, and never signal a process group after its leader might have been reaped. waitpid(WNOHANG) returning the PID reaps it. Remove the incorrect ownership comment. Cover interruption during the ownership transition: setting a boolean only after waitpid returns is insufficient. Enter a no-signal region before a potentially reaping operation, or use another explicitly justified platform-supported mechanism that closes that interruption gap. Restore signal eligibility only upon a definite non-reaping observation. Unknown state is failure, not permission to signal.",
+    "Prepare fallible output/result material before reaping where practical. Status conversion, output construction, receipt writes, closing operations and deliberate post-reap faults must never flow back into a signal-capable exception handler. Do not install a generic handler that uses the original PID after ownership is released.",
+    "On setup failure, timeout, stream overflow, or an exception while ownership is established, signal only the owned group, boundedly drain both stdout and stderr without retaining beyond the existing caps, close stdin and all other pipe/selector resources, and boundedly reap. Cleanup has a fixed deadline, including drain and reap; do not use an unbounded wait or communicate. Preserve original failure reason alongside cleanup outcome. Failed or uncertain cleanup is a terminal failure and stops the suite.",
+    "Maintain concise lifecycle state for a public invocation: spawned PID, whether group signaling was attempted and the ownership phase of each attempt, leader-reap outcome, pipe closure outcome, cleanup status, and failure reason. Bound this to a fixed small set of transitions; it is not a general tracing system. For single lifecycle probes, persist this small object as lifecycle.json under the validated output directory even on failure when persistence is possible. Full matrix result.json remains the separate receipt card.",
+    "Preserve --adapter ABS and --output-dir ABS. Add only optional --scenario with a closed enum: matrix (default), lifecycle-normal, lifecycle-setup-failure, lifecycle-post-reap-exception, lifecycle-post-reap-interrupt, lifecycle-timeout, lifecycle-stdout-overflow, lifecycle-stderr-overflow. Reject unknown values before spawning. Each non-matrix scenario runs at most one real adapter invocation. No arbitrary command, Python expression, shell fragment, timeout, path-to-runner, dynamic plugin, or user-supplied fake program control.",
+    "The normal probe uses the existing success response. Setup failure raises a fixed deliberate exception after successful spawn and before selector setup. Post-reap exception and interruption probes deliberately raise a fixed ordinary exception or KeyboardInterrupt at the first designated post-reap finalization point. These are narrowly located public test controls, not monkeypatches or helper-call tests. Timeout and overflow probes change only the generated fake's fixed response behavior: finite sleep past the existing invocation deadline, or exactly 4097 literal bytes on the selected stream. The fake still cannot fork or use network.",
+    "The injected failure probes must exit nonzero and must not masquerade as matrix success. Their lifecycle object identifies the requested probe, observed failure, cleanup outcome, and signal attempts. A normal probe exits zero only after exact existing response validation and successful lifecycle completion. Do not claim a fixture's literal cleanup response is evidence of actual process cleanup.",
+    "Preserve fixed environment PATH=/usr/bin:/bin, private HOME, LANG=C; actual source adapter and sibling; absolute validated interpreter shebang; real /usr/bin/sandbox-exec and the original no-network/no-fork/write-only-output profile. No adapter copies or sandbox substitutes. Keep current 4096-byte stream caps, 16384-byte record cap, 10-second invocation and 180-second suite limits. Deadline-race repair is intentionally separate at launch27."
+  ],
+  "forbidden_changes": [
+    "No edits outside tests/e2e/test_review_adapter_e2e.py in the isolated candidate, including no adapter, controller, dispatcher, policy, dependency, or historical artifact edits.",
+    "No code/test execution by the coding worker; no Docker, real provider, Claude, network, imported project helper, or replacement runner.",
+    "No fixes for the other six findings in this launch, no broad refactoring, and no general fault-injection or supervision framework.",
+    "No signal based on a PID after a possible reap, no success with uncertain cleanup, and no claim that source review alone is runtime evidence."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-lifecycle-normal",
+    "B1a-public-lifecycle-setup-failure",
+    "B1a-public-lifecycle-post-reap-exception",
+    "B1a-public-lifecycle-post-reap-interrupt",
+    "B1a-public-lifecycle-timeout",
+    "B1a-public-lifecycle-stdout-overflow",
+    "B1a-public-lifecycle-stderr-overflow"
+  ],
+  "public_e2e_recipe": {
+    "executor": "Root only, after independent approvals and exact source/adapter hash verification; never the coding worker.",
+    "invocation": [
+      "VERIFIED_ABSOLUTE_PYTHON",
+      "VERIFIED_ABSOLUTE_TEST",
+      "--adapter",
+      "VERIFIED_ACTUAL_CLAUDE_ADAPTER",
+      "--output-dir",
+      "FRESH_OWNED_EMPTY_0700_DIRECTORY",
+      "--scenario",
+      "ONE_FIXED_ENUM_VALUE"
+    ],
+    "mechanism": "Launch the complete test executable as a process; it invokes /bin/bash and the actual sibling adapters under native sandbox. Do not import bounded_run, mock Popen, call internal helpers, replace adapters, or synthesize lifecycle success outside the process.",
+    "observations": "Collect bounded exit/stdout/stderr and lifecycle.json for every probe. Normal succeeds; injected faults, timeout and overflows fail. Setup/timeout/overflow clean owned child and pipes within the fixed cleanup allowance. Post-reap faults have zero signal attempts after a reap, preserve nonzero failure, and report the leader already reaped. Unknown cleanup fails and stops. Review event order and independently bounded outer process completion together.",
+    "proof_limit": "Public probes exercise the real path but cannot prove absence of a PID-reuse race by waiting for reuse. Astra must also inspect the no-signal region around every reap and interruption point. An outer wrapper must not inspect or kill a reused PID merely to test this property."
+  },
+  "expected_outcomes": [
+    "The source closes both ownership findings: post-spawn selector setup is protected, and no reap/finalization failure can signal a released group ID.",
+    "Public lifecycle probes exist for later approved execution, with bounded and honest cleanup observations.",
+    "The other six review findings remain explicitly open; launch26 alone cannot establish complete-suite acceptance."
+  ],
+  "evidence_outputs": [
+    "Coding output: changed tests/e2e/test_review_adapter_e2e.py only, plus supervising root's normal frozen manifest/diff artifacts outside coding scope.",
+    "Later root-run evidence: bounded process exit/streams and lifecycle.json per lifecycle probe. No runtime evidence is generated by this card's authoring step.",
+    "Independent Astra source review of the exact frozen revision, identifying any unresolved ownership or platform-support issue."
+  ],
+  "stop_conditions": [
+    "Any binding mismatch, exhausted reconciled launch/time budget, required edit outside the single allowed file, or need for worker execution.",
+    "Cannot express a justified ownership transition that handles interruption without signaling after a possible reap; do not replace this with a timing assumption or a post-wait boolean.",
+    "Native support required by the selected ownership mechanism is unavailable or uncertain. Fail closed and report the concrete platform limitation; no Linux-only assumption or sandbox substitute.",
+    "Outer execution wrapper remains unreviewed, independent Astra approval is absent, or any source execution-safety blocker remains: source authoring may proceed within scope, execution may not."
+  ]
+}
+FULL REVIEW
+{
+  "safe_to_execute": false,
+  "scope": "Independent source-only review of frozen B1a-E2E-025. No candidate execution, edits, Docker, provider calls, or delegation performed. Outer execution wrapper is outside this review.",
+  "revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+  "parent_revision_sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+  "source_hashes": {
+    "tests/e2e/test_review_adapter_e2e.py": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "hash_verification": "Computed hashes match the frozen25 manifest and supplied review source hash. Both adapters also match frozen24. The frozen25 parent manifest matches the card's frozen24 revision hash.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/",
+  "findings": [
+    {
+      "id": "B1a-E2E-025-owned-process-lifecycle",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:128-192",
+      "problem": "waitpid(WNOHANG) reaps the leader when it returns its PID. Status conversion, return-value construction, or an interrupt after that point can enter except BaseException, which unconditionally calls killpg using the released PID. The comment claiming retained ownership is incorrect. Additionally, selector construction occurs after Popen but before the cleanup try, so a setup exception can leave a launched process unmanaged.",
+      "required_change": "Make cleanup protection cover every operation after successful spawn. Establish an auditable ownership transition at reap, including interruption handling, so no path can signal after the leader is reaped. Move fallible result construction out of the signal-capable region or perform it before reap. On timeout/overflow, signal only while ownership is established, boundedly drain and reap, close all pipes, and record cleanup success or uncertainty.",
+      "required_e2e": "After separate approval, exercise normal completion, timeout, overflow, setup failure, and an exception/interruption around reap. Confirm bounded cleanup and zero group-signal attempts after reap.",
+      "missing_evidence": "No safe ownership transition or bounded-drain receipt exists in this source."
+    },
+    {
+      "id": "B1a-E2E-025-record-bound",
+      "severity": "medium",
+      "classification": "execution_boundedness_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:215-217,240",
+      "problem": "Both records.read_bytes() calls read the entire file before checking anything. The first cap excludes newline bytes, and the second read has no byte-size check. RECORD_LIMIT therefore does not enforce the promised 16384-byte collection bound.",
+      "required_change": "Read at most RECORD_LIMIT + 1 raw bytes, reject overflow before splitting or parsing, and apply the same bound on every collection. Count all raw bytes, including separators. Check records after each invocation so extra/missing records stop the suite immediately.",
+      "required_e2e": "After approval, confirm exact-limit acceptance and one-byte-over-limit rejection without reading an unbounded file.",
+      "missing_evidence": "No bounded record-read path exists."
+    },
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "severity": "high",
+      "classification": "acceptance_evidence_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:204-249",
+      "problem": "The program never writes result.json. Success prints only nine response-row booleans; arity rows, expected/actual values, exact launch arguments, and cleanup outcomes are absent. Failure paths discard accumulated rows and print only a diagnostic.",
+      "required_change": "Write the required result.json beneath the validated output directory. Include every planned row with pass/fail/not-run status, exact arguments, expected/actual bounded output and status, record checks, and cleanup outcome. Persist failures after output validation, and report overall pass only when every required row passes.",
+      "required_e2e": "After approval, inspect receipts for both a complete successful matrix and an early failure; later cases must be explicitly not-run and overall must fail.",
+      "missing_evidence": "The source cannot produce the card's required execution receipt."
+    },
+    {
+      "id": "B1a-E2E-025-arity-offset",
+      "severity": "medium",
+      "classification": "acceptance_coverage_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:226-239",
+      "problem": "The matrix treats counts as arguments after the role, while the adapter counts all arguments and the card requires review-with-4 to reject. Consequently the suite tests review totals 1,2,3,4,7 instead of the requested 0,1,2,3,6 plus 4; code-with-5 becomes total 6; unknown-with-4/5 becomes totals 5/6. The purported review-with-4 test is actually valid review with total 5.",
+      "required_change": "Define counts explicitly as total adapter arguments. Cover empty argv; review totals 1,2,3,4,6; code total 5; and unknown totals 4,5. Require exit 64, empty streams, and zero new records for each. Do not invoke valid code mode. The nine response cases already exercise valid review total 5.",
+      "required_e2e": "After approval, include explicit argv and total argument count in each arity receipt and verify every requested row.",
+      "missing_evidence": "Zero arguments, review total 6, code total 5, and unknown total 4 are not covered."
+    },
+    {
+      "id": "B1a-E2E-025-per-case-routing",
+      "severity": "medium",
+      "classification": "acceptance_evidence_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:205-225,228-241",
+      "problem": "Records are validated only as an aggregate after nine response cases. All records have identical contents, so an extra invocation in one case and a missing invocation in another can cancel in the final count. The additional valid-review record is counted but never content-validated.",
+      "required_change": "Validate the bounded record delta immediately after every invocation: exactly one matching argv/cwd/stdin record for a response case and zero for an invalid-arity case. Associate that observation with its row and stop on the first mismatch.",
+      "required_e2e": "After approval, demonstrate that duplicate or missing records fail the responsible row immediately; every accepted response row must have exactly one matching record.",
+      "missing_evidence": "Aggregate counts do not establish the required exactly-once behavior per case."
+    },
+    {
+      "id": "B1a-E2E-025-deadline-race",
+      "severity": "medium",
+      "classification": "acceptance_reliability_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:170-172,228-237",
+      "problem": "The deadline can expire between the check and the second monotonic read, producing a negative sleep and ValueError instead of the intended timeout. Later matrix invocations also launch before checking that their supplied remaining suite budget is positive.",
+      "required_change": "Compute one remaining duration per decision, raise the intended timeout when it is nonpositive, and otherwise sleep for its bounded positive value. Reject an exhausted suite budget before spawning each invocation.",
+      "required_e2e": "After approval, verify deadline-boundary behavior produces a timeout receipt and never launches another case once the suite budget is exhausted.",
+      "missing_evidence": "Deadline handling is not deterministic at the expiration boundary."
+    },
+    {
+      "id": "B1a-E2E-025-diagnostic-byte-cap",
+      "severity": "low",
+      "classification": "acceptance_boundedness_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:244-248",
+      "problem": "Diagnostic slicing limits Unicode characters rather than emitted bytes, and print adds a newline. Even ASCII output can exceed the stated 4096-byte diagnostic cap by one byte.",
+      "required_change": "Encode diagnostics, truncate to a byte budget that includes the newline, and write through the binary stderr stream.",
+      "required_e2e": "After approval, verify long ASCII and multibyte diagnostics both remain within 4096 emitted bytes.",
+      "missing_evidence": "No byte-level diagnostic cap is enforced."
+    }
+  ],
+  "missing_evidence": [
+    "No runtime evidence was generated, as required for this source-only review.",
+    "Root must still verify the complete execution binding and separately review the outer execution wrapper.",
+    "Fake-routing results, once available, establish routing and transparency only; they do not establish provider identity or real-provider availability.",
+    "A prior capacity-failed review supplies no approval."
+  ]
+}
+
+SOURCE tests/e2e/test_review_adapter_e2e.py
+#!/usr/bin/python3
+"""Source-only authoring for bounded fake-Codex review routing evidence."""
+
+import argparse
+import base64
+import json
+import os
+import selectors
+import signal
+import stat
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+LIMIT = 4096
+RECORD_LIMIT = 16384
+INVOCATION_TIMEOUT = 10.0
+SUITE_TIMEOUT = 180.0
+DIAGNOSTIC_LIMIT = 4096
+EXPECTED_ARGV = [
+    "exec", "--disable", "apps", "--disable", "plugins", "--disable",
+    "hooks", "--disable", "multi_agent", "--disable", "shell_snapshot",
+    "--disable", "shell_tool", "--ignore-user-config", "--ephemeral",
+    "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox",
+    "read-only", "--cd", "WORKSPACE", "--json", "-",
+]
+CASES = [
+    ("success", b"OK\n", b"", 0),
+    ("findings", b'{"findings":["fixture"]}\n', b"", 0),
+    ("availability", b"", b"unavailable\n", 69),
+    ("auth", b"", b"authentication required\n", 77),
+    ("permission", b"", b"permission denied\n", 77),
+    ("malformed", b"{broken\n", b"", 0),
+    ("identity", b"identity mismatch\n", b"", 0),
+    ("context", b"context missing\n", b"", 0),
+    ("cleanup", b"", b"cleanup failed\n", 23),
+]
+
+
+class Failure(Exception):
+    pass
+
+
+def absolute_nonsymlink(value, label):
+    if not os.path.isabs(value):
+        raise Failure(label + " must be absolute")
+    path = Path(value)
+    cur = Path(path.anchor)
+    for part in path.parts[1:]:
+        cur = cur / part
+        try:
+            mode = cur.lstat().st_mode
+        except OSError as exc:
+            raise Failure("invalid " + label) from exc
+        if stat.S_ISLNK(mode):
+            raise Failure(label + " has a symlink component")
+    return path
+
+
+def validate(args):
+    adapter = absolute_nonsymlink(args.adapter, "adapter")
+    if not stat.S_ISREG(adapter.lstat().st_mode):
+        raise Failure("adapter must be regular")
+    sibling = adapter.parent / "codex-worker.sh"
+    absolute_nonsymlink(str(sibling), "sibling adapter")
+    if not stat.S_ISREG(sibling.lstat().st_mode):
+        raise Failure("missing regular codex-worker.sh")
+    output = absolute_nonsymlink(args.output_dir, "output directory")
+    info = output.lstat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
+        raise Failure("output directory must be owned, empty, and mode 0700")
+    if os.listdir(output):
+        raise Failure("output directory must be empty")
+    return adapter, output
+
+
+def write_bytes(path, data, mode=0o600):
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(data)
+
+
+def make_fixtures(output):
+    workspace = output / "workspace"
+    workspace.mkdir(mode=0o700)
+    prompt = output / "prompt.txt"
+    write_bytes(prompt, b"review fixture\n")
+    home = output / "private-home"
+    home.mkdir(mode=0o700)
+    records = output / "records.jsonl"
+    write_bytes(records, b"")
+    config = workspace / "response.json"
+    fake = output / "fake-codex"
+    interpreter = Path(os.path.realpath(sys.executable))
+    absolute_nonsymlink(str(interpreter), "Python interpreter")
+    if not stat.S_ISREG(interpreter.lstat().st_mode) or not os.access(interpreter, os.X_OK):
+        raise Failure("Python interpreter is not executable")
+    literal = str(interpreter)
+    if any(c.isspace() for c in literal) or "\n" in literal or len(literal.encode()) > 120:
+        raise Failure("Python interpreter path unsuitable for shebang")
+    fake_source = '''#!INTERPRETER
+import base64, json, os, sys
+raw = sys.stdin.buffer.read(4097)
+if len(raw) > 4096:
+    raise SystemExit(125)
+with open(os.path.join(os.getcwd(), "response.json"), "r", encoding="utf-8") as f:
+    response = json.load(f)
+record = {"argv": sys.argv[1:], "cwd": os.getcwd(), "stdin": base64.b64encode(raw).decode("ascii")}
+with open(RECORDS, "a", encoding="utf-8") as f:
+    f.write(json.dumps(record, separators=(",", ":")) + "\\n")
+sys.stdout.buffer.write(bytes.fromhex(response["stdout"]))
+sys.stderr.buffer.write(bytes.fromhex(response["stderr"]))
+raise SystemExit(response["status"])
+'''.replace("INTERPRETER", literal).replace("RECORDS", repr(str(records)))
+    write_bytes(fake, fake_source.encode("utf-8"), 0o700)
+    os.chmod(fake, 0o700)
+    escaped = str(output).replace("\\", "\\\\").replace('"', '\\"')
+    profile = output / "profile.sb"
+    text = ('(version 1)\n(allow default)\n(deny network*)\n(deny file-write*)\n'
+            '(allow file-write* (subpath "' + escaped + '"))\n(deny process-fork)\n')
+    write_bytes(profile, text.encode())
+    return workspace, prompt, profile, fake, config, records, home
+
+
+def bounded_run(argv, workspace, home, output, records, timeout):
+    env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "LANG": "C"}
+    proc = subprocess.Popen(argv, cwd=str(workspace), env=env, stdin=subprocess.PIPE,
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
+                           close_fds=True)
+    selector = selectors.DefaultSelector()
+    streams = {proc.stdout: bytearray(), proc.stderr: bytearray()}
+    try:
+        for stream in streams:
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, selectors.EVENT_READ)
+        os.set_blocking(proc.stdin.fileno(), False)
+        pending = memoryview(b"review fixture\n")
+        deadline = time.monotonic() + timeout
+        while selector.get_map() or pending:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise Failure("invocation timeout")
+            if pending:
+                try:
+                    sent = os.write(proc.stdin.fileno(), pending)
+                    pending = pending[sent:]
+                except BlockingIOError:
+                    pass
+                except BrokenPipeError:
+                    pending = memoryview(b"")
+            if not pending and proc.stdin is not None:
+                proc.stdin.close()
+            for key, _ in selector.select(min(remaining, 0.1)):
+                chunk = os.read(key.fd, LIMIT + 1 - len(streams[key.fileobj]))
+                if chunk:
+                    streams[key.fileobj].extend(chunk)
+                    if len(streams[key.fileobj]) > LIMIT:
+                        raise Failure("stream overflow")
+                else:
+                    selector.unregister(key.fileobj)
+                    key.fileobj.close()
+        # waitpid(WNOHANG) retains ownership until exit is proven; unlike
+        # Popen.poll()/wait(timeout), it cannot silently reap before cleanup.
+        while True:
+            waited, raw_status = os.waitpid(proc.pid, os.WNOHANG)
+            if waited:
+                proc.returncode = os.waitstatus_to_exitcode(raw_status)
+                break
+            if time.monotonic() >= deadline:
+                raise Failure("invocation timeout")
+            time.sleep(min(0.02, deadline - time.monotonic()))
+        return bytes(streams[proc.stdout]), bytes(streams[proc.stderr]), proc.returncode
+    except BaseException:
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError as exc:
+            raise Failure("could not prove owned process-group cleanup") from exc
+        except OSError as exc:
+            raise Failure("process-group cleanup failed") from exc
+        try:
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired as exc:
+            raise Failure("could not reap owned process") from exc
+        for stream in (proc.stdout, proc.stderr):
+            try:
+                stream.close()
+            except OSError:
+                pass
+        raise
+    finally:
+        selector.close()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--adapter", required=True)
+    parser.add_argument("--output-dir", required=True)
+    args = parser.parse_args()
+    started = time.monotonic()
+    try:
+        adapter, output = validate(args)
+        workspace, prompt, profile, fake, config, records, home = make_fixtures(output)
+        rows = []
+        for name, stdout, stderr, status in CASES:
+            if time.monotonic() - started > SUITE_TIMEOUT:
+                raise Failure("suite timeout")
+            config.write_text(json.dumps({"stdout": stdout.hex(), "stderr": stderr.hex(), "status": status}), encoding="utf-8")
+            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
+            actual_out, actual_err, actual_status = bounded_run(argv, workspace, home, output, records,
+                                                                  min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
+            rows.append((name, actual_out == stdout and actual_err == stderr and actual_status == status))
+            if (actual_out, actual_err, actual_status) != (stdout, stderr, status):
+                raise Failure("unexpected response for " + name)
+        lines = records.read_bytes().splitlines()
+        if len(lines) != len(CASES) or sum(map(len, lines)) > RECORD_LIMIT:
+            raise Failure("record count or size invalid")
+        expected = ["exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks", "--disable",
+                    "multi_agent", "--disable", "shell_snapshot", "--disable", "shell_tool", "--ignore-user-config",
+                    "--ephemeral", "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox", "read-only",
+                    "--cd", str(workspace), "--json", "-"]
+        for line in lines:
+            rec = json.loads(line)
+            if rec != {"argv": expected, "cwd": str(workspace), "stdin": base64.b64encode(b"review fixture\n").decode("ascii")}:
+                raise Failure("fake routing record mismatch")
+        # Four arguments after the role is the valid review interface; exercise it
+        # with real fixture paths. Never invoke the valid code branch.
+        out, err, status = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                                       workspace, home, output, records,
+                                       min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
+        if (out, err, status) != (CASES[-1][1], CASES[-1][2], CASES[-1][3]):
+            raise Failure("valid review arity failed")
+        arities = [("review", n) for n in (0, 1, 2, 3, 6)] + [("code", 5), ("unknown", 4), ("unknown", 5)]
+        for role, count in arities:
+            params = [role] + ["unused"] * count
+            out, err, status = bounded_run(["/bin/bash", str(adapter)] + params, workspace, home, output, records,
+                                           min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
+            if (out, err, status) != (b"", b"", 64):
+                raise Failure("invalid arity was not rejected")
+        if len(records.read_bytes().splitlines()) != len(CASES) + 1:
+            raise Failure("invalid arity reached provider")
+        print(json.dumps({"rows": [{"case": n, "status": "pass" if ok else "fail"} for n, ok in rows], "overall": "pass"}))
+        return 0
+    except Failure as exc:
+        print(str(exc)[:DIAGNOSTIC_LIMIT], file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print((type(exc).__name__ + ": " + str(exc))[:DIAGNOSTIC_LIMIT], file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+ACCUMULATED DIFF tests/e2e/test_review_adapter_e2e.py
+--- baseline/tests/e2e/test_review_adapter_e2e.py
++++ candidate/tests/e2e/test_review_adapter_e2e.py
+@@ -0,0 +1,253 @@
++#!/usr/bin/python3
++"""Source-only authoring for bounded fake-Codex review routing evidence."""
++
++import argparse
++import base64
++import json
++import os
++import selectors
++import signal
++import stat
++import subprocess
++import sys
++import time
++from pathlib import Path
++
++LIMIT = 4096
++RECORD_LIMIT = 16384
++INVOCATION_TIMEOUT = 10.0
++SUITE_TIMEOUT = 180.0
++DIAGNOSTIC_LIMIT = 4096
++EXPECTED_ARGV = [
++    "exec", "--disable", "apps", "--disable", "plugins", "--disable",
++    "hooks", "--disable", "multi_agent", "--disable", "shell_snapshot",
++    "--disable", "shell_tool", "--ignore-user-config", "--ephemeral",
++    "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox",
++    "read-only", "--cd", "WORKSPACE", "--json", "-",
++]
++CASES = [
++    ("success", b"OK\n", b"", 0),
++    ("findings", b'{"findings":["fixture"]}\n', b"", 0),
++    ("availability", b"", b"unavailable\n", 69),
++    ("auth", b"", b"authentication required\n", 77),
++    ("permission", b"", b"permission denied\n", 77),
++    ("malformed", b"{broken\n", b"", 0),
++    ("identity", b"identity mismatch\n", b"", 0),
++    ("context", b"context missing\n", b"", 0),
++    ("cleanup", b"", b"cleanup failed\n", 23),
++]
++
++
++class Failure(Exception):
++    pass
++
++
++def absolute_nonsymlink(value, label):
++    if not os.path.isabs(value):
++        raise Failure(label + " must be absolute")
++    path = Path(value)
++    cur = Path(path.anchor)
++    for part in path.parts[1:]:
++        cur = cur / part
++        try:
++            mode = cur.lstat().st_mode
++        except OSError as exc:
++            raise Failure("invalid " + label) from exc
++        if stat.S_ISLNK(mode):
++            raise Failure(label + " has a symlink component")
++    return path
++
++
++def validate(args):
++    adapter = absolute_nonsymlink(args.adapter, "adapter")
++    if not stat.S_ISREG(adapter.lstat().st_mode):
++        raise Failure("adapter must be regular")
++    sibling = adapter.parent / "codex-worker.sh"
++    absolute_nonsymlink(str(sibling), "sibling adapter")
++    if not stat.S_ISREG(sibling.lstat().st_mode):
++        raise Failure("missing regular codex-worker.sh")
++    output = absolute_nonsymlink(args.output_dir, "output directory")
++    info = output.lstat()
++    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
++        raise Failure("output directory must be owned, empty, and mode 0700")
++    if os.listdir(output):
++        raise Failure("output directory must be empty")
++    return adapter, output
++
++
++def write_bytes(path, data, mode=0o600):
++    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
++    with os.fdopen(fd, "wb") as stream:
++        stream.write(data)
++
++
++def make_fixtures(output):
++    workspace = output / "workspace"
++    workspace.mkdir(mode=0o700)
++    prompt = output / "prompt.txt"
++    write_bytes(prompt, b"review fixture\n")
++    home = output / "private-home"
++    home.mkdir(mode=0o700)
++    records = output / "records.jsonl"
++    write_bytes(records, b"")
++    config = workspace / "response.json"
++    fake = output / "fake-codex"
++    interpreter = Path(os.path.realpath(sys.executable))
++    absolute_nonsymlink(str(interpreter), "Python interpreter")
++    if not stat.S_ISREG(interpreter.lstat().st_mode) or not os.access(interpreter, os.X_OK):
++        raise Failure("Python interpreter is not executable")
++    literal = str(interpreter)
++    if any(c.isspace() for c in literal) or "\n" in literal or len(literal.encode()) > 120:
++        raise Failure("Python interpreter path unsuitable for shebang")
++    fake_source = '''#!INTERPRETER
++import base64, json, os, sys
++raw = sys.stdin.buffer.read(4097)
++if len(raw) > 4096:
++    raise SystemExit(125)
++with open(os.path.join(os.getcwd(), "response.json"), "r", encoding="utf-8") as f:
++    response = json.load(f)
++record = {"argv": sys.argv[1:], "cwd": os.getcwd(), "stdin": base64.b64encode(raw).decode("ascii")}
++with open(RECORDS, "a", encoding="utf-8") as f:
++    f.write(json.dumps(record, separators=(",", ":")) + "\\n")
++sys.stdout.buffer.write(bytes.fromhex(response["stdout"]))
++sys.stderr.buffer.write(bytes.fromhex(response["stderr"]))
++raise SystemExit(response["status"])
++'''.replace("INTERPRETER", literal).replace("RECORDS", repr(str(records)))
++    write_bytes(fake, fake_source.encode("utf-8"), 0o700)
++    os.chmod(fake, 0o700)
++    escaped = str(output).replace("\\", "\\\\").replace('"', '\\"')
++    profile = output / "profile.sb"
++    text = ('(version 1)\n(allow default)\n(deny network*)\n(deny file-write*)\n'
++            '(allow file-write* (subpath "' + escaped + '"))\n(deny process-fork)\n')
++    write_bytes(profile, text.encode())
++    return workspace, prompt, profile, fake, config, records, home
++
++
++def bounded_run(argv, workspace, home, output, records, timeout):
++    env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "LANG": "C"}
++    proc = subprocess.Popen(argv, cwd=str(workspace), env=env, stdin=subprocess.PIPE,
++                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
++                           close_fds=True)
++    selector = selectors.DefaultSelector()
++    streams = {proc.stdout: bytearray(), proc.stderr: bytearray()}
++    try:
++        for stream in streams:
++            os.set_blocking(stream.fileno(), False)
++            selector.register(stream, selectors.EVENT_READ)
++        os.set_blocking(proc.stdin.fileno(), False)
++        pending = memoryview(b"review fixture\n")
++        deadline = time.monotonic() + timeout
++        while selector.get_map() or pending:
++            remaining = deadline - time.monotonic()
++            if remaining <= 0:
++                raise Failure("invocation timeout")
++            if pending:
++                try:
++                    sent = os.write(proc.stdin.fileno(), pending)
++                    pending = pending[sent:]
++                except BlockingIOError:
++                    pass
++                except BrokenPipeError:
++                    pending = memoryview(b"")
++            if not pending and proc.stdin is not None:
++                proc.stdin.close()
++            for key, _ in selector.select(min(remaining, 0.1)):
++                chunk = os.read(key.fd, LIMIT + 1 - len(streams[key.fileobj]))
++                if chunk:
++                    streams[key.fileobj].extend(chunk)
++                    if len(streams[key.fileobj]) > LIMIT:
++                        raise Failure("stream overflow")
++                else:
++                    selector.unregister(key.fileobj)
++                    key.fileobj.close()
++        # waitpid(WNOHANG) retains ownership until exit is proven; unlike
++        # Popen.poll()/wait(timeout), it cannot silently reap before cleanup.
++        while True:
++            waited, raw_status = os.waitpid(proc.pid, os.WNOHANG)
++            if waited:
++                proc.returncode = os.waitstatus_to_exitcode(raw_status)
++                break
++            if time.monotonic() >= deadline:
++                raise Failure("invocation timeout")
++            time.sleep(min(0.02, deadline - time.monotonic()))
++        return bytes(streams[proc.stdout]), bytes(streams[proc.stderr]), proc.returncode
++    except BaseException:
++        try:
++            os.killpg(proc.pid, signal.SIGKILL)
++        except ProcessLookupError as exc:
++            raise Failure("could not prove owned process-group cleanup") from exc
++        except OSError as exc:
++            raise Failure("process-group cleanup failed") from exc
++        try:
++            proc.wait(timeout=2)
++        except subprocess.TimeoutExpired as exc:
++            raise Failure("could not reap owned process") from exc
++        for stream in (proc.stdout, proc.stderr):
++            try:
++                stream.close()
++            except OSError:
++                pass
++        raise
++    finally:
++        selector.close()
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--adapter", required=True)
++    parser.add_argument("--output-dir", required=True)
++    args = parser.parse_args()
++    started = time.monotonic()
++    try:
++        adapter, output = validate(args)
++        workspace, prompt, profile, fake, config, records, home = make_fixtures(output)
++        rows = []
++        for name, stdout, stderr, status in CASES:
++            if time.monotonic() - started > SUITE_TIMEOUT:
++                raise Failure("suite timeout")
++            config.write_text(json.dumps({"stdout": stdout.hex(), "stderr": stderr.hex(), "status": status}), encoding="utf-8")
++            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
++            actual_out, actual_err, actual_status = bounded_run(argv, workspace, home, output, records,
++                                                                  min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
++            rows.append((name, actual_out == stdout and actual_err == stderr and actual_status == status))
++            if (actual_out, actual_err, actual_status) != (stdout, stderr, status):
++                raise Failure("unexpected response for " + name)
++        lines = records.read_bytes().splitlines()
++        if len(lines) != len(CASES) or sum(map(len, lines)) > RECORD_LIMIT:
++            raise Failure("record count or size invalid")
++        expected = ["exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks", "--disable",
++                    "multi_agent", "--disable", "shell_snapshot", "--disable", "shell_tool", "--ignore-user-config",
++                    "--ephemeral", "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox", "read-only",
++                    "--cd", str(workspace), "--json", "-"]
++        for line in lines:
++            rec = json.loads(line)
++            if rec != {"argv": expected, "cwd": str(workspace), "stdin": base64.b64encode(b"review fixture\n").decode("ascii")}:
++                raise Failure("fake routing record mismatch")
++        # Four arguments after the role is the valid review interface; exercise it
++        # with real fixture paths. Never invoke the valid code branch.
++        out, err, status = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                                       workspace, home, output, records,
++                                       min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
++        if (out, err, status) != (CASES[-1][1], CASES[-1][2], CASES[-1][3]):
++            raise Failure("valid review arity failed")
++        arities = [("review", n) for n in (0, 1, 2, 3, 6)] + [("code", 5), ("unknown", 4), ("unknown", 5)]
++        for role, count in arities:
++            params = [role] + ["unused"] * count
++            out, err, status = bounded_run(["/bin/bash", str(adapter)] + params, workspace, home, output, records,
++                                           min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
++            if (out, err, status) != (b"", b"", 64):
++                raise Failure("invalid arity was not rejected")
++        if len(records.read_bytes().splitlines()) != len(CASES) + 1:
++            raise Failure("invalid arity reached provider")
++        print(json.dumps({"rows": [{"case": n, "status": "pass" if ok else "fail"} for n, ok in rows], "overall": "pass"}))
++        return 0
++    except Failure as exc:
++        print(str(exc)[:DIAGNOSTIC_LIMIT], file=sys.stderr)
++        return 1
++    except Exception as exc:
++        print((type(exc).__name__ + ": " + str(exc))[:DIAGNOSTIC_LIMIT], file=sys.stderr)
++        return 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+
+SOURCE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+case "$#" in
+  4|5) ;;
+  *) exit 64 ;;
+esac
+role=$1
+case "$role" in
+ review)
+  [[ $# -eq 5 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  codex_bin=$5
+  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
+  ;;
+ code)
+  [[ $# -eq 4 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
+  model=$CLAUDE_CODING_MODEL
+  tools="Read,Edit,Write,Glob,Grep"
+  permission=acceptEdits
+  ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+ACCUMULATED DIFF scripts/esy-repair/claude-worker.sh
+--- baseline/scripts/esy-repair/claude-worker.sh
++++ candidate/scripts/esy-repair/claude-worker.sh
+@@ -0,0 +1,32 @@
++#!/bin/bash
++set -euo pipefail
++case "$#" in
++  4|5) ;;
++  *) exit 64 ;;
++esac
++role=$1
++case "$role" in
++ review)
++  [[ $# -eq 5 ]] || exit 64
++  workspace=$2
++  prompt=$3
++  profile=$4
++  codex_bin=$5
++  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
++  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
++  ;;
++ code)
++  [[ $# -eq 4 ]] || exit 64
++  workspace=$2
++  prompt=$3
++  profile=$4
++  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
++  model=$CLAUDE_CODING_MODEL
++  tools="Read,Edit,Write,Glob,Grep"
++  permission=acceptEdits
++  ;;
++ *) exit 64 ;;
++esac
++: "${CLAUDE_BIN:?absolute executable required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+SOURCE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+ACCUMULATED DIFF scripts/esy-repair/codex-worker.sh
+--- baseline/scripts/esy-repair/codex-worker.sh
++++ candidate/scripts/esy-repair/codex-worker.sh
+@@ -0,0 +1,25 @@
++#!/bin/bash
++# Frozen role template. Every argument is supplied by the verified controller;
++# no environment variable can replace the executable, model, sandbox, or prompt.
++set -euo pipefail
++if [[ $# -ne 5 ]]; then
++  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
++  exit 64
++fi
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++codex_bin=$5
++case "$role" in
++  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
++  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
++  *) echo "unsupported role" >&2; exit 64 ;;
++esac
++[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
++[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
++[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
++[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
++
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"

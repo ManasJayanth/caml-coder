@@ -1,0 +1,42 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "domain",
+    "family",
+    "source_groups",
+    "split",
+    "prompt",
+    "starter",
+    "editable_paths",
+    "visible_checks",
+    "protected_tests",
+    "reference_solution",
+    "limits"
+  ],
+  "optional": [],
+  "enums": {
+    "split": [
+      "train",
+      "valid",
+      "dev",
+      "holdout"
+    ]
+  },
+  "hashes": [],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "domain": "string",
+    "family": "string",
+    "source_groups": "array",
+    "split": "string",
+    "prompt": "string",
+    "starter": "object",
+    "editable_paths": "array",
+    "visible_checks": "array",
+    "protected_tests": "array",
+    "reference_solution": "object",
+    "limits": "object"
+  }
+}

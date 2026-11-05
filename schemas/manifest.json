@@ -1,0 +1,27 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "inputs",
+    "outputs",
+    "config_hash",
+    "software",
+    "models",
+    "artifacts"
+  ],
+  "optional": [],
+  "enums": {},
+  "hashes": [
+    "config_hash"
+  ],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "inputs": "array",
+    "outputs": "array",
+    "config_hash": "string",
+    "software": "object",
+    "models": "object",
+    "artifacts": "array"
+  }
+}

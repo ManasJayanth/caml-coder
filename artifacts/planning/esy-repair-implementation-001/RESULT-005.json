@@ -1,0 +1,34 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "Required Claude fable smoke failed: OAuth session expired and could not be refreshed. No fallback reviewer permitted.",
+  "coding_launches_consumed": 18,
+  "coding_launch_cap": 24,
+  "new_coding_launches_consumed": 0,
+  "new_coding_launches_remaining": 6,
+  "reviewer": "Claude worker --model fable",
+  "planner": "separate Codex gpt-6-astra",
+  "candidate_sha256": "66624a94ef7b5f3cc7c4e9789d391202e5edc7561bb60f0328a9dab5dbda8d8e",
+  "imported": false,
+  "candidate_changed": false,
+  "original_changed": false,
+  "adapter": "Restored review role in isolated preflight staging only; not activated in candidate/controller.",
+  "active_time": {
+    "previous_recorded_seconds": 10367.532,
+    "this_preflight_seconds": 255.31,
+    "known_total_lower_bound_seconds": 10622.842,
+    "limit_seconds": 21600,
+    "unreconciled": "Intervening planning activity is not represented by durable workflow intervals; reconcile before coding. Do not charge idle time or reset consumption."
+  },
+  "preflight": {
+    "artifact_hashes_checked": 664,
+    "mismatches": [],
+    "sandbox_write_denial": "PASSED for original file and prompt",
+    "private_runtime_write": "PASSED",
+    "actual_docker_socket_denial": "PASSED",
+    "owned_container_listing": "Successful empty listing for esy-reference.owner label",
+    "smoke_process_group": "Confirmed absent; credential symlink removed",
+    "full_descendant_containment": "NOT_ESTABLISHED"
+  },
+  "resume": "Authenticate Claude in the normal user session, rerun bounded sandboxed Fable smoke, reconcile accounting, and obtain required bootstrap approval before any coding worker.",
+  "all_prior_findings": "Remain unresolved; prior diagnostics and controller failures retained."
+}

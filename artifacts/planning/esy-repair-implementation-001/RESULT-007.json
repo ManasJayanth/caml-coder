@@ -1,0 +1,32 @@
+{
+  "packet_correction": "Packet006 retained an inherited historical test_source_sha256 beside the current source_sha256. Packet007 labels the historical value explicitly and binds test_source_sha256 to the actual current harness. Packet006 preserved.",
+  "status": "INCOMPLETE",
+  "reason": "Astra rejected real-container execution pending lifecycle, query, deadline and seed prerequisites. Controller and global acceptance remain rejected/incomplete. No original-source import.",
+  "reviewer": "fresh Codex gpt-6-astra",
+  "planner": "separate fresh Codex gpt-6-astra",
+  "coding_model": "gpt-6-luna",
+  "coding_backend": "Pi openai-codex, individually reviewed no-fork supervised launches only",
+  "coding_launches_consumed": 21,
+  "coding_launch_cap": 24,
+  "coding_launches_remaining": 3,
+  "active_seconds_consumed_at_packet": 15666.157,
+  "active_seconds_limit": 21600,
+  "candidate_sha256": "c1a147a5d06e07eecca3ca3b06809b2a57d6d5b6e7264b613702d906bdf2f296",
+  "imported": false,
+  "original_entries_checked": 72,
+  "original_mismatches": [],
+  "implemented_unaccepted": [
+    "R01: retain verified cleanup; compute sleep remainder once",
+    "R01b: complete missing-evidence rows in early CLI failure",
+    "R02a: finally cleanup with separate supervision and cleanup outcomes; fixed log-write-fault scenario"
+  ],
+  "tested": [
+    "R01b public CLI expected-failure reporting contract, not real runner acceptance",
+    "native no-fork containment and guardian lifecycle cases",
+    "real Pi Luna authenticated edit smoke"
+  ],
+  "real_runner_e2es": "NOT_RUN; explicitly blocked by independent review",
+  "current_review": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A6-R02a-source-review-001/final.txt",
+  "followup_plan": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A6-resumption-plan-001/final.txt",
+  "created_utc": "2026-10-22T15:29:35.600413+00:00"
+}

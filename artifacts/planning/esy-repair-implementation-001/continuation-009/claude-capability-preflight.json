@@ -1,0 +1,17 @@
+{
+  "help_exit": 0,
+  "version": "2.1.308 (Claude Code)",
+  "required_flags_present": {
+    "--restricted": true,
+    "--setting-sources": true,
+    "--strict-mcp-config": true,
+    "--no-session-persistence": true,
+    "--tools": true,
+    "--model": true,
+    "--safe-mode": true,
+    "--disable-slash-commands": true
+  },
+  "model_availability": "NOT_VERIFIED",
+  "real_smoke": "NOT_RUN",
+  "fallback_enabled": false
+}

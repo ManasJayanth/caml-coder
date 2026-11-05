@@ -1,0 +1,46 @@
+{
+  "safe_to_run_smoke": true,
+  "safe_to_dispatch_one_card": false,
+  "findings": [
+    {
+      "severity": "info",
+      "id": "smoke-bounded-approval",
+      "message": "Approve one supervised high-Luna smoke using the inspected D10 pi-smoke-high.py, R008 guardian and nofork profile, subject to the conditions below. This does not approve candidate execution, tests, Docker, Claude, unattended control, or another coding launch."
+    },
+    {
+      "severity": "info",
+      "id": "launch-byte-binding",
+      "message": "Computed SHA256 of launch-correction.py is 55c4da25003d0f58b4bff2e8394f642f6cf7191a1cfedd01f01006108aba747f, identical to D9 launch-B1a-e2e.py. D10 smoke SHA256 is fecd6c33c4da67e1441bb90c234cc7157d0d31a320c8332beed5461fcd75ea03; R008 guardian SHA256 is 0168a443a677349c14d6ff32482976407b09568bbed18fe37c7d7105ef45aa6f; R008 profile SHA256 is 6f5bd2ea5f14e95d4583167d7362a4a136655c1195b62b3d09448eb2c1b089c7. Assessment is based on inspected source and probe evidence, not inherited approval."
+    },
+    {
+      "severity": "warning",
+      "id": "coding-card-review-pending",
+      "message": "astra-correction-plan-026.json and the final dispatch card were not available during this review. safe_to_dispatch_one_card is false only because exact card review remains pending. The inspected launcher is conditionally suitable for one supervised coding26 authoring attempt restricted to tests/e2e/test_review_adapter_e2e.py after independent review of the final card and the required successful fresh smoke. This artifact alone does not activate coding26."
+    },
+    {
+      "severity": "warning",
+      "id": "root-acceptance-controls-required",
+      "message": "The dispatcher records scope_valid without enforcing it, does not establish complete provider completion, and always labels the frozen result UNACCEPTED. Root must independently validate all envelopes, exact model/provider, card and manifest bindings, cleanup, and single-file scope before considering any import. The smoke helper checks assistant message identities but does not establish a complete terminal protocol envelope by itself."
+    },
+    {
+      "severity": "warning",
+      "id": "shared-runtime-and-cleanup",
+      "message": "The D10 dispatch lock does not serialize the shared R008 runtime against D8/D9 or smoke launchers. It can also be removed once worker_reaped is true even if credential cleanup verification subsequently fails. Lock absence is not cleanup proof. The profile permits runtime-wide writes and access to the delegated temporary authentication file; read/edit/write tool selection is not a per-file filesystem boundary. Keep one supervised worker, inspect actual tool activity, and never expose credential contents in prompts or review outputs."
+    },
+    {
+      "severity": "info",
+      "id": "observed-state-and-ownership",
+      "message": "The D10 ledger currently records 25 of 36 coding launches. Runtime and private-pi directories are owner-private mode 0700, and private-pi was empty when inspected. D10 native-probe.json records successful fork denial, Docker socket denial, original/auth write denial, and private-runtime writes. Guardian signals only its direct unreaped child under the separately established nofork assumption, bounds output/time, and removes the delegated access token after reaping. No candidate or launcher code was executed by this reviewer."
+    }
+  ],
+  "conditions": [
+    "Maintain root's exclusive S workflow lock and no concurrent guardian, pi, dispatcher, or other runtime writer. Root reports these checks currently pass; recheck at each activation boundary.",
+    "Before smoke, verify the recorded guardian/profile/smoke hashes and native fork-denial evidence still bind the actual executable/profile/runtime; require credential absence and fresh unused smoke output paths. Run only the inspected smoke, with its 120-second timeout and bounded logs.",
+    "After smoke, independently require complete and valid JSON event envelopes with terminal success, exact openai-codex/gpt-6-luna identity, expected fixture bytes, zero exit, no timeout/output-cap/error/aborted state, worker absence/reaping, and credential absence. Any uncertainty stops dispatch.",
+    "Before coding26, obtain independent review of the exact final card and plan, including parent revision binding, all input hashes, single-file allowed scope, read/edit/write-only authoring, no execution/imports/tests/Docker/provider subprocesses, and no Claude. The pending card review must explicitly permit this one dispatch before safe_to_dispatch_one_card may become true.",
+    "Launch exactly coding26 with a fresh unique job/workspace, a current ledger value of 25, and durable reservation of slot 26. Preserve the global 36-launch cap and 32400-second active allocation; include smoke/review/dispatch activity in accounting and retain at least the launcher's 660-second reserve before coding.",
+    "Keep the inspected guardian's direct-child supervision and proven nofork profile. Abort through the launcher's stdin EOF path; do not introduce process-group signaling, post-reap signaling, detached workers, or an unreviewed controller.",
+    "Treat any coding result as UNACCEPTED until root independently validates the complete manifest, unchanged candidate, exact allowed path, tool transcript, provider completion, cleanup, and immutable frozen evidence. No automatic import is approved.",
+    "Independently review the authored test source and any later outer execution wrapper before executing it. The existing rejected E2E source and controller remain unexecuted. Any additional smoke, coding job, changed launch control, import, or execution needs its own authorization and applicable review."
+  ]
+}

@@ -1,0 +1,7 @@
+--- a/src/sft/chunks.py
++++ b/src/sft/chunks.py
+@@
+-                    (eligible and group.get("split") not in {"train", "valid"}) or
+-                    (not eligible and group.get("split") is not None)):
++                    (eligible and group.get("split") not in {"train", "valid"})):
+                 raise Invalid("split member does not match validated source identity, eligibility, or group assignment")

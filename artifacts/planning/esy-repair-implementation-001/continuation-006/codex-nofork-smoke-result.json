@@ -1,0 +1,17 @@
+{
+  "fixture_before": "before\n",
+  "fixture_after": "before\n",
+  "expected": "after\n",
+  "guardian": {
+    "status": "TERMINATED",
+    "worker_pid": 36655,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 6.957,
+    "single_worker_assumption": "requires separately proven native process-fork denial"
+  },
+  "runner_coding_launches_consumed": 0,
+  "scope": "isolated provider capability smoke only, candidate unmodified",
+  "profile_sha256": "446562ceacc57219ec3b59ed6374b2bb65dc7cfb4a667e067730d5c35d8a4bf6"
+}

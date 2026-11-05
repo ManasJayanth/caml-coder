@@ -1,0 +1,54 @@
+{
+  "status": "PASSED",
+  "commands": [
+    {
+      "case": "unchanged",
+      "argv": [
+        "./scripts/sft",
+        "--root",
+        "/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/sft-r3-repro-lb16j2l7",
+        "fetch",
+        "--config",
+        "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/config/sources.json",
+        "--run-id",
+        "official-stable-sources-002"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"files\":170,\"kind\":\"official\",\"manifest\":\"/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/sft-r3-repro-lb16j2l7/artifacts/sources/official-stable-sources-002/manifest.json\",\"scope\":\"source-fetch-only\",\"status\":\"PASSED\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "empty-inventory",
+      "argv": [
+        "./scripts/sft",
+        "--root",
+        "/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/sft-r3-repro-lb16j2l7",
+        "fetch",
+        "--config",
+        "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/config/sources.json",
+        "--run-id",
+        "official-stable-sources-002"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"error\":\"snapshot manifest does not match independently pinned expected hash\",\"status\":\"FAILED\"}\n",
+      "stderr": ""
+    },
+    {
+      "case": "changed-revision",
+      "argv": [
+        "./scripts/sft",
+        "--root",
+        "/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/sft-r3-repro-lb16j2l7",
+        "fetch",
+        "--config",
+        "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/config/sources.json",
+        "--run-id",
+        "official-stable-sources-002"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"error\":\"snapshot manifest does not match independently pinned expected hash\",\"status\":\"FAILED\"}\n",
+      "stderr": ""
+    }
+  ],
+  "original_preserved": true
+}

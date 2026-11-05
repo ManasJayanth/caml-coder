@@ -1,0 +1,293 @@
+Independent Astra dispatch review, no tools/edits. Return concise JSON safe_for_one_supervised_R01b_launch boolean, findings. Request exactly coding20 via unchanged reviewed noforkPi/Luna dispatcher/guardian. Actualcoding19 integratedsuccess andscopevalid, workerreaped credentialsremoved. R01 source review found only earlyfailurestdout omits scenario rows; correctivecard20 only E2E file earlyprint object adds scope/scenarios, nonzeroexit preserved; productionrunner unchanged. Separate planner running for tinycard. Root validates finalcardmatchesbounds beforedispatch. No hosttests or import authorized by this approval. Totalbudget24/used19; unchanged original6h accounting. Exactcode/setup/sourceevidence supplied. Broadercontrollerstillrejected.
+
+FILE launch-pi-card.py
+"""Supervised single-card dispatch only; no test execution or import."""
+import hashlib,json,os,shutil,stat,subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent;S=D.parent;R=D/'pi-runtime-v2';job=sys.argv[1];card=Path(sys.argv[2]);round_number=int(sys.argv[3]);assert job.replace('-','').isalnum();assert 19<=round_number<=24
+lock=D/'coding-dispatch.lock';fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600);os.close(fd)
+jobdir=D/'coding-jobs'/job;jobdir.mkdir(parents=True,exist_ok=False);workspace=R/('workspace-'+job);guardian_reaped=False
+try:
+ allocation=json.loads((D/'allocation.json').read_text());remaining=21600-allocation['prior_active_seconds']-(time.time()-allocation['current_turn_started_epoch']);assert remaining>=660,'active budget insufficient'
+ ledger=D/'coding-ledger.json';used=json.loads(ledger.read_text())['coding_launches_consumed'] if ledger.exists() else 18;assert round_number==used+1
+ source=S/'candidate'
+ for p in source.rglob('*'):
+  if p.is_symlink() or not(p.is_dir() or p.is_file()):raise RuntimeError('unsupported source entry')
+ shutil.copytree(source,workspace,copy_function=shutil.copy2)
+ def manifest(root):
+  rows=[]
+  for p in sorted(root.rglob('*')):
+   if p.is_symlink() or not(p.is_dir() or p.is_file()):raise RuntimeError('unsupported entry')
+   if p.is_file():rows.append({'path':str(p.relative_to(root)),'mode':stat.S_IMODE(p.stat().st_mode),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'size':p.stat().st_size})
+  return rows
+ parent=manifest(source);assert parent==manifest(workspace);(jobdir/'parent-manifest.json').write_text(json.dumps(parent,indent=2));(jobdir/'prompt.txt').write_bytes(card.read_bytes());prompt=R/(job+'-prompt.txt');prompt.write_bytes(card.read_bytes())
+ env={k:os.environ[k] for k in ['PATH','LANG','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS'] if k in os.environ};env.update(HOME=str(R/'home'),PI_CODING_AGENT_DIR=str(R/'private-pi'),PI_CODING_AGENT_SESSION_DIR=str(R/'sessions'),PI_TELEMETRY='0',TMPDIR=str(R))
+ argv=['/usr/bin/sandbox-exec','-f',str(D/'pi-nofork-v3.sb'),'/opt/homebrew/bin/pi','--print','--mode','json','--provider','openai-codex','--model','gpt-6-luna','--no-session','--no-extensions','--no-mcp','--no-skills','--no-prompt-templates','--no-context-files','--no-themes','--no-approve','--offline','--tools','read,edit,write','@'+str(prompt)]
+ spec={'argv':argv,'env':env,'cwd':str(workspace),'output':str(jobdir/'guardian'),'timeout':600,'cap':2097152,'auth_source':'real'};sp=jobdir/'spec.json';sp.write_text(json.dumps(spec,indent=2))
+ with ledger.open('w') as f:json.dump({'coding_launches_consumed':round_number,'coding_launch_cap':24,'reserved_job':job,'epoch':time.time()},f);f.flush();os.fsync(f.fileno())
+ p=subprocess.Popen([sys._base_executable,'-B',str(D/'guardian-v2.py'),str(sp)],stdin=subprocess.PIPE,start_new_session=True)
+ try:p.wait(timeout=615)
+ except subprocess.TimeoutExpired:p.stdin.close();p.wait(timeout=10)
+ receipt=json.loads((jobdir/'guardian/receipt.json').read_text());guardian_reaped=receipt['worker_reaped'];assert guardian_reaped and receipt['credential_removed'],'cleanup unverified'
+ current=manifest(workspace);(jobdir/'result-manifest.json').write_text(json.dumps(current,indent=2));assert manifest(source)==parent,'candidate changed concurrently'
+ before={x['path']:x for x in parent};after={x['path']:x for x in current};changed=[k for k in sorted(set(before)|set(after)) if before.get(k)!=after.get(k)];allow={'artifacts/planning/esy-reference-proposal-001/run_esy_reference.py','artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py'}
+ result={'status':'UNACCEPTED','coding_round':round_number,'changed_paths':changed,'scope_valid':set(changed)<=allow,'receipt':receipt,'workspace':str(workspace),'imported':False}
+ shutil.copytree(workspace,jobdir/'frozen',copy_function=shutil.copy2);(jobdir/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+finally:
+ if guardian_reaped:lock.unlink()
+
+FILE guardian-v2.py
+"""Trusted single-child supervisor; experimental, not accepted workflow control."""
+import base64,json,os,selectors,signal,stat,subprocess,sys,time
+from pathlib import Path
+spec_path=Path(sys.argv[1]); spec=json.loads(spec_path.read_text()); out=Path(spec['output']);out.mkdir(exist_ok=False)
+signal.signal(signal.SIGCHLD,signal.SIG_DFL)
+D=Path(__file__).resolve().parent;runtime=D/'pi-runtime-v2';authdir=runtime/'private-pi';authfd=None;auth_created=False;credential_removed=False
+p=None;sel=selectors.DefaultSelector();logs={'stdout':bytearray(),'stderr':bytearray()};reason=None;reaped=False;status=None;started=time.monotonic();deadline=started+spec['timeout'];exit_deadline=None
+try:
+ for directory in [runtime,authdir]:
+  if directory.is_symlink():raise RuntimeError('symlink directory')
+  directory.mkdir(mode=0o700,exist_ok=True)
+  st=directory.stat()
+  if stat.S_IMODE(st.st_mode)!=0o700 or st.st_uid!=os.getuid():raise RuntimeError('private directory mode/owner')
+ if runtime.resolve()!=runtime or authdir.resolve()!=authdir:raise RuntimeError('path redirection')
+ for ancestor in D.parents:
+  st=ancestor.stat()
+  if st.st_mode & 0o022 and not (st.st_mode & stat.S_ISVTX):raise RuntimeError('writable ancestor')
+ authfd=os.open(authdir,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+ source=Path.home()/'.codex/auth.json' if spec['auth_source']=='real' else D/'tests/fixture-auth.json'
+ if spec['auth_source'] not in ['real','fixture']:raise RuntimeError('unknown auth source')
+ tokens=json.loads(source.read_text())['tokens'];access=tokens['access_token'];body=access.split('.')[1];claims=json.loads(base64.urlsafe_b64decode(body+'='*((-len(body))%4)));expiry=claims['exp']*1000
+ if expiry<time.time()*1000+600000:raise RuntimeError('insufficient access token lifetime')
+ credential={'openai-codex':{'type':'oauth','access':access,'refresh':'','expires':expiry,'accountId':tokens['account_id']}}
+ fd=os.open('auth.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=authfd);auth_created=True
+ try:
+  st=os.fstat(fd)
+  if not stat.S_ISREG(st.st_mode) or stat.S_IMODE(st.st_mode)!=0o600 or st.st_uid!=os.getuid():raise RuntimeError('credential mode/owner')
+  with os.fdopen(fd,'w',closefd=False) as stream:json.dump(credential,stream);stream.flush();os.fsync(fd)
+ finally:os.close(fd)
+ (out/'auth-ready.json').write_text(json.dumps({'credential_mode':384,'private_parent_mode':448}))
+ if spec.get('inject')=='after-auth':raise RuntimeError('injected setup failure')
+ import select
+ if select.select([sys.stdin.buffer],[],[],0)[0] and not os.read(sys.stdin.fileno(),1):raise RuntimeError('launcher absent before spawn')
+ p=subprocess.Popen(spec['argv'],cwd=spec['cwd'],env=spec['env'],stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True)
+ (out/'ready.json').write_text(json.dumps({'guardian_pid':os.getpid(),'worker_pid':p.pid,'started_epoch':time.time()}))
+ sel.register(sys.stdin.buffer,selectors.EVENT_READ,'parent')
+ for pipe,name in [(p.stdout,'stdout'),(p.stderr,'stderr')]:os.set_blocking(pipe.fileno(),False);sel.register(pipe,selectors.EVENT_READ,name)
+ while True:
+  if not reaped:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:
+    reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status
+  if reaped and not any(k.data!='parent' for k in sel.get_map().values()):break
+  if time.monotonic()>=deadline and reason is None:reason='timeout'
+  if reason and not reaped:
+   # This direct child has not been reaped. Its PID cannot be reused.
+   try:os.kill(p.pid,signal.SIGKILL)
+   except ProcessLookupError:pass
+   if exit_deadline is None:exit_deadline=time.monotonic()+5
+  if exit_deadline and time.monotonic()>=exit_deadline:break
+  for key,_ in sel.select(.02):
+   data=os.read(key.fileobj.fileno(),16384)
+   if key.data=='parent':
+    if not data:
+     sel.unregister(key.fileobj)
+     if not reaped:reason=reason or 'launcher-eof'
+    continue
+   if not data:sel.unregister(key.fileobj);continue
+   buf=logs[key.data];left=spec['cap']-len(buf);buf.extend(data[:max(0,left)])
+   if len(data)>left:reason=reason or 'output-cap'
+except BaseException as e:reason='guardian-exception:'+type(e).__name__
+finally:
+ if p is not None and not reaped:
+  try:os.kill(p.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+  until=time.monotonic()+5
+  while time.monotonic()<until:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status;break
+   time.sleep(.01)
+ if authfd is not None:
+  if auth_created and (p is None or reaped):
+   try:os.unlink('auth.json',dir_fd=authfd)
+   except FileNotFoundError:pass
+   try:os.stat('auth.json',dir_fd=authfd,follow_symlinks=False)
+   except FileNotFoundError:credential_removed=True
+  os.close(authfd)
+ sel.close()
+ for k,v in logs.items():(out/k).write_bytes(v)
+ result={'status':'TERMINATED' if reaped else 'CLEANUP_UNVERIFIED','worker_pid':p.pid if p else None,'worker_reaped':reaped,'exit_code':status,'reason':reason,'elapsed_seconds':round(time.monotonic()-started,3),'single_worker_assumption':'requires separately proven native process-fork denial','credential_removed':credential_removed}
+ (out/'receipt.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps(result),flush=True)
+
+FILE pi-nofork-v3.sb
+(version 1)
+(allow default)
+(deny process-fork)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/pi-runtime-v2"))
+(deny network-outbound (remote unix-socket))
+(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))
+(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))
+(deny signal)
+(allow signal (target self) (target children))
+(deny file-read* (subpath "/Users/psac"))
+(allow file-read* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/pi-runtime-v2"))
+(deny file-read* (subpath "/Users/psac/.codex"))
+(deny file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/pi-runtime-v2/private-pi"))
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/pi-runtime-v2/private-pi/auth.json.lock"))
+(allow file-read-metadata (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft") (literal "/Users/psac/development/prometheansacrifice") (literal "/Users/psac/development") (literal "/Users/psac"))
+
+FILE coding-jobs/R01-019/result.json
+{
+  "status": "UNACCEPTED",
+  "coding_round": 19,
+  "changed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "scope_valid": true,
+  "receipt": {
+    "status": "TERMINATED",
+    "worker_pid": 38873,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 51.474,
+    "single_worker_assumption": "requires separately proven native process-fork denial",
+    "credential_removed": true
+  },
+  "workspace": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/pi-runtime-v2/workspace-R01-019",
+  "imported": false
+}
+
+FILE coding-ledger.json
+{"coding_launches_consumed": 19, "coding_launch_cap": 24, "reserved_job": "R01-019", "epoch": 1792680724.312823}
+FILE R01-missing-e2e-001.json
+{
+  "expected": "nonzero exit with all three complete MISSING_FAILED scenario rows",
+  "actual_exit": 1,
+  "actual_stdout": {
+    "failures": [
+      {
+        "suite": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/intentionally-missing-expectations.json'"
+      },
+      {
+        "reason": "Missing reviewed deterministic timing fixture to prove verified cleanup is preserved.",
+        "scenario": "R01-verified-cleanup-preserved"
+      },
+      {
+        "reason": "Missing reviewed forwarding fixture to prove a real bounded cleanup retry.",
+        "scenario": "R01-unverified-cleanup-retried"
+      },
+      {
+        "reason": "Missing reviewed race fixture to prove stop_group deadline-boundary behavior.",
+        "scenario": "R01-stop-group-deadline-crossing"
+      }
+    ],
+    "manifest": null,
+    "status": "FAILED"
+  },
+  "complete_rows": false,
+  "acceptance": "HARNESS_REPORTING_CONTRACT_ONLY_NOT_OCAML",
+  "status": "FAILED"
+}
+
+FILE allocation.json
+{
+  "status": "RECONCILED_FROM_THIS_THREAD_TURN_BOUNDARIES",
+  "checkpoint": 1792665383.826273,
+  "previous_checkpoint_seconds": 10367.532,
+  "closed_intervals": [
+    {
+      "start": 1792665383.826273,
+      "end": 1792665394.155,
+      "seconds": 10.328727006912231,
+      "turn_id": "01a162fb-0b5b-72a3-8e61-c2cf41e3b205"
+    },
+    {
+      "start": 1792677056.485,
+      "end": 1792677064.575,
+      "seconds": 8.09000015258789,
+      "turn_id": "01a163e1-0fdf-7ef1-b569-9162d75b9d2f"
+    },
+    {
+      "start": 1792677081.701,
+      "end": 1792677085.549,
+      "seconds": 3.8480000495910645,
+      "turn_id": "01a163e1-7260-7690-b399-e5f1f811fbf0"
+    },
+    {
+      "start": 1792677090.462,
+      "end": 1792677153.73,
+      "seconds": 63.26800012588501,
+      "turn_id": "01a163e1-9499-76d1-8a2f-49a27d828b6c"
+    },
+    {
+      "start": 1792677177.801,
+      "end": 1792677488.909,
+      "seconds": 311.10799980163574,
+      "turn_id": "01a163e2-e9c4-75e3-81d2-2422b637911a"
+    },
+    {
+      "start": 1792677866.817,
+      "end": 1792677909.908,
+      "seconds": 43.09100008010864,
+      "turn_id": "01a163ed-6d3c-7f02-a870-8d44bd1d86db"
+    },
+    {
+      "start": 1792677920.112,
+      "end": 1792678252.702,
+      "seconds": 332.5899999141693,
+      "turn_id": "01a163ee-3d6b-7cc1-b61c-12257b2820b2"
+    },
+    {
+      "start": 1792678340.301,
+      "end": 1792678346.856,
+      "seconds": 6.554999828338623,
+      "turn_id": "01a163f4-a6c8-7e61-8178-1d1e7b42a69d"
+    }
+  ],
+  "prior_active_seconds": 11146.411,
+  "current_turn_started_epoch": 1792678455.854,
+  "active_limit_seconds": 21600,
+  "coding_consumed": 18,
+  "coding_cap": 24,
+  "new_allocation": 6,
+  "reviewer": "fresh Codex gpt-6-astra",
+  "planner": "separate fresh Codex gpt-6-astra",
+  "authorization": "User explicitly replaced Fable with Codex Astra, then instructed go. Six coding launches previously authorized.",
+  "note": "Uses RESULT004 checkpoint plus nonoverlapping subsequent task intervals; RESULT005 preflight is included in its parent turn, not counted twice. Idle gaps excluded."
+}
+
+REVIEWFINDINGS
+{
+  "revision_sha256": "4b8a0eed69a09223e4868778d3433101b4517bade62956725a3b8466880ac4cf",
+  "scoped_source_correct": false,
+  "safe_to_run_missing_evidence_cli": true,
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "severity": "error",
+      "location": "test_esy_reference_runtime_e2e.py: main, manifest_path is None branch",
+      "detail": "Nonexistent expectations fail at resolve(strict=True). All three MISSING_FAILED scenario rows are constructed internally, but this branch emits only status, manifest and failures. The three scenario identifiers and reasons appear in failures, but their evidence_status and passed fields are omitted, and no manifest is written. The proposed invocation therefore cannot expose all three required MISSING_FAILED rows.",
+      "required_change": "Include the constructed scenarios and scope in the early-failure stdout JSON while retaining nonzero exit and no publication to an unvalidated output directory."
+    },
+    {
+      "severity": "info",
+      "detail": "The two production fixes are correct by source inspection: stop_group supplies a positive sleep duration from one remaining-time calculation; final cleanup preserves verified_absent=True and retries otherwise. The default seven-run suite and existing missing-evidence requirements remain preserved. No unrelated semantic expansion is apparent in the supplied diff."
+    },
+    {
+      "severity": "info",
+      "detail": "Only the described public CLI missing-input check is approved under the stated 20-second supervision and capped logs. With expectations remaining nonexistent, resolution fails before docker_inspect or any runner invocation. This approval does not cover valid expectations, real runner execution or OCaml acceptance."
+    }
+  ],
+  "missing_evidence": [
+    "Reviewed deterministic timing fixture for R01-verified-cleanup-preserved.",
+    "Reviewed forwarding fixture for R01-unverified-cleanup-retried.",
+    "Reviewed race fixture for R01-stop-group-deadline-crossing.",
+    "Observed public CLI nonzero exit and externally visible complete MISSING_FAILED rows.",
+    "Independent verification of the supplied revision digest and frozen execution paths; no tools were used.",
+    "Resolution of the other findings and controller issues remains outside this review; overall repair cannot pass."
+  ]
+}

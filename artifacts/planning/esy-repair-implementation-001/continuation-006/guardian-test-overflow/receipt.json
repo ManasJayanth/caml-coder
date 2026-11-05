@@ -1,0 +1,9 @@
+{
+  "status": "TERMINATED",
+  "worker_pid": 36139,
+  "worker_reaped": true,
+  "exit_code": -9,
+  "reason": "output-cap",
+  "elapsed_seconds": 0.021,
+  "single_worker_assumption": "requires separately proven native process-fork denial"
+}

@@ -1,0 +1,19 @@
+{
+  "scope": "exact npm compiler archive source identity; compiler not built",
+  "file": "artifacts/toolchain-assets/node-esy-001/ocaml-5.5.1000.tgz",
+  "bytes": 4951097,
+  "sha512": "99524f952e11da29f5000c3e85404542a814ab9d8a1e0c6eedae83df7d3a843c86fd253a7bbfd89486ee0145c9ecf5f00411907be48cb83c937958f2770a086d",
+  "url": "https://registry.npmjs.org/ocaml/-/ocaml-5.5.1000.tgz",
+  "source_records": [
+    {
+      "path": "package/VERSION",
+      "content": "5.5.1\n\n# Starting with OCaml 4.14, although the version string that appears above is\n# still correct and this file can thus still be used to figure it out,\n# the version itself is actually defined in the build-aux/ocaml_version.m4\n# file (See the OCAML__VERSION* macros there.)\n# To update the present VERSION file:\n# 1. Update build-aux/ocaml_version.m4\n# 2. Run tools/autogen.\n# 3. If you are in a context where version control matters,\n# commit the changes to both build-aux/ocaml_version.m4 and VERSION.\n# The version string must be in the format described in stdlib/sys.mli\n",
+      "sha256": "544e67249d8554d7341b4489de5537beb479c199e8dd4fc2aeb41518216d3b4b"
+    },
+    {
+      "path": "package/package.json",
+      "content": "{\n  \"name\": \"ocaml\",\n  \"version\": \"5.5.1000\",\n  \"description\": \"OCaml compiler packaged for esy\",\n  \"esy\": {\n    \"buildsInSource\": true,\n    \"build\": [\n      \"#{os == 'windows' ? 'sh ./setup-flexdll': 'true'}\",\n      \"./configure --prefix #{self.install} #{os == 'windows' ? '--host=x86_64-w64-mingw32 --with-flexdll=flexdll': ''}\",\n      \"make -j#{self.jobs}\"\n    ],\n    \"install\": \"make install\",\n    \"buildEnv\": {},\n    \"exportedEnv\": {\n      \"OCAMLPATH\": {\n        \"val\": \"#{ocaml.lib / 'ocaml' : $OCAMLPATH}\",\n        \"scope\": \"global\"\n      },\n      \"OCAMLLIB\": {\n        \"val\": \"#{ocaml.lib / 'ocaml'}\",\n        \"scope\": \"global\"\n      },\n      \"CAML_LD_LIBRARY_PATH\": {\n        \"val\": \"#{ocaml.lib / 'ocaml' / 'stublibs' : ocaml.lib / 'ocaml' : $CAML_LD_LIBRARY_PATH}\",\n        \"scope\": \"global\"\n      },\n      \"OCAML_TOPLEVEL_PATH\": {\n        \"val\": \"#{ocaml.lib / 'ocaml'}\",\n        \"scope\": \"global\"\n      }\n    }\n  },\n  \"dependencies\": {}\n}",
+      "sha256": "879fe75d4562548a90203aff541934ca79a9e2fe09557cfbbcc2ef63a35d3ef9"
+    }
+  ]
+}

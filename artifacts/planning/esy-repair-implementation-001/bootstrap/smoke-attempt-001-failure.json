@@ -1,0 +1,1 @@
+{"status":"FAILED","reason":"Harness raised PermissionError during killpg after pipes closed; no raw provider result retained. Subsequent elevated ps inspection found no reviewer process. Not a provider acceptance result."}

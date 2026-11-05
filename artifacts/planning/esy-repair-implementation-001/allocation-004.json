@@ -1,0 +1,10 @@
+{
+  "authorization": "User Go after recommendation of6 extra coding launches; keep original six-hour active limit",
+  "previous_coding_launches": 12,
+  "additional_coding_launches": 6,
+  "total_limit": 18,
+  "prior_active_seconds": 7007.971,
+  "resume_epoch": 1792662024.26525,
+  "max_active_seconds": 21600,
+  "remaining_active_seconds": 14592.029
+}

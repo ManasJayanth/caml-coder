@@ -1,0 +1,14 @@
+Independent Astra review ONLY immutable Dockerfile plus fixed root build procedure. No execution or delegation. Return JSON safe_to_attempt_build, findings, limitations. The procedure fresh-inspects full pinned local ID, verifies exact Id and RepoDigest, empty OnBuild/Volumes, records full layers. New context contains only exact reviewed Dockerfile. Root uses argv array docker build --pull=false --network=none --no-cache --rm=true --force-rm=true --iidfile OUTPUT --file CONTEXT/Dockerfile.esy-runtime CONTEXT with env DOCKER_BUILDKIT=0, deadline120s, streaming hard logcap1MiB. Existing local image ID explicitly used both FROM stages; no tag/registry substitution or fallback on unsupported legacybuilder. No RUN instructions; no remotecontext. On timeout retain uncertain-build status and stop instead of claiming cancellation. On success inspect derivative immutableID and base layerprefix, record hashes. Do not approve runner/tests or claim acceptance. Raw base inspection already shows no OnBuild/Volumes; fresh check required. Build --network none only asserted for build steps; do not invent a claim about daemon-wide firewall.
+SHA256 f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f
+DOCKERFILE
+FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267 AS installed
+
+FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267
+USER 1000:1000
+ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
+WORKDIR /home/opam/esy-reference
+
+# Preserve the already installed esy state and Node cache as immutable seed
+# payloads. The runner copies these into bounded writable tmpfs mounts at start.
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache

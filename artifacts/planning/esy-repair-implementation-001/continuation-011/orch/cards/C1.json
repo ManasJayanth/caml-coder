@@ -1,0 +1,27 @@
+{
+ "acceptance_rows": [
+  "R1 cmd_run_card records cs['base_hash'] = st['parent_hash'] at the moment the parent tree is copied into jobs/<id>-<n>, and result-manifest.json keeps parent_hash as today.",
+  "R2 cmd_review card branch, before any parent_dir/parent_hash update, compares cs.get('base_hash') to st['parent_hash']; on mismatch it prints a single line starting with PARENT_STALE <card-id>, leaves st['parent_dir']/st['parent_hash']/st['milestone'] untouched, sets cs['status']='PENDING' so run-card may rebuild it on the new parent, appends a ledger event {'event':'review_stale'}, and exits nonzero. Cards with no base_hash key (pre-existing state) are treated as stale, not accepted.",
+  "R3 run_e2e.py gains scenario O32: init with two independent cards A and B; run-card A; run-card B; review --card A accepted; review --card B must exit nonzero with PARENT_STALE, parent_hash must equal A's tree hash afterwards, B status must be PENDING; then run-card B and review --card B accepted succeeds and the resulting parent tree contains A's edit.",
+  "R4 Scenario O32 is registered in the same table/dispatch as existing scenarios so `run_e2e.py O32` runs only it; no other scenario or loop.py behaviour outside cmd_run_card and cmd_review is changed."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O32"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C1",
+ "objective": "Bind card acceptance to the parent it was built from: refuse to accept a card whose base hash no longer matches st.parent_hash (F1)",
+ "stop_condition": "print CARD_BLOCKED C1 if scenario id O32 already exists in e2e/run_e2e.py, or if cmd_review has no card branch that assigns st['parent_hash'] from cs['tree_hash']",
+ "timeout": 480
+}

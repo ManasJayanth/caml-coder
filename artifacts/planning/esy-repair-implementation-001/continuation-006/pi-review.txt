@@ -1,0 +1,134 @@
+Independent Astra pre-execution review, no tools/edits. Return strict JSON safe_to_execute_pi_capability_smoke boolean, findings, missing_acceptance_evidence. Exact same nofork sandbox/guardian passed real launcher-SIGKILL tests. Codex smoke safely failed: patch tool requires code-mode childhost. Optional Pi backend authorized by plan; installed catalog explicitly supports openai-codex gpt-6-luna, direct file edit tools. Review bounded alternative smoke only (no candidate code/no runner coding launch). Auth copies only current unexpired access token/accountid to0600 private runtime, EMPTY refresh token prevents credentialrotation, sourceauth read-only. Require600seconds lifetime for120sec smoke; remove auth afterward. No model substitution (samegpt6luna). All extensions/MCP/commands disabled, private PI directories, nofork profile unchanged. Any smoke failure blocks this option; never weaken profile.
+
+FILE pi-nofork-smoke.py
+"""Bounded optional-backend capability check, never edits the candidate."""
+import base64,hashlib,json,os,subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent;runtime=D/'nofork-runtime';work=runtime/'pi-smoke';work.mkdir();(work/'probe.txt').write_text('before\n');config=runtime/'pi';config.mkdir();auth=config/'auth.json'
+# Only an unexpired access credential is copied. No refresh capability is granted.
+tokens=json.loads((Path.home()/'.codex/auth.json').read_text())['tokens'];access=tokens['access_token'];body=access.split('.')[1];claims=json.loads(base64.urlsafe_b64decode(body+'='*((-len(body))%4)));expiry=claims['exp']*1000
+if expiry < time.time()*1000+600000:raise SystemExit('Access token has insufficient remaining lifetime; no refresh attempted')
+auth.write_text(json.dumps({'openai-codex':{'type':'oauth','access':access,'refresh':'','expires':expiry,'accountId':tokens['account_id']}}));auth.chmod(0o600)
+env={k:os.environ[k] for k in ['PATH','HOME','USER','LANG','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS'] if k in os.environ};env.update(PI_CODING_AGENT_DIR=str(config),PI_CODING_AGENT_SESSION_DIR=str(config/'sessions'),PI_TELEMETRY='0',TMPDIR=str(runtime))
+argv=['/usr/bin/sandbox-exec','-f',str(D/'nofork.sb'),'/opt/homebrew/bin/pi','--print','--mode','json','--provider','openai-codex','--model','gpt-6-luna','--no-session','--no-extensions','--no-mcp','--no-skills','--no-prompt-templates','--no-context-files','--no-themes','--no-approve','--offline','--tools','read,edit,write','Use your file tools to change only probe.txt from before to after, retaining its newline. Do not run commands. This is an isolated capability smoke, not repository implementation.']
+spec={'argv':argv,'env':env,'cwd':str(work),'output':str(D/'pi-nofork-smoke'),'timeout':120,'cap':131072};p=D/'pi-nofork-smoke.spec.json'
+try:
+ p.write_text(json.dumps(spec,indent=2));proc=subprocess.Popen([sys.executable,'-B',str(D/'guardian.py'),str(p)],stdin=subprocess.PIPE,start_new_session=True)
+ try:proc.wait(timeout=130)
+ except subprocess.TimeoutExpired:proc.stdin.close();proc.wait(timeout=10)
+ receipt=json.loads((D/'pi-nofork-smoke/receipt.json').read_text());result={'requested_provider':'openai-codex','requested_model':'gpt-6-luna','fixture_after':(work/'probe.txt').read_text(),'expected':'after\n','guardian':receipt,'runner_coding_launches_consumed':0,'profile_sha256':hashlib.sha256((D/'nofork.sb').read_bytes()).hexdigest()};(D/'pi-nofork-smoke-result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+finally:auth.unlink(missing_ok=True)
+
+FILE guardian.py
+"""Trusted single-child supervisor; experimental, not accepted workflow control."""
+import json,os,selectors,signal,subprocess,sys,time
+from pathlib import Path
+spec_path=Path(sys.argv[1]); spec=json.loads(spec_path.read_text()); out=Path(spec['output']);out.mkdir(exist_ok=False)
+signal.signal(signal.SIGCHLD,signal.SIG_DFL)
+p=None;sel=selectors.DefaultSelector();logs={'stdout':bytearray(),'stderr':bytearray()};reason=None;reaped=False;status=None;started=time.monotonic();deadline=started+spec['timeout'];exit_deadline=None
+try:
+ p=subprocess.Popen(spec['argv'],cwd=spec['cwd'],env=spec['env'],stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True)
+ (out/'ready.json').write_text(json.dumps({'guardian_pid':os.getpid(),'worker_pid':p.pid,'started_epoch':time.time()}))
+ sel.register(sys.stdin.buffer,selectors.EVENT_READ,'parent')
+ for pipe,name in [(p.stdout,'stdout'),(p.stderr,'stderr')]:os.set_blocking(pipe.fileno(),False);sel.register(pipe,selectors.EVENT_READ,name)
+ while True:
+  if not reaped:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:
+    reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status
+  if reaped and not any(k.data!='parent' for k in sel.get_map().values()):break
+  if time.monotonic()>=deadline and reason is None:reason='timeout'
+  if reason and not reaped:
+   # This direct child has not been reaped. Its PID cannot be reused.
+   try:os.kill(p.pid,signal.SIGKILL)
+   except ProcessLookupError:pass
+   if exit_deadline is None:exit_deadline=time.monotonic()+5
+  if exit_deadline and time.monotonic()>=exit_deadline:break
+  for key,_ in sel.select(.02):
+   data=os.read(key.fileobj.fileno(),16384)
+   if key.data=='parent':
+    if not data:
+     sel.unregister(key.fileobj)
+     if not reaped:reason=reason or 'launcher-eof'
+    continue
+   if not data:sel.unregister(key.fileobj);continue
+   buf=logs[key.data];left=spec['cap']-len(buf);buf.extend(data[:max(0,left)])
+   if len(data)>left:reason=reason or 'output-cap'
+except BaseException as e:reason='guardian-exception:'+type(e).__name__
+finally:
+ if p is not None and not reaped:
+  try:os.kill(p.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+  until=time.monotonic()+5
+  while time.monotonic()<until:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status;break
+   time.sleep(.01)
+ sel.close()
+ for k,v in logs.items():(out/k).write_bytes(v)
+ result={'status':'TERMINATED' if reaped else 'CLEANUP_UNVERIFIED','worker_pid':p.pid if p else None,'worker_reaped':reaped,'exit_code':status,'reason':reason,'elapsed_seconds':round(time.monotonic()-started,3),'single_worker_assumption':'requires separately proven native process-fork denial'}
+ (out/'receipt.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps(result),flush=True)
+
+FILE guardian-death-e2e.json
+[
+  {
+    "phase": "created",
+    "triggered": true,
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36641,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "launcher-eof",
+      "elapsed_seconds": 0.011,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "phase": "active",
+    "triggered": true,
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36646,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "launcher-eof",
+      "elapsed_seconds": 0.08,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  }
+]
+
+FILE nofork.sb
+(version 1)
+(allow default)
+(deny process-fork)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/nofork-runtime"))
+(deny network-outbound (remote unix-socket))
+(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))
+(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))
+(deny signal)
+(allow signal (target self) (target children))
+
+FILE codex-nofork-smoke-result.json
+{
+  "fixture_before": "before\n",
+  "fixture_after": "before\n",
+  "expected": "after\n",
+  "guardian": {
+    "status": "TERMINATED",
+    "worker_pid": 36655,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 6.957,
+    "single_worker_assumption": "requires separately proven native process-fork denial"
+  },
+  "runner_coding_launches_consumed": 0,
+  "scope": "isolated provider capability smoke only, candidate unmodified",
+  "profile_sha256": "446562ceacc57219ec3b59ed6374b2bb65dc7cfb4a667e067730d5c35d8a4bf6"
+}

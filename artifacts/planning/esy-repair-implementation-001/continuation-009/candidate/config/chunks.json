@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "stage": "chunks",
+  "extraction_manifest": "artifacts/extract/official-extraction-002/manifest.json",
+  "extraction_manifest_sha256": "782652492ecf1cac415511773029dbc85e240d9c885043846fca3a213a44dc12",
+  "split_manifest": "artifacts/splits/official-splits-002/manifest.json",
+  "split_manifest_sha256": "7e1193a76b77f648b6f6f19edd65e5f4b2bfa344e0b2c10f5c0ec915702d567d",
+  "tokenizer_manifest": "artifacts/models/tokenizers/bonito-tokenizer-002/manifest.json",
+  "tokenizer_manifest_sha256": "7b6da39f0e4d220dd52bb974782bda7e3cbe8a3d7ed0fa65a0c874eda65bb6af"
+}

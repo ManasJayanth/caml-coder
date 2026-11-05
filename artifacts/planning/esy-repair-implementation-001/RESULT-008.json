@@ -1,0 +1,32 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "Required fresh Astra review failed: Selected model is at capacity. No fallback. Proposal23 unreviewed; public lifecycle and esy acceptance remain unrun; controller rejected.",
+  "reviewer": "Codex gpt-6-astra",
+  "planner": "separate fresh Codex gpt-6-astra",
+  "coding_model": "gpt-6-luna via Pi openai-codex, explicit high reasoning for23",
+  "coding_launches_consumed": 23,
+  "coding_launch_cap": 36,
+  "coding_launches_remaining": 13,
+  "active_seconds_consumed_at_packet": 17870.209,
+  "active_seconds_limit": 32400,
+  "active_seconds_remaining_at_packet": 14529.791,
+  "candidate_sha256": "c46ac9c731ffddb32351d815ad4e05304f92fd8a517adffdf376eb464ef50d16",
+  "proposal23": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+    "bytes": 13005,
+    "sha256": "fc1e58bfe7134fb129c3478f0da888a05f1f221028bac116c018874237f0f93d"
+  },
+  "proposal23_full_revision_manifest": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/coding-jobs/L1a-023/result-manifest.json",
+    "bytes": 14291,
+    "sha256": "fe9e1aaa2bcf8dbd208bb643003036d764fb41f34036e16b6a7000c5c35d6258"
+  },
+  "imported": false,
+  "original_entries_checked": 72,
+  "original_mismatches": [],
+  "historical_indexed_files_verified": 1316,
+  "containers_created_this_continuation": false,
+  "public_lifecycle_e2e": "NOT_RUN: exact-source approval unavailable",
+  "public_esy_e2e": "NOT_ACCEPTED; prior blockers remain",
+  "next_step": "When Astra is available, reconcile lock/processes/accounting and rerun independent source review of frozen23. Address every finding through separate Astra planning. Obtain one-launch authorization before harness24. No budget reset."
+}

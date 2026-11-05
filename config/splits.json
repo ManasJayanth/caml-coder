@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "stage": "splits",
+  "extraction_manifest": "artifacts/extract/official-extraction-002/manifest.json",
+  "extraction_manifest_sha256": "782652492ecf1cac415511773029dbc85e240d9c885043846fca3a213a44dc12",
+  "annotations_file": "config/split-annotations.json",
+  "annotations_sha256": "094486dc844f0374097a19fbcd4da772f5d9c6730fea700927d603d6b9c91b7c"
+}

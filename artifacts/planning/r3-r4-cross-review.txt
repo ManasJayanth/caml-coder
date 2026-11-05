@@ -1,0 +1,19 @@
+R3/R4 scoped cross-review (read-only)
+
+Concrete findings
+
+1. R3 still accepts and completes some partial output directories. `fetch()` treats an output with neither manifest nor receipt as a fresh acquisition and writes into it (`src/sft/corpus.py:97-104`). The restored partial E2E seeds a conflicting file (`tests/e2e/test_sources.py:97-101`), so it only proves conflict rejection. If the preexisting partial file already has the exact pinned source bytes, `atomic_bytes()` accepts it and fetch fills in the rest, producing a passing snapshot. This silently repairs a partial run ID despite the T06 partial-snapshot contract. Reject a nonempty existing snapshot output lacking both commit markers, and add a matching-bytes partial fixture.
+
+2. The R4 audit special-cases CATALOGUE-RUNNER before checking whether its suite is registered or its required scenario matches the suite. It verifies the command and allowed files, then continues (`tests/e2e/test_control.py:141-146`). A premature `catalogue-runner` registration, or a card whose required scenario does not match its dedicated suite, could pass the ownership audit. Assert the suite remains unregistered for this ownership-only card and that its required scenario is exactly `catalogue-runner`.
+
+Accepted in the inspected snapshot
+
+- R3 now checks manifest/receipt paths for symlinks, rejects a non-object manifest, checks the filename-derived license marker, and has negative cases for config conflict, empty/omitted/duplicate inventories, removed domains/files, source revision/repository, byte/blob, license flag, malformed manifest, and symlinks.
+- R4 now authorizes the T08/T09/T10/T11 scenario and registry work, checks family task IDs and task-specific scenarios, audits unresolved placeholders, and exercises `work next` with runner, family, and pending-suite fixtures.
+- I did not run suites, per instruction. I confirmed both findings against the frozen snapshot; the parent reports the six suites pass, but these edge cases are outside that reported coverage.
+
+Resolution (2026-10-17)
+
+- Finding 1 is fixed: `src/sft/corpus.py` rejects any existing nonempty output directory without a manifest commitment before acquisition writes. The parent reports the matching-bytes partial-output E2E passed.
+- Finding 2 is fixed: `tests/e2e/test_control.py` requires the runner's exact `catalogue-runner` scenario and, when registered, verifies its implementation scenario is authorized; while unregistered it checks the suite remains pending.
+- Read-only confirmation against the current files completed. No suites were run for this confirmation. The parent reports all six suites pass with 13 scenarios and 1097 assertions at hash `72364c1d0d923df5f6b7da6e92d42372438b72bc85c346b50427dd8d8ae88cd3`.

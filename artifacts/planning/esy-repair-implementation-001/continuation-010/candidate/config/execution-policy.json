@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "student": {
+    "model_id": "qwen35_9b",
+    "repo_id": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "config_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "architecture_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizer_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "tokenizer_sha256": "0756ac9b9343d39ddeda2767a3a18574f4f25cbb6281d0cf2c77572ed82ba9e9",
+    "tokenizer_file_sha256": {
+      "chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+      "merges.txt": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+      "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "tokenizer_config.json": "316230d6a809701f4db5ea8f8fc862bc3a6f3229c937c174e674ff3ca0a64ac8",
+      "vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+    },
+    "template_sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+    "selection_basis": "Explicit user direction",
+    "readiness_status": "PENDING baseline and selected-architecture validation"
+  },
+  "documentation_generator": "BatsResearch/bonito-v1",
+  "trajectory_teacher": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+  "precision": "BF16; quantization only for deployment",
+  "hardware": "M4 Max, 128 GiB unified memory for training; M1, 16 GiB unified memory as quantized deployment target",
+  "tests": "E2E only: public CLI/Pi subprocesses; real persistence and tools. Scripted external inference fixtures allowed only in deterministic tier. No unit tests or internal mocks.",
+  "approval_gates": [
+    "exact-hash user pilot approval",
+    "exact-hash user final dataset approval",
+    "frontier review before promotion"
+  ],
+  "forbidden": [
+    "paid inference",
+    "publication",
+    "personal Pi state",
+    "host execution of agent tools",
+    "fabricated execution or edited-success transcripts",
+    "silent truncation",
+    "weakened acceptance",
+    "model fallback",
+    "hidden retries",
+    "tuned-on holdout reuse"
+  ],
+  "bonito": {
+    "source_tokens": 1536,
+    "prompt_tokens": 2048,
+    "new_tokens": 1024,
+    "total_tokens": 4096,
+    "student_doc_tokens": 4096,
+    "temperature": 0.5,
+    "top_p": 0.95,
+    "chat_template": false,
+    "parity_atol": 0.1,
+    "parity_rtol": 0.02,
+    "delimiter": "<|pipe|>",
+    "replace_literal_context_in_both_halves": true
+  },
+  "pi": {
+    "version": "1.2.0",
+    "compaction": false,
+    "retries": 0,
+    "cache_warming": false,
+    "tool_execution": "sequential",
+    "context_with_reserve": 16384,
+    "max_requests": 24,
+    "max_tools": 40,
+    "max_new_per_request": 2048,
+    "max_new_total": 12288,
+    "command_seconds": 120,
+    "episode_seconds_after_warmup": 900,
+    "completion_event": "agent_settled",
+    "messages": "message_end finalized",
+    "limit_boundary": "session.agent.streamFunction",
+    "tools": "container-backed read/bash/edit/write; nonroot, network-none, no host home/credentials/docker.sock/hidden tests"
+  },
+  "decoding": {
+    "thinking": false,
+    "temperature": 0.7,
+    "top_p": 0.8,
+    "top_k": 20,
+    "min_p": 0,
+    "student_repetition_penalty": 1,
+    "teacher_repetition_penalty": 1.05
+  },
+  "training": {
+    "rank": 8,
+    "scale": 20,
+    "dropout": 0,
+    "last_layers": 16,
+    "targets": null,
+    "learning_rate": 1e-05,
+    "optimizer": "Adam",
+    "schedule": "constant",
+    "batch_size": 1,
+    "accumulation": 4,
+    "gradient_checkpointing": true,
+    "seed": 17,
+    "buckets": 8,
+    "microbatches": "8*ceil((D+A)/8)",
+    "optimizer_steps": "2*ceil((D+A)/8)",
+    "sampling": "equal domain/stream draws; then uniform episode and approved target",
+    "loss": "only next approved assistant content/tool call plus EOS; explicit mask; no padding or prior actions",
+    "checkpoint": "final only; restart unless full optimizer/RNG/sampler state is verified",
+    "targets_status": "UNSELECTED until selected-architecture adapter validation; never assume q/v targets for Qwen3.5 hybrid attention.",
+    "architecture_validation": "T25 proves selected-template token prefix and exact loss masks; T27 proves actual selected-architecture adapter modules update and reload; T28 proves selected architecture export/reload before full training."
+  },
+  "catalogue": {
+    "practical": 80,
+    "per_domain_train": 18,
+    "per_domain_valid": 2,
+    "dev": 20,
+    "holdout_domain": 40,
+    "holdout_python": 10,
+    "holdout_javascript": 10
+  },
+  "pilot": {
+    "docs_attempts": 48,
+    "docs_per_domain": 12,
+    "qa_per_domain": 8,
+    "extractive_per_domain": 2,
+    "summary_per_domain": 2,
+    "usable_docs_per_domain_min": 10,
+    "first_trajectory_attempts": 16,
+    "accepted_trajectories_min": 13,
+    "accepted_trajectories_per_domain_min": 3
+  },
+  "full": {
+    "qa_attempts_per_chunk": 2,
+    "summary": "conceptual prose only",
+    "trajectory_attempts_including_pilot": 160,
+    "accepted_episodes_per_task_max": 1,
+    "episode_tiebreak": "shortest student rendering then seed order",
+    "reviews": "every promoted record; independent amendments/disagreements plus stratified 10% of remaining; no unresolved facts; all 8 train and valid buckets nonempty"
+  },
+  "acceptance": {
+    "both_runtimes": [
+      "MLX",
+      "Ollama"
+    ],
+    "domain_net_gain_min": 4,
+    "per_domain_decrease_allowed": 0,
+    "lost_previously_passing_general_max": 1,
+    "domain_baseline_ceiling": 36,
+    "domain_tasks": 40,
+    "general_tasks": 20,
+    "holdout_policy": "sealed before training; retire if any final failure informs a change"
+  },
+  "export": "Selected-architecture BF16 fused HF -> pinned llama.cpp F16 GGUF -> Q4_K_M -> new Ollama name; same-baseline route; do not assume MLX-native GGUF supports the selected architecture.",
+  "source_policy": "All four official domains; retain content-category licensing provenance and stable version evidence. Melange may proceed on the user confirmation recorded in artifacts/decisions/melange-user-confirmation-20261016.json; do not label it an upstream license verification or infer an SPDX license. Group duplicates/translations/task families before split.",
+  "student_selection_status": "USER_SELECTED_QWEN35_PENDING_READINESS",
+  "deployment_target": {
+    "device": "M1",
+    "unified_memory_gib": 16,
+    "status": "requires actual-device evidence; no simulator substitute"
+  },
+  "historical_comparator": {
+    "model_id": "qwen3_8b",
+    "repo_id": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+    "status": "optional historical comparator only; not a training candidate or selection dependency"
+  }
+}

@@ -1,0 +1,1120 @@
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-026.json
+SHA256 9e3ec357e239e2150062ec5981b80c9514b8e8460320f487e325b227acf72dfb
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+  "parent_revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+  "safe_for_execution": false,
+  "ownership_card_closed": false,
+  "scope": "Read launch_026, retry-astra-review-025.json, frozen26 source and manifests, actual frozen adapters, and the candidate parent. Compared sources using read-only utilities. No candidate execution, imports, compilation, tests, Docker, provider invocation, or delegation. The only file written is this review. This review supplies no runtime claim or outer-wrapper approval.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/frozen/",
+  "source_hashes": {
+    "tests/e2e/test_review_adapter_e2e.py": "e27c301dbcffa733ce5aa6f95207399ee0f4eb717f76f4b68a5799addc81ed43",
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "binding_checks": {
+    "result_manifest_hash_computed": true,
+    "parent_manifest_hash_matches_launch_026": true,
+    "candidate_test_hash": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+    "prior_review_hash": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825",
+    "manifest_diff": "Only tests/e2e/test_review_adapter_e2e.py changes hash and size; mode remains 420.",
+    "recursive_candidate_comparison": "Only tests/e2e/test_review_adapter_e2e.py differs between candidate and frozen26.",
+    "limit": "Computed reviewed source, adapter, parent/result manifest and prior-review hashes; did not independently recompute every unchanged manifest member's metadata. Root retains the complete execution-binding verification obligation."
+  },
+  "positive_source_observations": [
+    "DefaultSelector construction, stream setup and registration now occur within the main try. Ordinary selector setup failure after phase becomes owned reaches group cleanup.",
+    "Every explicit waitpid is preceded by phase=reap-uncertain. The only killpg is guarded by phase==owned. Returning the leader PID changes phase to reaped before unmasking. Thus an exception between a possible reap and phase update does not authorize signaling; this closes the particular post-wait boolean/stale-group signaling path in the previous source.",
+    "The deliberate post-reap exception and KeyboardInterrupt occur after phase is reaped; their cleanup path has no group-signal permission. Status conversion and byte construction remain in the generic handler's region but its phase guard prevents post-reap signaling.",
+    "The public CLI has precisely the requested closed scenario enum, defaults to matrix, and parses before spawn. Each lifecycle branch contains one actual adapter invocation, fixed setup/post-reap faults, a fixed 11-second fake sleep, or 4097 fixed x bytes on the selected stream. It does not import the helper, replace adapters, or accept arbitrary commands/timeouts.",
+    "Fixed PATH/private HOME/LANG, separate session, validated absolute interpreter, real sandbox-exec through unchanged adapters, no-network/no-fork/write-only-output profile, response CASES and matrix collection/arity structure remain present.",
+    "Cleanup uses nonblocking reads with discarded data and WNOHANG under a shared nominal two-second deadline; it has no unbounded wait or communicate. These source properties do not establish successful cleanup at runtime."
+  ],
+  "finding_disposition": [
+    {
+      "id": "B1a-E2E-025-owned-process-lifecycle",
+      "status": "open-partially-addressed",
+      "reason": "The original stale-group reap path and ordinary selector-construction gap are addressed, but the post-spawn handoff, interruption of cleanup, and truthful finalization requirements below prevent card closure."
+    },
+    {
+      "id": "B1a-E2E-025-record-bound",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:327-328,352",
+      "reason": "Both unbounded records.read_bytes calls remain; raw separators are still excluded from the first cap."
+    },
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:316-361",
+      "reason": "No full matrix result.json, failure-preserved row evidence, or not-run rows exist. lifecycle.json does not close the separate receipt card."
+    },
+    {
+      "id": "B1a-E2E-025-arity-offset",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:338-352",
+      "reason": "Counts remain arguments after the role and the redundant valid-review call remains. Required total-argument rejection coverage is still absent."
+    },
+    {
+      "id": "B1a-E2E-025-per-case-routing",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:317-337,340-353",
+      "reason": "Records remain aggregate-validated rather than checked immediately for an exact per-invocation delta."
+    },
+    {
+      "id": "B1a-E2E-025-deadline-race",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:137-142,193-196,318-323,340-349",
+      "reason": "The wait-loop negative-sleep subproblem was changed out of the launch26 scope, but exhausted suite budget is still not rejected immediately before every spawn. No deadline-boundary or exhausted-suite evidence exists. This finding is not fixed."
+    },
+    {
+      "id": "B1a-E2E-025-diagnostic-byte-cap",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:356-365",
+      "reason": "Character slicing plus print remains. The deliberately raised KeyboardInterrupt also escapes the ordinary top-level handlers and can produce an interpreter traceback; lifecycle persistence alone does not establish bounded diagnostics."
+    }
+  ],
+  "findings": [
+    {
+      "id": "B1a-E2E-026-spawn-handoff",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:140-145,208-217,232-271",
+      "problem": "After Popen has returned into proc, state['spawned_pid']=proc.pid executes before phase becomes owned. A KeyboardInterrupt at that assignment or immediately before phase assignment leaves a real proc with phase not-spawned. The handler then skips both group signaling and reaping, closes its pipes, and sets cleanup=success if those closes succeed. A live child can therefore be left unmanaged with an affirmative cleanup receipt. Moving the try earlier did not close this ownership-registration gap.",
+      "required_change": "Make the spawn-to-owned handoff interruption-safe, or let cleanup derive unreaped ownership from an acquired proc until a no-signal reap transition begins. Do not classify a non-null proc in an unresolved phase as successful cleanup. Audit the Popen return/assignment boundary as well as the following bookkeeping.",
+      "missing_evidence": "The fixed setup probe raises only after phase=owned and cannot exercise this handoff. Source proof of the complete handoff is missing."
+    },
+    {
+      "id": "B1a-E2E-026-interrupted-cleanup",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:204-279",
+      "problem": "The cleanup body is not protected against a further KeyboardInterrupt. For example, an interrupt after signal_attempts.append but before killpg skips signaling, all pipe closes and reap. An interrupt while draining or while the bounded reap sleeps similarly aborts the remaining cleanup. The local catches handle OSError or Exception, not BaseException; the outer except cannot catch exceptions raised by its own body. finally only closes the selector and can then label pending pipes closed without closing them. The suite fails, but owned-process cleanup and receipt accuracy are not established. Blocking signals only around waitpid does not protect the rest of cleanup.",
+      "required_change": "Use a bounded, interruption-resilient cleanup policy that defers or records interruptions while completing each independent pipe/selector/reap obligation. Preserve the triggering failure and mark interrupted/uncertain cleanup terminally failed. Do not infer closed pipes from reaching finally. Keep the no-signal-before-reap invariant intact.",
+      "missing_evidence": "The fixed post-reap interrupt is raised before entering cleanup, with pipes already closed by normal collection; it does not test interruption during cleanup. No source proof or runtime observation covers interrupted cleanup."
+    },
+    {
+      "id": "B1a-E2E-026-finalization-receipt",
+      "severity": "medium",
+      "classification": "lifecycle_acceptance_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:197-205,219-231,265-279,305-314",
+      "problem": "Normal completion sets cleanup=success before the final selector.close. If that close raises, the main cleanup handler has already been left, so lifecycle.json can contain failure=null and cleanup=success for an actual failed invocation. Failure cleanup also closes the selector once in its guarded block and again unguarded in finally, allowing a second failure to replace the original diagnostic. A failure during set_blocking/read skips that stream's close because draining and closing share one try. The final pending-to-closed assignment records no observed close operations.",
+      "required_change": "Finalize each resource once through a guarded path; attempt close even if its drain/setup failed. Derive pipe/selector closure and overall cleanup from observed outcomes, and update the lifecycle failure for finalization or probe-validation errors before persistence. Preserve the original failure alongside cleanup errors.",
+      "missing_evidence": "No truthful source path covers selector-close or partial pipe-cleanup failure. Later approved public evidence must include lifecycle state and independently bounded outer completion, rather than accepting a literal success field as proof."
+    }
+  ],
+  "scope_assessment": {
+    "allowed_file_boundary": "satisfied by manifest and recursive content comparison",
+    "behavioral_scope": "not fully satisfied",
+    "violations": [
+      {
+        "location": "tests/e2e/test_review_adapter_e2e.py:153",
+        "change": "The fixed parent stdin payload was changed from a newline-terminated byte string to a literal backslash followed by n. Restore the original payload; lifecycle ownership does not require changing it. The current real adapter redirects from prompt.txt, so this observation is not a claim that current fake routing records necessarily fail."
+      },
+      {
+        "location": "tests/e2e/test_review_adapter_e2e.py:193-196",
+        "change": "The original second monotonic read in sleep was replaced with a saved remaining duration, partially implementing the deadline-race card expressly reserved for launch27. Keep the overall finding open and reconcile this scope departure before accepting launch26; it does not justify calling the deadline finding fixed."
+      }
+    ],
+    "not_claimed_as_new_safety_defect": "Cleanup waitpid does not set proc.returncode, unlike the normal path. This leaves Popen bookkeeping stale, but no source path shown here turns that omission into a post-reap group signal. It should be reconciled with the lifecycle implementation without overstating its demonstrated impact."
+  },
+  "public_probe_assessment": {
+    "present": ["lifecycle-normal", "lifecycle-setup-failure", "lifecycle-post-reap-exception", "lifecycle-post-reap-interrupt", "lifecycle-timeout", "lifecycle-stdout-overflow", "lifecycle-stderr-overflow"],
+    "real_public_path": "Source invokes /bin/bash with the actual provided adapter and sibling; native sandbox execution is in the unchanged sibling. No runtime success is inferred.",
+    "expected_source_behavior": "Normal checks the original success response and cleanup field. Fixed injected faults, timeout and overflow propagate nonzero. lifecycle.json is attempted for failures inside the single-invocation try; pre-invocation fixture/config failures occur before this persistence scope.",
+    "limitations": "The normal probe validates response bytes/status, not per-case routing; that remains the separate routing card. The post-reap fault controls demonstrate only their fixed points, not every asynchronous ownership/cleanup boundary. Cleanup receipts currently have the gaps above. SIGTERM remains default process termination after unmasking; masking it around waitpid alone is not a guarantee of a persisted receipt or completed cleanup. No claim of comprehensive signal handling is accepted."
+  },
+  "missing_evidence": [
+    "No runtime evidence was generated, as required for source-only review.",
+    "The ownership card needs correction and independent source re-review before any execution approval.",
+    "All six non-ownership findings explicitly remain open; launch26 cannot establish complete-suite acceptance.",
+    "The outer execution wrapper requires its own review and complete exact source/adapter/environment binding verification. This report does not approve that wrapper.",
+    "After all execution blockers and approval prerequisites are resolved, collect bounded process exit/stdout/stderr and lifecycle.json for each of the seven real public probes. Independently establish bounded outer completion and inspect ordering/cleanup outcomes. A cleanup response fixture is not process-cleanup evidence.",
+    "Native platform support and behavior of the chosen signal-masking implementation have not been exercised here. No substitute sandbox, helper-only test, or PID-reuse experiment is authorized by this review."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-027.json
+SHA256 20a80247c67b64381ebd23550a42e55cc5ff7977bfceddf91b13a51b576ae747
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "parent_revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+  "source_sha256": "dd9c4f8fbfab2657582ad36c204d5c8781ce990188b184100b476d5adc406689",
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "execution_safety_verdict": "No new concrete process-safety defect established within the finite cooperative SIGINT/SIGTERM and fixed-fault contract. This limited review is not execution approval or acceptance; lifecycle receipt gaps remain.",
+  "scope": "Read launch_027, review026, frozen27 source, manifests, diff and independent-validation.json; independently computed source, parent/result manifest and adapter hashes. No candidate execution, imports, compilation, tests, providers, Docker or delegation. Wrote only this review. Root reports full-manifest/provider/cleanup verification passed; that is not runtime lifecycle evidence.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-027/frozen/tests/e2e/test_review_adapter_e2e.py",
+  "adapter_hashes": {
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_dispositions": {
+    "B1a-E2E-025-owned-process-lifecycle": "Open pending the receipt corrections below and later approved public evidence.",
+    "B1a-E2E-026-spawn-handoff": "Source concern addressed for the finite contract: handlers only record intent before Popen; no signal mask crosses spawn; phase becomes owned immediately after acquisition and before bookkeeping. The redundant finalizer exclusion of not-spawned lacks the planned fallback, but no cooperative-signal or designated-fault path reaches a non-null proc in that phase; no arbitrary-exception defect is claimed.",
+    "B1a-E2E-026-interrupted-cleanup": "Core source concern addressed: handlers remain non-raising through resource obligations, repeated cleanup signals set a separate fixed flag, drain and close are separate, and cleanup uses one deadline. The fixed cleanup-interrupt control sends one self-SIGINT after a setup failure. Observation completeness remains deficient below.",
+    "B1a-E2E-026-finalization-receipt": "Partially addressed: one guarded selector close, observed pipe outcomes, independent drain/close, first-failure preservation, return after finalization, and probe-validation failure persistence. Aggregate cleanup truth and required signal observations remain open."
+  },
+  "positive_source_observations": [
+    "Every waitpid first sets reap-uncertain; only waited==0 restores owned. Known reap sets reaped before returncode conversion on both normal and cleanup paths. The sole killpg is before cleanup reap and requires owned; uncertain/reaped paths cannot signal.",
+    "The original newline stdin payload is restored; saved-duration normal waiting is retained as expressly authorized. Only the allowed test source changes according to the manifest/diff and root validation.",
+    "Eight fixed lifecycle scenarios plus matrix form a closed CLI enum parsed before spawn. Each lifecycle branch invokes the actual adapter once; no arbitrary command, timeout, signal or runner input is introduced. Fixed environment, native sandbox profile, stream caps and original matrix behavior remain."
+  ],
+  "findings": [
+    {
+      "id": "B1a-E2E-027-cleanup-outcome-conflation",
+      "severity": "medium",
+      "classification": "lifecycle_acceptance_gap",
+      "location": "319-328",
+      "problem": "The clean predicate requires primary is None. Therefore a deliberate setup failure, timeout, overflow or ordinary post-reap exception necessarily persists cleanup=failed even when every close, handler restoration and leader reap succeeded with no cleanup interruption or errors. The receipt cannot distinguish failed work with successful cleanup from failed cleanup, contrary to the required separation of primary failure and cleanup outcomes.",
+      "required_change": "Derive aggregate cleanup solely from observed cleanup/reap/close/restoration outcomes and cleanup interruption. Preserve and re-raise primary independently; successful cleanup must never turn an injected failure into exit zero.",
+      "required_e2e": "After separate execution approval, use the existing setup-failure, timeout, overflow and post-reap-exception public controls. Where observed cleanup obligations succeed, require nonzero exit plus original failure and cleanup=success. Keep cleanup-interrupt nonzero with cleanup=failed even when its resource obligations complete."
+    },
+    {
+      "id": "B1a-E2E-027-signal-observation-receipt",
+      "severity": "medium",
+      "classification": "lifecycle_acceptance_gap",
+      "location": "140-150,259-266,310-316",
+      "problem": "The handler records received.signal locally but never persists it. Cleanup interruption records only a boolean and a generic message; collection interruption also loses the signal identity. signal_attempt omits the ownership phase. Thus lifecycle.json cannot show the required observed SIGINT in the fixed cleanup-interrupt probe or the phase at the actual group-signal attempt; scenario name alone is not an observation.",
+      "required_change": "Persist a fixed scalar first-signal observation and the phase captured at the sole group-signal attempt, retaining the existing intended/attempted/result fields and separate cleanup-interrupted flag. Do not add a signal log or new fault matrix.",
+      "required_e2e": "Use existing cleanup-interrupt to require original setup failure, observed SIGINT, cleanup_interrupted=true, cleanup=failed and independent resource/reap outcomes. Existing owned-failure controls must expose phase=owned for an attempted group signal; post-reap controls must show no attempt."
+    }
+  ],
+  "other_findings": "All six non-ownership review025 findings remain open: record-bound, result-receipt, arity-offset, per-case-routing, deadline-race and diagnostic-byte-cap. This review does not repeat or close them.",
+  "missing_evidence": [
+    "No runtime evidence was generated. Source correction and exact-revision re-review remain necessary for ownership-card closure.",
+    "Complete source/environment execution approval and separate outer-wrapper approval are still required before runtime work; this review grants neither.",
+    "Later approved evidence must collect bounded public-process exit/stdout/stderr and lifecycle.json for all eight fixed lifecycle scenarios, with independently bounded outer completion. Provider authoring validation and a cleanup success literal do not establish process cleanup."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-028.json
+SHA256 eddbbc3a70fd91b94467ff89580f9239ee4d9acae575b8bf55796949abf06848
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "parent_revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "source_sha256": "df3260094ed9e55055e13040520900103e765217237c5ec5a62e3b31d13a804e",
+  "input_hashes": {
+    "astra-plan-028.json": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef",
+    "astra-source-review-027.json": "20a80247c67b64381ebd23550a42e55cc5ff7977bfceddf91b13a51b576ae747",
+    "coding-jobs/B1a-Receipt-028/diff.patch": "fa705073916533baed36b96afe3eb53d5cd4ffff17b5662828495700e8a3f743",
+    "coding-jobs/B1a-Receipt-028/independent-validation.json": "5dad97e85c2f21536d9edd44c10516016692f430d778af6a18008e5ccd268359"
+  },
+  "source_card_closed": true,
+  "ownership_source_concern_closed": true,
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "execution_safety_verdict": "Limited source closure only. Full safety acceptance and execution remain blocked by the six known review025 findings, including record-bound, and missing source/environment and outer-wrapper approvals.",
+  "scope": "Reviewed the complete frozen source and exact diff against frozen27 within the finite cooperative SIGINT/SIGTERM and eight fixed lifecycle-scenario contract. Independently verified hashes, all 82 manifest entries (content, size, mode), exact parent-manifest identity, and exact diff. Only the allowed test file changed. No candidate execution, imports, compilation, tests, providers or delegation; wrote only this review.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Receipt-028/frozen/tests/e2e/test_review_adapter_e2e.py",
+  "adapter_hashes": {
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_dispositions": {
+    "B1a-E2E-027-cleanup-outcome-conflation": "Source closed: lines 319-324 derive cleanup solely from observed close/reap/selector outcomes, cleanup errors and interruption; restoration failures enter cleanup_errors. Lines 328-331 still re-raise the preserved primary failure independently.",
+    "B1a-E2E-027-signal-observation-receipt": "Source closed: first_signal initializes null and copies the handler-observed numeric signal or null after restoration (131,147-151,306-312); deliberate KeyboardInterrupt does not invent a signal. signal_attempt.phase initializes null and captures owned immediately before the sole killpg (132,260-263). No-attempt paths retain null.",
+    "B1a-E2E-025-owned-process-lifecycle": "Source concern closed through the cumulative26/27 ownership changes and these final receipt corrections, within the existing finite contract. Runtime acceptance remains open.",
+    "B1a-E2E-026-spawn-handoff": "Prior source closure preserved.",
+    "B1a-E2E-026-interrupted-cleanup": "Prior core source closure preserved; its signal-observation gap is now source closed.",
+    "B1a-E2E-026-finalization-receipt": "Remaining aggregate-cleanup and signal-observation source gaps closed."
+  },
+  "regressions": "None identified in this exact receipt-only diff. Ownership/reap transitions, first-failure persistence, independent close/reap obligations, single two-second cleanup deadline, guarded handler restoration, actual adapters, native sandbox, fixed environment, newline stdin, saved-duration waits, existing limits and closed CLI enum are unchanged.",
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-deadline-race",
+    "B1a-E2E-025-record-bound",
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime evidence exists for this revision. Source closure is not ownership runtime acceptance or full execution approval.",
+    "Resolve the six remaining review025 findings and obtain complete exact-revision source/environment approval plus separate outer-wrapper approval before execution.",
+    "After approval, collect bounded public exit/stdout/stderr and lifecycle.json for all eight existing lifecycle scenarios, with independent outer completion. Verify nonzero primary-failure exits alongside successful cleanup where obligations succeed; owned attempted-signal phase; post-reap no-attempt/null phase; cleanup-interrupt observed numeric SIGINT, preserved setup failure, failed cleanup, and independent resource/reap outcomes. Without an observed OS signal, first_signal must remain null."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-029.json
+SHA256 19f9d4fa59f9073b38d13ad97e828d153b899f27d60ce2dca763fb4aba5856ab
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+  "parent_revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "source_sha256": "407d80771a820d8b91a8a52edb3694af4889c648dfaa1a290607739359fe85c1",
+  "input_hashes": {
+    "astra-plan-029.json": "6b48f9ec60ff66dc112ce85a625c82d5f185ea179dbc12566fd4c1e8800c183f",
+    "astra-source-review-028.json": "eddbbc3a70fd91b94467ff89580f9239ee4d9acae575b8bf55796949abf06848",
+    "coding-jobs/B1a-Deadline-029/diff.patch": "e33932e80110e085aff14e29923360ba9bde6e82c419165cd70d2a3b411dd1af",
+    "coding-jobs/B1a-Deadline-029/independent-validation.json": "19ef71d2bf34b45a9ae696b5bfe3a3a15fc1122782f12f38097b9bade8b45d4d"
+  },
+  "source_card_closed": true,
+  "ownership_source_concern_closed": true,
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "scope": "Read complete frozen source, exact diff, plan29, review28 and independent validation. Independently verified all 82 manifest entries by content, size and mode, exact parent manifest, exact diff and all plan input hashes. Only the allowed test file changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review. Assessment stays within the existing finite signal and fixed-scenario contract.",
+  "source_dispositions": {
+    "B1a-E2E-025-deadline-race": "Source closed: one absolute suite deadline reaches every response, valid-review, arity and lifecycle call. Lines 190-195 check a saved monotonic observation inside the protected region before the sole Popen and cap the invocation deadline. Collection, ordinary reap and cleanup reap use positive saved remaining durations; independent two-second cleanup and primary failure preservation remain intact.",
+    "deadline-controls": "Exactly two added enum values exercise the shared real guard. Before-first attempts one exhausted invocation. Before-next validates one ordinary response and successful cleanup before attempting an exhausted second invocation. The bounded attempts receipt is written before rethrow; exhausted state has no PID, absent pipes/selector, no signal attempt, successful no-child cleanup and suite-timeout failure. Intended exhaustion returns nonzero.",
+    "B1a-E2E-025-owned-process-lifecycle": "Prior source closure preserved. Ownership transitions, signal observation, guarded restoration, independent close/reap obligations and primary failure semantics are unchanged. Runtime acceptance remains open."
+  },
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-record-bound",
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime acceptance for revision29. Resolve the five remaining findings and obtain complete exact-revision source/environment approval and separate outer-wrapper approval before execution.",
+    "After approval, collect bounded public receipts for deadline-before-first, deadline-before-next, lifecycle-timeout and lifecycle-normal, including deadline.json or lifecycle.json and independent outer completion. Verify zero records/one unspawned state before-first and one matching record/one successful reaped state followed by one unspawned state before-next using the approved raw-byte-bounded outer collector.",
+    "Prior ownership runtime obligations from review28 remain open. Fixed runtime controls do not establish arbitrary scheduling behavior."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-030.json
+SHA256 e793a44012c7fe839a05c342cd424e69c3a25ff0d7c37e0e80b32e338670d647
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0",
+  "parent_revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+  "source_sha256": "62de4d8beb975d777ab145d5c626d9ade201842e58d0dd5934867132df27646a",
+  "input_hashes": {
+    "astra-plan-030.json": "5f356361dde171ce8a84b81a254f2720ac5c478a191e183b3357c79a43e862c9",
+    "astra-source-review-029.json": "19f9d4fa59f9073b38d13ad97e828d153b899f27d60ce2dca763fb4aba5856ab",
+    "coding-jobs/B1a-Records-030/diff.patch": "a631d342742d6ea61bf5fcad4c427d2bb9723badc9192c90d2c299747da79ef5",
+    "coding-jobs/B1a-Records-030/independent-validation.json": "cfd19f09023c382f7148d7daf129b56264feae01e033e3b95e3947f6c6e5b1b2",
+    "claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_card_closed": false,
+  "safe_for_execution": false,
+  "scope": "Read complete frozen test, plan30, review29, diff and validation. Independently verified all 82 frozen manifest entries by hash, size and mode, parent-manifest binding, exact diff and unchanged adapter hashes. Only the allowed test differs from frozen29. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "raw-record-collector": "Source corrected: binary unbuffered collection retains at most 16385 raw bytes, closes through a context manager, and rejects overflow before splitting or parsing. All four record reads use it; both former read_bytes sites and newline-excluding size calculation are removed.",
+    "public-controls": "Exactly two fixed enum controls use the actual adapter, fixtures, sandbox and shared bounded_run, verifying response and cleanup first. Boundary receipts retain observed bytes, protocol_evaluated=false, original failure and lifecycle state. Required boundary construction is blocked by the finding below.",
+    "prior-source-closures": "Ownership and deadline source closures remain preserved: bounded_run, existing controls, constants, fixed environment, newline stdin and cleanup logic are unchanged. Runtime acceptance remains open."
+  },
+  "findings": [
+    {
+      "id": "B1a-Records-030-boundary-newline-escaping",
+      "priority": "P1",
+      "path": "tests/e2e/test_review_adapter_e2e.py",
+      "lines": [414, 423, 426],
+      "finding": "Both new literals b\"\\\\n\" denote two bytes (backslash and n), not LF. The fixture writes a real LF, so both controls fail at line 414 with unexpected initial record size before exercising either boundary. Independently, line 423 would append twice the required byte count; subtracting that write count makes remaining negative and the next empty write fails. Fixing only the guard is insufficient.",
+      "required_correction": "Use the single-LF byte literal at both sites so the guard matches the real fixture and each padding repetition adds exactly one newline byte. Preserve the capped collector and receipt semantics; obtain fresh exact-revision source review."
+    }
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-per-case-routing (card31)",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "Card30 source closure requires correction of both newline literals; record-bound acceptance remains open.",
+    "No runtime evidence. After all source/environment blockers and separate outer-wrapper approval are resolved, run the public exact-limit, one-over and lifecycle-normal controls and collect bounded receipts plus independent outer completion. Exact-limit must observe 16384 and exit zero; one-over must observe 16385 and fail with record-overflow; both must retain successful actual invocation cleanup and protocol_evaluated=false.",
+    "Per-case deltas31, arity, diagnostics and result receipt work remain pending. Prior ownership/deadline runtime obligations remain open."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-031.json
+SHA256 a00f29e03aeb3d178c354d63d3a7095823a857abff57f4b093ba99f58ac8ef64
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "parent_revision_sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0",
+  "source_sha256": "f2d5d17bf15b76181a4da149d42b9448702a5346fc3866a6f4b65b06743384fe",
+  "input_hashes": {
+    "astra-plan-031.json": "65f41883e836bf198f5f309975036e70d0f93f5cc2cdd74f13a151203dc6683e",
+    "astra-source-review-030.json": "e793a44012c7fe839a05c342cd424e69c3a25ff0d7c37e0e80b32e338670d647",
+    "coding-jobs/B1a-Newline-031/diff.patch": "5a43d2704e246a5ca42af95a4902ad599bd02a42b4715d11877ea3900208c2fa",
+    "coding-jobs/B1a-Newline-031/independent-validation.json": "78ae1dab99b828573906b3e4db6504ab4ccee67959dec6c51bf6e05e3c810954",
+    "claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, plan31, review30, diff and validation. Independently verified all 82 frozen manifest entries by hash, size and mode, exact file inventory, parent-manifest binding, exact diff and unchanged adapter hashes. Only the allowed test differs from frozen30, by exactly the two requested literal replacements. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "B1a-Records-030-boundary-newline-escaping": "Closed at source: executable-source lines 414 and 423 now use single-LF byte literals. The guard matches the fixture terminator; each padding repetition adds one byte and subtraction of each successful write reaches zero even with partial writes.",
+    "record-bound-source-card": "Closed at source with review30 collector/control dispositions preserved. The unchanged collector caps raw reads at 16385 bytes and rejects overflow before parsing. Exact-limit construction targets 16384 bytes; one-over targets 16385, retains the rejected outcome and raises record-overflow. Receipts retain protocol_evaluated=false and successful actual-adapter cleanup before boundary construction.",
+    "embedded-template-and-regressions": "Embedded fake_source newline escaping is unchanged and remains correctly doubled for generated Python. Exact two-replacement comparison proves no scope expansion or changes to collector, receipts, constants, ownership, deadlines, cleanup, adapters or other controls; no new source regression found."
+  },
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime acceptance. Record-bound and prior ownership/deadline lifecycle runtime obligations remain open.",
+    "After all remaining source/environment blockers and separate outer-wrapper approval, exact-revision public controls must establish exact-limit observed_bytes=16384 with accepted outcome and exit 0; one-over observed_bytes=16385 with record-overflow and nonzero exit; both preserve successful actual-adapter cleanup and protocol_evaluated=false. Collect bounded receipts and independent outer completion, plus lifecycle-normal evidence.",
+    "All four original routing, arity, diagnostic-byte-cap and result-receipt findings remain open; fake-routing evidence does not establish provider identity or availability."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-033.json
+SHA256 457d873b4c291167fbc7d3340fc1cfd92a83d69e82da891279e23b99ad79eccb
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "source_sha256": "d7c94d0f322ff870bcaaa8e7f85f9d043aba6e3de2587ee3b7c7bd2aed1d2fd2",
+  "input_hashes": {
+    "astra-plan-033-v2.json": "227d0ed6ba500f008f28ef701c1503dbe01c61e63845aa57ac4ba25f28e35a8a",
+    "astra-source-review-031.json": "a00f29e03aeb3d178c354d63d3a7095823a857abff57f4b093ba99f58ac8ef64",
+    "coding-jobs/B1a-Routing-033/diff.patch": "acd599fb61e9f636cfaf45de66b0337476502e74fb87aaff3e76d012b3507f48",
+    "coding-jobs/B1a-Routing-033/independent-validation.json": "d3737499121d592556b5265cc842e4256f181ba8501ca51c736355af0c450685",
+    "coding-jobs/B1a-Routing-033/guardian/receipt.json": "ce2542f59730f42c4b8c75b1e180de16b4859a94f3625c565debb44ac022e29a",
+    "claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_card_closed": false,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, adapters, plan33-v2, review31, diff, validation and guardian receipt. Independently verified all 82 manifest entries by hash/size/mode, exact file inventory, byte-identical parent manifest binding to accepted31 and exact diff. Only the allowed test changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review. Provider recovery is reported successful, but does not establish source acceptance.",
+  "source_dispositions": {
+    "R1": "Satisfied at source for all required matrix callsites: nine response rows at 568-577, extra valid-review at 581-590, and eight preserved invalid-arity rows at 591-603 immediately collect bounded records and compare the retained raw prefix plus suffix. Snapshot advances only after routing match; mismatch raises before any later invocation.",
+    "R2": "Satisfied at source for those callsites: exact one matching argv/cwd/base64-stdin object for response and valid-review, zero raw bytes for invalid arities. Checker rejects prefix changes, blank/incomplete lines, count errors, malformed JSON and unequal objects. Row identity/deltas/outcome precede byte/status checks. New LF operations use bytes([10]); generated-source escaping remains correct.",
+    "R3": "Preserved: nine response fixtures, additional valid-review, eight existing invalid arities and response comparisons. Aggregate-only acceptance removed. Exact diff leaves collector, bounded_run, limits, deadline/ownership/cleanup logic, sandbox, existing controls and both adapters unchanged; no additional regression found in those areas.",
+    "R4": "Not satisfied: fixed public choices and literal fake zero/two-record modes exist, but controls execute a separate one-shot branch rather than the actual matrix response path.",
+    "R5": "Partially satisfied: separate control branch passes lifecycle state to unchanged bounded_run and writes routing.json with bounded record/response observations, expected/observed deltas, failure reason and count1 before returning nonzero. Receipt-write failure propagates. Count1 and absence of later launches are structural properties of that branch, not evidence that the matrix aborts on its first mismatching row."
+  },
+  "findings": [
+    {
+      "id": "B1a-Routing-033-controls-bypass-matrix",
+      "severity": "blocking",
+      "path": "tests/e2e/test_review_adapter_e2e.py",
+      "line": 503,
+      "detail": "Lines 503-532 independently invoke the adapter, check a delta and return before the matrix loop at 563-577. A regression removing the matrix routing check or allowing later matrix launches would not affect either control. This violates explicit R4 actual-matrix-path coverage and leaves the per-case-routing finding open."
+    }
+  ],
+  "requiredchanges": [
+    "Route matrix, routing-missing and routing-duplicate through the same response loop and its immediate collector/checker/abort path, bypassing only the lifecycle branch. Only the first success response in either control should select its literal missing/duplicate mode. Count actual invocation attempts there and persist the bounded control routing receipt with lifecycle state on the first mismatch, then exit nonzero before any later bounded_run. Preserve accepted normal callsite behavior and all existing safeguards."
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "Fresh exact-revision source review after the shared-matrix control correction; source33 is not accepted.",
+    "No runtime acceptance. After remaining source/environment blockers and separately reviewed outer wrapper, public matrix and both controls must establish matching one/zero deltas and actual first-row failures with observed0/2, attempted1, bounded receipts and independent cleanup/completion evidence.",
+    "Existing arity, diagnostic-byte-cap, result-receipt/inventory and outer-wrapper obligations remain open. Fake routing cannot establish provider identity or availability."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-034.json
+SHA256 8da761046c12199c72f7477814094150cc9da0fc45becdeb5ed81233dad95386
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+  "parent_revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "source_sha256": "a38c78d34350178809f5135555d59dc5b53d0d7e5fded8be92af1d822f6a2565",
+  "input_hashes": {
+    "astra-plan-034.json": "3e46a2abdd958ae824179d48b3ad113264272a692977ae5d14271135fd7ec26a",
+    "astra-source-review-033.json": "457d873b4c291167fbc7d3340fc1cfd92a83d69e82da891279e23b99ad79eccb",
+    "coding-jobs/B1a-Routing-034/diff.patch": "4e5cb947cf0f5de69af0236940fff3b76c6feee89a8b4ffc0dd017aec6fdae46",
+    "coding-jobs/B1a-Routing-034/independent-validation.json": "f1a28cc06e053670125e80ce1eff079c6863e2a5abd2c3f3447e0705d21d2409",
+    "coding-jobs/B1a-Routing-034/guardian/receipt.json": "09f1ee7bd6ae74af38534d01ec21cf3c0af18e6f644f8c6c96d18706937b4908"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, both adapters, plan34, review33, review25, diff, validation and guardian receipt. Independently verified all 82 frozen entries by hash/size/mode, exact inventory, byte-identical parent manifest binding to revision33 and exact diff. Only the allowed test changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "R1": "Preserved: nine response rows at 536-579, valid-review at 583-590 and eight existing invalid-arity rows at 594-603 immediately collect/check the retained raw prefix and row delta. Snapshot advances only after match; mismatches prevent subsequent invocations.",
+    "R2": "Preserved: expected one exact argv/cwd/base64-stdin object for response/valid-review and zero raw bytes for invalid arities. Checker rejects prefix changes, blank/incomplete lines, wrong counts, malformed JSON and unequal objects. Row observations precede response checks; LF handling is unchanged.",
+    "R3": "Preserved: response fixtures, extra valid-review and existing arity coverage/comparisons remain. Exact diff leaves fake selector, collector, bounded_run, bounds, ownership, deadlines, cleanup, sandbox, other controls and adapters unchanged. The response callsite now retains invocation errors for receipt/checking and still fails before another launch.",
+    "R4": "Satisfied at source: line503 sends both fixed controls into the actual CASES loop at536. Only index0 selects literal missing/duplicate at540-541; response bytes/status remain unchanged. Both controls share the matrix bounded_run at550 and immediate collector/checker at555-556. The separate one-shot invocation branch is removed.",
+    "R5": "Satisfied at source for the two fixed controls: attempted starts at0 and increments at the shared callsite; unchanged bounded_run receives lifecycle state. Lines558-572 write routing.json before failing, with first row, expected/observed delta, reason, bounded record/response observations, actual attempt count, invocation failure and lifecycle. The fixed fake modes produce observed0/2 against expected1 and attempted1; all control paths stop before later launches. Receipt-write failure and unexpected matching completion fail. Response/cleanup errors cannot be reported as clean routing success. These are source conclusions, not runtime observations."
+  },
+  "findings": [],
+  "requiredchanges": [],
+  "closed_source_findings": [
+    "B1a-Routing-033-controls-bypass-matrix",
+    "B1a-E2E-025-per-case-routing"
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime acceptance: after remaining blockers and separate execution approval, run the public matrix and both fixed routing controls. Establish actual first-row observed0/2, expected1, attempted1, nonzero status, bounded receipts, no later launches and independent cleanup/completion evidence.",
+    "Arity correction, diagnostic byte cap, complete result receipt/inventory and independently reviewed outer wrapper remain open; this source-card closure authorizes no execution or dispatch.",
+    "Fake routing cannot establish provider identity or real-provider availability."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-035.json
+SHA256 90a7d2086d0f9ca0f4a3beb392e075f085c31a2c93e1b12195a1055794b067ce
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+  "parent_revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+  "source_sha256": "af8bd7297c7c97892a502331ad18357ff94415a474f9b8954a9e72650306669a",
+  "input_hashes": {
+    "astra-plan-035.json": "518660c37018e34f1244555407a15d25a09e904832964ef91f388ff2b733dafb",
+    "astra-source-review-034.json": "8da761046c12199c72f7477814094150cc9da0fc45becdeb5ed81233dad95386",
+    "coding-jobs/B1a-Arity-035/diff.patch": "2b5ce7d7602845be895425d5a1daa5d4110b42c7c26c026b014217acc0ccb00e",
+    "coding-jobs/B1a-Arity-035/independent-validation.json": "58c6e49afd9f4da7a00cf44fa4712dd610bff11a312cf06f096072bb727ea459"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, both adapters, plan35, review34, diff and validation. Independently verified all 82 frozen entries by hash/size/mode, exact inventory, byte-identical parent binding and exact diff. Only allowed test changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "arity_rows": "Satisfied: exactly nine rejection rows: empty argv/count0; review total1,2,3,4,6; code total5; unknown total4,5. Role counts toward total. Nonempty arguments are role plus count-1 literal unused values. All reject in unchanged claude-worker before paths/providers; valid code total4 is never invoked.",
+    "rejection_checks": "Satisfied: actual adapter launch uses bounded_run; immediate bounded collect_records and validate_routing_delta(expected0) reject changed prefix or any appended byte. First routing mismatch fails before snapshot advancement or another invocation. Then status64, empty stdout/stderr and observed_delta0 are required.",
+    "row_evidence": "Satisfied: each arity row retains routing fields and adds unambiguous case, adapter_argv, total_argument_count=len(params), full launch_argv, including empty argv/count0.",
+    "regressions": "Redundant valid-review block removed. Nine original response rows still invoke valid review total5 with unchanged exact response/routing checks. Exact diff preserves routing and lifecycle controls, ownership, deadlines, cleanup, record/stream bounds, diagnostics and adapters. No general result receipt added."
+  },
+  "findings": [],
+  "requiredchanges": [],
+  "closed_source_findings": [
+    "B1a-E2E-025-arity-offset"
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "Source closure only. Diagnostic byte cap, complete result receipt/inventory and independently reviewed outer wrapper remain open; no execution or dispatch approval.",
+    "Public response/arity matrix, fixed controls and independent cleanup/completion evidence still require separately approved exact-revision execution. Fake routing cannot establish provider identity or availability."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-036.json
+SHA256 c58ad686e500d647288bcd1b6dfa7cdde428d47c4de6703235e9560b980f4a56
+{
+  "review_type": "independent final source-only review; no runtime or end-to-end acceptance",
+  "revision_sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4",
+  "parent_revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+  "source_sha256": "345b8c7b052bda1d0a77c2d12fb70b3ca41181ade5e3f3ccb2e012b3404325fe",
+  "input_hashes": {
+    "astra-plan-036.json": "7b6c0fb15753c0366712dbfd97b750d71d181f2e85815f8f4f89db5d94b81c13",
+    "astra-source-review-035.json": "90a7d2086d0f9ca0f4a3beb392e075f085c31a2c93e1b12195a1055794b067ce",
+    "retry-astra-review-025.json": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825",
+    "coding-jobs/B1a-Diagnostics-036/diff.patch": "dff1f24c71a9f780a194f9741ab558c94c87298515079d2cfe171bd69f217106",
+    "coding-jobs/B1a-Diagnostics-036/independent-validation.json": "6e580cbdecb289bb54d09ea3e663ac7da9ece98b94ed94373610a453ed7a8a54"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "overall": "INCOMPLETE",
+  "scope": "Read frozen test, adapters, plan36, review35, original review25, diff and validation. Independently verified all 82 frozen entries by hash/size/mode, exact inventory, byte-identical parent manifest, exact diff and every plan input hash. Only the allowed test changed. No candidate execution, source import, compilation, tests, Docker, provider invocation or delegation. Original repository source was not imported or replaced. Wrote only this review.",
+  "source_dispositions": {
+    "normal_diagnostics": "Satisfied: DIAGNOSTIC_LIMIT remains 4096; Failure preserves str(exc), Exception preserves type name plus ': ' plus str(exc). Each encodes UTF-8 with replacement, slices to 4095 bytes, appends one newline byte and writes directly to stderr.buffer without decoding. Each returns 1.",
+    "interrupt_and_parser": "Satisfied: explicit KeyboardInterrupt handler writes only fixed b'KeyboardInterrupt\\n' and returns 130. No new broad BaseException handler or SystemExit interception; argparse parsing remains outside the guarded region. This closes only the specified finite handler diagnostics, not parser output, stream-write failures, startup/shutdown failures or repeated asynchronous interruption.",
+    "public_controls": "Satisfied: exactly three added choices. After validate and before make_fixtures, diagnostic-ascii raises fixed Failure('A' * 8192), diagnostic-multibyte raises fixed RuntimeError('é' * 4096), and diagnostic-interrupt raises KeyboardInterrupt(). No arbitrary payload input, fixture execution, child launch or routing evidence is introduced.",
+    "regressions": "Exact diff preserves response and corrected arity matrices, per-invocation routing, bounded records, lifecycle ownership/finalization, deadlines, cleanup, adapters and existing control receipts. No receipt framework was added. No new source-card defect identified."
+  },
+  "source_card_findings": [],
+  "closed_source_findings": ["B1a-E2E-025-diagnostic-byte-cap"],
+  "findings": [
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "severity": "high",
+      "classification": "acceptance_evidence_gap",
+      "status": "open; existing finding confirmed against final frozen source",
+      "location": "tests/e2e/test_review_adapter_e2e.py:536-623",
+      "problem": "No result.json is written. Matrix success prints rows and overall pass only; response rows lack exact launch argv, expected/actual streams and status, and retained lifecycle cleanup outcomes. Arity rows now carry argv/count and routing evidence, but lack complete expected/actual and cleanup evidence. Failure exits discard accumulated matrix rows, and later planned rows are not persisted as not-run. Scenario-specific lifecycle/deadline/record-bound/routing files do not supply the complete matrix receipt.",
+      "future_plan_requirement": "Under separately authorized future coding scope, specify a result.json beneath the validated output directory with every planned row marked pass/fail/not-run, exact launch arguments, bounded expected/actual output and status, record checks and cleanup outcome. Persist failures after validation; overall pass requires every required row to pass. No implementation authorized by this review: coding launches are exhausted at 36/36.",
+      "missing_evidence": "Complete success and early-failure receipts, including explicit not-run rows, cannot be produced by the current test."
+    }
+  ],
+  "other_open_findings": ["B1a-E2E-025-result-receipt"],
+  "missing_evidence": [
+    "No runtime evidence or execution approval. Separately approved complete-script diagnostic runs must establish status 1/1/130, empty stdout, exact 4096-byte ASCII and multibyte stderr or fixed interrupt bytes, and no fixture/child activity; compare raw bytes.",
+    "Exact-revision response/arity matrix, lifecycle, deadline, record-bound and routing controls still require runtime evidence and independent cleanup/completion evidence. Source closures do not establish their observed behavior.",
+    "Complete result receipt and final acceptance inventory remain incomplete; the outer execution wrapper still requires independent review and binding/gate verification before any execution.",
+    "Fake routing can establish routing/transparency only; real-provider identity and availability remain unestablished."
+  ],
+  "budget_disposition": "36/36 coding launches exhausted. Any source correction is future planning only. Separate final planner must dispose all remaining findings and evidence gaps; this source-card closure is not overall completion."
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-026-card-review.json
+SHA256 e3b0fcf05207a1f51dcfd8935ed99f1e54bd601addb3b9265cc864e8f73aeb91
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 26,
+  "approved_card_id": "B1a-E2E-026-owned-process-lifecycle",
+  "reviewed_plan_sha256": "3cefd6a053e04cb61fc52acf3157aa307e177df7f148dff188d948f9c27c8758",
+  "reviewed_plan_section": "launch_026",
+  "findings": [
+    {
+      "severity": "info",
+      "id": "exact-authoring-card-approved",
+      "message": "The exact launch_026 section is suitable for one supervised read/edit/write-only Luna authoring attempt. Its only writable source is tests/e2e/test_review_adapter_e2e.py; it repairs process ownership and narrowly scoped fixed lifecycle probes. It expressly forbids worker execution, imports of project helpers, tests, Docker, Claude, provider subprocesses, arbitrary command controls, adapter copies, policy changes, and unrelated repairs."
+    },
+    {
+      "severity": "info",
+      "id": "ownership-requirement-adequate-for-authoring",
+      "message": "The card explicitly requires cleanup coverage from successful spawn, a no-signal region before potentially reaping operations, interruption-aware ownership transitions, bounded cleanup, and failure on unknown ownership. Public scenarios are a closed enum, each non-matrix probe invokes at most one adapter, and post-reap faults must not signal. These are sound authoring requirements; implementation correctness still requires independent review."
+    },
+    {
+      "severity": "info",
+      "id": "bindings-and-smoke-observed",
+      "message": "Computed parent manifest, current D10 candidate test, both current candidate adapters, original card25, and retry review SHA256 values all match the plan. The fresh smoke result reports PASSED, exit zero, reaping, removed credentials and matching profile hash. Inspected final stream events show stopReason stop, agent_end willRetry false and agent_settled aborted false; private-pi is empty. Root must finish its full-stream and full-manifest consistency checks before launch."
+    },
+    {
+      "severity": "warning",
+      "id": "scope-and-time-remain-supervised",
+      "message": "The plan contains seven launch templates but this approval covers only launch26. Its active_checkpoint_seconds is stale and lower than D10 allocation.prior_active_seconds; use the reconciled allocation and current active elapsed time, as the plan itself requires. Ledger remains 25/36. All previous launch-control review conditions remain applicable."
+    },
+    {
+      "severity": "warning",
+      "id": "no-execution-acceptance",
+      "message": "The existing source remains unsafe to execute, and the other six findings deliberately remain open. This approval neither accepts the resulting source nor permits the lifecycle probes, matrix, adapters, rejected controller, import, or any unattended activation to run."
+    }
+  ],
+  "conditions": [
+    "Dispatch exactly the reviewed launch_026 section, with only non-expanding operational author-only instructions. Preserve its exact source scope, fixed restrictions and stop conditions. Do not send remaining_cards as additional work to perform or activate later launches automatically.",
+    "Complete root's fresh smoke full-envelope/tool-activity checks, full parent-manifest/candidate binding checks, and current no-worker/credential-absence checks. Keep the exclusive S workflow lock and unchanged reviewed launcher, guardian and nofork profile.",
+    "Root verifies any outside-sandbox input bindings itself; their absolute paths in the card do not authorize expanding worker filesystem access. Supply only necessary verified non-secret reference content through the existing prompt/workspace mechanism.",
+    "Use a fresh unique job/workspace, reserve coding slot26 from ledger25, and enforce the global 36-launch and 32400-active-second limits using D10's reconciled allocation plus elapsed activity. Require the launcher's 660-second remaining reserve.",
+    "After authoring, independently verify complete provider completion, exact tool activity and single-file scope, parent/candidate immutability, frozen manifests, worker reaping and credential absence. Keep the result UNACCEPTED pending independent Astra source review.",
+    "A source review must inspect every reap/interruption transition and cleanup path; fixed fault probes alone cannot prove ownership safety. No later execution occurs until all execution-safety blockers and the outer execution wrapper receive the required independent reviews."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-026-review.json
+SHA256 e84a263095a97f7af38cc3e378583d4749d31a505b0edd098c0428e1ffbbd17a
+{
+  "safe_to_run_smoke": true,
+  "safe_to_dispatch_one_card": false,
+  "findings": [
+    {
+      "severity": "info",
+      "id": "smoke-bounded-approval",
+      "message": "Approve one supervised high-Luna smoke using the inspected D10 pi-smoke-high.py, R008 guardian and nofork profile, subject to the conditions below. This does not approve candidate execution, tests, Docker, Claude, unattended control, or another coding launch."
+    },
+    {
+      "severity": "info",
+      "id": "launch-byte-binding",
+      "message": "Computed SHA256 of launch-correction.py is 55c4da25003d0f58b4bff2e8394f642f6cf7191a1cfedd01f01006108aba747f, identical to D9 launch-B1a-e2e.py. D10 smoke SHA256 is fecd6c33c4da67e1441bb90c234cc7157d0d31a320c8332beed5461fcd75ea03; R008 guardian SHA256 is 0168a443a677349c14d6ff32482976407b09568bbed18fe37c7d7105ef45aa6f; R008 profile SHA256 is 6f5bd2ea5f14e95d4583167d7362a4a136655c1195b62b3d09448eb2c1b089c7. Assessment is based on inspected source and probe evidence, not inherited approval."
+    },
+    {
+      "severity": "warning",
+      "id": "coding-card-review-pending",
+      "message": "astra-correction-plan-026.json and the final dispatch card were not available during this review. safe_to_dispatch_one_card is false only because exact card review remains pending. The inspected launcher is conditionally suitable for one supervised coding26 authoring attempt restricted to tests/e2e/test_review_adapter_e2e.py after independent review of the final card and the required successful fresh smoke. This artifact alone does not activate coding26."
+    },
+    {
+      "severity": "warning",
+      "id": "root-acceptance-controls-required",
+      "message": "The dispatcher records scope_valid without enforcing it, does not establish complete provider completion, and always labels the frozen result UNACCEPTED. Root must independently validate all envelopes, exact model/provider, card and manifest bindings, cleanup, and single-file scope before considering any import. The smoke helper checks assistant message identities but does not establish a complete terminal protocol envelope by itself."
+    },
+    {
+      "severity": "warning",
+      "id": "shared-runtime-and-cleanup",
+      "message": "The D10 dispatch lock does not serialize the shared R008 runtime against D8/D9 or smoke launchers. It can also be removed once worker_reaped is true even if credential cleanup verification subsequently fails. Lock absence is not cleanup proof. The profile permits runtime-wide writes and access to the delegated temporary authentication file; read/edit/write tool selection is not a per-file filesystem boundary. Keep one supervised worker, inspect actual tool activity, and never expose credential contents in prompts or review outputs."
+    },
+    {
+      "severity": "info",
+      "id": "observed-state-and-ownership",
+      "message": "The D10 ledger currently records 25 of 36 coding launches. Runtime and private-pi directories are owner-private mode 0700, and private-pi was empty when inspected. D10 native-probe.json records successful fork denial, Docker socket denial, original/auth write denial, and private-runtime writes. Guardian signals only its direct unreaped child under the separately established nofork assumption, bounds output/time, and removes the delegated access token after reaping. No candidate or launcher code was executed by this reviewer."
+    }
+  ],
+  "conditions": [
+    "Maintain root's exclusive S workflow lock and no concurrent guardian, pi, dispatcher, or other runtime writer. Root reports these checks currently pass; recheck at each activation boundary.",
+    "Before smoke, verify the recorded guardian/profile/smoke hashes and native fork-denial evidence still bind the actual executable/profile/runtime; require credential absence and fresh unused smoke output paths. Run only the inspected smoke, with its 120-second timeout and bounded logs.",
+    "After smoke, independently require complete and valid JSON event envelopes with terminal success, exact openai-codex/gpt-6-luna identity, expected fixture bytes, zero exit, no timeout/output-cap/error/aborted state, worker absence/reaping, and credential absence. Any uncertainty stops dispatch.",
+    "Before coding26, obtain independent review of the exact final card and plan, including parent revision binding, all input hashes, single-file allowed scope, read/edit/write-only authoring, no execution/imports/tests/Docker/provider subprocesses, and no Claude. The pending card review must explicitly permit this one dispatch before safe_to_dispatch_one_card may become true.",
+    "Launch exactly coding26 with a fresh unique job/workspace, a current ledger value of 25, and durable reservation of slot 26. Preserve the global 36-launch cap and 32400-second active allocation; include smoke/review/dispatch activity in accounting and retain at least the launcher's 660-second reserve before coding.",
+    "Keep the inspected guardian's direct-child supervision and proven nofork profile. Abort through the launcher's stdin EOF path; do not introduce process-group signaling, post-reap signaling, detached workers, or an unreviewed controller.",
+    "Treat any coding result as UNACCEPTED until root independently validates the complete manifest, unchanged candidate, exact allowed path, tool transcript, provider completion, cleanup, and immutable frozen evidence. No automatic import is approved.",
+    "Independently review the authored test source and any later outer execution wrapper before executing it. The existing rejected E2E source and controller remain unexecuted. Any additional smoke, coding job, changed launch control, import, or execution needs its own authorization and applicable review."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-027-card-review.json
+SHA256 1d77f68142235e021d89f8281259ed2776d3522f869a1828308213630b7d5040
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 27,
+  "approved_card_id": "B1a-Lifecycle-027",
+  "reviewed_plan_sha256": "0c03e22f4544e99b8b1298543f78a4a5bc17d7883180b94f175951273c72a420",
+  "reviewed_plan_section": "launch_027",
+  "parent_revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+  "findings": [
+    {
+      "severity": "info",
+      "id": "one-correction-authoring-approved",
+      "message": "Approve exactly one read/edit/write-only Luna authoring launch27 under the inspected launch_027 contract. It addresses the three review26 lifecycle findings, restores the accidental stdin payload change and explicitly retains the saved-duration safety improvement. Only tests/e2e/test_review_adapter_e2e.py may change. The six unrelated findings remain open."
+    },
+    {
+      "severity": "info",
+      "id": "card-addresses-rejection",
+      "message": "The card requires non-raising cooperative SIGINT/SIGTERM handlers across child acquisition and finalization, guarded partial handler restoration, a no-signal phase before every reap, independent bounded cleanup obligations, single guarded finalization, and truthful resource/receipt outcomes. It adds only one fixed cleanup-interrupt public scenario, retains the fixed bounds and actual sandbox/adapter path, and does not expand arbitrary command or execution controls. These are suitable authoring requirements; implementation safety remains unproved until source re-review."
+    },
+    {
+      "severity": "info",
+      "id": "bindings-confirmed",
+      "message": "Computed all six launch_027 input hashes and found them equal to the card. Current candidate test SHA256 e27c301dbcffa733ce5aa6f95207399ee0f4eb717f76f4b68a5799addc81ed43 matches frozen26 and candidate-transition-026.json. Root reports full-manifest verification and sole-path transition. Launcher, guardian and profile hashes still match the prior independent dispatch review."
+    },
+    {
+      "severity": "info",
+      "id": "recent-supervision-evidence",
+      "message": "Coding26 guardian receipt reports worker reaped, exit zero, reason null and credential removal. private-pi is currently empty and ledger records 26/36. Root reports unchanged provider/binaries/configuration since the successful fresh smoke and no candidate execution. This review does not request another smoke."
+    },
+    {
+      "severity": "warning",
+      "id": "authoring-only-unaccepted-base",
+      "message": "Frozen26 remains IMPLEMENTED_UNACCEPTED, safe_for_execution=false and ownership_card_closed=false. Using it as the correction base does not accept it. Neither plan27's later templates nor any runtime probe, matrix, import, rejected controller or unattended workflow is approved."
+    }
+  ],
+  "conditions": [
+    "Dispatch only the reviewed launch_027 section with non-expanding operational instructions. Reserve exactly slot27 from ledger26 using a fresh unique job/workspace. No automatic later launch.",
+    "Retain exclusive S workflow ownership, no concurrent runtime writer, verified unchanged dispatch controls, absent old worker and temporary credential, and current candidate equality with the full frozen26 manifest. Prior dispatch-review control conditions continue to apply.",
+    "Use reconciled D10 allocation and current elapsed active work rather than the plan's approximate checkpoint; enforce 36 coding launches and 32400 active seconds and the launcher's 660-second remaining reserve. Preserve same-objective attempt accounting and fresh-replan gates.",
+    "Worker actions remain source authoring only, with read/edit/write tools and the existing nofork sandbox. Root verifies external input hashes; listed outside-sandbox paths do not authorize expanded worker filesystem access. No candidate execution, tests, helper imports, subprocess tools, Docker, Claude or provider invocation by the worker.",
+    "After launch, independently validate full provider completion, tool activity, single-file scope, immutable parent/candidate bindings, frozen manifests, worker reaping and credential absence. Keep resulting source UNACCEPTED for an independent Astra review of the exact revision.",
+    "Any execution requires full applicable source-safety closure and independent outer-wrapper review. Cooperative-signal and fixed-fault requirements are a finite contract, not proof against interpreter crashes, SIGKILL or arbitrary asynchronous failures. Do not infer runtime success from source review or lifecycle receipt literals."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-028-card-review.json
+SHA256 75d410bb8a6d441ee63eac0b54ba6bb88a0690ea4f39c9406ae8ade7cf2d107b
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 28,
+  "approved_card_id": "B1a-Lifecycle-028",
+  "reviewed_plan_sha256": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef",
+  "reviewed_plan_section": "launch_028",
+  "parent_revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one source-authoring attempt for the exact launch_028 card. Scope is limited to separating cleanup success from the primary invocation failure and recording two fixed signal observations in tests/e2e/test_review_adapter_e2e.py. The card preserves failure propagation and lifecycle control flow, adds no execution controls or scenarios, and explicitly leaves the six other findings open."
+    },
+    {
+      "severity": "info",
+      "message": "All six input hashes match. Candidate test hash dd9c4f8fbfab2657582ad36c204d5c8781ce990188b184100b476d5adc406689 matches frozen27. The supplied independent-validation receipt records complete provider/tool/scope/manifest/cleanup validation. Coding27 guardian reports reaped, exit zero, no failure and credential removal. Launcher/guardian/profile hashes remain unchanged; ledger is 27/36."
+    },
+    {
+      "severity": "info",
+      "message": "This is the requested fresh replan after attempts25/26/27. It permits only one further attempt and preserves cumulative attempt history. No additional smoke is requested because root reports unchanged provider/configuration/binaries and continuing valid supervision evidence."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_028, reserve slot28 from ledger27, and use a fresh unique isolated job. Resolve listed input paths against the explicit repository input_path_base without expanding worker access.",
+    "Maintain all previous supervision, exclusive-runtime, credential-absence, complete-manifest and unchanged-control checks. Enforce current reconciled active time, 32400-second/36-launch limits and the launcher's 660-second reserve; do not use the approximate plan checkpoint as fresh accounting.",
+    "Allow only read/edit/write source authoring in the one test file. No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls, extra findings or later-card activation.",
+    "Independently validate provider completion, tools, scope, bindings and cleanup after authoring; freeze the output as UNACCEPTED for exact-revision Astra source review. No import or execution is approved, and later execution retains separate source/environment and outer-wrapper review gates."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-029-card-review.json
+SHA256 28b29d50af6cbecb25eefeee0cf88f945ea405eec188ce93022315c35c3f4f57
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 29,
+  "approved_card_id": "B1a-Deadline-029",
+  "reviewed_plan_sha256": "6b48f9ec60ff66dc112ce85a625c82d5f185ea179dbc12566fd4c1e8800c183f",
+  "reviewed_plan_section": "launch_029",
+  "parent_revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one deadline-only source-authoring launch29. The card requires a shared absolute-suite-deadline guard immediately before the sole Popen, saved positive remaining durations for waits, and preservation of the independent bounded cleanup allowance and ownership semantics. Only two fixed public scenarios and a receipt containing at most two actual invocation states are added. No arbitrary timeout, clock replacement, command input, new runner or unrelated finding is authorized."
+    },
+    {
+      "severity": "info",
+      "message": "All seven input hashes match. Current candidate test matches frozen28. Hash-bound review28 explicitly closes the receipt and ownership source concern while keeping runtime acceptance and full execution approval open. Launcher, guardian and profile hashes remain unchanged; ledger is 28/36. Coding28 guardian receipt confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "Five non-deadline findings remain open after the proposed authoring work. The two deadline controls are future evidence mechanisms, not execution permission or proof that all scheduling interleavings are safe. This approval grants neither another smoke nor later authoring cards."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_029 with tests/e2e/test_review_adapter_e2e.py as the sole writable source. Reserve slot29 from ledger28 and use a fresh isolated job. Resolve the explicit input_path_base without expanding worker access.",
+    "Retain prior exclusive-runtime, no-worker/credential-absence, complete candidate-manifest binding and unchanged-control gates. Preserve the existing smoke evidence under root's unchanged-provider/configuration confirmation; no new smoke is required by this review.",
+    "Reconcile current active time against 32400 seconds and cumulative launches against36, retain the launcher's 660-second reserve and existing attempt/replan accounting. Do not treat the plan's approximate checkpoint as current accounting.",
+    "Read/edit/write authoring only: no candidate execution, imports, tests, subprocess tools, Docker, Claude or provider calls. Preserve all accepted ownership source semantics and keep unrelated findings open.",
+    "After authoring, independently validate complete provider/tool/scope/binding/cleanup evidence and freeze the result UNACCEPTED for exact-revision Astra source review. No import, public scenario execution or controller activation is approved; full source/environment and outer-wrapper gates remain required."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-030-card-review.json
+SHA256 65868fe61b48ead647f9162122a8ec565e0d5ef729b285773c39c03d9e6f64c9
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 30,
+  "approved_card_id": "B1a-RecordBound-030",
+  "reviewed_plan_sha256": "5f356361dde171ce8a84b81a254f2720ac5c478a191e183b3357c79a43e862c9",
+  "reviewed_plan_section": "launch_030",
+  "parent_revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one bounded-record source-authoring attempt. The card centralizes raw binary reads at a 16385-byte maximum, rejects over 16384 before parsing, counts separators, and replaces both existing unbounded reads. Two fixed boundary controls and a small bounded observation receipt remain confined to the allowed test file. They explicitly evaluate bounds only, not protocol/routing acceptance."
+    },
+    {
+      "severity": "info",
+      "message": "All eight input hashes match. Current candidate test matches frozen29. Bound review29 closes deadline source work and preserves ownership source closure while withholding execution approval. Launcher/guardian/profile hashes remain unchanged. Ledger records 29/36; coding29 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "Per-invocation record checks, arity, diagnostic-byte bounds and full result receipts remain separate open findings. No worker execution, additional controls, later cards, import or runtime acceptance is approved."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_030, reserve slot30 from ledger29, and use a fresh isolated job with tests/e2e/test_review_adapter_e2e.py as its sole writable source. Resolve input_path_base without expanding worker access.",
+    "Retain prior exclusive-runtime, worker/credential-absence, complete frozen29 candidate binding, unchanged dispatch-control and valid smoke gates. Reconcile active elapsed time against 32400 seconds and launches against 36, preserving the launcher's 660-second reserve and existing attempt/replan accounting.",
+    "Read/edit/write source authoring only; no candidate execution, imports, tests, subprocess tools, Docker, Claude or provider calls. Preserve reviewed ownership/deadline semantics and the fixed environment/sandbox/adapters.",
+    "After authoring, independently validate complete provider/tool/scope/binding/cleanup evidence and freeze the result UNACCEPTED for exact-revision Astra source review. Later execution still requires complete source/environment and outer-wrapper approval."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-031-card-review.json
+SHA256 33bc272dc369b4a99ec5489c0b9e3a3a172e7e7e800a390dd66ff72ef5018fe0
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 31,
+  "approved_card_id": "B1a-BoundaryNewline-031",
+  "reviewed_plan_sha256": "65f41883e836bf198f5f309975036e70d0f93f5cc2cdd74f13a151203dc6683e",
+  "reviewed_plan_section": "launch_031",
+  "parent_revision_sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one authoring attempt limited to the two single-LF byte-literal corrections identified by review30. The exact card preserves embedded fake_source escaping and all collector, receipt, ownership, deadline and cleanup behavior. No new controls or other repairs are allowed."
+    },
+    {
+      "severity": "info",
+      "message": "All seven input hashes match. Current candidate test matches frozen30. Dispatcher, guardian and profile hashes are unchanged; ledger records 30/36. Coding30 guardian confirms reaping, exit zero, no failure and credential removal. The rejected frozen30 source is an unaccepted correction base, not an execution-approved artifact."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_031 in a fresh isolated job, reserving slot31 from ledger30. Exactly two literals may change in tests/e2e/test_review_adapter_e2e.py; verify the exact diff afterward.",
+    "Preserve prior exclusive-runtime, worker/credential-absence, full candidate-manifest binding, unchanged-control and valid smoke gates. Reconcile active time against 32400 seconds and launches against 36 with the launcher's 660-second reserve and existing attempt/replan rules. The plan's zero future reserve grants no future launch authority.",
+    "Use read/edit/write authoring only. No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or other source changes.",
+    "Independently verify complete provider/tool/scope/binding/cleanup evidence and obtain fresh exact-revision Astra source review. No import, public-control execution or wrapper activation is approved; all later execution gates remain."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-032-card-review.json
+SHA256 7c6ff05df381721068ca0c88a2e3678bb5ae85101c5100837f246ffa1c8f3a19
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 32,
+  "approved_card_id": "B1a-Routing-032",
+  "reviewed_plan_sha256": "71e074d2ec1cf3c8eb5d4ab30a1bc2cfa0e7d28479eefe37fc07f3af39e948ee",
+  "reviewed_plan_section": "launch_032",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one routing-only authoring attempt. The exact card requires bounded cumulative-prefix preservation, immediate exact one-record response deltas and zero-byte rejection deltas, content validation and stop-on-first-mismatch. Its two fixed missing/duplicate scenarios use the actual matrix path and preserve ordinary process output/status. No arbitrary fixture control, new execution mechanism or general receipt framework is authorized."
+    },
+    {
+      "severity": "info",
+      "message": "All seven input hashes match, current candidate test matches frozen31, and bound review31 closes the literal/record-bound source work while withholding execution approval. Launcher/guardian/profile hashes remain unchanged. Ledger records 31/36 and coding31 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "Existing arity defects are intentionally preserved for the next card; this authoring approval does not imply matrix success. Diagnostic and full result/invocation receipts also remain open. Referenced future execution-envelope requirements do not authorize wrapper creation or execution in this launch."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_032 in a fresh isolated job, reserving slot32 from ledger31. Only tests/e2e/test_review_adapter_e2e.py may change; preserve the exact stated routing scope and two fixed controls.",
+    "Retain prior exclusive-runtime, worker/credential-absence, full candidate-manifest binding, unchanged-control and valid smoke checks. Enforce current reconciled 32400-second and 36-launch limits, the launcher's 660-second reserve, and cumulative attempt/replan gates. Future slot allocations are not future dispatch permission.",
+    "Read/edit/write source authoring only. No candidate execution, imports, tests, subprocess tools, Docker, Claude or provider calls. Keep prior bounded collector, ownership, deadline, cleanup, adapter and sandbox semantics intact.",
+    "Independently validate provider/tool/scope/binding/cleanup evidence and freeze the result UNACCEPTED for exact-revision Astra source review. No import or execution is approved; complete source/environment and outer-wrapper gates remain."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-033-card-review.json
+SHA256 a8cc97329fb65b74b3795194edeee85bed7e619a6dd270c42d28bd6bae86d981
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 33,
+  "approved_card_id": "B1a-Routing-033",
+  "reviewed_plan_sha256": "19a2123bb25264cdbfbd5af86e9b8cc05df3bf7b22b4ed6e768e9af1e8c35032",
+  "reviewed_plan_section": "launch_033",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one routing recovery authoring attempt from reviewed frozen31. The card retains all five prior routing requirements and the two fixed negative controls; its mitigation is targeted edit patches under 3000 characters with no whole-file rewrite or source dump. It does not enlarge the 2 MiB output cap, relax acceptance or reuse partial32 as accepted source."
+    },
+    {
+      "severity": "info",
+      "message": "All eight planning input hashes match. Current candidate test matches frozen31. Unchanged dispatcher/guardian/profile hashes retain the previously reviewed controls. Ledger records 32/36. Coding32 receipt establishes output-cap termination with exit -9, worker reaping and credential removal; independent failure receipt records FAILED_UNACCEPTED, incomplete provider result and unchanged candidate. This is failed completion with recorded cleanup, not success."
+    },
+    {
+      "severity": "warning",
+      "message": "Only four launch slots remain. The plan explicitly leaves overall completion impossible within that allocation because the outer wrapper remains unimplemented and unreviewed. This authoring approval provides no allocation extension, completion promise, future dispatch authority or workaround for missing execution containment."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_033, reserve slot33 from ledger32 and start a fresh isolated job from the full frozen31 manifest. Keep failed partial32 evidence unchanged and unaccepted; do not import its source.",
+    "Enforce the card's read-and-edit-only authoring protocol, targeted patches under 3000 characters, no full-file rewrite and no source dump. The unchanged launcher's exposure of write does not authorize its use under this narrower card. Preserve the 2 MiB cap and all supervision controls.",
+    "Retain exclusive-runtime, old-worker/credential-absence, full candidate binding and valid smoke gates. Reconcile actual active time against 32400 seconds and launches against 36, keeping the 660-second reserve and cumulative attempt/replan rules.",
+    "Only tests/e2e/test_review_adapter_e2e.py may change. No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or delegation; no extra controls or unrelated repairs.",
+    "Validate complete provider/tool/scope/binding/cleanup evidence and freeze any completed result UNACCEPTED for independent exact-revision Astra review. Another capped/incomplete result remains failed regardless of source parseability. No import, execution, automatic follow-on launch or unallocated wrapper authoring is approved."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-033-v2-card-review.json
+SHA256 35354e125e500315b6cf0361661ca80f991624ec7fff07a769d5396173773632
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 33,
+  "approved_card_id": "B1a-Routing-033",
+  "reviewed_plan": "astra-plan-033-v2.json",
+  "reviewed_plan_sha256": "227d0ed6ba500f008f28ef701c1503dbe01c61e63845aa57ac4ba25f28e35a8a",
+  "reviewed_plan_section": "launch_033 with complete v2 context",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "prior_review_disposition": "dispatch-033-card-review.json is preserved historical v1 review and was placed on HOLD by root for missing mandatory card fields. It is not an activation authority. This separate decision applies exclusively to the complete hash-bound v2 contract.",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "V2 contains the mandatory card fields: card_id, finding_ids, parent_revision_sha256, inputs, allowed_paths, prerequisites, required_behavior, forbidden_changes, e2e_recipe_ids, expected_outcomes, evidence_outputs and stop_conditions. Requirements retain the same bounded routing recovery scope; schema completion adds no execution authority."
+    },
+    {
+      "severity": "info",
+      "message": "All twelve absolute input hashes match the checks performed in this review turn. Candidate remains frozen31. Failed partial32 is planning evidence only; its guardian confirms output-cap termination, exit -9, reaping and credential removal. Unchanged launcher/guardian/profile retain the original 2 MiB cap and other controls; ledger remains 32/36."
+    },
+    {
+      "severity": "info",
+      "message": "Approve one source-authoring recovery attempt using the complete v2 card, small read/edit operations with each targeted patch under 3000 characters, and the two fixed routing controls. No full-file rewrite, whole-source dump, cap enlargement, acceptance weakening or partial32 import is allowed."
+    },
+    {
+      "severity": "warning",
+      "message": "Overall completion remains INCOMPLETE within the remaining allocation because the required outer wrapper has no slot. No future card, allocation extension, unallocated wrapper work, import or execution is approved."
+    }
+  ],
+  "conditions": [
+    "Inline the complete hash-bound v2 contract as root proposes; do not discard mandatory fields. Dispatch exactly one launch33 from the full verified frozen31 parent, using a fresh isolated job and durable ledger reservation from 32 to 33.",
+    "Only tests/e2e/test_review_adapter_e2e.py may change. Worker actions are read and edit only under the narrower card even though the unchanged launcher also exposes write. Preserve all authoring-size restrictions, unchanged collector/bounded_run, prior ownership/deadline semantics and all five routing requirements.",
+    "Retain exclusive-runtime, old-worker/credential-absence, full candidate-manifest binding, unchanged-control and valid smoke gates. Enforce current reconciled 32400-second/36-launch limits, the 660-second reserve and cumulative attempt/replan accounting.",
+    "No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls, delegation, unrelated findings or later-card activation. Absolute input paths do not expand worker access.",
+    "Independently validate complete provider/tool/scope/binding/cleanup evidence; freeze a completed result UNACCEPTED for exact-revision Astra review. Capped or incomplete output remains failed. All execution and outer-wrapper gates remain unsatisfied until separately established."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-034-card-review.json
+SHA256 2c6e5aa276d7129c9bef082a9d5396e51806a6d657bfe1642dbbd42178de2f60
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 34,
+  "approved_card_id": "B1a-Routing-034",
+  "reviewed_plan_sha256": "3e46a2abdd958ae824179d48b3ad113264272a692977ae5d14271135fd7ec26a",
+  "reviewed_plan_section": "launch_034",
+  "parent_revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one source-authoring correction for the review33 shared-matrix control-path defect. The complete mandatory card fields are present. Both existing controls must enter the actual response loop, select their fixed first-row fixture mode, use the existing shared checks, persist bounded observations and abort at the first mismatch. No arity fix, new control, execution mechanism or broader refactor is authorized."
+    },
+    {
+      "severity": "info",
+      "message": "All four card input hashes match. Current candidate test matches frozen33, whose source review leaves only R4/R5 control-path coverage unresolved within the routing card. Dispatcher/guardian/profile hashes remain unchanged. Ledger is 33/36; coding33 guardian confirms reaping, exit zero, no failure and credential removal. Source33 remains an unaccepted correction base."
+    },
+    {
+      "severity": "warning",
+      "message": "Two launch slots would remain after34. Arity, diagnostics, full receipt/inventory and the outer wrapper still remain open; this correction cannot establish overall completion or runtime acceptance and authorizes no future work automatically."
+    }
+  ],
+  "conditions": [
+    "Dispatch the complete hash-bound launch_034 card once, reserving slot34 from ledger33 in a fresh isolated job with verified full frozen33 parent. Only tests/e2e/test_review_adapter_e2e.py may change.",
+    "Preserve targeted patches under 3000 characters, no whole-file rewrite and the unchanged 2 MiB output cap. Keep accepted normal routing checks, collector, bounded_run, ownership/deadline/cleanup semantics, adapters and existing controls intact.",
+    "Maintain prior exclusive-runtime, old-worker/credential-absence, full-manifest binding, unchanged-control and valid smoke gates. Enforce reconciled active time below 32400 seconds, the 36-launch cap, 660-second reserve and cumulative same-objective attempt/replan rules.",
+    "Source authoring only with read/edit/write tools: no candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or delegation. No arity, diagnostics, general receipt or wrapper work.",
+    "Independently validate complete provider/tool/scope/binding/cleanup evidence, preserve frozen output as UNACCEPTED and obtain fresh exact-revision Astra source review. No import or execution approval is granted."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-035-card-review.json
+SHA256 ddacb1ed86c638f9bbfe7b7200200543c36f18c24001e1e063597a2da83db8d9
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 35,
+  "approved_card_id": "B1a-Arity-035",
+  "reviewed_plan_sha256": "518660c37018e34f1244555407a15d25a09e904832964ef91f388ff2b733dafb",
+  "reviewed_plan_section": "launch_035",
+  "parent_revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one arity-only source-authoring attempt. The complete card removes the redundant valid-review invocation and specifies exactly nine rejection rows using total adapter arguments: empty, review totals 1/2/3/4/6, code total 5 and unknown totals 4/5. It preserves immediate zero-record checks and requires exit64 with empty streams, explicit adapter/full argv and counts. It excludes valid code mode, new controls and unrelated repairs."
+    },
+    {
+      "severity": "info",
+      "message": "All four card input hashes match. Current candidate test matches frozen34 and bound review34 closes the routing source concern without execution approval. Dispatcher/guardian/profile hashes remain unchanged; ledger records 34/36. Coding34 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "Only one launch slot would remain after35. Diagnostic bounds, full result/invocation receipts and the outer wrapper remain open. Overall completion and runtime acceptance remain unavailable within this approval."
+    }
+  ],
+  "conditions": [
+    "Dispatch the complete hash-bound launch_035 contract once from the fully verified frozen34 parent, in a fresh isolated job with durable slot35 reservation from ledger34. Only tests/e2e/test_review_adapter_e2e.py may change.",
+    "Retain existing supervision, runtime exclusivity, worker/credential-absence, full candidate binding and valid smoke gates. Use root's corrected reconciled active-time accounting plus current elapsed work, not earlier rough estimates; enforce 32400 seconds, 36 launches, the 660-second reserve and cumulative attempt/replan rules.",
+    "Preserve patches under 3000 characters, no whole-file rewrite and unchanged 2 MiB output cap. Source authoring only with read/edit/write: no candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or delegation.",
+    "Validate complete provider/tool/scope/binding/cleanup evidence and freeze output UNACCEPTED for independent exact-revision Astra source review. No automatic launch36, import, execution or unallocated wrapper work is approved."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/dispatch-036-card-review.json
+SHA256 145a8f4ce1bc70d0db92aa9d2c340f7cbaa2527ec86f454904f9c49619728f56
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 36,
+  "approved_card_id": "B1a-Diagnostic-036",
+  "reviewed_plan_sha256": "7b6c0fb15753c0366712dbfd97b750d71d181f2e85815f8f4f89db5d94b81c13",
+  "reviewed_plan_section": "launch_036",
+  "parent_revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+  "final_authorized_coding_slot": true,
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one final diagnostic-only authoring attempt. The complete card bounds handled stderr by encoding before slicing and includes the trailing LF in 4096 bytes. It explicitly handles KeyboardInterrupt with fixed bytes/status130, preserves SystemExit/parser behavior, and adds exactly three fixed childless diagnostic controls after validation and before fixture creation. No fixture execution or additional routing controls are authorized."
+    },
+    {
+      "severity": "info",
+      "message": "All five input hashes match. Current candidate test matches frozen35; bound review35 closes arity source work while withholding execution approval. Dispatcher/guardian/profile hashes remain unchanged. Ledger records 35/36 and coding35 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "This consumes the final authorized coding slot regardless of result. There is no launch37 authority. Complete result receipts/inventory, the independently reviewed outer wrapper and runtime acceptance remain INCOMPLETE even if this source correction passes review."
+    }
+  ],
+  "conditions": [
+    "Dispatch the complete hash-bound launch_036 contract exactly once from the full verified frozen35 parent, using a fresh isolated job and durable slot36 reservation from ledger35. Only tests/e2e/test_review_adapter_e2e.py may change.",
+    "Preserve existing supervision, runtime exclusivity, worker/credential-absence, full parent binding and valid smoke gates. Refresh root's reconciled active time against 32400 seconds and retain the 660-second reserve; preserve the hard 36-launch cap and cumulative attempt rules.",
+    "Targeted patches remain under 3000 characters with no whole-file rewrite and unchanged 2 MiB output cap. Read/edit/write source authoring only: no candidate execution, imports, tests, fixture runs, subprocess tools, Docker, Claude, provider calls or delegation.",
+    "Keep this correction limited to the finite handled-diagnostic contract and three fixed childless scenarios. No receipt framework, wrapper, arbitrary input/control or unrelated source work.",
+    "Independently validate complete provider/tool/scope/binding/cleanup evidence and freeze the output UNACCEPTED for exact-revision Astra source review. Stop coding after36 regardless of outcome. No import, execution, retries beyond the cap, unallocated wrapper work or overall completion claim is approved."
+  ]
+}
+
+
+ARTIFACT /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json
+SHA256 a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825
+{
+  "safe_to_execute": false,
+  "scope": "Independent source-only review of frozen B1a-E2E-025. No candidate execution, edits, Docker, provider calls, or delegation performed. Outer execution wrapper is outside this review.",
+  "revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+  "parent_revision_sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+  "source_hashes": {
+    "tests/e2e/test_review_adapter_e2e.py": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "hash_verification": "Computed hashes match the frozen25 manifest and supplied review source hash. Both adapters also match frozen24. The frozen25 parent manifest matches the card's frozen24 revision hash.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/",
+  "findings": [
+    {
+      "id": "B1a-E2E-025-owned-process-lifecycle",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:128-192",
+      "problem": "waitpid(WNOHANG) reaps the leader when it returns its PID. Status conversion, return-value construction, or an interrupt after that point can enter except BaseException, which unconditionally calls killpg using the released PID. The comment claiming retained ownership is incorrect. Additionally, selector construction occurs after Popen but before the cleanup try, so a setup exception can leave a launched process unmanaged.",
+      "required_change": "Make cleanup protection cover every operation after successful spawn. Establish an auditable ownership transition at reap, including interruption handling, so no path can signal after the leader is reaped. Move fallible result construction out of the signal-capable region or perform it before reap. On timeout/overflow, signal only while ownership is established, boundedly drain and reap, close all pipes, and record cleanup success or uncertainty.",
+      "required_e2e": "After separate approval, exercise normal completion, timeout, overflow, setup failure, and an exception/interruption around reap. Confirm bounded cleanup and zero group-signal attempts after reap.",
+      "missing_evidence": "No safe ownership transition or bounded-drain receipt exists in this source."
+    },
+    {
+      "id": "B1a-E2E-025-record-bound",
+      "severity": "medium",
+      "classification": "execution_boundedness_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:215-217,240",
+      "problem": "Both records.read_bytes() calls read the entire file before checking anything. The first cap excludes newline bytes, and the second read has no byte-size check. RECORD_LIMIT therefore does not enforce the promised 16384-byte collection bound.",
+      "required_change": "Read at most RECORD_LIMIT + 1 raw bytes, reject overflow before splitting or parsing, and apply the same bound on every collection. Count all raw bytes, including separators. Check records after each invocation so extra/missing records stop the suite immediately.",
+      "required_e2e": "After approval, confirm exact-limit acceptance and one-byte-over-limit rejection without reading an unbounded file.",
+      "missing_evidence": "No bounded record-read path exists."
+    },
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "severity": "high",
+      "classification": "acceptance_evidence_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:204-249",
+      "problem": "The program never writes result.json. Success prints only nine response-row booleans; arity rows, expected/actual values, exact launch arguments, and cleanup outcomes are absent. Failure paths discard accumulated rows and print only a diagnostic.",
+      "required_change": "Write the required result.json beneath the validated output directory. Include every planned row with pass/fail/not-run status, exact arguments, expected/actual bounded output and status, record checks, and cleanup outcome. Persist failures after output validation, and report overall pass only when every required row passes.",
+      "required_e2e": "After approval, inspect receipts for both a complete successful matrix and an early failure; later cases must be explicitly not-run and overall must fail.",
+      "missing_evidence": "The source cannot produce the card's required execution receipt."
+    },
+    {
+      "id": "B1a-E2E-025-arity-offset",
+      "severity": "medium",
+      "classification": "acceptance_coverage_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:226-239",
+      "problem": "The matrix treats counts as arguments after the role, while the adapter counts all arguments and the card requires review-with-4 to reject. Consequently the suite tests review totals 1,2,3,4,7 instead of the requested 0,1,2,3,6 plus 4; code-with-5 becomes total 6; unknown-with-4/5 becomes totals 5/6. The purported review-with-4 test is actually valid review with total 5.",
+      "required_change": "Define counts explicitly as total adapter arguments. Cover empty argv; review totals 1,2,3,4,6; code total 5; and unknown totals 4,5. Require exit 64, empty streams, and zero new records for each. Do not invoke valid code mode. The nine response cases already exercise valid review total 5.",
+      "required_e2e": "After approval, include explicit argv and total argument count in each arity receipt and verify every requested row.",
+      "missing_evidence": "Zero arguments, review total 6, code total 5, and unknown total 4 are not covered."
+    },
+    {
+      "id": "B1a-E2E-025-per-case-routing",
+      "severity": "medium",
+      "classification": "acceptance_evidence_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:205-225,228-241",
+      "problem": "Records are validated only as an aggregate after nine response cases. All records have identical contents, so an extra invocation in one case and a missing invocation in another can cancel in the final count. The additional valid-review record is counted but never content-validated.",
+      "required_change": "Validate the bounded record delta immediately after every invocation: exactly one matching argv/cwd/stdin record for a response case and zero for an invalid-arity case. Associate that observation with its row and stop on the first mismatch.",
+      "required_e2e": "After approval, demonstrate that duplicate or missing records fail the responsible row immediately; every accepted response row must have exactly one matching record.",
+      "missing_evidence": "Aggregate counts do not establish the required exactly-once behavior per case."
+    },
+    {
+      "id": "B1a-E2E-025-deadline-race",
+      "severity": "medium",
+      "classification": "acceptance_reliability_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:170-172,228-237",
+      "problem": "The deadline can expire between the check and the second monotonic read, producing a negative sleep and ValueError instead of the intended timeout. Later matrix invocations also launch before checking that their supplied remaining suite budget is positive.",
+      "required_change": "Compute one remaining duration per decision, raise the intended timeout when it is nonpositive, and otherwise sleep for its bounded positive value. Reject an exhausted suite budget before spawning each invocation.",
+      "required_e2e": "After approval, verify deadline-boundary behavior produces a timeout receipt and never launches another case once the suite budget is exhausted.",
+      "missing_evidence": "Deadline handling is not deterministic at the expiration boundary."
+    },
+    {
+      "id": "B1a-E2E-025-diagnostic-byte-cap",
+      "severity": "low",
+      "classification": "acceptance_boundedness_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:244-248",
+      "problem": "Diagnostic slicing limits Unicode characters rather than emitted bytes, and print adds a newline. Even ASCII output can exceed the stated 4096-byte diagnostic cap by one byte.",
+      "required_change": "Encode diagnostics, truncate to a byte budget that includes the newline, and write through the binary stderr stream.",
+      "required_e2e": "After approval, verify long ASCII and multibyte diagnostics both remain within 4096 emitted bytes.",
+      "missing_evidence": "No byte-level diagnostic cap is enforced."
+    }
+  ],
+  "missing_evidence": [
+    "No runtime evidence was generated, as required for this source-only review.",
+    "Root must still verify the complete execution binding and separately review the outer execution wrapper.",
+    "Fake-routing results, once available, establish routing and transparency only; they do not establish provider identity or real-provider availability.",
+    "A prior capacity-failed review supplies no approval."
+  ]
+}

@@ -1,0 +1,126 @@
+Implement ONLY the first bounded card below. You may rewrite the current controller. No host code execution, no providers, no Docker. Edit only scripts/esy-repair/controller.py and scripts/esy-repair/codex-worker.sh. The next separate card handles all E2Es; do not edit tests now. Use Python stdlib only and explicit practical interfaces, no stub successes. Code will be independently reviewed before running. The controlling supervisor must install authority snapshot/evidence after review, so write the installation contract clearly in module docstring (required manifest fields/files), but never fabricate approval yourself. CLI init should take explicit --root for the selected workflow state, with authority script physically outside worker workspace; fixture-installed authority must use identical schema/checks. Support actual fixed supervised execution when installation/probes are supplied by the supervisor; keep unattended disabled permanently for this Mac.
+
+Latest authoritative accounting: 7 prior coding launches, this one is launch8 of12; no additional_launches=10. Floor active time482.411 plus resumed bootstrap since launch_worker.py was created. The supervisor will supply authoritative accounting import in installation manifest; controller must validate/maintain it, not hardcode a path to one historic job. Future stages C2-C7 pending; do NOT block useful plan/code/review core on those future obligations. Existing no-op launch/advance unacceptable.
+
+Review/planner can return PASS/FAIL structured final per card; requirement completeapproval remainsfinaloverallnotUNIT_COMPLETE. User outside files remain untouched.
+CARD
+{
+  "id": "C01-supervised-core",
+  "allowed_paths": [
+    "scripts/esy-repair/controller.py",
+    "scripts/esy-repair/codex-worker.sh"
+  ],
+  "requirements": [
+    "Replace the inert scaffold with a compact stdlib-only supervised controller. Scope is one planned coding unit followed by independent review and collection; no scheduler, framework, import, image or runner implementation. Unattended dispatch remains disabled because kernel NOTE_TRACK is unsupported. Successful supervised work must not claim complete descendant tracking or full lifecycle approval.",
+    "Public interface: init; launch --role {plan,code,review} [--card ID]; collect --run-id ID; advance; resume; print-handoff. launch is synchronous, prints its allocated run_id before spawning, and persists its outcome before returning. --card is mandatory for code and review and forbidden for plan. No command, executable, provider, model, sandbox, timeout or fixture override through CLI or environment. Return 0 for a completed supported operation, 2 for an unmet prerequisite or unsuccessful job, and 3 for integrity failure. Emit one JSON result on stdout, except launch may first emit a JSON started record; diagnostics go to stderr.",
+    "Persist this bounded state flow: init -> PLAN_REQUIRED; successful plan launch/collect -> PLAN_COLLECTED; advance selects the next approved card -> CODE_READY; code launch -> CODE_RUNNING -> CODE_FINISHED; successful collect -> DIFF_REVIEW_REQUIRED; review launch -> REVIEW_RUNNING -> REVIEW_FINISHED; successful review collection -> REVIEW_COLLECTED; advance with PASS -> UNIT_COMPLETE. Each running role also has a persisted running/finished status independent of the workflow state. Planning must have equivalent crash-safe job records. UNIT_COMPLETE means only the supervised unit and review finished; overall completion, acceptance, import and C2-C7 remain INCOMPLETE. advance at this boundary reports the unsupported next stage without undoing the completed unit. A rejected review returns the same card to CODE_READY; failed execution or collection cannot advance and may be retried only after verified cleanup and budget reconciliation. Do not execute acceptance_e2e strings.",
+    "Require a supervisor-installed authority snapshot outside candidate before init or dispatch. Validate canonical nonoverlapping paths, ownership and permissions, regular nonlinked files, installed controller/wrapper/provider hashes, pinned policy and a supervisor-owned installation manifest. Directory naming and a writable self-created hash manifest are insufficient trust anchors. The outer native sandbox must deny worker writes to authority, bootstrap snapshots, review records and host inputs; allow only the isolated worker workspace and designated scratch; include the required native network DNS exception. Verify the installed sandbox profile and its recorded write-denial probes before each launch. If this external installation evidence is unavailable, explicitly reject dispatch; do not invent it or edit protected records.",
+    "Use fixed Codex execution templates frozen by installation: plan/review use gpt-6-astra with read-only, shell-disabled capabilities; code uses gpt-6-luna with inner danger-full-access REQUIRED, exclusively beneath the verified outer native sandbox. Pin exact argv against available observed Codex invocation evidence during implementation, and record the resulting argv and executable identity in each job. Never substitute model-generated commands or shell-evaluate prompts. Optional Claude/Pi adapters stay disabled pending their own gate. Replace /usr/bin/realpath with Python stdlib path resolution using the supervisor's validated interpreter; resolve and freeze the executable once and verify identity again before spawning.",
+    "Before spawn, create an exclusive immutable started record containing job/run identity, role/model/card, executable and sandbox identities, input revision and evidence hashes, workspace identity, deadline and accounting anchor. Allocate IDs internally; collisions must fail without overwriting or spawning. Stream stdout and stderr concurrently with a combined 2 MiB cap, retain bounded evidence, wait for actual process exit rather than pipe EOF, and enforce monotonic deadlines even when pipes close early or remain open after parent exit. Effective execution allowance is min(role timeout, remaining active budget minus the 10-second cleanup reserve); reject nonpositive allowance. Record PID, available native start identity, process group, actual exit status, stop attempts and cleanup findings. Nonzero exit, timeout, overflow or malformed evidence cannot become successful jobs.",
+    "Use bounded termination and reaping for observed processes/process groups, with identity checks before signaling. Explicitly record the permanent unsupported full-descendant-tracking limitation separately from concrete unresolved cleanup. If observed descendants escape, identities cannot be verified, termination/reaping fails, or interrupted work cannot be reconciled, persist cleanup_uncertainty and block all further dispatch. resume may resolve uncertainty only from fresh verified native evidence, never an acknowledgement flag, empty process list, PID reuse assumption or EOF. Ordinary known-process cleanup may support the authorized supervised core without claiming race-free cleanup.",
+    "Keep the original repository baseline, inherited dirty candidate snapshot and each job's input revision distinct. Validate strict manifest entries with mandatory path/type/mode/size/hash fields for files and path/type/mode for directories; normalize documented legacy bytes/kind fields explicitly, never infer missing integrity data from candidate. Verify independent frozen copies and their manifests on every replay. Compare mutable worker output against its frozen input, permitting edits to existing allowed files. Derive added, modified and deleted files plus directory metadata changes; allow only declared card paths and structurally necessary ancestor directories. Reject symlinks, hardlinks, special files, path traversal, out-of-card deletions and mode changes. Enforce 2 MiB/file, 16 MiB aggregate added or increased bytes and 1000 added files without deletion offsets. Preserve the user's starting dirty bytes; never reset to Git HEAD. Keep collected output in the isolated workspace, without importing into the user's candidate.",
+    "Pin the installed provider's observed JSONL schemas, including actual command-execution and file-change/tool item start/update/completion events. Accept their validated item lifecycle and exactly one final structured agent response followed by exactly one successful turn terminal. Do not guess schemas, use a four-event-only shortcut, or accept unknown variants. Distinguish observed progress messages from the final response using the pinned protocol; ambiguity fails closed. Validate strict UTF-8, duplicate keys, finite JSON numbers, exact fields/types, item identities, permitted sequencing and final newline. Provider errors and truncation invalidate collection. Tool command fields are inert provider evidence and never become controller dispatch instructions.",
+    "Final-response schema version 1 has exactly schema_version, run_id, role, revision_sha256, evidence_sha256 plus role fields. code adds status in {complete,incomplete}, summary:string and changed_paths:unique normalized relative file paths; bind these paths to the actual collected delta. plan adds cards, a nonempty list of objects with exactly id, allowed_paths, requirements and acceptance_e2e; IDs are unique bounded identifiers, allowed_paths are unique normalized relative file paths within installation-authorized scope, and both remaining fields are bounded nonempty string lists. review adds verdict in {PASS,FAIL}, findings:string[] and missing_evidence:string[]; PASS requires both lists empty. Reject extra nested fields and executable payload keys such as command, commands, argv and executable in final responses. Treat prose as data. Planning is bound to its frozen candidate revision; coding to its frozen input revision; review to the collected output revision and collection evidence. The controller supplies bindings through its fixed prompt, and collection verifies them against authoritative job records.",
+    "Reconstruct budgets by unique job identity from every authoritative started record, receipt and resumed accounting interval. Count receipt/started overlap once, count unfinished started jobs, and reject unexplained missing, conflicting or malformed evidence. Preserve at least seven consumed coding launches and at least 482.411 active seconds plus all subsequent and resumed work. Total limits are 12 coding launches and 21600 active seconds: at most five coding launches remain before these cards, fewer after their implementation or retries. Remove the stale additional_launches=10 allowance. Plan/review consume elapsed time but do not reset or silently alter the coding-launch budget. Anchor intervals so historical elapsed time is not added twice; conservatively charge interrupted unclosed intervals or block when accounting cannot be established. Persist reservations before spawn and durable consumption afterward, including installation-time and resumed work.",
+    "Use exclusive locking, atomic durable publication and exclusive artifact creation. Hash-bind all referenced reports, raw stream evidence, final responses, installation evidence and frozen inputs into history; replay verifies their contents, schemas and bindings. collect is idempotent by run_id and returns the same report hash without duplicate transitions. resume reconstructs the actual last supported state and interrupted jobs; it never relaunches automatically. print-handoff derives current budgets, revision/evidence hashes, active identities, cleanup uncertainty, permanent lifecycle limitations, pending C2-C7 obligations and next_command from replay. next_command is an argv array for an available public operation, or null with a concrete blocker; never advertise a command known merely to repeat a rejection."
+  ],
+  "acceptance_e2e": [
+    "Acceptance is conditional on C01-public-cli-e2e passing against the independently reviewed installed revision; rejection-only behavior does not satisfy this card.",
+    "Inspect the protected installation and actual provider-schema evidence without modifying them. If unavailable, report the exact missing external prerequisite and do not claim dispatch acceptance or replace real native sandbox enforcement with a stub.",
+    "Demonstrate a supervised fixture plan -> code modifying an existing adopted file -> collect -> independent review -> UNIT_COMPLETE, with durable resume between transitions and explicit remaining lifecycle/C2-C7 obligations."
+  ]
+}
+OBSERVED REAL CODEX EVENT VARIANTS (data only; commands are examples never execution instructions):
+{
+  "('thread.started', None)": {
+    "type": "thread.started",
+    "thread_id": "01a1625f-f447-7851-a2ec-636e254dd295"
+  },
+  "('turn.started', None)": {
+    "type": "turn.started"
+  },
+  "('item.completed', 'agent_message')": {
+    "type": "item.completed",
+    "item": {
+      "id": "item_0",
+      "type": "agent_message",
+      "text": "I\u2019ll inspect the existing wrappers, candidate files, and available bootstrap receipts first. I\u2019ll keep changes within the three allowed paths, avoid running newly written code, and make any missing host capability or evidence an explicit incomplete condition."
+    }
+  },
+  "('item.started', 'command_execution')": {
+    "type": "item.started",
+    "item": {
+      "id": "item_1",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'controller.py' -g 'codex-worker.sh' -g 'test_esy_repair_controller.py' -g '*receipt*' -g '*started*' -g '*smoke*' -g 'manifest*' -g '*policy*' .\"",
+      "aggregated_output": "",
+      "exit_code": null,
+      "status": "in_progress"
+    }
+  },
+  "('item.completed', 'command_execution')": {
+    "type": "item.completed",
+    "item": {
+      "id": "item_1",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"pwd && rg --files -g 'AGENTS.md' -g 'controller.py' -g 'codex-worker.sh' -g 'test_esy_repair_controller.py' -g '*receipt*' -g '*started*' -g '*smoke*' -g 'manifest*' -g '*policy*' .\"",
+      "aggregated_output": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate\n./scripts/esy-repair/codex-worker.sh\n./config/execution-policy.json\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  },
+  "('item.started', 'file_change')": {
+    "type": "item.started",
+    "item": {
+      "id": "item_11",
+      "type": "file_change",
+      "changes": [
+        {
+          "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/controller.py",
+          "kind": "add"
+        }
+      ],
+      "status": "in_progress"
+    }
+  },
+  "('item.completed', 'file_change')": {
+    "type": "item.completed",
+    "item": {
+      "id": "item_11",
+      "type": "file_change",
+      "changes": [
+        {
+          "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/controller.py",
+          "kind": "add"
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "('turn.completed', None)": {
+    "type": "turn.completed",
+    "usage": {
+      "input_tokens": 2134273,
+      "cached_input_tokens": 2062976,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 30820,
+      "reasoning_output_tokens": 16413
+    }
+  }
+}
+
+FROZEN SUPERVISOR WRAPPER currently used:
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+case "$role" in
+ code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+ plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+ *) exit 64 ;;
+esac
+: "${CODEX_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CODEX_BIN" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"

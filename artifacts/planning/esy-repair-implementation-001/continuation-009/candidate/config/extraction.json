@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "stage": "extraction",
+  "eligibility_manifest": "artifacts/prepare/official-candidates-004/manifest.json",
+  "eligibility_manifest_sha256": "cb8fefc83cdb67e0ea3f0b2f699f5f9c07b6087088f44a45710661d4a97b315c"
+}

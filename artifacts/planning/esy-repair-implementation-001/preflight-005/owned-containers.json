@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "/usr/local/bin/docker",
+    "container",
+    "ls",
+    "-a",
+    "--no-trunc",
+    "--filter",
+    "label=esy-reference.owner",
+    "--format",
+    "{{.ID}} {{.Names}}"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 0.021,
+  "owned_group_absent": true,
+  "logs": {
+    "stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

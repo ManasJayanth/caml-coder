@@ -1,0 +1,35 @@
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+  "parent_revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "source_sha256": "407d80771a820d8b91a8a52edb3694af4889c648dfaa1a290607739359fe85c1",
+  "input_hashes": {
+    "astra-plan-029.json": "6b48f9ec60ff66dc112ce85a625c82d5f185ea179dbc12566fd4c1e8800c183f",
+    "astra-source-review-028.json": "eddbbc3a70fd91b94467ff89580f9239ee4d9acae575b8bf55796949abf06848",
+    "coding-jobs/B1a-Deadline-029/diff.patch": "e33932e80110e085aff14e29923360ba9bde6e82c419165cd70d2a3b411dd1af",
+    "coding-jobs/B1a-Deadline-029/independent-validation.json": "19ef71d2bf34b45a9ae696b5bfe3a3a15fc1122782f12f38097b9bade8b45d4d"
+  },
+  "source_card_closed": true,
+  "ownership_source_concern_closed": true,
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "scope": "Read complete frozen source, exact diff, plan29, review28 and independent validation. Independently verified all 82 manifest entries by content, size and mode, exact parent manifest, exact diff and all plan input hashes. Only the allowed test file changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review. Assessment stays within the existing finite signal and fixed-scenario contract.",
+  "source_dispositions": {
+    "B1a-E2E-025-deadline-race": "Source closed: one absolute suite deadline reaches every response, valid-review, arity and lifecycle call. Lines 190-195 check a saved monotonic observation inside the protected region before the sole Popen and cap the invocation deadline. Collection, ordinary reap and cleanup reap use positive saved remaining durations; independent two-second cleanup and primary failure preservation remain intact.",
+    "deadline-controls": "Exactly two added enum values exercise the shared real guard. Before-first attempts one exhausted invocation. Before-next validates one ordinary response and successful cleanup before attempting an exhausted second invocation. The bounded attempts receipt is written before rethrow; exhausted state has no PID, absent pipes/selector, no signal attempt, successful no-child cleanup and suite-timeout failure. Intended exhaustion returns nonzero.",
+    "B1a-E2E-025-owned-process-lifecycle": "Prior source closure preserved. Ownership transitions, signal observation, guarded restoration, independent close/reap obligations and primary failure semantics are unchanged. Runtime acceptance remains open."
+  },
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-record-bound",
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime acceptance for revision29. Resolve the five remaining findings and obtain complete exact-revision source/environment approval and separate outer-wrapper approval before execution.",
+    "After approval, collect bounded public receipts for deadline-before-first, deadline-before-next, lifecycle-timeout and lifecycle-normal, including deadline.json or lifecycle.json and independent outer completion. Verify zero records/one unspawned state before-first and one matching record/one successful reaped state followed by one unspawned state before-next using the approved raw-byte-bounded outer collector.",
+    "Prior ownership runtime obligations from review28 remain open. Fixed runtime controls do not establish arbitrary scheduling behavior."
+  ]
+}

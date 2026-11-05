@@ -1,0 +1,8 @@
+{
+  "session_id": 99664,
+  "status_at_observation": "RUNNING",
+  "observed_unix": 1792187833.202899,
+  "last_verified_phase": "esy install completed; network-disabled compiler dependency build running",
+  "model_acquisition_session_id": 41457,
+  "scope": "progress handle only; not build success"
+}

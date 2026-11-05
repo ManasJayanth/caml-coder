@@ -1,0 +1,89 @@
+{
+  "revision_sha256": "c46ac9c731ffddb32351d815ad4e05304f92fd8a517adffdf376eb464ef50d16",
+  "evidence_sha256": "e77817bda71ec87dee6d173550bc5b911012a3f2acd14a2ae03e8fa9526f1dc1",
+  "verdict": "BLOCKED",
+  "findings": [
+    {
+      "id": "L1a-023-01",
+      "severity": "high",
+      "location": "continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py:144-152,201-206",
+      "problem": "Docker executable integrity checks use different path bindings. Launch and the initial hash follow /usr/local/bin/docker, but the final hash reads the previously resolved command target. If the Docker symlink changes after the initial hash, the final comparison can still report true by hashing the old target. A change before Popen can also make the launched executable differ from the recorded resolved executable.",
+      "required_change": "Have the separate planner specify consistent executable identity binding across resolution, hashing, launch and final verification. Detect changes to the fixed lexical executable path as well as its resolved target; do not silently change the approved fixed command contract.",
+      "required_e2e": "Approved public runs must independently substantiate both executable path bindings and matching before/after integrity. Provide a safely owned negative control for changed bindings without modifying the shared Docker installation."
+    },
+    {
+      "id": "L1a-023-02",
+      "severity": "medium",
+      "location": "continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py:226-233",
+      "problem": "The repaired fork fixture emits FORK_POLICY_FAILURE and exits 71 when fork unexpectedly succeeds, but policy validation runs only for decoded exit zero. This outcome is therefore reported as generic child-failure, contrary to the separate L1a requirement to classify policy failure explicitly.",
+      "required_change": "Recognize the exact unexpected-fork-success evidence independently of the zero-exit denial predicate, preserve the first terminal cause, and expose containment failure explicitly for L1b stop evaluation.",
+      "required_e2e": "Authentic native denial must pass only on the exact allowed record. Any observed successful fork must fail containment and stop later launches. Never weaken policy to manufacture successful fork."
+    },
+    {
+      "id": "L1a-023-03",
+      "severity": "medium",
+      "location": "continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py:173-198,245-248",
+      "problem": "Cleanup status can remain not-required for a launched child whose reap and EOFs were verified. If one normal-loop drain observes caller EOF and the last stream EOFs, followed by successful reap_once, the terminal-is-None assignment is skipped and the finally cleanup block is also skipped. The report then contains a wait receipt and no missing cleanup observations but cleanup_status not-required.",
+      "required_change": "Derive final cleanup status from child ownership, reap and stream completion independently of the first terminal cause. Reserve not-required for outcomes with no launched child.",
+      "required_e2e": "Approved public caller-liveness controls must preserve the caller-eof failure while reporting verified cleanup whenever the owned wait receipt and both EOFs are present."
+    },
+    {
+      "id": "L1-022-03",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: readiness and communicate handling",
+      "problem": "The unchanged candidate22 harness calls communicate in ordinary scenarios, closing caller liveness. Its caller-eof branch closes stdin before communicate and accepts any truthy readiness object after polling, even when validation did not succeed.",
+      "required_change": "Implement the existing L1b nonblocking collection and explicit readiness_valid requirements, keeping ordinary caller stdin open until supervisor termination.",
+      "required_e2e": "All five live rows must reach their intended outcomes; only caller-eof may deliberately close liveness while the supervisor runs, after fully validated readiness."
+    },
+    {
+      "id": "L1-022-09",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: collection, timeout fallback and finally",
+      "problem": "Supervisor output remains unbounded in communicate; the timeout fallback and canary kill fallback contain unbounded waits. Exceptions can abandon the active supervisor, and supervisor termination does not establish its child's cleanup.",
+      "required_change": "Implement L1b bounded observation, retention, deadlines, active-handle ownership and separate bounded canary cleanup. Forced supervisor termination must fail containment.",
+      "required_e2e": "Provide public timeout, output and exception evidence with bounded collection and cleanup. An outer timeout or supervisor reap cannot substitute for the child's actual cleanup receipt."
+    },
+    {
+      "id": "L1-022-10",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: blocked assignment",
+      "problem": "The unchanged harness stops later launches for only two reason strings. Proposal23 reports cleanup and integrity through independent fields, so these checks also fail to consume its new evidence contract.",
+      "required_change": "Implement the existing L1b central stop predicates across report availability, containment, configuration, integrity, identity, cleanup and canary state.",
+      "required_e2e": "Every blocking condition must prevent subsequent launches while preserving exactly five explicit result rows."
+    },
+    {
+      "id": "L1-022-11",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: report and scenario predicates",
+      "problem": "The harness still omits required typed evidence, identity, executable/profile, artifact and cleanup checks; it uses substring fork-denial matching and potentially vacuous stream predicates. It expects top-level wait_status, whereas frozen23 supplies wait_receipt.raw_status and decoded_child_exit.",
+      "required_change": "Author L1b against an explicitly frozen proposal23 evidence contract, validating complete common predicates and scenario-specific evidence independently.",
+      "required_e2e": "All five live scenarios must pass every common predicate and their exact scenario predicates, including independently decoded actual wait receipts and integrity checks."
+    },
+    {
+      "id": "L1-022-12",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: row creation and result publication",
+      "problem": "Rows are created during execution, exceptions can prevent final publication, executed means truthy readiness rather than successful launch, and result publication occurs before canary cleanup.",
+      "required_change": "Precreate five rows, distinguish launch from valid readiness, convert exceptions into failures, and publish after bounded cleanup with cleanup results included.",
+      "required_e2e": "Success and failure paths must produce exactly five unique rows; overall success requires all five executed and passed plus verified canary cleanup."
+    },
+    {
+      "id": "L1-022-14",
+      "severity": "high",
+      "location": "candidate22, frozen proposal23 and lifecycle-client-primitive acceptance",
+      "problem": "Candidate22 remains the rejected revision. Proposal23 is a separate supervisor-only draft and has not replaced candidate22. Neither provider success nor this partial source review establishes execution approval or lifecycle acceptance. Failed cleanup-denied and capacity receipts remain failures.",
+      "required_change": "Preserve revision separation and failed receipts. Route findings through separate fresh Astra planning, finish L1b, freeze both sources, and obtain the required independent execution review before running either script.",
+      "required_e2e": "Require the approved paired public five-scenario lifecycle E2E with authentic Docker metadata, exact native denial, bounded streams, verified ownership and cleanup, and complete evidence. Full esy acceptance remains separate and open."
+    }
+  ],
+  "missing_evidence": [
+    "Incomplete required semantic coverage: frontier-packet-008/source-002.txt lines 1-1611; source-003.txt lines 1-1115; source-006.txt lines 1-2487; source-009.txt lines 311-821; inline-orchestration.txt lines 1-1309, although equivalent worker-wrapper text was read in other required parts; FRONTIER_HANDOFF-007.txt lines 1-521. These files were hash-verified, which does not constitute source review. BLOCKED is required for this uncovered context.",
+    "Reviewed fully: proposal-023.txt including its diff, review-history.txt, source-000/001/004/005/007/008, and handoff008 with its initially truncated section recovered by a targeted read. Reviewed source-009 lines 1-310 and inline-orchestration lines 1310-1517. Also inspected packet-generation, allocation, ledger, proposal result and final-cleanup records.",
+    "Hash verification passed for all 13 required packet parts, candidate22 revision c46ac9c731ffddb32351d815ad4e05304f92fd8a517adffdf376eb464ef50d16 and its 81 files, frozen23 result manifest fe9e1aaa2bcf8dbd208bb643003036d764fb41f34036e16b6a7000c5c35d6258 and its 81 files, and the original 72 baseline entries. Frozen23 supervisor bytes match fc1e58bfe7134fb129c3478f0da888a05f1f221028bac116c018874237f0f93d. The canonical artifact-index digest matches the requested evidence digest. Of 1634 indexed files, 1633 hashes were checked without mismatch; continuation-006/tests/fixture-auth.json was deliberately not read under the authentication-file restriction.",
+    "No five-row public lifecycle acceptance evidence was supplied or generated. Native policy, actual Docker metadata, negative lifecycle cleanup, strict CLI/path rejection, readiness ordering, complete streams, integrity failures, exception handling and stop propagation remain observable acceptance requirements.",
+    "All 17 required public esy scenarios remain unaccepted, together with the separately listed missing fault and filesystem controls in required-esy-scenario-status-008.json. Diagnostic seed compilation and provider containment/smoke results do not close these gaps. Missing implementations are not proof that safe tests are impossible.",
+    "The controller, import gates, C17/N6 issues, ownership/create/query/deadline integration, seed comparisons, allocation/OOM evidence and post-import verification remain open. Their complete source/history basis was not reviewed here.",
+    "Historical final-cleanup-check.json records absent matching workers and temporary authentication links, and the ledger records 23 of 36 launches. This review did not independently establish current process state, reconcile subsequent active intervals or authorize another launch. The successful dispatch approval was limited to coding23 and cannot authorize coding24.",
+    "HARNESS-ONLY AUTHORING ASSESSMENT: The existing separate L1b plan remains a reasonable next task for isolated source authoring against frozen23, with edits restricted to tests/e2e/test_esy_lifecycle.py and all supervisor findings retained. Its own terms keep the acceptance unit open when supervisor defects remain. This does not require pretending the five E2Es passed. However, this incomplete review does not certify the dispatcher, satisfy the exhausted launch-specific authorization, approve execution, approve import or declare L1a accepted. Any authoring dispatch still requires the prescribed current parent binding, reconciled accounting/cleanup and fresh one-launch gate."
+  ]
+}

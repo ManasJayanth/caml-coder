@@ -1,0 +1,74 @@
+Fresh separate Astra planner. No tools, code edits or execution. Return concise strict JSON under1800words: proposed_bounded_card, allowed_bootstrap_paths, gate_tests, pitfalls, blockers. Current reviewer rejected one Luna coding launch due detached descendants. Existing macOS NOTE_TRACK probe failed errno45. User permits bounded supervisor bootstrap repair but no borrowing runner6launches. Consider eliminating the issue with native (deny process-fork) sandbox policy plus Codex shell_tool disabled (apply_patch only), not attempting unreliable polling descendant tracking. Need trusted OS probe that fork/posix_spawn/double-fork are denied and threads/network auth unaffected, then actual CLI smoke. A CLI unable to edit without child processes must block, no fallback to weaker profile. Profiles and smoke harness confined to continuation-006; candidate and existing wrappers unchanged until independent review. Does this give a sound narrow path? Do not assert macOS policy semantics without observed probes. Require independent root process cleanup on launcher death for the single worker PID, identity pinned; avoid PID reuse. No need implement full controller. If safe cannot be established, retain blocker rather than waive.
+{
+  "verdict": "CHANGES_REQUIRED",
+  "safe_for_supervised_isolated_coding": false,
+  "findings": [
+    {
+      "severity": "blocking",
+      "finding": "The implementation does not establish a bounded process lifetime, even for one supervised coding launch. Cleanup calls killpg only while the direct child is alive. Descendants can survive an already-exited leader; descendants that create another session can escape that process group entirely.",
+      "required_gate": "Before launching the coding card, demonstrate a root-controlled cleanup mechanism that tracks and terminates all job-owned descendants independently of the leader and original process group. Exercise it with a trusted probe that detaches, closes inherited output streams, and survives its parent. Verify termination on normal completion and timeout, and provide cleanup if the launcher dies. Keep the candidate quarantined until root verifies that no owned processes remain."
+    },
+    {
+      "severity": "assessment",
+      "finding": "Before/after manifests and owned-process checks are useful supervision, but the supplied evidence does not establish that those checks discover and terminate detached descendants. Manifest comparison detects changes; it cannot prevent further writes by a surviving worker."
+    },
+    {
+      "severity": "positive",
+      "finding": "The wrapper selects Luna for coding and Astra for planning/review. The outer sandbox restricts writes to candidate and runtime and denies Unix-socket connections except the named DNS sockets. Supplied probes support several write, child-process, signal, and socket restrictions. They do not demonstrate descendant cleanup."
+    },
+    {
+      "severity": "scope",
+      "finding": "A full unattended controller is not required for this narrow authorization. Verified independent root cleanup could satisfy the missing gate for one supervised card. PROVIDER_COMPLETED correctly represents provider completion only; it does not authorize host execution, importing changes, or repair acceptance. The no-host-execution restriction remains procedural because the coding role enables shell execution."
+    }
+  ],
+  "missing_evidence": [
+    "A demonstrated root ownership and cleanup mechanism covering detached descendants and descendants whose leader has exited.",
+    "A trusted containment probe exercising that mechanism with the actual coding sandbox and launcher lifecycle.",
+    "Evidence that cleanup remains available when the launcher is interrupted or terminated."
+  ]
+}
+EXISTING LAUNCHER
+"""Supervised bootstrap launcher; not the accepted unattended controller."""
+import argparse,hashlib,json,os,selectors,signal,subprocess,time
+from pathlib import Path
+p=argparse.ArgumentParser(); p.add_argument('--role',choices=['code','plan','review'],required=True); p.add_argument('--job',required=True); p.add_argument('--prompt',type=Path,required=True); p.add_argument('--timeout',type=int,default=600); a=p.parse_args()
+s=Path(__file__).resolve().parents[1]; candidate=s/'candidate'; jobs=s/'jobs'; jobs.mkdir(exist_ok=True)
+if not a.job.replace('-','').replace('_','').isalnum(): raise SystemExit('invalid job')
+j=jobs/a.job; j.mkdir(exist_ok=False); runtime=j/'runtime'; runtime.mkdir(); (runtime/'tmp').mkdir(); (runtime/'codex').mkdir()
+(j/'prompt.txt').write_bytes(a.prompt.read_bytes())
+wrapper=s/'bootstrap/trusted-codex-worker-003.sh'; (j/'worker.sh').write_bytes(wrapper.read_bytes())
+profile='(version 1)\n(allow default)\n(deny file-write*)\n(allow file-write* (subpath '+json.dumps(str(runtime))+'))\n(deny network-outbound (remote unix-socket))\n(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))\n(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))\n(deny signal)\n(allow signal (target self) (target children))\n'
+if a.role=='code': profile+='(allow file-write* (subpath '+json.dumps(str(candidate))+'))\n'
+(j/'sandbox.sb').write_text(profile)
+auth=runtime/'codex/auth.json'; auth.symlink_to(Path.home()/'.codex/auth.json')
+env={k:os.environ[k] for k in ('PATH','HOME','USER','LOGNAME','LANG','SHELL','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS') if k in os.environ}; env.update(CODEX_BIN='/opt/homebrew/bin/codex',CODEX_HOME=str(runtime/'codex'),TMPDIR=str(runtime/'tmp'))
+cmd=['/bin/bash',str(j/'worker.sh'),a.role,str(candidate),str(j/'prompt.txt'),str(j/'sandbox.sb')]
+started=time.monotonic(); proc=subprocess.Popen(cmd,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
+(j/'started.json').write_text(json.dumps({'pid':proc.pid,'role':a.role,'command':cmd,'timeout':a.timeout,'wall_started':time.time()}))
+sel=selectors.DefaultSelector(); sel.register(proc.stdout,selectors.EVENT_READ,'stdout'); sel.register(proc.stderr,selectors.EVENT_READ,'stderr'); logs={k:bytearray() for k in ('stdout','stderr')}; reason=None
+try:
+ while sel.get_map():
+  if time.monotonic()-started>a.timeout: reason='timeout'; break
+  for key,_ in sel.select(.2):
+   raw=os.read(key.fileobj.fileno(),16384)
+   if not raw: sel.unregister(key.fileobj); continue
+   buf=logs[key.data]
+   if len(buf)+len(raw)>2*1024*1024: reason='output-cap'; break
+   buf.extend(raw)
+  if reason: break
+finally:
+ if proc.poll() is None:
+  try: os.killpg(proc.pid,signal.SIGKILL)
+  except ProcessLookupError: pass
+  except PermissionError: reason='cleanup-denied'
+ try: proc.wait(timeout=5)
+ except subprocess.TimeoutExpired: reason='cleanup-unverified'
+ sel.close(); auth.unlink(missing_ok=True)
+for name,raw in logs.items(): (j/name).write_bytes(raw)
+report={'role':a.role,'requested_model':'gpt-6-luna' if a.role=='code' else 'gpt-6-astra','exit_code':proc.returncode,'failure':reason,'elapsed_seconds':round(time.monotonic()-started,3),'command':cmd,'status':'FAILED'}
+try:
+ events=[json.loads(line) for line in logs['stdout'].splitlines() if line.strip()]; messages=[e['item']['text'] for e in events if e.get('type')=='item.completed' and e.get('item',{}).get('type')=='agent_message']; (j/'final.txt').write_text(messages[-1] if messages else '')
+ if proc.returncode==0 and not reason and messages and any(e.get('type')=='turn.completed' for e in events) and not any(e.get('type') in ('error','turn.failed') for e in events): report['status']='PROVIDER_COMPLETED'
+except (ValueError,TypeError,KeyError): report['failure']='invalid-provider-output'
+(j/'receipt.json').write_text(json.dumps(report,indent=2)+'\n'); print(json.dumps(report)); print((j/'final.txt').read_text()[:12000] if (j/'final.txt').exists() else logs['stderr'].decode(errors='replace')[-2000:])
+raise SystemExit(0 if report['status']=='PROVIDER_COMPLETED' else 1)

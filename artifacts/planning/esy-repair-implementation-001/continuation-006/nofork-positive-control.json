@@ -1,0 +1,7 @@
+{
+  "fork_denied": false,
+  "posix_spawn_denied": false,
+  "thread_works": true,
+  "exit_code": 1,
+  "expected": "outside native policy both creation routes succeed; negative-probe exit1 is expected positive-control outcome"
+}

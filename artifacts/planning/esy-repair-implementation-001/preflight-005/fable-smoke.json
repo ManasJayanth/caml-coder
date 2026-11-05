@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/claude-worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/work",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/review.sb"
+  ],
+  "exit_code": 1,
+  "failure": null,
+  "elapsed_seconds": 1.743,
+  "owned_group_absent": true,
+  "logs": {
+    "stdout": {
+      "size": 1253,
+      "sha256": "6b1bdbad816a50be7f165d31582946b9864788367e2363bc487035b1758bbb6c"
+    },
+    "stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "requested_model": "fable",
+  "status": "FAILED",
+  "parse": "NO_VALID_COMPLETE_SUCCESS_ENVELOPE"
+}

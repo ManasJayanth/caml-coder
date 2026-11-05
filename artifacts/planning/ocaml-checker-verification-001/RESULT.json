@@ -1,0 +1,50 @@
+{
+  "status": "TARGETED_REPAIR_VERIFIED",
+  "scope": "Third bounded repair, authorized by direct user request to verify suggested repair; other repairs not authorized",
+  "before": {
+    "original": "Compilation succeeded but candidate execution failed with permission denied on noexec work tmpfs; did not reproduce false PASS in the original environment",
+    "controlled_baseline": "Exact original script plus exec on disposable container tmpfs incorrectly PASSED early-exit candidate. Original and baseline source snapshots retained."
+  },
+  "after": {
+    "e2e": "PASSED,2 scenarios,19assertions",
+    "cases": [
+      "correct source passes",
+      "early exit returns0 but missing checker marker forces FAILED",
+      "incorrect result fails actual assertion",
+      "syntax error rejected by compiler",
+      "two simultaneous96character runIDs succeed with distinct preserved randomsuffixes"
+    ],
+    "existing_real_model_output": "qwen35-runtime-001 passed repaired fixed-example checker; no new inference or training"
+  },
+  "changes": [
+    "Remove shell completion marker; marker emitted only after checker assertions",
+    "Preserve random container-name suffix when runID is long",
+    "Enable exec only in disposable nonroot container worktmpfs",
+    "Correct task-card command ordering and hostMLX versus containerOCaml scope",
+    "Add public command Docker-backed E2E suite"
+  ],
+  "broader_validation": {
+    "status": "FAILED",
+    "report": "artifacts/e2e/control-after-checker-repair-001.json",
+    "scenario": "card-interfaces",
+    "failure": "Fixture expects old T12 pending model task; kept visible, no unrelated repair attempted"
+  },
+  "limits": [
+    "Not a tamper-proof grader; candidate and checker still share a process and filesystem. No arbitrary adversarial robustness claim.",
+    "No training, model improvement, or M1 deployment claim.",
+    "Workflow hold event not rewritten; trusted approval resolution remains separate."
+  ],
+  "files": {
+    "scripts/check_ocaml_probe.py": "2b8fc9fa2cd2c2f1c17f2a069ae36e6c5a9f2dcfd360a3597455e512d18b2a00",
+    "tests/e2e/test_ocaml_checker.py": "bd9e14bc0823314570749f43a31c3bb0511f76890143085f6d7c13fbfd81a337",
+    "config/cards.json": "274a791632943561326bd7256773a6485ee1f961d95111719cceef45d96fb603",
+    "src/sft/e2e.py": "411619392a7059ec26fa4c1cfb8a276448e3cf94ad441b4d6bfe368fa444826c",
+    "artifacts/planning/ocaml-checker-verification-001/checker-before.py": "cd2c2fc25ed6e31ccc36969515a6dc1ff98b6be726f73da65b96ca06784f50e8",
+    "artifacts/planning/ocaml-checker-verification-001/checker-baseline-exec.py": "1bb7232ac9a3c986e90b841b1091b397538d19d5d63c54eae62f386bd727e0d1",
+    "artifacts/planning/ocaml-checker-verification-001/early-exit/ocaml-checks/before-repair.json": "83adcbd45603838fca94078579a594defdbf3be43f0fd9c6d08eae9ca14c1819",
+    "artifacts/planning/ocaml-checker-verification-001/early-exit/ocaml-checks/before-marker-repair.json": "2509b250b8bef31ec7d9a17e3e2b56c01fe109655cba81eafbb2da82c294ec27",
+    "artifacts/e2e/ocaml-checker-authorized-repair-002.json": "adc94510a2b97f8dc335e491880ff6c9c2ecdbd0b209599fd66c53efc6b48985",
+    "artifacts/e2e/control-after-checker-repair-001.json": "638c7b82e511cc245441f4f4172e62af8cb88416acb16bd178afcb42ef02b5a2",
+    "artifacts/models/probes/qwen35-runtime-001/ocaml-checks/repaired-checker-001.json": "4397111de760df6a6ed4294c0440d16a42e107501a011bd28011b7aff83f9b29"
+  }
+}

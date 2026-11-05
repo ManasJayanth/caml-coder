@@ -1,0 +1,43 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 27,
+  "approved_card_id": "B1a-Lifecycle-027",
+  "reviewed_plan_sha256": "0c03e22f4544e99b8b1298543f78a4a5bc17d7883180b94f175951273c72a420",
+  "reviewed_plan_section": "launch_027",
+  "parent_revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+  "findings": [
+    {
+      "severity": "info",
+      "id": "one-correction-authoring-approved",
+      "message": "Approve exactly one read/edit/write-only Luna authoring launch27 under the inspected launch_027 contract. It addresses the three review26 lifecycle findings, restores the accidental stdin payload change and explicitly retains the saved-duration safety improvement. Only tests/e2e/test_review_adapter_e2e.py may change. The six unrelated findings remain open."
+    },
+    {
+      "severity": "info",
+      "id": "card-addresses-rejection",
+      "message": "The card requires non-raising cooperative SIGINT/SIGTERM handlers across child acquisition and finalization, guarded partial handler restoration, a no-signal phase before every reap, independent bounded cleanup obligations, single guarded finalization, and truthful resource/receipt outcomes. It adds only one fixed cleanup-interrupt public scenario, retains the fixed bounds and actual sandbox/adapter path, and does not expand arbitrary command or execution controls. These are suitable authoring requirements; implementation safety remains unproved until source re-review."
+    },
+    {
+      "severity": "info",
+      "id": "bindings-confirmed",
+      "message": "Computed all six launch_027 input hashes and found them equal to the card. Current candidate test SHA256 e27c301dbcffa733ce5aa6f95207399ee0f4eb717f76f4b68a5799addc81ed43 matches frozen26 and candidate-transition-026.json. Root reports full-manifest verification and sole-path transition. Launcher, guardian and profile hashes still match the prior independent dispatch review."
+    },
+    {
+      "severity": "info",
+      "id": "recent-supervision-evidence",
+      "message": "Coding26 guardian receipt reports worker reaped, exit zero, reason null and credential removal. private-pi is currently empty and ledger records 26/36. Root reports unchanged provider/binaries/configuration since the successful fresh smoke and no candidate execution. This review does not request another smoke."
+    },
+    {
+      "severity": "warning",
+      "id": "authoring-only-unaccepted-base",
+      "message": "Frozen26 remains IMPLEMENTED_UNACCEPTED, safe_for_execution=false and ownership_card_closed=false. Using it as the correction base does not accept it. Neither plan27's later templates nor any runtime probe, matrix, import, rejected controller or unattended workflow is approved."
+    }
+  ],
+  "conditions": [
+    "Dispatch only the reviewed launch_027 section with non-expanding operational instructions. Reserve exactly slot27 from ledger26 using a fresh unique job/workspace. No automatic later launch.",
+    "Retain exclusive S workflow ownership, no concurrent runtime writer, verified unchanged dispatch controls, absent old worker and temporary credential, and current candidate equality with the full frozen26 manifest. Prior dispatch-review control conditions continue to apply.",
+    "Use reconciled D10 allocation and current elapsed active work rather than the plan's approximate checkpoint; enforce 36 coding launches and 32400 active seconds and the launcher's 660-second remaining reserve. Preserve same-objective attempt accounting and fresh-replan gates.",
+    "Worker actions remain source authoring only, with read/edit/write tools and the existing nofork sandbox. Root verifies external input hashes; listed outside-sandbox paths do not authorize expanded worker filesystem access. No candidate execution, tests, helper imports, subprocess tools, Docker, Claude or provider invocation by the worker.",
+    "After launch, independently validate full provider completion, tool activity, single-file scope, immutable parent/candidate bindings, frozen manifests, worker reaping and credential absence. Keep resulting source UNACCEPTED for an independent Astra review of the exact revision.",
+    "Any execution requires full applicable source-safety closure and independent outer-wrapper review. Cooperative-signal and fixed-fault requirements are a finite contract, not proof against interpreter crashes, SIGKILL or arbitrary asynchronous failures. Do not infer runtime success from source review or lifecycle receipt literals."
+  ]
+}

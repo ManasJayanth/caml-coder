@@ -1,0 +1,61 @@
+You are a fresh separate Astra frontier planner. PLAN ONLY, tools disabled. Latest user authorizes implementation of B1 review routing first; default code Luna, primary review invoked via claude-worker.sh routing Codex Astra; Fable only after provider availability failure, never findings/auth/permission/malformed/identity/context/cleanup. Planner remains Astra-only. Original checkout/import prohibited. Current controller independently rejected, never execute it. We use individually supervised no-fork Pi Luna authoring. Need first SMALL B1 card, preferably adapter routing only; defer policy/provider-envelopes/E2Es to explicit separate cards. Do not compress all B1 into one job. Exact executable adapters below. Return strict JSON with card_id, finding_ids, parent_revision_sha256 (use supplied binding), inputs, allowed_paths, prerequisites, required_behavior, forbidden_changes, e2e_recipe_ids, expected_outcomes, evidence_outputs, stop_conditions; plus following_cards and safe_bootstrap_notes. No placeholders. Author only, no worker execution. Each card must specify public-process E2Es, allowed fake executable scenarios for routing only and subsequent realsmokes. Preserve nofallback-on-findings policy. Budget23/36 and19122.94active/32400 beforecurrentturn; noreset. Do not require a repaired controller to author its bootstrap adapter; independent review before activation. Use current cli supported flags unchanged unless explicit prerequisite requires them. Choose a minimal B1a adapter change and how approval will be tested without running unreviewed code. Expected output<=1300words.
+
+INPUT BINDING 6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836
+[{"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate/scripts/esy-repair/claude-worker.sh", "sha256": "9c774c821615dc604eaea1fdcaed8bf38b67909288e309d9913bf028dae5c63c"}, {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate/scripts/esy-repair/codex-worker.sh", "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"}, {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate/scripts/esy-repair/pi-worker.sh", "sha256": "bbb9c26e41ea6a7ba6d17558d6dff7f614b75f7ca378084f218e0f5c8bedf794"}]
+
+FILE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+case "$role" in
+ review) echo "Review uses codex-worker.sh review with gpt-6-astra" >&2; exit 64 ;;
+ code) : "${CLAUDE_CODING_MODEL:?exact coding model required}"; model=$CLAUDE_CODING_MODEL; tools="Read,Edit,Write,Glob,Grep"; permission=acceptEdits ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+FILE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+FILE scripts/esy-repair/pi-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+[ "$role" = code ] || exit 64
+: "${PI_BIN:?absolute executable required}"
+: "${PI_PROVIDER:?exact provider required}"
+: "${PI_CODING_MODEL:?exact coding model required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$PI_BIN" --print --mode json --provider "$PI_PROVIDER" --model "$PI_CODING_MODEL" --no-session --no-extensions --no-mcp --no-skills --no-prompt-templates --no-context-files --no-approve --tools read,edit,write < "$prompt"

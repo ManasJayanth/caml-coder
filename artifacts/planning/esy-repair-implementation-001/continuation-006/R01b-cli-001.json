@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "/opt/homebrew/bin/uv",
+    "run",
+    "--project",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+    "--locked",
+    "--no-sync",
+    "python",
+    "-B",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/coding-jobs/R01b-020/frozen/artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+    "--scenario",
+    "cleanup-results",
+    "--image",
+    "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "--expectations",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/intentionally-missing-expectations.json",
+    "--output-dir",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/r01b-cli-output"
+  ],
+  "exit_code": 2,
+  "failure": null,
+  "elapsed_seconds": 0.007,
+  "owned_group_absent": true,
+  "logs": {
+    "stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "size": 160,
+      "sha256": "0e13e7693e8a72175a232cc06407ce7da879b4106bf179e89bff2301b153f769"
+    }
+  }
+}

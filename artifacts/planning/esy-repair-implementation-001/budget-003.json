@@ -1,0 +1,9 @@
+{
+  "max_coding_launches": 12,
+  "coding_launches_reserved": 7,
+  "prior_readiness_launches": 6,
+  "active_seconds_prior_resume": 482.411,
+  "resume_time_epoch": 1792651436.0642276,
+  "current_card": "C01-core",
+  "reserved_at_epoch": 1792651813.116291
+}

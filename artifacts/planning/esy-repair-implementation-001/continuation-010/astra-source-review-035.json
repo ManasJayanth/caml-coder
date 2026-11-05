@@ -1,0 +1,35 @@
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+  "parent_revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+  "source_sha256": "af8bd7297c7c97892a502331ad18357ff94415a474f9b8954a9e72650306669a",
+  "input_hashes": {
+    "astra-plan-035.json": "518660c37018e34f1244555407a15d25a09e904832964ef91f388ff2b733dafb",
+    "astra-source-review-034.json": "8da761046c12199c72f7477814094150cc9da0fc45becdeb5ed81233dad95386",
+    "coding-jobs/B1a-Arity-035/diff.patch": "2b5ce7d7602845be895425d5a1daa5d4110b42c7c26c026b014217acc0ccb00e",
+    "coding-jobs/B1a-Arity-035/independent-validation.json": "58c6e49afd9f4da7a00cf44fa4712dd610bff11a312cf06f096072bb727ea459"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, both adapters, plan35, review34, diff and validation. Independently verified all 82 frozen entries by hash/size/mode, exact inventory, byte-identical parent binding and exact diff. Only allowed test changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "arity_rows": "Satisfied: exactly nine rejection rows: empty argv/count0; review total1,2,3,4,6; code total5; unknown total4,5. Role counts toward total. Nonempty arguments are role plus count-1 literal unused values. All reject in unchanged claude-worker before paths/providers; valid code total4 is never invoked.",
+    "rejection_checks": "Satisfied: actual adapter launch uses bounded_run; immediate bounded collect_records and validate_routing_delta(expected0) reject changed prefix or any appended byte. First routing mismatch fails before snapshot advancement or another invocation. Then status64, empty stdout/stderr and observed_delta0 are required.",
+    "row_evidence": "Satisfied: each arity row retains routing fields and adds unambiguous case, adapter_argv, total_argument_count=len(params), full launch_argv, including empty argv/count0.",
+    "regressions": "Redundant valid-review block removed. Nine original response rows still invoke valid review total5 with unchanged exact response/routing checks. Exact diff preserves routing and lifecycle controls, ownership, deadlines, cleanup, record/stream bounds, diagnostics and adapters. No general result receipt added."
+  },
+  "findings": [],
+  "requiredchanges": [],
+  "closed_source_findings": [
+    "B1a-E2E-025-arity-offset"
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "Source closure only. Diagnostic byte cap, complete result receipt/inventory and independently reviewed outer wrapper remain open; no execution or dispatch approval.",
+    "Public response/arity matrix, fixed controls and independent cleanup/completion evidence still require separately approved exact-revision execution. Fake routing cannot establish provider identity or availability."
+  ]
+}

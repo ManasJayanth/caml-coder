@@ -1,0 +1,119 @@
+Implement this single bounded card using read/edit/write only. Do not execute commands or code. Modify only scripts/esy-repair/claude-worker.sh. Existing sibling Codex adapter takes FIVE arguments; review must forward the fifth verified executable. Preserve existing four-argument Claude code behavior. No fallback, policy classifier, tests, controller, unrelated changes. Root binds actual full parent manifest below, replacing the planner subset binding without changing behavior. All future tests and realsmoke are supervisor-owned after independent source approval.
+{
+  "card_id": "B1a-review-adapter-routing",
+  "finding_ids": [
+    "B1-review-entrypoint-rejects-primary"
+  ],
+  "allowed_paths": [
+    "scripts/esy-repair/claude-worker.sh"
+  ],
+  "prerequisites": [
+    "Independently verify the supplied binding and three file hashes without executing repository code.",
+    "Individually supervise one no-fork Pi author using the exact Luna model; planner and independent reviewer remain Astra.",
+    "The supervisor must support absolute adapter invocation with a fifth positional argument containing the verified absolute Codex executable. This extends the shell-adapter contract, not provider CLI flags.",
+    "Independent review must use a separately trusted invocation; neither the rejected controller nor the proposed adapter may bootstrap its own approval."
+  ],
+  "required_behavior": [
+    "Validate arity before positional dereferences: code accepts four arguments, review accepts five; malformed or unsupported invocations exit 64.",
+    "For review, replace the rejection with exec of the bound sibling codex-worker.sh, forwarding ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE unchanged.",
+    "Resolve the sibling from the adapter location before workspace changes; do not search PATH or the workspace for another adapter.",
+    "Route before requiring CLAUDE_BIN or CLAUDE_CODING_MODEL.",
+    "Preserve the existing four-argument Claude code branch and every provider CLI flag.",
+    "Inherit Codex review's fixed gpt-6-astra model, read-only sandbox, disabled shell and multi_agent settings.",
+    "Preserve streams and process outcome. Add no retry, classification, or fallback."
+  ],
+  "forbidden_changes": [
+    "Controller execution or repair; original checkout access/import; changes to Codex or Pi adapters.",
+    "Policy manifests, provider envelopes, fallback implementation, test-runner implementation, unrelated hardening, or provider CLI changes.",
+    "Execution of the authored candidate before independent static approval."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-fake-routing",
+    "B1a-public-real-astra-smoke"
+  ],
+  "expected_outcomes": [
+    "After static approval, a trusted supervisor invokes the approved absolute claude-worker.sh review entrypoint as a public process, through the unchanged Codex adapter and real sandbox-exec.",
+    "A non-symlink absolute fake Codex executable records argv and stdin and emits controlled stdout, stderr and exit status. Verify exact forwarding, Astra/read-only flags, prompt delivery and successful routing with Claude variables absent.",
+    "Allowed fake scenarios: success, findings-like output, availability-like output, authentication-like output, permission-like output, malformed output, identity/context/cleanup-like output, and controlled nonzero exits. These test transparent routing only; every case must produce zero alternate-provider invocations.",
+    "Malformed argument counts and unsupported roles exit 64 without launching a provider.",
+    "Then invoke a verified real Codex executable with a harmless read-only review prompt through the same public entrypoint. Record available identity evidence; absence or mismatch blocks activation. Any failure stops the smoke without fallback.",
+    "This turn produces a card only; authoring, approval and execution occur in separately supervised steps."
+  ],
+  "evidence_outputs": [
+    "Bound input manifest, minimal diff, candidate hash, unchanged-file hashes.",
+    "Independent Astra static decision bound to candidate bytes.",
+    "After approval: public-process commands, sanitized argv/stdin assertions, stream/status records, provider-invocation ledger and real-smoke result."
+  ],
+  "stop_conditions": [
+    "Binding mismatch, scope expansion, unsupported prerequisite or missing independent approval.",
+    "Review findings require revision and renewed static approval; they never authorize fallback.",
+    "Any tested-byte mismatch invalidates approval; any smoke failure blocks activation."
+  ],
+  "parent_revision_sha256": "fe9e1aaa2bcf8dbd208bb643003036d764fb41f34036e16b6a7000c5c35d6258",
+  "inputs": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/parent-024.json",
+      "sha256": "fe9e1aaa2bcf8dbd208bb643003036d764fb41f34036e16b6a7000c5c35d6258"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-plan-001/final.txt",
+      "sha256": "f1205ed384d1f58f0832c665e2750607b89c59c404fd69c809fb9885049861f0"
+    }
+  ]
+}
+FILE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+case "$role" in
+ review) echo "Review uses codex-worker.sh review with gpt-6-astra" >&2; exit 64 ;;
+ code) : "${CLAUDE_CODING_MODEL:?exact coding model required}"; model=$CLAUDE_CODING_MODEL; tools="Read,Edit,Write,Glob,Grep"; permission=acceptEdits ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+FILE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+FILE scripts/esy-repair/pi-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+[ "$role" = code ] || exit 64
+: "${PI_BIN:?absolute executable required}"
+: "${PI_PROVIDER:?exact provider required}"
+: "${PI_CODING_MODEL:?exact coding model required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$PI_BIN" --print --mode json --provider "$PI_PROVIDER" --model "$PI_CODING_MODEL" --no-session --no-extensions --no-mcp --no-skills --no-prompt-templates --no-context-files --no-approve --tools read,edit,write < "$prompt"

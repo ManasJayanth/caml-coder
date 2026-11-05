@@ -1,0 +1,13 @@
+{
+  "status": "SEMANTIC_SEED_CONTENTS_MATCH",
+  "checks": {
+    "seed_project": true,
+    "seed_cache": true
+  },
+  "excluded_identity_field": "mtime_ms only for top-level seed-root directories; retained in full diagnostics",
+  "full_inventory_artifact": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/seed-inventory-probe-004.json",
+  "full_inventory_sha256": "d0a8c6e8f555af97f41c98ae2c65a38db1c51b1d0e481e9c672d2328cc4f41bb",
+  "planner_decision": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/N5-replan-001/final.txt",
+  "runtime_acceptance": false,
+  "original_inputs_unchanged": true
+}

@@ -1,0 +1,266 @@
+{
+  "plan_id": "remaining-frontier-after-036",
+  "planner": "fresh separate gpt-6-astra",
+  "status": "INCOMPLETE; BLOCKED_NO_CODING_ALLOCATION",
+  "authorized_now": "Planning artifact only. No implementation, candidate execution, delegation, training, dataset generation, promotion or original-source import.",
+  "accounting": {
+    "coding_consumed": 36,
+    "coding_cap": 36,
+    "remaining": 0,
+    "active_limit_seconds": 32400,
+    "rule": "No allocation reset or inferred extension. Later coding requires new explicit human allocation; reconcile cumulative active time, failures and cleanup before dispatch. Failed attempts consume launches; three failures on one objective require fresh frontier replanning."
+  },
+  "review_policy": "Astra only; Claude disabled. Historical Fable fallback instructions are superseded. User-authorized separate-agent reviews are source-only, not through-adapter provider smoke or execution approval.",
+  "current_bindings": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-036.json",
+      "sha256": "c58ad686e500d647288bcd1b6dfa7cdde428d47c4de6703235e9560b980f4a56"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json",
+      "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/execution-envelope-plan.json",
+      "sha256": "067233313fbc3f8a974adf7c1da2f685da9405f23144ab7365da4d4ba877a8c6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/result-manifest.json",
+      "sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/independent-validation.json",
+      "sha256": "6e580cbdecb289bb54d09ea3e663ac7da9ece98b94ed94373610a453ed7a8a54"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/tests/e2e/test_review_adapter_e2e.py",
+      "sha256": "345b8c7b052bda1d0a77c2d12fb70b3ca41181ade5e3f3ccb2e012b3404325fe"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/scripts/esy-repair/claude-worker.sh",
+      "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/scripts/esy-repair/codex-worker.sh",
+      "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/pyproject.toml",
+      "sha256": "49841d7f9771ab90b97b6293d4ca03f64052947266c88a93166624947b1758de"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/uv.lock",
+      "sha256": "3dacc98fe3a959f78056b1b19e4ff45e9c4e55dda70e4c408aa52b8412808329"
+    }
+  ],
+  "original_findings": [
+    {
+      "id": "B1a-E2E-025-owned-process-lifecycle",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-028.json",
+      "runtime_missing": "Eight lifecycle controls; independent reap/EOF/descendant observations.",
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-025-record-bound",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-031.json",
+      "runtime_missing": "Exact 16384 acceptance and 16385 rejection before parsing; boundary padding is not protocol evidence.",
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "source_status": "open",
+      "resolution_receipt": "astra-source-review-036.json",
+      "runtime_missing": "Complete success and early-failure result.json, retained rows and explicit not-run rows.",
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-025-arity-offset",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-035.json",
+      "runtime_missing": "Nine total-argument rejection rows, status64, empty streams, zero record delta.",
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-025-per-case-routing",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-034.json",
+      "runtime_missing": "Matrix exact one/zero deltas; shared-loop missing/duplicate stop after attempt1.",
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-025-deadline-race",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-029.json",
+      "runtime_missing": "Before-first and before-next exhausted attempts acquire no child; no negative sleeps.",
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-025-diagnostic-byte-cap",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-036.json",
+      "runtime_missing": "Raw bytes: ASCII/multibyte exactly4096, status1; fixed interrupt bytes/status130; empty stdout and no children.",
+      "e2e_pass": false
+    }
+  ],
+  "additional_findings": [
+    {
+      "id": "B1a-E2E-026-spawn-handoff",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-028.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-026-interrupted-cleanup",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-028.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-026-finalization-receipt",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-028.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-027-cleanup-outcome-conflation",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-028.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-E2E-027-signal-observation-receipt",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-028.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-Records-030-boundary-newline-escaping",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-031.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    },
+    {
+      "id": "B1a-Routing-033-controls-bypass-matrix",
+      "source_status": "closed",
+      "resolution_receipt": "astra-source-review-034.json",
+      "runtime_missing": true,
+      "e2e_pass": false
+    }
+  ],
+  "additional_scope_dispositions": "Review026 newline payload departure restored by027 and preserved028-036. Saved-duration wait departure expressly reconciled in plan027; full deadline finding source-closed029. Cleanup Popen returncode bookkeeping reconciled027. No new source-card findings in036. These dispositions establish no runtime acceptance.",
+  "immediate_future_card": {
+    "card_id": "FUTURE-B1a-complete-result-inventory",
+    "status": "NOT_AUTHORIZED; no slot reserved",
+    "finding_ids": [
+      "B1a-E2E-025-result-receipt"
+    ],
+    "parent_revision_sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4",
+    "inputs": [
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-036.json",
+        "sha256": "c58ad686e500d647288bcd1b6dfa7cdde428d47c4de6703235e9560b980f4a56"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json",
+        "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/execution-envelope-plan.json",
+        "sha256": "067233313fbc3f8a974adf7c1da2f685da9405f23144ab7365da4d4ba877a8c6"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/result-manifest.json",
+        "sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/independent-validation.json",
+        "sha256": "6e580cbdecb289bb54d09ea3e663ac7da9ece98b94ed94373610a453ed7a8a54"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/tests/e2e/test_review_adapter_e2e.py",
+        "sha256": "345b8c7b052bda1d0a77c2d12fb70b3ca41181ade5e3f3ccb2e012b3404325fe"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/scripts/esy-repair/claude-worker.sh",
+        "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/scripts/esy-repair/codex-worker.sh",
+        "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/pyproject.toml",
+        "sha256": "49841d7f9771ab90b97b6293d4ca03f64052947266c88a93166624947b1758de"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/frozen/uv.lock",
+        "sha256": "3dacc98fe3a959f78056b1b19e4ff45e9c4e55dda70e4c408aa52b8412808329"
+      }
+    ],
+    "allowed_paths": [
+      "tests/e2e/test_review_adapter_e2e.py"
+    ],
+    "prerequisites": [
+      "New human coding allocation; fresh separate Astra planner reconfirms scope/size, complete inventory and parent equality, hashes, cumulative gates and prior cleanup. Preserve final036 source closures. Rebind any changed parent before dispatch."
+    ],
+    "required_behavior": [
+      "Precreate all18 matrix rows: nine response cases and nine corrected arities. Persist bounded result.json beneath validated output after success or any handled failure following validation. Every row has stable ID, pass/fail/not-run, exact adapter/launch argv and total count, expected/actual status and byte-safe bounded streams with lengths/truncation, routing/record checks, primary failure and actual cleanup. Missing observations are explicit null/not-observed; never invented success.",
+      "Inventory every attempted bounded_run across matrix, routing, lifecycle, record and deadline branches, including exhausted no-child attempts. Retain scenario/call ID, exact argv, acquired PID and PGID/session-leader identity, acquisition/ownership phase, reap, pipe/selector/restoration outcomes, signal attempts, first signal, original failure and cleanup errors. Register evidence across acquisition and ordinary exceptions without weakening ownership. Diagnostics record explicit childless classification. Complete source-backed inventory is mandatory for the outer descendant gate.",
+      "Retain partial bounded bytes/status on invocation failure rather than discarding them. Persist accumulated rows and mark later rows not-run; publication failure is nonzero. Overall pass requires every required row pass and complete inventory/cleanup. Expected negative controls remain nonzero; their expected outcome is evaluated externally. Uncatchable death or incomplete/truncated inventory is uncertainty.",
+      "Keep receipts within65536 raw bytes using fixed counts, bounded fields and byte-safe encoding; define full schema/types/null rules and deterministic overflow failure before authoring. Preserve existing scenario receipts,18 public scenarios, all caps, real adapter calls, native sandbox and finite signal contract."
+    ],
+    "forbidden_changes": [
+      "No adapters, dependencies, policies, historical artifacts, controller or original-source changes. No arbitrary inputs, generalized framework, unit/helper tests, monkeypatches or sandbox replacement. Worker read/edit/write only; no execution/import/compilation/tests/Docker/provider calls/delegation; targeted patches under3000 characters and2MiB worker output cap."
+    ],
+    "e2e_recipe_ids": [
+      "B1a-public-matrix",
+      "B1a-public-routing-missing",
+      "B1a-public-routing-duplicate",
+      "B1a-public-all-fixed-controls"
+    ],
+    "expected_outcomes": [
+      "Later separately approved full-script matrix:18 passing rows and18 accounted invocations. Routing failures: first row fail,17 not-run, attempt1, observed0/2 against expected1; no later launch. All control branches publish complete invocation/no-child inventories with retained failure and independently verified cleanup."
+    ],
+    "evidence_outputs": [
+      "Allowed-file diff; immutable parent/result manifests; independent Astra exact-source review; later bounded raw process output, result.json, scenario receipts and independently observed cleanup/completion."
+    ],
+    "stop_conditions": [
+      "No new allocation, binding/gate failure, missing source closure, scope/size overrun, new-path requirement, receipt overflow or execution attempt stops dispatch. If too large, split result-row publication and all-call inventory into separately reviewed dependent cards within the future allocation; never merge unrelated work to fit a cap."
+    ]
+  },
+  "future_queue": [
+    {
+      "card_id": "FUTURE-B1a-fixed-outer-envelope",
+      "depends_on": "Accepted complete result/inventory source",
+      "scope": "One fixed bootstrap/runner source under continuation artifacts; independent Astra review before execution. execution-envelope-plan.json remains the design contract; obsolete slot35/receipt34 scheduling is void.",
+      "requirements": "Bind immutable sources, adapters, actual uv/Python/environment and lockfile; prove adapter descendants cannot escape their owned groups. Fixed literal scenario list, independent bootstrap/runner deadlines, bounded streams/receipts, guarded finalizers and ownership-only signaling. Independent bounded ps descendant checks require complete inventory; no stale-PID signaling or orphan salvage. Missing/uncertain cleanup retains lock and stops.",
+      "evidence": "Exact-source wrapper review plus separately approved public success/failure/completion observations; no generic controller."
+    },
+    {
+      "card_id": "FUTURE-B1a-public-acceptance",
+      "depends_on": "Result/inventory, reviewed envelope and separate execution approval",
+      "scope": "All18 literal public scenarios through complete script/actual adapters; no helper tests.",
+      "evidence": "Matrix; eight lifecycle controls; two deadline controls; two record boundaries; two shared-loop routing controls; three diagnostic controls. Exact argv/revision, bounded raw bytes/status, receipts, independent reap/EOF/descendant/completion evidence. Expected injected failures are not envelope acceptance failures."
+    },
+    {
+      "card_id": "FUTURE-B1a-real-provider-and-final-review",
+      "depends_on": "Accepted adapter E2Es and reviewed provider containment",
+      "scope": "Real Codex gpt-6-astra smoke through claude-worker.sh review, then fresh independent Astra through-adapter review of exact source/evidence manifest. Claude stays disabled.",
+      "evidence": "Actual provider identity, availability, complete context/coverage and cleanup. Fake routing and separate-agent reviews do not substitute. Every final finding or missing item returns to a fresh separate planner; zero findings AND zero missing evidence required."
+    }
+  ],
+  "broader_open_gates": [
+    "B1 policy/envelope work must follow Astra-only routing; B2 supervision and B3 controller/accounting public E2Es remain unaccepted. Existing rejected controller cannot approve its replacement.",
+    "S1/E1 executable bindings, S2/E2 fork classification, S3/E3 cleanup status; H1-H8 and E4-E6 public harness repairs and A1 paired diagnostic/native acceptance remain open under continuation-009/authorized-plan.txt. Snapshot TOCTOU limitation remains explicit.",
+    "No authentic five-scenario lifecycle acceptance, full esy fault matrix, global import approval or training readiness is established. required-esy-scenario-status-009.json and its missing rows remain open. No source closure is an E2E pass."
+  ],
+  "final_disposition": "Result receipt/inventory implementation and reviewed outer runner missing; every runtime requirement and real-provider adapter smoke missing. Stop INCOMPLETE at36/36. Preserve originals and frozen artifacts."
+}

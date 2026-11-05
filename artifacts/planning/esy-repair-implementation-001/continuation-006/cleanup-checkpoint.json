@@ -1,0 +1,29 @@
+{
+  "coding_workers": [
+    {
+      "job": "R01-019",
+      "pid": 38873,
+      "currently_absent": true,
+      "worker_reaped": true,
+      "credential_removed": true
+    },
+    {
+      "job": "R01b-020",
+      "pid": 39507,
+      "currently_absent": true,
+      "worker_reaped": true,
+      "credential_removed": true
+    },
+    {
+      "job": "R02a-021",
+      "pid": 40094,
+      "currently_absent": true,
+      "worker_reaped": true,
+      "credential_removed": true
+    }
+  ],
+  "private_auth_absent": true,
+  "coding_dispatch_lock_absent": true,
+  "no_new_containers_created_in_continuation": true,
+  "epoch": 1792682746.540535
+}

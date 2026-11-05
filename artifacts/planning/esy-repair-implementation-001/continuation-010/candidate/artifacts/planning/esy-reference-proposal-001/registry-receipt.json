@@ -1,0 +1,112 @@
+[
+  {
+    "requested": "5.3.0",
+    "url": "https://registry.npmjs.org/ocaml/5.3.0",
+    "sha256": "14b065f986f78ccc08f78382409fad772fc556415e755fa8835d629cfbb835e6",
+    "metadata": {
+      "name": "ocaml",
+      "version": "5.3.0",
+      "dist": {
+        "shasum": "3b0a65035064f52cbd5b522920cf2dcac165d081",
+        "tarball": "https://registry.npmjs.org/ocaml/-/ocaml-5.3.0.tgz",
+        "fileCount": 4488,
+        "integrity": "sha512-D0uG44Q3r6LY4wSzhBZpHe+q1yMJ4QHgk5R1Osv7qLWBgWPQ2jE60vY6rXgJraL/H9fvsWOF3KZSIro/bS+Z8A==",
+        "signatures": [
+          {
+            "sig": "MEQCIFqUvpS2w61uhr5vTWzZjh4UTcNNOEGtWOVVAgjgNb0qAiB47WHR4UrAeDoUrTkIJSBnqfBnSJAddH2G0aZ3M3chJg==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 30095708
+      },
+      "esy": {
+        "build": [
+          "#{os == 'windows' ? 'sh ./setup-flexdll': 'true'}",
+          "./configure --prefix #{self.install} #{os == 'windows' ? '--host=x86_64-w64-mingw32': ''}",
+          "make -j#{self.jobs}"
+        ],
+        "install": "make install",
+        "buildEnv": {},
+        "exportedEnv": {
+          "OCAMLLIB": {
+            "val": "#{ocaml.lib / 'ocaml'}",
+            "scope": "global"
+          },
+          "OCAMLPATH": {
+            "val": "#{ocaml.lib / 'ocaml' : $OCAMLPATH}",
+            "scope": "global"
+          },
+          "OCAML_TOPLEVEL_PATH": {
+            "val": "#{ocaml.lib / 'ocaml'}",
+            "scope": "global"
+          },
+          "CAML_LD_LIBRARY_PATH": {
+            "val": "#{ocaml.lib / 'ocaml' / 'stublibs' : ocaml.lib / 'ocaml' : $CAML_LD_LIBRARY_PATH}",
+            "scope": "global"
+          }
+        },
+        "buildsInSource": true
+      },
+      "dependencies": {},
+      "peerDependencies": null,
+      "engines": null
+    }
+  },
+  {
+    "requested": "latest",
+    "url": "https://registry.npmjs.org/ocaml/latest",
+    "sha256": "9dbedc768d238ad4a36131400260ddea143dea58976ba1ccb9cad4af69a9e91c",
+    "metadata": {
+      "name": "ocaml",
+      "version": "5.5.1000",
+      "dist": {
+        "shasum": "5517ef7fcba03af8176a4422743a01c5f6ea9c11",
+        "tarball": "https://registry.npmjs.org/ocaml/-/ocaml-5.5.1000.tgz",
+        "fileCount": 1620,
+        "integrity": "sha512-mVJPlS4R2in1AAw+hUBFQqgUq52KHgxu7a6D3306hDyG/SU6e7/YlIbuAUXJ7PXwBBGQe+SMuDyTeVjydwoIbQ==",
+        "signatures": [
+          {
+            "sig": "MEYCIQDb9UXPW6K2e2XD+0B4ugTlZOGAL3dtSwkicIhyTT/VTAIhAJCaYN4MhNRQ7Fng9liLLwfovpdYZtt3RF+dRnrQjvUX",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIBp5smydefz/SKIYHm0A57TIf4Y+WqU/gzrDX9Zf2D5HAiEA8zsVQ2ocuom+cqwqVQW2Qml2ezd0MQPKf5Nb019xzMY=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 25137473
+      },
+      "esy": {
+        "build": [
+          "#{os == 'windows' ? 'sh ./setup-flexdll': 'true'}",
+          "./configure --prefix #{self.install} #{os == 'windows' ? '--host=x86_64-w64-mingw32 --with-flexdll=flexdll': ''}",
+          "make -j#{self.jobs}"
+        ],
+        "install": "make install",
+        "buildEnv": {},
+        "exportedEnv": {
+          "OCAMLLIB": {
+            "val": "#{ocaml.lib / 'ocaml'}",
+            "scope": "global"
+          },
+          "OCAMLPATH": {
+            "val": "#{ocaml.lib / 'ocaml' : $OCAMLPATH}",
+            "scope": "global"
+          },
+          "OCAML_TOPLEVEL_PATH": {
+            "val": "#{ocaml.lib / 'ocaml'}",
+            "scope": "global"
+          },
+          "CAML_LD_LIBRARY_PATH": {
+            "val": "#{ocaml.lib / 'ocaml' / 'stublibs' : ocaml.lib / 'ocaml' : $CAML_LD_LIBRARY_PATH}",
+            "scope": "global"
+          }
+        },
+        "buildsInSource": true
+      },
+      "dependencies": {},
+      "peerDependencies": null,
+      "engines": null
+    }
+  }
+]

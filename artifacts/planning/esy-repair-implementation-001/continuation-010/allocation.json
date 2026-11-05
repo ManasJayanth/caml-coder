@@ -1,0 +1,9 @@
+{
+  "prior_active_seconds": 20562.349587202072,
+  "current_turn_started_epoch": 1792729120.228,
+  "active_limit_seconds": 32400,
+  "coding_launch_cap": 36,
+  "coding_consumed_at_start": 25,
+  "authority": "User: Go. In a separate agent, Retry the review with Astra and continue addressing the findings. Astra only; Claude disabled. No new allocation.",
+  "reconciliation": "Prior checkpoint start to task_complete fully counted; short subsequent turn counted; idle gaps excluded."
+}

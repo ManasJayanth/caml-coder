@@ -1,0 +1,67 @@
+[
+  {
+    "scenario": "normal",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36131,
+      "worker_reaped": true,
+      "exit_code": 0,
+      "reason": null,
+      "elapsed_seconds": 0.021,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "timeout",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36137,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "timeout",
+      "elapsed_seconds": 0.216,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "overflow",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36139,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "output-cap",
+      "elapsed_seconds": 0.021,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "detached-single",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36141,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "timeout",
+      "elapsed_seconds": 0.23,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "parent-eof",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36145,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "launcher-eof",
+      "elapsed_seconds": 0.003,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  }
+]

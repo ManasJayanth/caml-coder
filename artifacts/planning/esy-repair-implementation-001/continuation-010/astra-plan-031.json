@@ -1,0 +1,90 @@
+{
+  "plan_id": "B1a-boundary-newline-correction-031",
+  "planner": "gpt-6-astra",
+  "status": "Source-authoring only; review30 rejects boundary controls. This correction requires fresh exact-revision source review. No execution approval.",
+  "scope": "Read frozen30 and review30; independently verified all 82 manifest entries by mode, size and hash. Write only this plan; no candidate execution or code edits.",
+  "budget": {
+    "consumed_launches": 30,
+    "maximum_launches": 36,
+    "active_checkpoint_seconds_approximate": 24500,
+    "active_limit_seconds": 32400,
+    "allocation": "31 correction,32 routing,33 arity,34 diagnostics,35 result receipt,36 wrapper; zero reserve. Root rechecks actual budgets and cumulative three-failure gates."
+  },
+  "launch_031": {
+    "card_id": "B1a-BoundaryNewline-031",
+    "objective": "Correct only the two non-template byte literals in record-boundary controls.",
+    "finding_ids": [
+      "B1a-Records-030-boundary-newline-escaping"
+    ],
+    "parent_revision_sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0",
+    "input_path_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/",
+    "inputs": [
+      {
+        "path": "retry-astra-review-025.json",
+        "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+      },
+      {
+        "path": "astra-plan-030.json",
+        "sha256": "5f356361dde171ce8a84b81a254f2720ac5c478a191e183b3357c79a43e862c9"
+      },
+      {
+        "path": "astra-source-review-030.json",
+        "sha256": "e793a44012c7fe839a05c342cd424e69c3a25ff0d7c37e0e80b32e338670d647"
+      },
+      {
+        "path": "coding-jobs/B1a-Records-030/result-manifest.json",
+        "sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0"
+      },
+      {
+        "path": "coding-jobs/B1a-Records-030/frozen/tests/e2e/test_review_adapter_e2e.py",
+        "sha256": "62de4d8beb975d777ab145d5c626d9ade201842e58d0dd5934867132df27646a"
+      },
+      {
+        "path": "coding-jobs/B1a-Records-030/frozen/scripts/esy-repair/claude-worker.sh",
+        "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+      },
+      {
+        "path": "coding-jobs/B1a-Records-030/frozen/scripts/esy-repair/codex-worker.sh",
+        "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+      }
+    ],
+    "allowed_paths": [
+      "tests/e2e/test_review_adapter_e2e.py"
+    ],
+    "prerequisites": [
+      "Root verifies every listed hash, full frozen30 manifest, exact working copy and budgets before dispatch. Start from frozen30; changed parents require rebinding.",
+      "Luna uses read/edit/write only: no shell, execution, imports, compilation, tests, subprocess, helper or provider invocation. Root freezes output and obtains independent Astra exact-revision review."
+    ],
+    "required_behavior": [
+      "At frozen30 line414, change the initial.endswith argument from the two-byte backslash-n literal to a single LF byte literal. At line423, make the same replacement in the padding multiplier. Each repetition must append exactly one byte, so existing remaining accounting reaches zero.",
+      "Make exactly these two literal corrections. Preserve embedded fake_source escaping: its double escaping correctly generates a real newline in records. Preserve collector, receipt semantics, all constants, ownership, deadlines, cleanup, adapters and existing controls."
+    ],
+    "forbidden_changes": [
+      "No other source changes, new controls, unit/helper tests, general receipt, routing or arity fixes. No execution."
+    ],
+    "public_e2e_recipe": {
+      "executor": "Root only after all source/environment blockers and separate outer-wrapper approval.",
+      "invocation": [
+        "VERIFIED_ABSOLUTE_PYTHON",
+        "VERIFIED_ABSOLUTE_TEST",
+        "--adapter",
+        "VERIFIED_ACTUAL_CLAUDE_ADAPTER",
+        "--output-dir",
+        "FRESH_OWNED_EMPTY_0700_DIRECTORY",
+        "--scenario",
+        "FIXED_ENUM_SCENARIO"
+      ],
+      "scenarios": [
+        "records-exact-limit",
+        "records-one-over",
+        "lifecycle-normal"
+      ],
+      "assertions": "Exact-limit: observed16384, accepted, exit0. One-over: observed16385, record-overflow, nonzero. Both boundary controls preserve successful actual-adapter cleanup and protocol_evaluated=false. Collect bounded receipts and independent outer completion; outer record reads cap16385 bytes."
+    },
+    "expected_outcome": "Fresh review may close boundary-literal source finding only. Raw record and lifecycle runtime acceptance remain open.",
+    "stop_conditions": [
+      "Hash mismatch, scope expansion, extra-path need, worker execution, exhausted budget or failed dispatch gate: stop and report. No fake-routing evidence establishes provider identity or availability."
+    ]
+  },
+  "later_cards": "Keep per-case-routing32, arity-offset33, diagnostic-byte-cap34 and result-receipt35 open; bind each to immediately preceding accepted revision. Outer-wrapper36 remains separately reviewed; Claude unavailable/disabled."
+}

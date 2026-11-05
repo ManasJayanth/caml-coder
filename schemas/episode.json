@@ -1,0 +1,31 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "task_id",
+    "attempt_id",
+    "messages",
+    "tools",
+    "associations",
+    "observations",
+    "final_diff",
+    "grader",
+    "termination"
+  ],
+  "optional": [],
+  "enums": {},
+  "hashes": [],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "task_id": "string",
+    "attempt_id": "string",
+    "messages": "array",
+    "tools": "array",
+    "associations": "array",
+    "observations": "array",
+    "final_diff": "string",
+    "grader": "object",
+    "termination": "string"
+  }
+}

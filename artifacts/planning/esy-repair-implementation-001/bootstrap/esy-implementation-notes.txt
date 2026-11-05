@@ -1,0 +1,13 @@
+Supervisor-discovered facts and implementation guidance (not acceptance):
+- Pinned base image exists, linux/amd64; base-image-inspect-001.json contains exact layers. No new image built.
+- Fresh readonly offline probe confirms _esy96KiB and node_modules/.cache24KiB, no symlinks printed. See base-readonly-probe-001.txt for reference-command-env and package/lock hashes.
+- Existing runner ROOT=parents[3] resolves correctly in candidate; original source stays unchanged. Results should accept explicit supervisor output directory outside candidate so later code workers cannot modify accepted evidence.
+- Build derivative with verified local base tag, no reinstall/compiler rebuild, --network none, validate base tag ID before/after and base layer prefix. Avoid assuming FROM local-name@digest works with BuildKit; previous use attempted remote resolution. Use immutable resulting image ID at runtime.
+- Container has Node/esy plus shell/coreutils, don't assume Python. Node stdlib can emit canonical file inventories. Capture canonical compiler path from existing reference environment/store, not hand-counted underscores. Capture executable hash/version and complete package+lock inventories. Seeds must include both _esy and node_modules/.cache.
+- Keep readonly root, networknone, nonroot1000, caps dropped/nnp, pids128, cpus2, 2GiB, work128MiB/caches32MiB. Original /home/opam/esy-reference paths unchanged. Remove runtime esy install.
+- Runtime requires pre-candidate identity/seed checks and post immutable inventory checks. Expected identity comes from supervisor-protected build receipt/manifest bound to image ID, not blindly observed runtime values.
+- Keep valid stdout esy-ocaml-reference:passed newline; wrong assertion independently compiles; syntax fixture exactly let broken =. Timeout/output/resource controls separate fixed fixtures.
+- Streaming host cap must apply before accumulating unlimited bytes. Inner per-command output files also need limits so flood cannot fill work filesystem before host sees data. Bounded logs and predictable overflow failure, no arbitrary truncation counted as pass.
+- For OOM classification retain owned container until State.OOMKilled inspected, then exact-label/name cleanup; --rm prevents post-exit inspect. Do not broad-delete names.
+- Test-only lower timeout/memory may only lower production limits if needed; never broaden privileges/network/writable roots or change defaults. Real E2Es never mocked Docker.
+- Existing image execution is amd64 emulated on Apple Silicon; no model weights/train/data generation in scope.

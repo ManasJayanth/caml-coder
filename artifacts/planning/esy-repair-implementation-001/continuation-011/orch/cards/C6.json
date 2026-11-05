@@ -1,0 +1,31 @@
+{
+ "acceptance_rows": [
+  "R1 In loop.py cmd_review, where st['milestone'] = 'ACCEPTED' is set, also set st['milestone_revision'] to the revision hash of the reviewed subject, and every entry appended to st['reviews'] records a 'revision' key with the reviewed hash.",
+  "R2 In loop.py cmd_replan, when new cards are written while st['milestone'] == 'ACCEPTED', set st['milestone'] = 'REPLANNED' and st['milestone_revision'] = None and append a ledger event 'milestone_reset' with the previous revision.",
+  "R3 In loop.py cmd_handoff, verdict is 'ACCEPTED' only when st['milestone'] == 'ACCEPTED' and st.get('milestone_revision') == st['parent_hash']; otherwise verdict is 'INCOMPLETE' and the handoff output includes a line 'MILESTONE REVISION MISMATCH' naming both hashes when they differ.",
+  "R4 e2e/run_e2e.py gains scenario O56: drive a milestone to ACCEPTED via review, then replan with one new card, run-card and review --card it to acceptance (moving parent_hash), then run handoff and assert the output contains 'MILESTONE VERDICT: INCOMPLETE' and does not contain 'MILESTONE VERDICT: ACCEPTED'; O56 is registered in the scenario table so `/usr/bin/python3 -B e2e/run_e2e.py O56` runs only it and exits 0 on pass.",
+  "R5 Existing scenarios that accept a milestone and immediately handoff are untouched and still expect ACCEPTED; no file other than loop.py and e2e/run_e2e.py is touched."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [
+  "C5"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O56"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C6",
+ "objective": "Bind milestone acceptance to a revision so handoff only reports ACCEPTED when the current parent_hash is the revision that was final-reviewed, and replan after acceptance clears the acceptance",
+ "replaces": "C4",
+ "stop_condition": "print CARD_BLOCKED C6 if cmd_review does not set st['milestone'] = 'ACCEPTED', if cmd_handoff does not compute verdict from st['milestone'], if cmd_replan does not exist, or if scenario id O56 is already present in e2e/run_e2e.py",
+ "timeout": 600
+}

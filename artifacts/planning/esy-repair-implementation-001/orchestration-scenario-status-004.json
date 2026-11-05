@@ -1,0 +1,114 @@
+{
+  "status": "INCOMPLETE",
+  "controller_public_e2e": "FAILED at PLAN_RUNNING replay; see reviews/C01-public-cli-e2e-002/e2e-receipt.json",
+  "scenarios": [
+    {
+      "scenario": "valid coding to E2E to review completion",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "findings to separate frontier plan to fresh coding evidence and review",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "three failed attempts trigger frontier replanning",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "malformed duplicate-key truncated stale empty unsuccessful responses",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "PASS with findings or missing evidence rejected",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "wrong or unavailable model no silent fallback",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "output overflow timeout interruption descendant cleanup",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "concurrent launch live lock explicit resume",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "18 allocated launches and six active hours exhaustion without reset",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "out-of-scope edits symlinks special files oversized changes",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "dirty and untracked starting inputs preserved",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "concurrent destination edit refuses import",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "interrupted multi-file import recovery",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "complete printed handoff through controller",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "real authenticated CLI smoke",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "effective native containment",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "review and test evidence bound to exact revision",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "final imported hashes and post-import E2Es and fresh review",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    }
+  ]
+}

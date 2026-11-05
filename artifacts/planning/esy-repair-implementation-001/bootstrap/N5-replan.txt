@@ -1,0 +1,45 @@
+Separate frontier repair planner, planning only. Two coding launches remain17,18. Keep controller deferred. Return compact JSON bounded steps for17 ownership/lifecycle with N4 review corrections, and addendum18 pinned-base compatibility. No execution/delegation, no acceptance or budget increase. N4 scopedreview found6defects attached: fix them as necessary coupled lifecycle changes during17 (runner bounded_process/run/capture/cleanup and test supervisor/run_case finally). Preserve small steps not rewritewholefiles. Integer Node deadline must ceil positive milliseconds; hostdeadline nested remainingtimeout budgets, remove knownverifiedCID directly beforediagnostic, innerdeadlineearlier thanhost, always cleanup remaining group afterleader normalexit, propagate interruption flags toall successconsumers. Retain uncertain-create recovery by recordedname+owner thenexactID, successfuldaemonqueryabsence, independent suitecleanup. Phase17 may explicitly leave unsafe fault scenarios missing but no unsafe runnercode execution.
+For18 additional actual build evidence: immutable derivative sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459 successfully built legacy amd64 from fixedfullbaseID;source layers verified. Readonly seedprobe shows all source package/lock/cache bytes/type/mode/uid/gid/hash metadata match; ONLY top-level seed root directory mtime differs due Docker COPY destination creation. User inventory requires path/type/mode/size/hash/symlinktarget, not root-dir mtime. Propose omit root-directory mtime from semantic inventory while retain it as diagnostic; preserve descendant timestamps and every required integrity field. This avoids incorrectly failing actual seedcopy without weakening userrequirement. Need your decision and bounded card18 amendment. Existing18 also installed-only compilerselection canonical lookup, HostConfig.Tmpfs correctvalidation Mounts=[] and R3-13 checks. Canonical trusted compiler observed path ends /i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt sha256361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24; do not hardcountstorepadding. Finalrecordedproof remains runtime review gated.
+N4 FINDINGS
+{
+  "scoped_change_correct": false,
+  "findings": [
+    {
+      "id": "N4-R3-05-01",
+      "problem": "NODE.run passes deadline - performance.now() directly as spawnSync's timeout. This normally produces a fractional number, but spawnSync requires a nonnegative integer timeout. Commands can throw before launch, including the capture-base compiler check.",
+      "required_change": "Check expiry using the unrounded remaining time, then convert a positive remainder to a valid integer timeout without accidentally passing zero, which disables the timeout."
+    },
+    {
+      "id": "N4-R3-05-02",
+      "problem": "The termination margin does not enforce the requested lifetime budget. stop_group adds fresh waits totaling up to approximately four seconds, while cleanup_owned independently budgets ten seconds each for inspection, removal, and verification. Small requested timeouts reserve only a fraction of a second. These operations can substantially exceed the requested budget.",
+      "required_change": "Establish an absolute monotonic deadline for the supervised lifetime and allocate execution, process-group shutdown, and forced removal from its remaining budget. Pass remaining time through cleanup operations instead of resetting independent timeouts."
+    },
+    {
+      "id": "N4-R3-05-03",
+      "problem": "The timeout, overflow, and interruption branch calls cleanup_owned before diagnostics, but cleanup_owned itself performs another container inspection before docker rm -f. A stalled or failed inspection delays or prevents forced removal of the already identified container. The termination_cleanup_attempted_before_diagnostics flag therefore does not establish the claimed removal ordering.",
+      "required_change": "Corroborate and retain the exact container ID and owner before starting it, then invoke bounded forced removal directly on termination paths. Perform absence verification and other diagnostics afterward. This concerns the known-container path, not pending N5 ownership recovery."
+    },
+    {
+      "id": "N4-R3-05-04",
+      "problem": "The host attachment deadline now precedes the in-container command deadline. For the timeout control, the host receives 15 seconds while NODE receives 20 seconds starting later. Once the fractional-timeout defect is fixed, the infinite loop is normally terminated by the host before NODE can report command-timeout. The report becomes host-deadline, which the supplied E2E correctly rejects instead of timeout-observed.",
+      "required_change": "Allocate an earlier in-container command deadline, followed by time for result emission, host shutdown, and removal within the requested budget. Preserve the timeout control's required evidence that the compiled loop reached its command deadline."
+    },
+    {
+      "id": "N4-R3-06-01",
+      "problem": "Both supervisors set needs_group_cleanup to false immediately after a successful leader wait. A descendant that closes its inherited output pipes but continues running in the original process group survives this path. EOF and leader exit do not establish process-group termination.",
+      "required_change": "Check and terminate remaining members of the owned process group on successful leader-exit paths as well as timeout and interruption paths. Record unresolved group termination as a failure."
+    },
+    {
+      "id": "N4-R3-06-02",
+      "problem": "KeyboardInterrupt is now converted into result flags, but several callers ignore them: image/container inspection, creation, capture, cleanup subprocesses, and the E2E acceptance checks. For example, a leader can emit valid JSON and exit zero while a descendant retains a pipe; interruption then returns exit_code 0 with interrupted true, and an inspection or E2E invocation can still be accepted. Cleanup uncertainty is likewise not consistently consumed.",
+      "required_change": "Propagate cancellation through every caller and reject interrupted or cleanup-uncertain results wherever success is evaluated. Preserve required cleanup, but do not accept interrupted evidence or continue ordinary work as though the command completed normally."
+    }
+  ],
+  "missing_runtime_evidence": [
+    "No execution was performed; review used only the supplied source and diff. The supplied hashes were not independently verified, and no overall runtime approval is given.",
+    "Pinned-Node evidence that fractional remaining budgets are converted correctly, expired budgets launch nothing, and the compiled timeout control produces command-timeout before host termination.",
+    "Independent monotonic lifetime measurements, including timeout=1, delayed removal, and inspection failure, demonstrating forced removal ordering and budget compliance.",
+    "Process-group evidence covering an exited leader with retained pipes, closed pipes with a still-running leader, descendants that close their pipes and survive, interruption during supervision, and cleanup failures.",
+    "Evidence that interruption and cleanup-uncertainty flags fail closed across runner helpers and E2E consumers. The existing missing interruption/lifetime evidence remains outstanding; pending N5 ownership recovery is not counted as a new N4 defect."
+  ]
+}

@@ -1,0 +1,29 @@
+ROLE: PLANNER
+Emit ONE fenced json block {"cards":[...],"dispositions":{...}} (<=4 cards).
+PARENT_TREE (cards edit paths relative to this tree; e2e argv runs with cwd=tree, no shell):
+  e2e/fake_engine.py 0o755 6147 a8d0f0fbaf2acc83526a7fb0ed25bc0159511b657dcc3096e7f651b51e1a2843
+  e2e/run_e2e.py 0o755 29433 e8af3cc683ae70bf29ce5ba55e8e3058428c4b4c31c40f3ef7b2ee801085dbf7
+  env.sh.example 0o644 637 1c738240b3d3b927089d434d3768daf1a07baeb3f8520ae559ea49361b91194d
+  loop.py 0o644 44000 0513efe1df933d3fe71628a112499361c3cc361d8571c44bad62bef4c38d1125
+  review-readonly.sb 0o644 661 5de083549af36aa541d86c9d9aef82600dc93df1c0b3ee0e23f40e59905bb861
+  run_bounded.py 0o755 4874 630de1f3501367a2e91a70e60ed012dd0db35ef15d30f4f10ccb0f8eb4e94134
+  worker-claude.sh 0o755 1507 38ef74e29ebef801152c47bff28bf35810bf994b0b6645ba50e6919a590ea35c
+  worker-codex.sh 0o755 359 95d84e148bf07d7388fa68845d32c4f75b1a235c9d20e903fc124cf0ec0c7142
+  worker-common.sh 0o755 363 eaeb222c7222de1948386864f2e6e5b2c1017c442f2fcf33904b79be4274250c
+  worker-pi.sh 0o755 726 2b6b3a65582bce07667e679a7a6ebe16105adc1d724cb40a9635bf6146f1ebc3
+REVIEW_JSON: null
+Each card keys: id,objective(one line),depends_on,allowed_paths(1-3 relative),acceptance_rows,stop_condition,e2e{argv,expect_status,expect_files},timeout(<=600); optional base,replaces. One concern per card.
+No placeholders. Every finding id needs a disposition: card:<id> | rejected:<why> | deferred:<why>.
+FINDING_IDS: F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,M0,M1,M2
+REPLACES: 
+EXISTING_CARD_IDS: 
+BUDGET: launches_used=36/48 active=27729.5/32400
+PARENT_HASH: fa761679df1cb637b8c9a0a312c420be7c7453bf814cc1a4974a544cba315527
+RULES (violating any rule = failure):
+1. One objective. Edit ONLY files listed in ALLOWED_PATHS. Create nothing else.
+2. Use only read/edit/write tools. Do not run, import, compile, test, or call providers.
+3. Each single edit < 3000 characters; split larger changes into several edits.
+4. Do not touch history, config/, uv.lock, adapters, or any file not in ALLOWED_PATHS.
+5. Finish by printing exactly one line: CARD_DONE <card-id>. If blocked print CARD_BLOCKED <card-id>: <reason> and stop.
+6. If instructions conflict, stop with CARD_BLOCKED. Never guess.
+7. Never print or write credentials, tokens, or paths under private-pi.

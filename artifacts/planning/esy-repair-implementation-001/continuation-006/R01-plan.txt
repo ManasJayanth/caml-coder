@@ -1,0 +1,1181 @@
+You are a separate fresh Astra frontier planner. Read-only, no execution/tools/delegation. Plan only R01 cleanup result stability addressing C17-04/07. Return strict JSON bounded under2500 words with card_id, finding_ids, parent_revision_sha256, inputs, allowed_paths, prerequisites, exact_behavior, e2e_recipes, expected_outcomes, evidence_outputs, blockers. One small Luna invocation, default paths below, no broad changes. Existing controller remains deferred; supervisor launch safety separately reviewed. Need actual public-subprocess E2Es with real Docker, NO helper imports/unit tests/mocked Docker success. Add optional --scenario cleanup-results preserving existing CLI. No source mutation in production for test-only faults unless explicit safe test input isolated to harness. Consider a real forwarding Docker proxy for deterministic latency but no fabricated Docker outcome counted as acceptance. If reproducing deadline race and preserved cleanup requires larger prerequisite cards, explicitly identify blocker rather than invent runnable commands or waive evidence. Remaining known C17 lifecycle and N6 seed bugs stay open; any scoped real test must have separate safety review. No permission to run rejected code yet. Use uv locked. Budget6 remaining only; one invocation must not silently fix unrelated findings.
+{
+  "revision": "f24d114d29196278067e87cdf921c0317fcc0e74e0b03725d0215cba246ea8dc",
+  "findings": [
+    {
+      "id": "C17-04",
+      "severity": "medium",
+      "location": "run_esy_reference.py: run() termination handling and finally",
+      "problem": "Unresolved. Successful early cleanup is unconditionally repeated and its verified-absence evidence overwritten. An exhausted removal deadline can turn confirmed cleanup into cleanup-deadline-exhausted.",
+      "required_change": "Preserve successful verified-absence evidence. Retry only when absence remains unverified.",
+      "required_e2e": [
+        "Verified early cleanup remains successful when the removal deadline expires before finally.",
+        "Unverified cleanup remains eligible for a bounded retry."
+      ]
+    },
+    {
+      "id": "C17-07",
+      "severity": "medium",
+      "location": "run_esy_reference.py: bounded_process().stop_group()",
+      "problem": "Unresolved. The deadline can expire between the while-condition clock read and the clock read inside time.sleep(min(...)), producing a negative sleep and ValueError.",
+      "required_change": "Compute remaining time once per iteration, stop when nonpositive, and pass only a nonnegative duration to sleep.",
+      "required_e2e": [
+        "A controlled deadline crossing produces the intended cleanup result without negative sleep or ValueError."
+      ]
+    }
+  ]
+}
+ALLOWED FILE artifacts/planning/esy-reference-proposal-001/run_esy_reference.py
+#!/usr/bin/env python3
+"""Bounded, offline Docker runner for the fixed esy reference project.
+
+Capture is performed by the supervisor before ordinary runs. Container payloads
+are canonical JSON on stdin; no manifest content is placed in argv or evaluated.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import selectors
+import secrets
+import signal
+import subprocess
+import tempfile
+import time
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+BASE_TAG = "ocaml-sft-esy-project-probe:001"
+BASE_ID = "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267"
+EXPECTED_COMPILER_SHA256 = "361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24"
+IMAGE_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+RUN_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
+MAX_EXPECTATIONS = 1024 * 1024
+MAX_PAYLOAD = 512 * 1024
+MAX_DOCKER_BYTES = 1024 * 1024
+MAX_REPORT = 256 * 1024
+DEFAULT_TIMEOUT = 120
+
+
+def sha(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def canonical(obj: object) -> bytes:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+                      allow_nan=False).encode("utf-8")
+
+
+def cache_inventory_equal(left: list[dict], right: list[dict]) -> bool:
+    """Ignore only cache-root directory mtime; retain full inventories for diagnostics."""
+    def semantic(rows: list[dict]) -> list[dict]:
+        return [{k: v for k, v in row.items()
+                 if not (row.get("path") == "." and row.get("type") == "dir" and k == "mtime_ms")}
+                for row in rows]
+    return canonical(semantic(left)) == canonical(semantic(right))
+
+
+def read_bounded(path: Path, limit: int) -> bytes:
+    st = path.lstat()
+    if not path.is_file() or path.is_symlink() or st.st_size > limit:
+        raise ValueError(f"input must be a regular file no larger than {limit} bytes")
+    with path.open("rb") as stream:
+        data = stream.read(limit + 1)
+    if len(data) > limit:
+        raise ValueError(f"input exceeds {limit} byte limit")
+    return data
+
+
+def bounded_process(argv: list[str], timeout: float, cap: int = MAX_DOCKER_BYTES,
+                    stdin: bytes | None = None, *, deadline: float | None = None,
+                    execution_deadline: float | None = None) -> dict:
+    """Drain both pipes and bounded stdin under one monotonic deadline."""
+    if os.name != "posix":
+        raise RuntimeError("runner requires POSIX process-group supervision")
+    deadline = min(deadline, time.monotonic() + timeout) if deadline is not None else time.monotonic() + timeout
+    run_deadline = min(deadline, execution_deadline) if execution_deadline is not None else deadline
+    if run_deadline <= time.monotonic():
+        return {"exit_code": None, "timed_out": True, "output_exceeded": False,
+                "interrupted": False, "group_cleanup_uncertain": False,
+                "total_bytes": 0, "stdout_total_bytes": 0, "stderr_total_bytes": 0,
+                "stdout_full_sha256": hashlib.sha256(b"").hexdigest(),
+                "stderr_full_sha256": hashlib.sha256(b"").hexdigest(), "stdout": b"", "stderr": b""}
+    proc = subprocess.Popen(argv, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
+                            close_fds=True)
+    streams = {"stdout": bytearray(), "stderr": bytearray()}
+    stream_hashes = {"stdout": hashlib.sha256(), "stderr": hashlib.sha256()}
+    stream_sizes = {"stdout": 0, "stderr": 0}
+    total = 0
+    overflow = False
+    sent = 0
+    timed_out = False
+    sel = None
+    interrupted = False
+    group_cleanup_uncertain = False
+    needs_group_cleanup = True
+
+    def signal_group(sig: int) -> bool:
+        nonlocal group_cleanup_uncertain
+        try:
+            os.killpg(proc.pid, sig)
+            return True
+        except ProcessLookupError:
+            return False
+        except OSError:
+            group_cleanup_uncertain = True
+            return False
+
+    def stop_group() -> None:
+        nonlocal group_cleanup_uncertain
+        left = max(0.0, deadline - time.monotonic())
+        if left <= 0:
+            group_cleanup_uncertain = True
+            signal_group(signal.SIGKILL)
+            return
+        signal_group(signal.SIGTERM)
+        grace = min(.2, max(0.0, deadline - time.monotonic()))
+        if grace:
+            try: proc.wait(timeout=grace)
+            except subprocess.TimeoutExpired: pass
+        # Always signal the group: the leader may have exited while a descendant
+        # still owns a pipe or continues running.
+        signal_group(signal.SIGKILL)
+        left = max(0.0, deadline - time.monotonic())
+        try: proc.wait(timeout=left)
+        except subprocess.TimeoutExpired: group_cleanup_uncertain = True
+        while time.monotonic() < deadline and signal_group(0): time.sleep(min(.02, deadline-time.monotonic()))
+        if signal_group(0):
+            group_cleanup_uncertain = True
+
+    try:
+        sel = selectors.DefaultSelector()
+        if stdin is not None:
+            os.set_blocking(proc.stdin.fileno(), False)
+            sel.register(proc.stdin, selectors.EVENT_WRITE, "stdin")
+        for label, pipe in (("stdout", proc.stdout), ("stderr", proc.stderr)):
+            os.set_blocking(pipe.fileno(), False)
+            sel.register(pipe, selectors.EVENT_READ, label)
+        while sel.get_map():
+            left = run_deadline - time.monotonic()
+            if left <= 0:
+                timed_out = True
+                break
+            for key, _ in sel.select(min(left, .1)):
+                if key.data == "stdin":
+                    if sent == len(stdin):
+                        sel.unregister(key.fileobj); key.fileobj.close(); continue
+                    try:
+                        sent += os.write(key.fd, stdin[sent:sent + 65536])
+                    except BrokenPipeError:
+                        sel.unregister(key.fileobj); key.fileobj.close()
+                else:
+                    block = os.read(key.fd, 65536)
+                    if not block:
+                        sel.unregister(key.fileobj); continue
+                    total += len(block)
+                    stream_sizes[key.data] += len(block)
+                    stream_hashes[key.data].update(block)
+                    room = max(0, cap - sum(map(len, streams.values())))
+                    streams[key.data].extend(block[:room])
+                    if total > cap:
+                        overflow = True
+                        break
+            if overflow:
+                break
+        if timed_out or overflow:
+            stop_group()
+            needs_group_cleanup = False
+        else:
+            try:
+                proc.wait(timeout=max(0, run_deadline - time.monotonic()))
+            except subprocess.TimeoutExpired:
+                timed_out = True
+            # The group remains owned after its leader exits, even after EOF.
+            stop_group()
+            needs_group_cleanup = False
+    except KeyboardInterrupt:
+        interrupted = True
+        stop_group()
+        needs_group_cleanup = False
+    finally:
+        if needs_group_cleanup:
+            try:
+                stop_group()
+            except OSError:
+                group_cleanup_uncertain = True
+        if sel is not None:
+            sel.close()
+        for pipe in (proc.stdin, proc.stdout, proc.stderr):
+            if pipe is not None:
+                try: pipe.close()
+                except OSError: pass
+    return {"exit_code": proc.returncode, "timed_out": timed_out, "output_exceeded": overflow,
+            "interrupted": interrupted, "group_cleanup_uncertain": group_cleanup_uncertain,
+            "total_bytes": total, "stdout_total_bytes": stream_sizes["stdout"],
+            "stderr_total_bytes": stream_sizes["stderr"],
+            "stdout_full_sha256": stream_hashes["stdout"].hexdigest(),
+            "stderr_full_sha256": stream_hashes["stderr"].hexdigest(),
+            "stdout": bytes(streams["stdout"]), "stderr": bytes(streams["stderr"])}
+
+
+# Fixed in-container program. It accepts only bounded JSON from stdin and fixed
+# mode names. Filesystem identities are checked before esy/compiler execution.
+NODE = r'''const fs=require('fs'),path=require('path'),crypto=require('crypto'),cp=require('child_process');
+const mode=process.argv[1], hash=b=>crypto.createHash('sha256').update(b).digest('hex'), started=performance.now();
+function canonicalEqual(a,b){if(a===b)return true;if(Array.isArray(a)||Array.isArray(b))return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&a.every((v,i)=>canonicalEqual(v,b[i]));if(a&&b&&typeof a==='object'&&typeof b==='object'){let ak=Object.keys(a).sort(),bk=Object.keys(b).sort();return ak.length===bk.length&&ak.every((k,i)=>k===bk[i]&&canonicalEqual(a[k],b[k]))}return false}
+// Keep root mtime in inventories for diagnostics; omit it only in cache semantics.
+function cacheInventoryEqual(a,b){function semantic(rows){return rows.map(r=>r.path==='.'&&r.type==='dir'?Object.fromEntries(Object.entries(r).filter(([k])=>k!=='mtime_ms')):r)}return canonicalEqual(semantic(a),semantic(b))}
+function inventory(root){let rows=[];function walk(p,rel){let s=fs.lstatSync(p);if(s.isSymbolicLink()||(!s.isDirectory()&&!s.isFile()))throw Error('unsafe inventory type: '+(rel||'.'));let row={path:rel||'.',type:s.isDirectory()?'dir':'file',mode:s.mode&0o777,uid:s.uid,gid:s.gid,mtime_ms:Math.floor(s.mtimeMs)};if(s.isFile()){row.bytes=s.size;row.sha256=hash(fs.readFileSync(p))}rows.push(row);if(s.isDirectory())for(const n of fs.readdirSync(p).sort())walk(path.join(p,n),rel?rel+'/'+n:n)}walk(root,'');return rows}
+function run(cmd,args,deadline,max=32768){let left=deadline-performance.now();if(left<=0)return {exit_code:null,signal:null,timed_out:true,error:'shared execution deadline expired before command launch',error_code:'ETIMEDOUT',stdout:'',stderr:'',stdout_bytes:0,stderr_bytes:0};let r=cp.spawnSync(cmd,args,{encoding:'utf8',timeout:Math.ceil(left),maxBuffer:max,killSignal:'SIGKILL',env:process.env});return {exit_code:r.status,signal:r.signal||null,timed_out:!!(r.error&&r.error.code==='ETIMEDOUT'),error:r.error?String(r.error):null,error_code:r.error&&r.error.code||null,stdout:(r.stdout||'').slice(0,8192),stderr:(r.stderr||'').slice(0,8192),stdout_bytes:Buffer.byteLength(r.stdout||''),stderr_bytes:Buffer.byteLength(r.stderr||'')}}
+function immutable(baseCapture=false){let root='/home/opam/esy-reference';let names=fs.readdirSync(root).filter(n=>n==='package.json'||n==='esy.lock'||n==='npm-shrinkwrap.json'||/(^|[-.])lock(file|b)?([-.]|$)/i.test(n)).sort();if(!names.includes('package.json')||!names.includes('esy.lock'))throw Error('required manifest/lock missing');let project=[];for(let n of names)project.push(...inventory(path.join(root,n)).map(x=>({...x,path:n+(x.path==='.'?'':'/'+x.path)})));let installation=inventory(path.join(root,'_esy')),node_cache=inventory(path.join(root,'node_modules/.cache'));return {project,installation,node_cache,seed:baseCapture?installation:inventory('/home/opam/esy-cache-seed/_esy'),node_seed:baseCapture?node_cache:inventory('/home/opam/esy-cache-seed/node-cache')}}
+function findCompiler(){let root=fs.realpathSync('/home/opam/.esy'),found=[];for(let store of fs.readdirSync(root)){let sp=path.join(root,store);if(!fs.lstatSync(sp).isDirectory())continue;let ip=path.join(sp,'i');if(!fs.existsSync(ip)||!fs.lstatSync(ip).isDirectory())continue;for(let pkg of fs.readdirSync(ip)){if(!/^ocaml-5\.5\.1000-[^/]+$/.test(pkg))continue;let candidate=path.join(ip,pkg,'bin','ocamlopt');if(!fs.existsSync(candidate))continue;let st=fs.statSync(candidate);if(!st.isFile()||!(st.mode&0o111))throw Error('installed ocaml compiler candidate is not executable');let real=fs.realpathSync(candidate),rel=path.relative(root,real);if(rel==='..'||rel.startsWith('..'+path.sep)||path.isAbsolute(rel))throw Error('canonical compiler escapes installed store');if(!real.endsWith('/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt'))throw Error('installed compiler canonical package identity mismatch');found.push(real)}}if(found.length!==1)throw Error('expected one installed ocaml-5.5.1000 compiler, got '+found.length);let p=found[0],s=fs.statSync(p),digest=hash(fs.readFileSync(p));if(digest!=='__EXPECTED_COMPILER_SHA256__')throw Error('pinned compiler SHA256 mismatch');return {path:p,bytes:s.size,mode:s.mode&0o777,sha256:digest}}
+function main(){if(!['capture-base','capture-derivative','run'].includes(mode))throw Error('invalid mode');if(mode.startsWith('capture-')){let i=immutable(mode==='capture-base'),c=findCompiler();if(mode==='capture-base'){let v=run(c.path,['-version'],performance.now()+5000);if(v.exit_code!==0||!v.stdout.includes('5.5.1'))throw Error('pinned compiler version mismatch');c.version=v.stdout.trim()}return {immutable:i,compiler:c}}let raw=fs.readFileSync(0);if(raw.length>524288)throw Error('payload exceeds limit');let cfg=JSON.parse(raw.toString('utf8')),deadline=started+cfg.timeout*1000;
+function copy(src,dst){let rootStat=fs.statSync(src);fs.mkdirSync(dst,{recursive:true,mode:rootStat.mode&0o777});for(let n of fs.readdirSync(src)){let a=path.join(src,n),b=path.join(dst,n),s=fs.lstatSync(a);if(s.isSymbolicLink())throw Error('seed symlink forbidden');if(s.isDirectory())copy(a,b);else if(s.isFile()){fs.copyFileSync(a,b);fs.chmodSync(b,s.mode&0o777);fs.utimesSync(b,s.atime,s.mtime)}else throw Error('unsafe seed type')}fs.chmodSync(dst,rootStat.mode&0o777);fs.utimesSync(dst,rootStat.atime,rootStat.mtime)}
+copy('/home/opam/esy-cache-seed/_esy','/home/opam/esy-reference/_esy');copy('/home/opam/esy-cache-seed/node-cache','/home/opam/esy-reference/node_modules/.cache');
+let start=immutable(),expected=cfg.expected,commands={},compiler=findCompiler();
+if(!canonicalEqual(start.project,expected.derivative.immutable.project)||!cacheInventoryEqual(start.seed,expected.derivative.immutable.seed)||!cacheInventoryEqual(start.node_seed,expected.derivative.immutable.node_seed)||!cacheInventoryEqual(start.installation,expected.derivative.immutable.installation)||!cacheInventoryEqual(start.node_cache,expected.derivative.immutable.node_cache))throw Object.assign(Error('integrity gate: derivative inventory mismatch'),{gate:'derivative-inventory'});
+if(!canonicalEqual(compiler,(( {path,bytes,mode,sha256})=>({path,bytes,mode,sha256}))(expected.base.compiler)))throw Object.assign(Error('integrity gate: compiler identity mismatch'),{gate:'compiler-static'});
+let esy=run('/home/opam/esy/bin/esy',['sh','-c','command -v ocamlopt'],deadline,8192);commands.esy_lookup=esy;let esyCompiler=null;try{if(esy.exit_code===0&&!esy.timed_out)esyCompiler=fs.realpathSync(esy.stdout.trim())}catch(_){}if(!esyCompiler||esyCompiler!==compiler.path)throw Object.assign(Error('integrity gate: esy compiler path mismatch'),{gate:'esy-lookup'});
+let cv=run(compiler.path,['-version'],deadline);commands.compiler_version=cv;if(cv.exit_code!==0||!cv.stdout.includes('5.5.1'))throw Object.assign(Error('compiler version failed'),{gate:'compiler-version'});
+let probes={};for(let [k,p] of Object.entries({esy_cache:'/home/opam/esy-reference/_esy',node_cache:'/home/opam/esy-reference/node_modules/.cache'})){try{let f=path.join(p,'.write-probe-'+process.pid);fs.writeFileSync(f,'ok',{flag:'wx'});fs.unlinkSync(f);probes[k]={path:p,exists:true,operation:'exclusive-create-delete',allowed:true}}catch(e){probes[k]={path:p,exists:e.code!=='ENOENT',operation:'exclusive-create-delete',allowed:false,code:e.code}}}
+let lockRow=start.project.find(x=>x.path.startsWith('esy.lock/')&&x.type==='file');if(!lockRow)throw Error('no inventoried existing lock target');for(let [k,p] of Object.entries({package:'/home/opam/esy-reference/package.json',lock:'/home/opam/esy-reference/'+lockRow.path,compiler:compiler.path})){try{let fd=fs.openSync(p,'r+');fs.closeSync(fd);probes[k]={path:p,exists:true,operation:'open-r+',allowed:true}}catch(e){probes[k]={path:p,exists:e.code!=='ENOENT',operation:'open-r+',allowed:false,code:e.code}}}
+let files=cfg.fixtures||{};for(let [n,b64] of Object.entries(files)){if(!/^[a-z0-9_-]+\.ml$/.test(n))throw Error('bad fixture name');let b=Buffer.from(b64,'base64');if(b.toString('base64')!==b64)throw Error('bad fixture encoding');fs.writeFileSync('/work/'+n,b,{mode:0o444})}
+function invoke(label,cmd,args){let r=run(cmd,args,deadline);commands[label]=r;return r}let src='/work',esybin='/home/opam/esy/bin/esy';function compile(label,file,out){return invoke(label,esybin,['ocamlopt','-o',src+'/'+out,src+'/'+file])}function exec(label,bin){return invoke(label,src+'/'+bin,[])}
+let c=cfg.case;if(['suite','positive','wrong-result','syntax'].includes(c)){let kinds=c==='suite'?['positive','wrong-result','syntax']:[c];if(kinds.includes('positive')){let r=compile('compile-positive','main.ml','positive.exe');if(r.exit_code===0)exec('run-positive','positive.exe')}if(kinds.includes('wrong-result')){let r=compile('compile-wrong-result','wrong_result.ml','wrong.exe');if(r.exit_code===0)exec('run-wrong-result','wrong.exe')}if(kinds.includes('syntax'))compile('compile-syntax','syntax.ml','syntax.exe')}
+if(c==='timeout'||c==='output'||c==='resource'){let file={timeout:'loop.ml',output:'output.ml',resource:'memory.ml'}[c],exe={timeout:'loop.exe',output:'output.exe',resource:'memory.exe'}[c],r=compile('compile-'+c,file,exe);if(r.exit_code===0){let x=invoke('run-'+c,src+'/'+exe,[]);if(x.timed_out)x.reason='command-timeout';if(x.error_code==='ENOBUFS'||x.stdout_bytes>32768||x.stderr_bytes>32768)x.reason='command-output-overflow';if(x.error_code==='ENOMEM'||/Out of memory/.test(x.stderr))x.reason='allocation-failure';if(x.signal==='SIGKILL'&&!x.timed_out)x.reason='unattributed-signal'}}
+let end=immutable();return {stage:'completed',case:c,commands,probes,pre_inventory:start,post_inventory:end,immutable_unchanged:canonicalEqual(start.project,end.project),compiler,compiler_unchanged:canonicalEqual(compiler,findCompiler())}}
+try{process.stdout.write(JSON.stringify(main()))}catch(e){process.stdout.write(JSON.stringify({stage:'integrity-or-harness-failure',gate:e.gate||null,error:String(e),stack:String(e.stack||'')}));process.exitCode=2}
+'''
+NODE = NODE.replace("__EXPECTED_COMPILER_SHA256__", EXPECTED_COMPILER_SHA256)
+
+
+def docker_image(image: str) -> dict:
+    p = bounded_process(["docker", "image", "inspect", image], 15)
+    if p["exit_code"] != 0 or p["timed_out"] or p["output_exceeded"] or p["interrupted"] or p["group_cleanup_uncertain"]:
+        raise RuntimeError("bounded image inspection failed")
+    rows = json.loads(p["stdout"])
+    if len(rows) != 1 or rows[0].get("Id") != image:
+        raise ValueError("image must resolve to its exact immutable ID")
+    return rows[0]
+
+
+def docker_base_image() -> dict:
+    p = bounded_process(["docker", "image", "inspect", BASE_TAG], 15)
+    if p["exit_code"] != 0 or p["timed_out"] or p["output_exceeded"] or p["interrupted"] or p["group_cleanup_uncertain"]:
+        raise RuntimeError("bounded base image inspection failed")
+    rows = json.loads(p["stdout"])
+    if len(rows) != 1 or rows[0].get("Id") != BASE_ID:
+        raise ValueError("base tag must resolve to its pinned immutable ID")
+    return rows[0]
+
+
+def docker_container_inspect(container_id: str, *, deadline: float | None = None) -> tuple[str, dict | None]:
+    p = bounded_process(["docker", "container", "inspect", container_id], 10, deadline=deadline)
+    if p["timed_out"] or p["output_exceeded"] or p["interrupted"] or p["group_cleanup_uncertain"]:
+        return "query-failed", None
+    if p["exit_code"]:
+        # A successful daemon query with an exact no-such-container response is absence.
+        err = p["stderr"].decode("utf-8", "replace").lower()
+        if "no such container" not in err: return "query-failed", None
+        filter_key = "id" if re.fullmatch(r"[0-9a-f]{64}", container_id) else "name"
+        listing = bounded_process(["docker", "container", "ls", "-a", "--no-trunc",
+                                   "--filter", filter_key+"="+container_id,
+                                   "--format", "{{.Names}}" if filter_key == "name" else "{{.ID}}"], 10, deadline=deadline)
+        if listing["exit_code"] or listing["timed_out"] or listing["output_exceeded"] or listing["interrupted"] or listing["group_cleanup_uncertain"]:
+            return "query-failed", None
+        rows = listing["stdout"].decode("utf-8", "replace").splitlines()
+        exists = any(container_id in row.split(",") for row in rows) if filter_key == "name" else bool(rows)
+        return ("query-failed", None) if exists else ("absent", None)
+    try:
+        rows = json.loads(p["stdout"])
+        return ("present", rows[0]) if len(rows) == 1 else ("query-failed", None)
+    except (ValueError, TypeError):
+        return "query-failed", None
+
+
+def cleanup_owned(container_id: str | None, owner: str, *, name: str | None = None,
+                  deadline: float | None = None, previously_verified: bool = False) -> dict:
+    # A create can succeed even when its client times out. Recover only from the
+    # persisted unique name after checking both Docker's name and owner label.
+    if not container_id and name:
+        state, obj = docker_container_inspect(name, deadline=deadline)
+        if state == "present":
+            labels = obj.get("Config", {}).get("Labels", {}) or {}
+            actual_name = (obj.get("Name") or "").lstrip("/")
+            candidate = obj.get("Id")
+            if actual_name == name and labels.get("esy-reference.owner") == owner and re.fullmatch(r"[0-9a-f]{64}", str(candidate)):
+                container_id = candidate
+                previously_verified = True
+        elif state != "absent":
+            return {"verified_absent": False, "reason": "recovery-query-failed"}
+        else:
+            return {"verified_absent": True, "reason": "daemon-confirmed-absent"}
+    if not container_id:
+        return {"verified_absent": False, "reason": "container-id-unavailable"}
+    if not previously_verified:
+        state, obj = docker_container_inspect(container_id, deadline=deadline)
+        if state == "absent": return {"verified_absent": True, "reason": "daemon-confirmed-absent"}
+        if state != "present": return {"verified_absent": False, "reason": "inspect-query-failed"}
+        labels = obj.get("Config", {}).get("Labels", {}) or {}
+        actual_name = (obj.get("Name") or "").lstrip("/")
+        if (obj.get("Id") != container_id or labels.get("esy-reference.owner") != owner or
+                (name is not None and actual_name != name)):
+            return {"verified_absent": False, "reason": "ownership-mismatch"}
+    left = 10.0 if deadline is None else max(0.0, deadline-time.monotonic())
+    if left <= 0: return {"verified_absent": False, "reason": "cleanup-deadline-exhausted"}
+    rm = bounded_process(["docker", "rm", "-f", container_id], min(10.0, max(.001, left*.65)), deadline=deadline)
+    if rm["timed_out"] or rm["interrupted"] or rm["group_cleanup_uncertain"]:
+        return {"remove_exit_code": rm["exit_code"], "verified_absent": False, "reason": "remove-uncertain"}
+    state2, _ = docker_container_inspect(container_id, deadline=deadline)
+    return {"remove_exit_code": rm["exit_code"], "verified_absent": state2 == "absent",
+            "reason": "removed-and-daemon-confirmed-absent" if state2 == "absent" else "absence-unverified"}
+
+
+def docker_create(image: str, name: str, owner: str, mode: str) -> list[str]:
+    argv = ["docker", "create", "-i", "--name", name, "--label", "esy-reference.owner="+owner,
+            "--platform", "linux/amd64", "--pull=never", "--network", "none", "--read-only",
+            "--cap-drop", "ALL", "--security-opt", "no-new-privileges:true", "--pids-limit", "128",
+            "--memory", "2g", "--cpus", "2", "--tmpfs", "/work:rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700",
+            "--env", "TMPDIR=/work", "--user", "1000:1000", "--workdir", "/home/opam/esy-reference", "--entrypoint",
+            "/home/opam/node/bin/node", image, "-e", NODE, mode]
+    if mode == "run":
+        argv[2:2] = ["--tmpfs", "/home/opam/esy-reference/_esy:rw,nosuid,nodev,exec,size=32m,uid=1000,gid=1000,mode=700",
+                     "--tmpfs", "/home/opam/esy-reference/node_modules/.cache:rw,nosuid,nodev,exec,size=32m,uid=1000,gid=1000,mode=700"]
+    return argv
+
+
+def validate_config(obj: dict, image: str, owner: str, mode: str) -> None:
+    c, h = obj.get("Config", {}), obj.get("HostConfig", {})
+    if obj.get("Image") != image or c.get("User") != "1000:1000" or c.get("WorkingDir") != "/home/opam/esy-reference":
+        raise ValueError("container identity/user/workdir mismatch")
+    if (c.get("Labels", {}) or {}).get("esy-reference.owner") != owner:
+        raise ValueError("container ownership label mismatch")
+    if h.get("NetworkMode") != "none" or h.get("ReadonlyRootfs") is not True or h.get("Memory") != 2*1024**3 or h.get("NanoCpus") != 2_000_000_000 or h.get("PidsLimit") != 128:
+        raise ValueError("effective resource configuration mismatch")
+    if h.get("CapDrop") != ["ALL"] or h.get("SecurityOpt") != ["no-new-privileges:true"]:
+        raise ValueError("effective security configuration mismatch")
+    if (h.get("Privileged") is not False or h.get("CapAdd") not in (None, []) or
+            h.get("Devices") not in (None, []) or h.get("DeviceRequests") not in (None, []) or
+            h.get("PidMode") not in (None, "") or h.get("IpcMode") != "private"):
+        raise ValueError("effective privilege/device/PID/IPC configuration mismatch")
+    env = c.get("Env")
+    tmpdir = [entry for entry in env or [] if isinstance(entry, str) and entry.split("=", 1)[0] == "TMPDIR"]
+    if not isinstance(env, list) or len(tmpdir) != 1 or tmpdir[0] != "TMPDIR=/work":
+        raise ValueError("effective TMPDIR environment mismatch")
+    if c.get("Entrypoint") != ["/home/opam/node/bin/node"] or c.get("Cmd") != ["-e", NODE, mode]:
+        raise ValueError("effective entrypoint/command mismatch")
+    if c.get("Volumes"):
+        raise ValueError("image declares unexpected volumes")
+    expected = {"/work":"rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700"}
+    if mode == "run": expected.update({"/home/opam/esy-reference/_esy":"rw,nosuid,nodev,exec,size=32m,uid=1000,gid=1000,mode=700",
+                                        "/home/opam/esy-reference/node_modules/.cache":"rw,nosuid,nodev,exec,size=32m,uid=1000,gid=1000,mode=700"})
+    if h.get("Tmpfs") != expected:
+        raise ValueError("effective tmpfs destinations/options mismatch")
+    mounts = obj.get("Mounts")
+    destinations = []
+    if not isinstance(mounts, list):
+        raise ValueError("effective mount set mismatch")
+    for mount in mounts:
+        if (not isinstance(mount, dict) or mount.get("Type") != "tmpfs" or
+                mount.get("Destination") not in expected or mount.get("RW") is not True or
+                mount.get("Source") not in (None, "") or mount.get("Name") not in (None, "") or
+                mount.get("Driver") not in (None, "") or mount.get("Propagation") not in (None, "")):
+            raise ValueError("effective mount set mismatch")
+        destinations.append(mount["Destination"])
+    if len(destinations) != len(set(destinations)):
+        raise ValueError("effective mount set mismatch")
+
+
+def capture_expectations(image: str, output: Path) -> dict:
+    if not IMAGE_RE.fullmatch(image): raise ValueError("capture image must be immutable sha256 ID")
+    base = docker_base_image()
+    derivative = docker_image(image)
+    if derivative.get("Config", {}).get("Volumes"):
+        raise ValueError("derivative declares unexpected image volumes")
+    base_layers = base.get("RootFS", {}).get("Layers", [])
+    layers = derivative.get("RootFS", {}).get("Layers", [])
+    if not base_layers or layers[:len(base_layers)] != base_layers: raise ValueError("derivative layer prefix mismatch")
+    owner = secrets.token_hex(16); captures=[]
+    for im, mode in ((BASE_ID,"capture-base"),(image,"capture-derivative")):
+        name="esyref-cap-"+secrets.token_hex(8); cid=None; cid_verified=False; clean={"verified_absent":False,"reason":"not-started"}
+        invocation_path=output.parent/"owned-invocations"/(name+".json")
+        try:
+            persist_invocation(invocation_path,name,owner,None)
+            create=bounded_process(docker_create(im,name,owner,mode),15)
+            if create["exit_code"] or create["timed_out"] or create["interrupted"] or create["group_cleanup_uncertain"]: raise RuntimeError("container create failed or uncertain")
+            cid=create["stdout"].decode().strip()
+            if not re.fullmatch(r"[0-9a-f]{64}",cid): raise RuntimeError("container create did not return an exact ID")
+            persist_invocation(invocation_path,name,owner,cid)
+            st,obj=docker_container_inspect(cid)
+            if st!="present": raise RuntimeError("created container inspection failed")
+            if obj.get("Id")!=cid or (obj.get("Name") or "").lstrip("/")!=name:
+                raise RuntimeError("created container name/ID mismatch")
+            validate_config(obj,im,owner,mode)
+            cid_verified=True
+            result=bounded_process(["docker","start","-ai",cid],30,MAX_DOCKER_BYTES)
+            if result["exit_code"] or result["timed_out"] or result["output_exceeded"] or result["interrupted"] or result["group_cleanup_uncertain"]: raise RuntimeError("capture execution failed or uncertain")
+            captures.append(json.loads(result["stdout"]))
+        finally:
+            clean=cleanup_owned(cid,owner,name=name,previously_verified=cid_verified)
+            if not clean["verified_absent"]: raise RuntimeError("capture cleanup unverified: "+clean["reason"])
+    b,d=captures
+    bi,di=b.get("immutable",{}),d.get("immutable",{})
+    bc,dc=b.get("compiler",{}),d.get("compiler",{})
+    compiler_static=lambda c:{k:c.get(k) for k in ("path","bytes","mode","sha256")}
+    if (compiler_static(bc)!=compiler_static(dc) or bc.get("version")!="5.5.1" or bi.get("project")!=di.get("project") or
+        not cache_inventory_equal(bi.get("installation"),di.get("installation")) or not cache_inventory_equal(bi.get("node_cache"),di.get("node_cache")) or
+        not cache_inventory_equal(bi.get("installation"),bi.get("seed")) or
+        not cache_inventory_equal(bi.get("node_cache"),bi.get("node_seed"))):
+        raise ValueError("derivative compiler, installation, or seed inventory differs from base")
+    source={}
+    for name in ("run_esy_reference.py","Dockerfile.esy-runtime","main.ml","package.json","esy.lock"):
+        p=HERE/name
+        if p.is_file(): source[name]=sha(read_bounded(p,1024*1024))
+    value={"schema_version":1,"base_image":BASE_ID,"image":image,"base_layers":base_layers,
+           "image_layers":layers,"base":b,"derivative":d,"source_sha256":source}
+    if len(canonical(value))+1>MAX_EXPECTATIONS: raise ValueError("captured expectations exceed size limit")
+    atomic_json(output,value)
+    return {"status":"PASSED","expectations":str(output),"sha256":sha(canonical(value)+b"\n")}
+
+
+def atomic_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True,exist_ok=True); data=canonical(value)+b"\n"
+    fd,tmp=tempfile.mkstemp(prefix=".esyref-",dir=path.parent)
+    try:
+        with os.fdopen(fd,"wb") as f: f.write(data); f.flush(); os.fsync(f.fileno())
+        os.link(tmp,path); d=os.open(path.parent,os.O_RDONLY)
+        try: os.fsync(d)
+        finally: os.close(d)
+    finally: os.unlink(tmp)
+
+
+def persist_invocation(path: Path, name: str, owner: str, container_id: str | None) -> None:
+    """Keep the unique recovery identity in the caller's explicit evidence tree."""
+    value = {"schema": 1, "name": name, "owner": owner, "container_id": container_id}
+    if container_id is None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(canonical(value) + b"\n"); stream.flush(); os.fsync(stream.fileno())
+        directory = os.open(path.parent, os.O_RDONLY)
+        try: os.fsync(directory)
+        finally: os.close(directory)
+    else:
+        tmp = path.with_name(path.name + ".tmp-" + secrets.token_hex(4))
+        fd = os.open(tmp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        try:
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(canonical(value) + b"\n"); stream.flush(); os.fsync(stream.fileno())
+            os.replace(tmp, path)
+        finally:
+            try: tmp.unlink()
+            except FileNotFoundError: pass
+
+
+def source_files(case: str) -> dict[str, bytes]:
+    main=read_bounded(HERE/"main.ml",64*1024)
+    result={"main.ml":main}
+    if case in ("suite","wrong-result"):
+        text=main.decode(); anchor='  let expected = [ 1; 4; 9; 16 ] in\n  if actual <> expected then failwith "List.map assertion failed";'
+        if text.count(anchor)!=1: raise ValueError("fixed main.ml derivation anchor changed")
+        result["wrong_result.ml"]=text.replace(anchor,'  let expected = [ 0 ] in\n  assert (actual = expected);').encode()
+    if case in ("suite","syntax"): result["syntax.ml"]=b"let broken =\n"
+    if case in ("timeout","output","resource"):
+        result[{"timeout":"loop.ml","output":"output.ml","resource":"memory.ml"}[case]]={
+            "timeout":b"let () = while true do () done\n",
+            "output":b"let () = while true do print_endline (String.make 4096 'x'); flush stdout done\n",
+            "resource":b"let () = let rec grow xs = let x=Bytes.create 65536 in Bytes.fill x 0 65536 'x'; grow (x::xs) in grow []\n"}[case]
+    return result
+
+
+def evaluate(case: str, result: dict) -> tuple[str,str]:
+    if result.get("stage")!="completed": return "integrity-gate-failed","FAILED"
+    cmds=result.get("commands",{}); probes=result.get("probes",{})
+    if not result.get("immutable_unchanged") or not result.get("compiler_unchanged"): return "immutable-integrity-failed","FAILED"
+    if not all(probes.get(k,{}).get("allowed") is True and probes.get(k,{}).get("exists") is True and probes.get(k,{}).get("operation")=="exclusive-create-delete" for k in ("esy_cache","node_cache")): return "cache-write-probe-failed","FAILED"
+    if not all(probes.get(k,{}).get("exists") is True and probes.get(k,{}).get("operation")=="open-r+" and probes.get(k,{}).get("allowed") is False and probes.get(k,{}).get("code") in ("EROFS","EACCES") for k in ("package","lock","compiler")): return "readonly-probe-failed","FAILED"
+    def normal(label,code):
+        c=cmds.get(label,{})
+        return c.get("exit_code")==code and c.get("signal") is None and not c.get("timed_out") and c.get("error") is None
+    def failed_normally(label):
+        c=cmds.get(label,{})
+        return isinstance(c.get("exit_code"),int) and c.get("exit_code")!=0 and c.get("signal") is None and not c.get("timed_out") and c.get("error") is None
+    if case in ("positive","suite"):
+        if not normal("compile-positive",0) or not normal("run-positive",0) or cmds["run-positive"].get("stdout")!="esy-ocaml-reference:passed\n": return "positive-failed","FAILED"
+    if case in ("wrong-result","suite"):
+        if not normal("compile-wrong-result",0) or not failed_normally("run-wrong-result") or "Assert_failure" not in cmds["run-wrong-result"].get("stderr",""): return "wrong-result-control-invalid","FAILED"
+        if case=="wrong-result": return "wrong-result-observed","FAILED"
+    if case in ("syntax","suite"):
+        s=cmds.get("compile-syntax",{}); diag=s.get("stderr","")
+        if s.get("exit_code")==0 or s.get("signal") is not None or s.get("timed_out") or not re.search(r"(?m)^Error: Syntax error",diag): return "syntax-control-invalid","FAILED"
+        if case=="syntax": return "syntax-failure-observed","FAILED"
+    if case in ("timeout","output","resource"):
+        c=cmds.get("run-"+case,{})
+        if not normal("compile-"+case,0): return "control-fixture-did-not-compile","FAILED"
+        reason=c.get("reason")
+        if case=="timeout" and reason!="command-timeout": return "timeout-not-observed","FAILED"
+        if case=="output" and reason!="command-output-overflow": return "output-overflow-not-observed","FAILED"
+        if case=="resource" and reason!="allocation-failure": return "allocation-pressure-not-observed","FAILED"
+        if case=="resource": return "resource-allocation-failure-observed","FAILED"
+        return case+"-observed","FAILED"
+    return "controls-passed","PASSED"
+
+
+def run(image:str,run_id:str,expectations:Path,output_dir:Path,case:str,timeout:int)->tuple[dict,Path,str]:
+    if not IMAGE_RE.fullmatch(image): raise ValueError("--image must be immutable sha256 ID")
+    if expectations.is_symlink(): raise ValueError("expectations cannot be a symlink")
+    exp_path=expectations.resolve(strict=True); out=output_dir.resolve()
+    if exp_path.is_relative_to(ROOT) or out.is_relative_to(ROOT): raise ValueError("expectations/output must be outside candidate")
+    raw=read_bounded(exp_path,MAX_EXPECTATIONS); expected=json.loads(raw)
+    if raw.rstrip(b"\n")!=canonical(expected): raise ValueError("expectations must be canonical JSON")
+    if expected.get("schema_version")!=1 or expected.get("image")!=image or expected.get("base_image")!=BASE_ID: raise ValueError("expectation identity mismatch")
+    runner=Path(__file__).resolve(); runner_hash=sha(read_bounded(runner,1024*1024))
+    for name in ("run_esy_reference.py", "Dockerfile.esy-runtime", "main.ml"):
+        path = HERE / name
+        if expected.get("source_sha256", {}).get(name) != sha(read_bounded(path, 1024*1024)):
+            raise ValueError("reviewed source hash mismatch: " + name)
+    img=docker_image(image)
+    if img.get("Config", {}).get("Volumes"):
+        raise ValueError("image declares unexpected volumes")
+    layers=img.get("RootFS",{}).get("Layers",[])
+    if layers!=expected.get("image_layers") or layers[:len(expected.get("base_layers",[]))]!=expected.get("base_layers"): raise ValueError("image layer identity mismatch")
+    files=source_files(case)
+    inner_timeout=max(.001, timeout-min(8.0, timeout*.30)-min(3.0, timeout*.15))
+    cfg={"case":case,"timeout":inner_timeout,"expected":expected,"fixtures":{k:v.decode("latin1").encode("latin1").hex() for k,v in files.items()}}
+    # Node decodes fixture hex; bounded payload is one JSON stdin document.
+    cfg["fixtures"]={k:__import__("base64").b64encode(v).decode("ascii") for k,v in files.items()}
+    payload=canonical(cfg)
+    if len(payload)>MAX_PAYLOAD: raise ValueError("container payload exceeds bound")
+    out.mkdir(parents=True,exist_ok=True); report_path=out/(run_id+".json"); reserve=out/(run_id+".reserve")
+    if report_path.exists() or report_path.is_symlink(): raise FileExistsError("immutable report already exists")
+    fd=os.open(reserve,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600); os.close(fd)
+    report={"schema":1,"id":run_id,"status":"FAILED","reason":"reserved-attempt-not-completed","case":case,
+            "image":image,"runner_sha256":runner_hash,"source_sha256":expected["source_sha256"],"expectation_sha256":sha(raw),"fixture_hashes":{k:sha(v) for k,v in files.items()},
+            "timeout_seconds":timeout,"cleanup":{"verified_absent":False,"reason":"not-started"},"stage":"reserved"}
+    name="esyref-"+secrets.token_hex(12); owner=secrets.token_hex(16); cid=None
+    invocation_path=out/"owned-invocations"/(run_id+".json")
+    lifetime_deadline=time.monotonic()+timeout
+    report_allowance=min(2.0, timeout*.05)
+    removal_deadline=lifetime_deadline-report_allowance
+    removal_allowance=min(8.0,timeout*.30)
+    transport_allowance=min(3.0,timeout*.15)
+    group_deadline=removal_deadline-removal_allowance
+    command_deadline=group_deadline-transport_allowance
+    try:
+        persist_invocation(invocation_path,name,owner,None)
+        create=bounded_process(docker_create(image,name,owner,"run"),15,deadline=command_deadline)
+        if create["exit_code"] or create["timed_out"] or create["interrupted"] or create["group_cleanup_uncertain"]: raise RuntimeError("docker create failed or uncertain")
+        cid=create["stdout"].decode().strip()
+        if not re.fullmatch(r"[0-9a-f]{64}",cid): raise RuntimeError("docker create did not return an exact container ID")
+        persist_invocation(invocation_path,name,owner,cid)
+        report["container_id"]=cid
+        state,obj=docker_container_inspect(cid,deadline=command_deadline)
+        if state!="present": raise RuntimeError("container inspect query failed")
+        if obj.get("Id")!=cid or (obj.get("Name") or "").lstrip("/")!=name:
+            raise RuntimeError("created container name/ID mismatch")
+        validate_config(obj,image,owner,"run")
+        report["actual_config"]={"image":obj.get("Image"),"user":obj.get("Config",{}).get("User"),"workdir":obj.get("Config",{}).get("WorkingDir"),"host_config":obj.get("HostConfig",{}),"mounts":obj.get("Mounts",[])}
+        cfg["timeout"]=max(.001,command_deadline-time.monotonic()-transport_allowance)
+        payload=canonical(cfg)
+        # The inner command expires before host attachment; process-group
+        # shutdown then has a bounded allocation before container removal.
+        result=bounded_process(["docker","start","-ai",cid],max(.001,lifetime_deadline-time.monotonic()),MAX_DOCKER_BYTES,payload,
+                               deadline=group_deadline,execution_deadline=command_deadline)
+        report.update({"timed_out":result["timed_out"],"output_exceeded":result["output_exceeded"],
+                       "interrupted":result["interrupted"],
+                       "process_group_cleanup_uncertain":result["group_cleanup_uncertain"]})
+        if result["timed_out"] or result["output_exceeded"] or result["interrupted"] or result["group_cleanup_uncertain"]:
+            # The exact ID and owner label were corroborated above. Stop the
+            # container before any post-run inspect or diagnostic work.
+            report["termination_cleanup_attempted_before_diagnostics"]=True
+            report["cleanup"]=cleanup_owned(cid,owner,name=name,deadline=removal_deadline,previously_verified=True)
+            if not report["cleanup"].get("verified_absent"):
+                report.update({"stage":"container-cleanup-uncertain", "reason":"cleanup-unverified", "status":"FAILED"})
+                return_report_early = True
+            else:
+                return_report_early = False
+        if result["interrupted"]:
+            report.update({"stage":"container-interrupted","interrupted":True,"reason":"interrupted",
+                           "docker_exit_code":result["exit_code"]})
+            return_report_early = True
+        elif result["group_cleanup_uncertain"]:
+            report.update({"stage":"process-group-cleanup-uncertain", "reason":"process-group-cleanup-uncertain", "status":"FAILED"})
+            return_report_early = True
+        elif not (result["timed_out"] or result["output_exceeded"]):
+            return_report_early = False
+        if not return_report_early:
+            inspect_state,inspect_obj=docker_container_inspect(cid,deadline=command_deadline)
+            report["container_state_query"]=inspect_state
+            if inspect_state=="present": report["oom_killed"]=bool(inspect_obj.get("State",{}).get("OOMKilled"))
+            report.update({"stage":"container-finished","docker_exit_code":result["exit_code"],"timed_out":result["timed_out"],"output_exceeded":result["output_exceeded"],"docker_stdout_bytes":result["stdout_total_bytes"],"docker_stdout_full_sha256":result["stdout_full_sha256"],"docker_stdout_retained_sha256":sha(result["stdout"]),"docker_stderr_bytes":result["stderr_total_bytes"],"docker_stderr_full_sha256":result["stderr_full_sha256"],"docker_stderr":result["stderr"].decode("utf-8","replace")[:2048]})
+            if result["timed_out"]: report["reason"]="host-deadline"
+            elif result["group_cleanup_uncertain"]: report["reason"]="process-group-cleanup-uncertain"
+            elif result["output_exceeded"]: report["reason"]="docker-output-overflow"
+            elif report.get("oom_killed") and case=="resource": report["reason"]="resource-oom-observed"
+            elif result["exit_code"]==0:
+                obj_result=json.loads(result["stdout"]); report["results"]=obj_result; report["reason"],report["status"]=evaluate(case,obj_result)
+            else: report["reason"]="container-nonzero"
+    except BaseException as exc:
+        if isinstance(exc, KeyboardInterrupt):
+            report["reason"]="interrupted"; report["interrupted"]=True; report["stage"]="container-interrupted"
+        else:
+            report["reason"]="supervisor-error"
+        report["error"]=f"{type(exc).__name__}: {exc}"
+    finally:
+        try: report["cleanup"]=cleanup_owned(cid,owner,name=name,deadline=removal_deadline,previously_verified=bool(cid and report.get("actual_config")))
+        except BaseException as exc: report["cleanup"]={"verified_absent":False,"reason":"cleanup-exception","error":f"{type(exc).__name__}: {exc}"}
+        if not report["cleanup"].get("verified_absent"): report["status"]="FAILED"; report["reason"]="cleanup-unverified"
+        try:
+            for input_name in ("run_esy_reference.py", "Dockerfile.esy-runtime", "main.ml"):
+                if sha(read_bounded(HERE/input_name,1024*1024))!=expected["source_sha256"][input_name]:
+                    report["status"]="FAILED"; report["reason"]="source-modified"; report["source_mismatch"]=input_name
+        except BaseException as exc: report["status"]="FAILED"; report["reason"]="source-recheck-failed"; report["source_error"]=str(exc)
+        if time.monotonic() >= lifetime_deadline:
+            report["status"]="FAILED"; report["reason"]="lifetime-deadline-exceeded"; report["lifetime_budget_exceeded"]=True
+        report["finished_unix"]=time.time()
+        data=canonical(report)+b"\n"
+        if len(data)>MAX_REPORT: report={"schema":1,"id":run_id,"status":"FAILED","reason":"report-size-bound","cleanup":report["cleanup"]}; data=canonical(report)+b"\n"
+        atomic_json(report_path,report)
+    return report,report_path,sha(data)
+
+
+def main(argv=None)->int:
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument("--image",required=True); p.add_argument("--run-id"); p.add_argument("--expectations",type=Path); p.add_argument("--output-dir",type=Path); p.add_argument("--capture-expectations",type=Path)
+    p.add_argument("--case",choices=("suite","positive","wrong-result","syntax","timeout","output","resource"),default="suite"); p.add_argument("--timeout",type=int,default=120); a=p.parse_args(argv)
+    try:
+        if not 1<=a.timeout<=120: raise ValueError("--timeout must be 1..120")
+        if a.capture_expectations:
+            if a.run_id: raise ValueError("capture cannot be combined with run ID")
+            if a.capture_expectations.is_symlink(): raise ValueError("capture output cannot be a symlink")
+            if a.capture_expectations.resolve().is_relative_to(ROOT): raise ValueError("capture output must be outside candidate")
+            result=capture_expectations(a.image,a.capture_expectations)
+        else:
+            if not a.run_id or not RUN_RE.fullmatch(a.run_id) or not a.expectations or not a.output_dir: raise ValueError("valid run ID, expectations and output directory required")
+            result,path,h=run(a.image,a.run_id,a.expectations,a.output_dir,a.case,a.timeout); result={"status":result["status"],"reason":result["reason"],"report":str(path),"report_sha256":h}
+        print(json.dumps(result,sort_keys=True)); return 0 if result["status"]=="PASSED" else 1
+    except Exception as exc:
+        if a.capture_expectations and not a.capture_expectations.is_symlink() and not a.capture_expectations.resolve().is_relative_to(ROOT):
+            failure_path=a.capture_expectations.with_name(a.capture_expectations.name+".failure.json")
+            try:
+                atomic_json(failure_path,{"schema":1,"status":"FAILED","reason":"capture-failed",
+                                          "error":f"{type(exc).__name__}: {exc}","finished_unix":time.time()})
+            except Exception:
+                pass
+        print(json.dumps({"status":"FAILED","reason":"input-or-supervisor-error","error":f"{type(exc).__name__}: {exc}"},sort_keys=True)); return 2
+
+
+if __name__=="__main__": raise SystemExit(main())
+
+ALLOWED FILE artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py
+#!/usr/bin/env python3
+"""Real Docker E2E checks for the captured esy reference image.
+
+Public interface is deliberately limited to --image, --expectations and
+--output-dir. Fixed scenarios and predicates live here. Docker or compiler
+unavailability is a failure; no mocked result or skipped scenario is accepted.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import selectors
+import signal
+import subprocess
+import sys
+import time
+
+IMAGE_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+SHA_RE = re.compile(r"^[0-9a-f]{64}$")
+MAX_EXPECTATIONS = 1024 * 1024
+MAX_REPORT = 256 * 1024
+MAX_LOG = 64 * 1024
+MAX_RUN_SECONDS = 120
+
+# Required cases this harness cannot safely induce against an ordinary local
+# daemon. They remain explicit failed evidence rows until a reviewed, owned
+# daemon-fault/variant fixture exists; they are never converted into skips.
+MISSING_REAL_CASES = {
+    "R2-inspect-failure": "No safe daemon fault injector is available for a real inspect failure.",
+    "R2-daemon-query-failure": "No safe daemon fault injector is available for a real daemon-query failure.",
+    "R2-ownership-mismatch": "A foreign-container ownership mismatch cannot be induced without risking unrelated daemon state.",
+    "R4-filesystem-variants": "Owned installation, seed, lock, and declared-volume variants are not safely constructible in this fixed runner-only E2E.",
+    "R8-oversized-image-metadata": "A safely owned oversized image-metadata fixture is not available.",
+    "R8-filesystem-mutation-matrix": "Added/missing locks, changed seed metadata, missing probes, and writable protected targets are not safely generated as owned image variants.",
+    "R10-oversized-expectations-and-payloads": "Oversized manifest/payload rejection is bounded in code but has no separately owned real-Docker evidence case.",
+    "R11-source-mutation": "Concurrent source mutation cannot be induced safely while preserving the reviewed input snapshot.",
+    "E2E-08-fifo-and-escaping-paths": "FIFO reports, symlink escapes, and external report destinations are not safely fault-induced by this runner interface.",
+    "E2E-11-unrelated-syntax-diagnostic": "The exact syntax control is checked, but an unrelated compiler error mentioning syntax.ml is not independently induced.",
+    "E2E-12-independent-container-lifetime": "The runner enforces a deadline, but this harness has no independent daemon-side container lifetime observer.",
+    "E2E-05-retained-pipe-and-interruption": "The runner supervisor cannot be independently interrupted without an external owned-process harness.",
+    "E2E-07-build-cancellation": "This E2E does not build images; daemon-side build cancellation cannot be proven here.",
+    "E2E-13-integrity-canaries": "The runner does not expose fixed execution canaries for every integrity gate.",
+    "E2E-14-startup-failure": "No owned missing-entrypoint image variant is supplied by the fixed three-argument interface.",
+    "E2E-16-concurrent-same-id": "Concurrent same-ID reservation is not exercised by this bounded serial driver.",
+    "E2E-17-report-namespace": "Invalid-ID and complete namespace preservation controls are not exposed by the runner contract.",
+    "E2E-18-daemon-log-retention": "Build, remove, and absence-query daemon logs are not persisted as separate evidence artifacts by the runner.",
+    "E2E-19-full-input-snapshot": "Reviewed runner, Dockerfile, fixture, and E2E hashes are checked; a full original/candidate tree snapshot is not part of this fixed harness.",
+    "E2E-20-complete-fault-matrix": "The unavailable daemon faults and filesystem variants listed above have explicit missing rows, but full twenty-finding coverage is not evidenced.",
+}
+
+REQUIRED_RUNS = (
+    ("positive", "positive", 120, True),
+    ("suite", "suite", 120, True),
+    ("wrong-result", "wrong-result", 120, False),
+    ("syntax", "syntax", 120, False),
+    ("timeout", "timeout", 20, False),
+    ("output", "output", 20, False),
+    ("resource", "resource", 20, False),
+)
+
+
+class E2EFailure(Exception):
+    pass
+
+
+def require(ok: bool, message: str) -> None:
+    if not ok:
+        raise E2EFailure(message)
+
+
+def canonical(obj: object) -> bytes:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+                      allow_nan=False).encode("utf-8")
+
+
+def bounded_read(path: Path, limit: int) -> bytes:
+    st = path.lstat()
+    require(path.is_file() and not path.is_symlink(), f"{path} must be a regular non-symlink file")
+    require(st.st_size <= limit, f"{path} exceeds {limit} bytes")
+    with path.open("rb") as stream:
+        raw = stream.read(limit + 1)
+    require(len(raw) <= limit, f"{path} grew beyond {limit} bytes while reading")
+    return raw
+
+
+def digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def immutable_write(path: Path, data: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(data); stream.flush(); os.fsync(stream.fileno())
+    directory = os.open(path.parent, os.O_RDONLY)
+    try: os.fsync(directory)
+    finally: os.close(directory)
+    return digest(data)
+
+
+def supervisor(argv: list[str], cwd: Path, timeout: float, stdout_path: Path,
+               stderr_path: Path, *, deadline: float | None = None) -> dict:
+    if os.name != "posix":
+        raise E2EFailure("POSIX process-group containment is required")
+    start = time.monotonic()
+    proc = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, start_new_session=True, close_fds=True)
+    captures = {"stdout": {"kept": bytearray(), "hash": hashlib.sha256(), "size": 0},
+                "stderr": {"kept": bytearray(), "hash": hashlib.sha256(), "size": 0}}
+    deadline = min(deadline, start + timeout) if deadline is not None else start + timeout
+    timed_out = False
+    interrupted = False
+    cleanup_uncertain = False
+    selector = None
+    needs_group_cleanup = True
+
+    def signal_group(sig: int) -> None:
+        nonlocal cleanup_uncertain
+        try: os.killpg(proc.pid, sig)
+        except ProcessLookupError: pass
+        except OSError: cleanup_uncertain = True
+
+    def stop_group() -> None:
+        nonlocal cleanup_uncertain
+        signal_group(signal.SIGTERM)
+        grace = min(.2, max(0.0, deadline - time.monotonic()))
+        if grace:
+            try: proc.wait(timeout=grace)
+            except subprocess.TimeoutExpired: pass
+        signal_group(signal.SIGKILL)
+        try: proc.wait(timeout=max(0.0, deadline - time.monotonic()))
+        except subprocess.TimeoutExpired: cleanup_uncertain = True
+        while time.monotonic() < deadline:
+            try: os.killpg(proc.pid, 0)
+            except ProcessLookupError: return
+            except OSError:
+                cleanup_uncertain = True
+                return
+            time.sleep(.05)
+        try: os.killpg(proc.pid, 0)
+        except ProcessLookupError: pass
+        except OSError: cleanup_uncertain = True
+        else: cleanup_uncertain = True
+
+    try:
+        selector = selectors.DefaultSelector()
+        for label, pipe in (("stdout", proc.stdout), ("stderr", proc.stderr)):
+            os.set_blocking(pipe.fileno(), False)
+            selector.register(pipe, selectors.EVENT_READ, label)
+        while selector.get_map():
+            left = deadline - time.monotonic()
+            if left <= 0:
+                timed_out = True
+                break
+            for key, _ in selector.select(min(left, .1)):
+                block = os.read(key.fd, 8192)
+                if not block:
+                    selector.unregister(key.fileobj)
+                    continue
+                row = captures[key.data]
+                row["hash"].update(block); row["size"] += len(block)
+                room = MAX_LOG - len(row["kept"])
+                if room > 0: row["kept"].extend(block[:room])
+        if timed_out:
+            stop_group()
+            needs_group_cleanup = False
+        else:
+            try:
+                proc.wait(timeout=max(0, deadline - time.monotonic()))
+                # A reaped leader may leave descendants in this owned group.
+                stop_group()
+                needs_group_cleanup = False
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                stop_group()
+                needs_group_cleanup = False
+        drain_deadline = deadline
+        while selector.get_map() and time.monotonic() < drain_deadline:
+            for key, _ in selector.select(min(.1, max(0.0, drain_deadline-time.monotonic()))):
+                block = os.read(key.fd, 8192)
+                if not block:
+                    selector.unregister(key.fileobj); continue
+                row = captures[key.data]
+                row["hash"].update(block); row["size"] += len(block)
+                room = MAX_LOG - len(row["kept"])
+                if room > 0: row["kept"].extend(block[:room])
+        if selector.get_map():
+            signal_group(signal.SIGKILL)
+            final_deadline = deadline
+            while selector.get_map() and time.monotonic() < final_deadline:
+                for key, _ in selector.select(min(.1, max(0.0, final_deadline-time.monotonic()))):
+                    block = os.read(key.fd, 8192)
+                    if not block:
+                        selector.unregister(key.fileobj); continue
+                    row = captures[key.data]
+                    row["hash"].update(block); row["size"] += len(block)
+                    room = MAX_LOG - len(row["kept"])
+                    if room > 0: row["kept"].extend(block[:room])
+            if selector.get_map(): cleanup_uncertain = True
+    except KeyboardInterrupt:
+        interrupted = True
+        stop_group()
+        needs_group_cleanup = False
+    finally:
+        if needs_group_cleanup:
+            stop_group()
+        if selector is not None: selector.close()
+        for pipe in (proc.stdout, proc.stderr):
+            try: pipe.close()
+            except OSError: pass
+    out, err = bytes(captures["stdout"]["kept"]), bytes(captures["stderr"]["kept"])
+    stdout_path.write_bytes(out); stderr_path.write_bytes(err)
+    return {"argv": argv, "exit_code": proc.returncode, "timed_out": timed_out,
+            "interrupted": interrupted, "process_group_cleanup_uncertain": cleanup_uncertain,
+            "elapsed_seconds": round(time.monotonic() - start, 3),
+            "stdout_total_bytes": captures["stdout"]["size"], "stdout_retained_bytes": len(out),
+            "stdout_full_sha256": captures["stdout"]["hash"].hexdigest(), "stdout_retained_sha256": digest(out),
+            "stdout_path": str(stdout_path), "stderr_total_bytes": captures["stderr"]["size"],
+            "stderr_retained_bytes": len(err), "stderr_full_sha256": captures["stderr"]["hash"].hexdigest(),
+            "stderr_retained_sha256": digest(err), "stderr_path": str(stderr_path)}
+
+
+def suite_cleanup_owned(output: Path, run_id: str, cwd: Path, evidence: Path) -> dict:
+    """Independently clean only the exact invocation recorded by the runner."""
+    cleanup_deadline = time.monotonic() + 12
+    record_path = output / "runner-reports" / "owned-invocations" / (run_id + ".json")
+    try: record = json.loads(bounded_read(record_path, 4096))
+    except (OSError, E2EFailure, json.JSONDecodeError) as exc:
+        return {"verified_absent": False, "reason": f"ownership-record-unavailable: {exc}"}
+    if not isinstance(record, dict): return {"verified_absent": False, "reason": "ownership-record-invalid"}
+    name, owner = record.get("name"), record.get("owner")
+    if record.get("schema") != 1 or re.fullmatch(r"esyref-[0-9a-f]{24}", str(name)) is None or re.fullmatch(r"[0-9a-f]{32}", str(owner)) is None:
+        return {"verified_absent": False, "reason": "ownership-record-invalid"}
+    if time.monotonic() >= cleanup_deadline: return {"verified_absent": False, "reason": "suite-cleanup-deadline-expired"}
+    inspect = supervisor(["docker", "container", "inspect", name], cwd, cleanup_deadline-time.monotonic(),
+                         evidence / "owned-inspect.stdout", evidence / "owned-inspect.stderr", deadline=cleanup_deadline)
+    if inspect["interrupted"] or inspect["timed_out"] or inspect["process_group_cleanup_uncertain"]:
+        return {"verified_absent": False, "reason": "owned-inspect-uncertain"}
+    if inspect["exit_code"]:
+        err = bounded_read(Path(inspect["stderr_path"]), MAX_LOG).decode("utf-8", "replace").lower()
+        if "no such container" not in err: return {"verified_absent": False, "reason": "owned-inspect-failed"}
+        if time.monotonic() >= cleanup_deadline: return {"verified_absent": False, "reason": "suite-cleanup-deadline-expired"}
+        listing = supervisor(["docker", "container", "ls", "-a", "--no-trunc", "--filter", "name="+name,
+                              "--format", "{{.Names}}"], cwd, cleanup_deadline-time.monotonic(),
+                             evidence / "owned-list.stdout", evidence / "owned-list.stderr", deadline=cleanup_deadline)
+        if listing["exit_code"] or listing["timed_out"] or listing["interrupted"] or listing["process_group_cleanup_uncertain"]:
+            return {"verified_absent": False, "reason": "daemon-list-query-failed"}
+        names = bounded_read(Path(listing["stdout_path"]), MAX_LOG).decode("utf-8", "replace").splitlines()
+        absent = not any(name in row.split(",") for row in names)
+        return {"verified_absent": absent, "reason": "daemon-confirmed-absent" if absent else "container-name-still-listed"}
+    try: rows = json.loads(bounded_read(Path(inspect["stdout_path"]), MAX_LOG))
+    except (json.JSONDecodeError, E2EFailure): return {"verified_absent": False, "reason": "owned-inspect-invalid"}
+    if not isinstance(rows, list) or len(rows) != 1: return {"verified_absent": False, "reason": "owned-inspect-invalid"}
+    row = rows[0]; labels = (row.get("Config", {}).get("Labels", {}) or {})
+    cid = row.get("Id")
+    if (row.get("Name", "").lstrip("/") != name or labels.get("esy-reference.owner") != owner or
+            re.fullmatch(r"[0-9a-f]{64}", str(cid)) is None or
+            record.get("container_id") not in (None, cid)):
+        return {"verified_absent": False, "reason": "owned-inspect-ownership-mismatch"}
+    if time.monotonic() >= cleanup_deadline: return {"verified_absent": False, "reason": "suite-cleanup-deadline-expired"}
+    removed = supervisor(["docker", "rm", "-f", cid], cwd, cleanup_deadline-time.monotonic(),
+                         evidence / "owned-remove.stdout", evidence / "owned-remove.stderr", deadline=cleanup_deadline)
+    if removed["interrupted"] or removed["timed_out"] or removed["process_group_cleanup_uncertain"]:
+        return {"verified_absent": False, "reason": "owned-remove-uncertain"}
+    if time.monotonic() >= cleanup_deadline: return {"verified_absent": False, "reason": "suite-cleanup-deadline-expired"}
+    verify = supervisor(["docker", "container", "inspect", cid], cwd, cleanup_deadline-time.monotonic(),
+                        evidence / "owned-verify.stdout", evidence / "owned-verify.stderr", deadline=cleanup_deadline)
+    if verify["interrupted"] or verify["timed_out"] or verify["process_group_cleanup_uncertain"]:
+        return {"verified_absent": False, "reason": "owned-verification-uncertain"}
+    if verify["exit_code"]:
+        err = bounded_read(Path(verify["stderr_path"]), MAX_LOG).decode("utf-8", "replace").lower()
+        if "no such container" not in err: return {"verified_absent": False, "reason": "absence-unverified"}
+        if time.monotonic() >= cleanup_deadline: return {"verified_absent": False, "reason": "suite-cleanup-deadline-expired"}
+        listing = supervisor(["docker", "container", "ls", "-a", "--no-trunc", "--filter", "id="+cid,
+                              "--format", "{{.ID}}"], cwd, cleanup_deadline-time.monotonic(),
+                             evidence / "owned-verify-list.stdout", evidence / "owned-verify-list.stderr", deadline=cleanup_deadline)
+        if listing["exit_code"] or listing["timed_out"] or listing["interrupted"] or listing["process_group_cleanup_uncertain"]:
+            return {"verified_absent": False, "reason": "daemon-list-query-failed"}
+        ids = bounded_read(Path(listing["stdout_path"]), MAX_LOG).decode("utf-8", "replace").splitlines()
+        absent = not ids
+        return {"verified_absent": absent, "reason": "daemon-confirmed-absent" if absent else "container-id-still-listed"}
+    return {"verified_absent": False, "reason": "container-still-present"}
+
+
+def docker_inspect(image: str, cwd: Path, evidence: Path) -> dict:
+    argv = ["docker", "image", "inspect", image]
+    row = supervisor(argv, cwd, 20, evidence / "image-inspect.stdout", evidence / "image-inspect.stderr")
+    require(row["exit_code"] == 0 and not row["timed_out"], "real Docker image inspection failed")
+    require(row["stdout_total_bytes"] <= MAX_LOG and row["stderr_total_bytes"] <= MAX_LOG,
+            "Docker image metadata or diagnostics exceeded bounded capture")
+    raw = bounded_read(Path(row["stdout_path"]), MAX_LOG)
+    # The retained log is intentionally bounded; metadata beyond the cap fails.
+    rows = json.loads(raw)
+    require(isinstance(rows, list) and len(rows) == 1, "Docker did not return exactly one image")
+    obj = rows[0]
+    require(obj.get("Id") == image, "Docker image ID differs from --image")
+    require(not obj.get("Config", {}).get("Volumes"), "Docker image declares unexpected volumes")
+    layers = obj.get("RootFS", {}).get("Layers")
+    require(isinstance(layers, list) and layers, "Docker image has no layer inventory")
+    return {"id": obj["Id"], "layers": layers, "config": obj.get("Config", {}),
+            "architecture": obj.get("Architecture"), "os": obj.get("Os"), "inspection": row}
+
+
+def check_expectations(raw: bytes, image: str, runner: Path, dockerfile: Path,
+                       fixture: Path) -> dict:
+    value = json.loads(raw)
+    require(isinstance(value, dict) and value.get("schema_version") == 1,
+            "expectations must use captured schema_version 1")
+    require(value.get("image") == image, "expectation image must equal --image")
+    require(value.get("base_image") == "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+            "expectations do not pin the required base image")
+    require(isinstance(value.get("base_layers"), list) and value["base_layers"], "base layers missing")
+    require(isinstance(value.get("image_layers"), list) and value["image_layers"], "image layers missing")
+    require(value["image_layers"][:len(value["base_layers"])] == value["base_layers"],
+            "captured derivative does not retain base layer prefix")
+    src = value.get("source_sha256")
+    required = {"run_esy_reference.py": runner, "Dockerfile.esy-runtime": dockerfile, "main.ml": fixture}
+    require(isinstance(src, dict), "captured source hash inventory missing")
+    for name, path in required.items():
+        expected = src.get(name)
+        require(isinstance(expected, str) and SHA_RE.fullmatch(expected), f"captured hash missing: {name}")
+        require(digest(bounded_read(path, 1024 * 1024)) == expected, f"reviewed source hash mismatch: {name}")
+    return value
+
+
+def run_case(name: str, case: str, timeout: int, expect_pass: bool, runner: Path,
+             image: str, expectations: Path, output: Path, cwd: Path) -> dict:
+    case_dir = output / "real-runs" / name
+    case_dir.mkdir(parents=True, exist_ok=False)
+    run_id = "e2e-" + name
+    argv = [sys.executable, "-B", str(runner), "--image", image, "--run-id", run_id,
+            "--expectations", str(expectations), "--output-dir", str(output / "runner-reports"),
+            "--case", case, "--timeout", str(timeout)]
+    proc = supervisor(argv, cwd, timeout + 30, case_dir / "runner.stdout", case_dir / "runner.stderr")
+    suite_cleanup = suite_cleanup_owned(output, run_id, cwd, case_dir)
+    require(suite_cleanup.get("verified_absent") is True,
+            f"independent owned-container cleanup failed for {name}: {suite_cleanup.get('reason')}")
+    require(not proc["interrupted"], f"runner supervision was interrupted for {name}")
+    require(not proc["process_group_cleanup_uncertain"], f"runner process-group cleanup is uncertain for {name}")
+    raw = bounded_read(Path(proc["stdout_path"]), MAX_LOG)
+    try: cli = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc: raise E2EFailure(f"{name}: malformed runner CLI output") from exc
+    report = None
+    failures = []
+    if not isinstance(cli, dict) or not isinstance(cli.get("report"), str):
+        failures.append("runner did not return a report path")
+    else:
+        report_path = Path(cli["report"])
+        require(report_path.resolve().parent == (output / "runner-reports").resolve(),
+                "runner report escaped its owned report directory")
+        report_raw = bounded_read(report_path, MAX_REPORT)
+        report = json.loads(report_raw)
+        immutable_write(case_dir / "runner-report.json", report_raw)
+        require(report.get("id") == run_id, "runner report ID mismatch")
+        ownership_path = output / "runner-reports" / "owned-invocations" / (run_id + ".json")
+        ownership = json.loads(bounded_read(ownership_path, 4096))
+        require(ownership.get("schema") == 1 and isinstance(ownership.get("name"), str) and
+                re.fullmatch(r"esyref-[0-9a-f]{24}", ownership["name"]) is not None and
+                re.fullmatch(r"[0-9a-f]{32}", str(ownership.get("owner"))) is not None,
+                "runner ownership record is malformed")
+        require(ownership.get("container_id") == report.get("container_id"),
+                "runner ownership record and report container IDs differ")
+        require(report.get("interrupted") is not True, "runner report records interruption")
+        require(report.get("process_group_cleanup_uncertain") is not True, "runner report records process-group cleanup uncertainty")
+        require(report.get("cleanup", {}).get("verified_absent") is True,
+                "runner lacks daemon-confirmed container cleanup")
+    require(not proc["timed_out"], f"host runner exceeded its bounded deadline for {name}")
+    if expect_pass:
+        require(proc["exit_code"] == 0 and report and report.get("status") == "PASSED",
+                f"{name}: positive invocation did not exit zero with PASSED report")
+        if case in ("positive", "suite"):
+            require(report.get("fixture_hashes", {}).get("main.ml") == digest(bounded_read(runner.parent / "main.ml", 64*1024)),
+                    "reference main.ml bytes changed in runner payload")
+    else:
+        require(proc["exit_code"] != 0 and report and report.get("status") == "FAILED",
+                f"{name}: negative control did not return nonzero with FAILED report")
+        reason = report.get("reason")
+        required_reason = {"wrong-result":"wrong-result-observed","syntax":"syntax-failure-observed",
+                           "timeout":"timeout-observed","output":"output-observed",
+                           "resource":"resource-allocation-failure-observed"}.get(case)
+        if required_reason:
+            allowed = ("resource-allocation-failure-observed", "resource-oom-observed") if case == "resource" else (required_reason,)
+            require(reason in allowed, f"{name}: wrong observed reason {reason!r}")
+            if case == "resource" and reason == "resource-allocation-failure-observed":
+                evidence = report.get("results", {}).get("commands", {}).get("run-resource", {})
+                require(evidence.get("reason") == "allocation-failure" and "Out of memory" in evidence.get("stderr", ""),
+                        "resource failure lacks an OCaml allocation diagnostic")
+            if case == "resource" and reason == "resource-oom-observed":
+                require(report.get("oom_killed") is True, "resource failure lacks Docker OOM confirmation")
+        results = report.get("results", {}).get("commands", {})
+        if case == "wrong-result":
+            require(results.get("compile-wrong-result", {}).get("exit_code") == 0,
+                    "wrong assertion fixture did not compile")
+            require(isinstance(results.get("run-wrong-result", {}).get("exit_code"), int) and
+                    results.get("run-wrong-result", {}).get("exit_code") != 0 and
+                    results.get("run-wrong-result", {}).get("signal") is None and
+                    not results.get("run-wrong-result", {}).get("timed_out") and
+                    "Assert_failure" in results.get("run-wrong-result", {}).get("stderr", ""),
+                    "compiled wrong assertion did not produce its expected OCaml exception")
+        if case == "syntax":
+            require(report.get("fixture_hashes", {}).get("syntax.ml") == digest(b"let broken =\n"),
+                    "syntax fixture bytes differ from the exact required source")
+            diag = results.get("compile-syntax", {}).get("stderr", "")
+            require(re.search(r"(?m)^Error: Syntax error", diag) is not None,
+                    "syntax control lacks the specific OCaml syntax diagnostic")
+        if case in ("timeout", "output", "resource"):
+            control = results.get("run-" + case, {})
+            require(results.get("compile-" + case, {}).get("exit_code") == 0,
+                    f"{case} OCaml control did not compile through esy")
+            if case == "timeout": require(control.get("reason") == "command-timeout", "compiled loop did not hit its deadline")
+            if case == "output": require(control.get("reason") == "command-output-overflow", "compiled output did not overflow the command buffer")
+            if case == "resource" and reason == "resource-allocation-failure-observed":
+                require(control.get("reason") == "allocation-failure", "compiled allocation control lacks allocation failure evidence")
+    return {"id": name, "case": case, "timeout_seconds": timeout,
+            "expected_runner_status": "PASSED" if expect_pass else "FAILED",
+            "actual": {"process": proc, "cli": cli, "report": report,
+                       "independent_suite_cleanup": suite_cleanup}, "passed": True}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--image", required=True)
+    parser.add_argument("--expectations", required=True, type=Path)
+    parser.add_argument("--output-dir", required=True, type=Path)
+    args = parser.parse_args(argv)
+    test_path = Path(__file__).resolve()
+    proposal = test_path.parents[1]
+    runner, dockerfile, fixture = proposal / "run_esy_reference.py", proposal / "Dockerfile.esy-runtime", proposal / "main.ml"
+    candidate = test_path.parents[4]
+    output = args.output_dir.resolve()
+    manifest = {"schema_version": 1, "suite": "ESY_REFERENCE_REAL_DOCKER_E2E", "status": "FAILED",
+                "image": args.image, "started_unix": time.time(), "scenarios": [], "failures": []}
+    manifest_path = None
+    try:
+        require(IMAGE_RE.fullmatch(args.image) is not None, "--image must be immutable sha256 ID")
+        require(not args.expectations.is_symlink(), "expectations cannot be a symlink")
+        expectation_path = args.expectations.resolve(strict=True)
+        require(expectation_path != candidate and candidate not in expectation_path.parents,
+                "expectations must be outside the candidate tree")
+        raw = bounded_read(expectation_path, MAX_EXPECTATIONS)
+        expectation = check_expectations(raw, args.image, runner, dockerfile, fixture)
+        require(output != candidate and candidate not in output.parents, "output directory must be outside candidate")
+        require(not args.output_dir.is_symlink(), "output directory cannot be a symlink")
+        require(not output.exists() or output.is_dir(), "output path must be a directory")
+        output.mkdir(parents=True, exist_ok=True)
+        require(not any(output.iterdir()), "output directory must be empty")
+        manifest_path = output / "scenario-manifest.json"
+        manifest.update({"expectations_path": str(expectation_path), "expectations_sha256": digest(raw),
+                         "runner_sha256": digest(bounded_read(runner, 1024*1024)),
+                         "test_sha256": digest(bounded_read(test_path, 1024*1024)),
+                         "source_hashes": expectation["source_sha256"], "output_dir": str(output)})
+        image_record = docker_inspect(args.image, proposal, output)
+        require(image_record["layers"] == expectation["image_layers"], "actual image layers differ from captured expectations")
+        manifest["image_evidence"] = image_record
+        for name, case, timeout, expect_pass in REQUIRED_RUNS:
+            try:
+                manifest["scenarios"].append(run_case(name, case, timeout, expect_pass, runner,
+                                                       args.image, expectation_path, output, proposal))
+            except BaseException as exc:
+                row={"id":name,"case":case,"expected_runner_status":"PASSED" if expect_pass else "FAILED",
+                     "passed":False,"failure":f"{type(exc).__name__}: {exc}"}
+                manifest["scenarios"].append(row); manifest["failures"].append({"scenario":name,"reason":row["failure"]})
+        for scenario, reason in MISSING_REAL_CASES.items():
+            row={"id":scenario,"passed":False,"evidence_status":"MISSING_FAILED","reason":reason}
+            manifest["scenarios"].append(row); manifest["failures"].append({"scenario":scenario,"reason":reason})
+        require(digest(bounded_read(runner,1024*1024)) == manifest["runner_sha256"], "runner source changed during suite")
+        require(digest(bounded_read(test_path,1024*1024)) == manifest["test_sha256"], "E2E source changed during suite")
+        require(digest(bounded_read(dockerfile,1024*1024)) == expectation["source_sha256"]["Dockerfile.esy-runtime"], "Dockerfile source changed during suite")
+        require(digest(bounded_read(fixture,1024*1024)) == expectation["source_sha256"]["main.ml"], "fixture source changed during suite")
+        if not manifest["failures"] and all(x.get("passed") is True for x in manifest["scenarios"]): manifest["status"]="PASSED"
+    except BaseException as exc:
+        manifest["failures"].append({"suite":f"{type(exc).__name__}: {exc}"})
+    present = {row.get("id") for row in manifest["scenarios"]}
+    for name, case, timeout, expect_pass in REQUIRED_RUNS:
+        if name not in present:
+            failure = "scenario setup failed before invocation"
+            manifest["scenarios"].append({"id":name,"case":case,"timeout_seconds":timeout,
+                "expected_runner_status":"PASSED" if expect_pass else "FAILED","passed":False,
+                "evidence_status":"MISSING_FAILED","reason":failure})
+            manifest["failures"].append({"scenario":name,"reason":failure})
+    present = {row.get("id") for row in manifest["scenarios"]}
+    for scenario, reason in MISSING_REAL_CASES.items():
+        if scenario not in present:
+            manifest["scenarios"].append({"id":scenario,"passed":False,"evidence_status":"MISSING_FAILED","reason":reason})
+            manifest["failures"].append({"scenario":scenario,"reason":reason})
+    manifest["finished_unix"] = time.time()
+    if manifest_path is None:
+        # Validation failures before output ownership cannot safely publish there.
+        sys.stdout.write(json.dumps({"status":"FAILED","manifest":None,"failures":manifest["failures"]},sort_keys=True)+"\n")
+        return 1
+    try:
+        data=canonical(manifest)+b"\n"
+        require(len(data)<=MAX_REPORT*8,"suite manifest exceeds evidence bound")
+        h=immutable_write(manifest_path,data)
+        sys.stdout.write(json.dumps({"status":manifest["status"],"manifest":str(manifest_path),"manifest_sha256":h,"failures":len(manifest["failures"])},sort_keys=True)+"\n")
+    except BaseException as exc:
+        sys.stdout.write(json.dumps({"status":"FAILED","manifest":str(manifest_path),"manifest_write_error":str(exc)},sort_keys=True)+"\n")
+        return 1
+    return 0 if manifest["status"]=="PASSED" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

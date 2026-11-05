@@ -1,0 +1,47 @@
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "parent_revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "source_sha256": "df3260094ed9e55055e13040520900103e765217237c5ec5a62e3b31d13a804e",
+  "input_hashes": {
+    "astra-plan-028.json": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef",
+    "astra-source-review-027.json": "20a80247c67b64381ebd23550a42e55cc5ff7977bfceddf91b13a51b576ae747",
+    "coding-jobs/B1a-Receipt-028/diff.patch": "fa705073916533baed36b96afe3eb53d5cd4ffff17b5662828495700e8a3f743",
+    "coding-jobs/B1a-Receipt-028/independent-validation.json": "5dad97e85c2f21536d9edd44c10516016692f430d778af6a18008e5ccd268359"
+  },
+  "source_card_closed": true,
+  "ownership_source_concern_closed": true,
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "execution_safety_verdict": "Limited source closure only. Full safety acceptance and execution remain blocked by the six known review025 findings, including record-bound, and missing source/environment and outer-wrapper approvals.",
+  "scope": "Reviewed the complete frozen source and exact diff against frozen27 within the finite cooperative SIGINT/SIGTERM and eight fixed lifecycle-scenario contract. Independently verified hashes, all 82 manifest entries (content, size, mode), exact parent-manifest identity, and exact diff. Only the allowed test file changed. No candidate execution, imports, compilation, tests, providers or delegation; wrote only this review.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Receipt-028/frozen/tests/e2e/test_review_adapter_e2e.py",
+  "adapter_hashes": {
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_dispositions": {
+    "B1a-E2E-027-cleanup-outcome-conflation": "Source closed: lines 319-324 derive cleanup solely from observed close/reap/selector outcomes, cleanup errors and interruption; restoration failures enter cleanup_errors. Lines 328-331 still re-raise the preserved primary failure independently.",
+    "B1a-E2E-027-signal-observation-receipt": "Source closed: first_signal initializes null and copies the handler-observed numeric signal or null after restoration (131,147-151,306-312); deliberate KeyboardInterrupt does not invent a signal. signal_attempt.phase initializes null and captures owned immediately before the sole killpg (132,260-263). No-attempt paths retain null.",
+    "B1a-E2E-025-owned-process-lifecycle": "Source concern closed through the cumulative26/27 ownership changes and these final receipt corrections, within the existing finite contract. Runtime acceptance remains open.",
+    "B1a-E2E-026-spawn-handoff": "Prior source closure preserved.",
+    "B1a-E2E-026-interrupted-cleanup": "Prior core source closure preserved; its signal-observation gap is now source closed.",
+    "B1a-E2E-026-finalization-receipt": "Remaining aggregate-cleanup and signal-observation source gaps closed."
+  },
+  "regressions": "None identified in this exact receipt-only diff. Ownership/reap transitions, first-failure persistence, independent close/reap obligations, single two-second cleanup deadline, guarded handler restoration, actual adapters, native sandbox, fixed environment, newline stdin, saved-duration waits, existing limits and closed CLI enum are unchanged.",
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-deadline-race",
+    "B1a-E2E-025-record-bound",
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime evidence exists for this revision. Source closure is not ownership runtime acceptance or full execution approval.",
+    "Resolve the six remaining review025 findings and obtain complete exact-revision source/environment approval plus separate outer-wrapper approval before execution.",
+    "After approval, collect bounded public exit/stdout/stderr and lifecycle.json for all eight existing lifecycle scenarios, with independent outer completion. Verify nonzero primary-failure exits alongside successful cleanup where obligations succeed; owned attempted-signal phase; post-reap no-attempt/null phase; cleanup-interrupt observed numeric SIGINT, preserved setup failure, failed cleanup, and independent resource/reap outcomes. Without an observed OS signal, first_signal must remain null."
+  ]
+}

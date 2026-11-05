@@ -1,0 +1,10 @@
+{
+  "test": "native-no-fork",
+  "fork_denied": true,
+  "posix_spawn_denied": true,
+  "thread_works": true,
+  "exit_code": 0,
+  "profile_sha256": "446562ceacc57219ec3b59ed6374b2bb65dc7cfb4a667e067730d5c35d8a4bf6",
+  "probe_sha256": "93dbfadd877eb065694238b770301e19470274ed989cd0e32772f4711e339fed",
+  "scope": "OS feasibility probe only, not worker acceptance"
+}

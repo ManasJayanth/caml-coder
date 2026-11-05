@@ -1,0 +1,40 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "input_ids",
+    "generator_hash",
+    "config_hash",
+    "seed",
+    "status",
+    "raw_output",
+    "finish_reason",
+    "failure_class"
+  ],
+  "optional": [],
+  "enums": {
+    "status": [
+      "PENDING",
+      "RUNNING",
+      "PASSED",
+      "FAILED",
+      "BLOCKED"
+    ]
+  },
+  "hashes": [
+    "generator_hash",
+    "config_hash"
+  ],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "input_ids": "array",
+    "generator_hash": "string",
+    "config_hash": "string",
+    "seed": "integer",
+    "status": "string",
+    "raw_output": "string",
+    "finish_reason": "string",
+    "failure_class": "string"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "status": "NEEDS_REPLAN",
+  "scope": "Standalone architecture diagnostic; not a T27 pass",
+  "attempts": [
+    {
+      "path": "artifacts/models/adapter-probes/qwen35-adapter-mechanics-001/manifest.json",
+      "sha256": "93725ae4f0da9b4f4852b1d0b348a5334adefb9e68687ffef7721973e2736fe3",
+      "status": "FAILED",
+      "error": {
+        "message": "'memory'",
+        "type": "KeyError"
+      },
+      "stage_progress": [
+        {
+          "elapsed_seconds": 13.812,
+          "stage": "source-verified"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/models/adapter-probes/qwen35-adapter-mechanics-002/manifest.json",
+      "sha256": "cc1c969a01120513d30108e63cd739e67d74b0c768e7e837460a02cd6ec3441e",
+      "status": "FAILED",
+      "error": {
+        "message": "initialized adapter shape/dtype mismatch for language_model.model.layers.16.linear_attn.in_proj_qkv.lora_a",
+        "type": "Invalid"
+      },
+      "stage_progress": [
+        {
+          "elapsed_seconds": 13.337,
+          "stage": "source-verified"
+        },
+        {
+          "elapsed_seconds": 15.672,
+          "stage": "model-loaded"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/models/adapter-probes/qwen35-adapter-mechanics-003/manifest.json",
+      "sha256": "6a08c88e8e026f23d15859520f8c13474cf76daef2c955be2c6128a5520e2bd6",
+      "status": "FAILED",
+      "error": {
+        "message": "[scaled_dot_product_attention] the vector kernels do not produce a logsumexp; the VJP path requires the full-attention kernel.",
+        "type": "RuntimeError"
+      },
+      "stage_progress": [
+        {
+          "elapsed_seconds": 13.965,
+          "stage": "source-verified"
+        },
+        {
+          "elapsed_seconds": 16.348,
+          "stage": "model-loaded"
+        },
+        {
+          "elapsed_seconds": 22.293,
+          "stage": "adapters-installed"
+        }
+      ]
+    }
+  ],
+  "verified": "Run003 resolved all24 intended module paths/shapes and initialized48 F32 adapter tensors with1900544scalars. No completed gradient, optimizer update, unchanged-base proof or adapter reload.",
+  "source_evidence": {
+    "url": "https://raw.githubusercontent.com/ml-explore/mlx/v0.32.4/mlx/backend/metal/scaled_dot_product_attention.cpp",
+    "lines": "1411-1416",
+    "observation": "Query sequence length <=8 enters vector path; multiple outputs requested by backward cause the observed runtime error. Source review, not an executed workaround."
+  },
+  "bounded_proposal": [
+    "After authorized restart use16 fixed synthetic tokens within original32token bound, preserving the failing8token diagnostic as an edge case.",
+    "Keep same real model,24targets,48adaptertensors,twoAdamsteps and finiteness/nonzero-family gradients. Keep full base-bit-identity and reload-logit tolerance1e-4 checks.",
+    "Production training must explicitly handle short inputs and test lengths8/9, valid masking and no semantic padding leakage. Do not silently drop short examples or change pinned runtime.",
+    "No source/dataset approval or training-readiness claim follows from diagnostic success."
+  ],
+  "authorization": "Pending; automatic goal continuations are not repair approval."
+}

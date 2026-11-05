@@ -1,0 +1,206 @@
+{
+  "status": "DEFERRED_UNRESOLVED",
+  "cards": [
+    {
+      "id": "C01_AUTHORITY_AND_ACCOUNTING",
+      "findings": [
+        "C01-R05",
+        "C01-R06",
+        "C01-R09"
+      ],
+      "source_revision_sha256": "e34ce3cbe5274d3e2da43f3ba6a9c2b54e76ec2e9614e6062eab614598b23ed9",
+      "allowed_paths_base": "The isolated source directory containing the reviewed installation's controller.py. Its exact repository mapping must be bound to the reviewed snapshot before future execution authorization; no repository location is inferred here.",
+      "allowed_paths": [
+        "controller.py",
+        "tests/test_controller_cli_e2e.py"
+      ],
+      "path_rule": "Exact relative file paths only; the E2E file is a proposed addition if absent. No other implementation, fixture, configuration or documentation files may be changed.",
+      "coder": "Codex gpt-6-luna",
+      "reviewer": "Codex gpt-6-astra, independently invoked under protected supervision",
+      "budget": {
+        "execution": "DEFERRED",
+        "proposed_future_coding_launch_cap": 1,
+        "authorization": "Requires a new explicit coding and wall-active allocation. Cannot execute under the currently reserved twelve-launch coding budget."
+      },
+      "depends_on": [],
+      "required_behavior": [
+        "Preserve the existing event history and accounting architecture. Normalize legacy kind/bytes manifest rows once into the canonical type/size representation and use that representation throughout validation, initialization, frozen verification and snapshot comparison.",
+        "Require the selected workflow_root to match the installed authority on every public command, including handoff commands.",
+        "Reconcile init accounting, baseline, adopted-input and bootstrap bindings, and started-record installation, policy and provider-schema bindings, against the installed snapshot. Resolve referenced evidence and validate its contents and hashes; matching hash strings alone are insufficient.",
+        "Support an explicit supervisor-authorized compatibility transition for probe refresh. Record old and new bindings, refresh evidence and compatibility determination; preserve all prior history, receipts and consumption. Reject incompatible authority or frozen-input replacement.",
+        "Reconstruct consumption from evidenced imported jobs, local jobs and resumed intervals. Validate interval bounds and durations, evidence coverage and declared totals; reject inconsistent totals, uncovered claimed consumption and conflicting overlaps.",
+        "Deduplicate overlapping imported/local jobs only after reconciling their identities, start evidence, receipts, elapsed times and cleanup outcomes. Preserve all evidenced consumption beyond the seven-launch and 482.411-second floors.",
+        "Define the charged local interval from durable launch reservation through evidence validation and durable completion. Use authoritative start/end evidence and a terminal completion record that is included in the charged interval. Interrupted or incomplete records must remain conservatively accounted and block further dispatch until reconciled."
+      ],
+      "public_cli_e2e_cases": [
+        "Initialize with a valid legacy manifest, verify frozen inputs and replay history without KeyError.",
+        "Reject a foreign workflow root on init and representative non-init commands; reject incompatible accounting, policy, provider-schema, baseline, adopted-input and bootstrap replacements.",
+        "Perform an authorized compatible probe refresh and verify unchanged prior receipts, launch consumption and accumulated active time.",
+        "Reject declared totals below evidenced job/resume consumption, interval durations inconsistent with their bounds, unresolved evidence, coverage gaps and conflicting overlapping receipts.",
+        "In an isolated accounting fixture, reserve launch eight after seven imported launches and verify retention of 482.411 seconds plus all additional evidenced consumption, including resumed intervals.",
+        "Exercise completed and interrupted public launches; verify evidence-validation and durable-completion time is charged, and matching imported/local records are counted once."
+      ],
+      "resolved_allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "resolved_candidate_root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+      "resolution_note": "Supervisor bound generic planner paths to the already-existing reviewed controller and E2E file; no additional source path or new test suite is authorized."
+    },
+    {
+      "id": "C02_REPLAY_AND_REVIEW_RETRY",
+      "findings": [
+        "C01-R01",
+        "C01-R07"
+      ],
+      "source_revision_sha256": "e34ce3cbe5274d3e2da43f3ba6a9c2b54e76ec2e9614e6062eab614598b23ed9",
+      "allowed_paths_base": "The isolated controller source directory bound under C01_AUTHORITY_AND_ACCOUNTING.",
+      "allowed_paths": [
+        "controller.py",
+        "tests/test_controller_cli_e2e.py"
+      ],
+      "path_rule": "Exact relative file paths only; reuse the public CLI E2E file without adding unit tests.",
+      "coder": "Codex gpt-6-luna",
+      "reviewer": "Codex gpt-6-astra, independently invoked under protected supervision",
+      "budget": {
+        "execution": "DEFERRED",
+        "proposed_future_coding_launch_cap": 1,
+        "authorization": "Requires a new explicit coding and wall-active allocation. Cannot execute under the currently reserved twelve-launch coding budget."
+      },
+      "depends_on": [
+        "C01_AUTHORITY_AND_ACCOUNTING"
+      ],
+      "required_behavior": [
+        "Include PLAN_RUNNING and PLAN_FINISHED and every other supported emitted running/finished phase in history validation. Preserve existing transition rules and reject unknown phases or illegal transitions.",
+        "Make each persisted transition replayable by subsequent public commands, including collection and resume.",
+        "Preserve the selected card and its authoritative binding across review FAIL and the resulting CODE_READY transition. Make execute and next_command resolve the same selected card.",
+        "Bind the failed review report and its source/evidence revision into the corrective attempt. Supply its actual findings in the corrective worker prompt; a report path or digest alone is insufficient.",
+        "Carry forward the authoritative unit baseline and accumulated-change binding for consumption by C03_IMMUTABLE_SOURCE_AND_REVISION_GATES."
+      ],
+      "public_cli_e2e_cases": [
+        "Complete public init, plan launch, plan collection, resume and advance to CODE_READY, replaying history after every step.",
+        "Exercise review FAIL, advance, the emitted corrective code command, collection and a second review using supervised fixture workers.",
+        "Verify the corrective worker receives the original selected card and the exact failed review findings with their bindings.",
+        "After C03 is applied, repeat the retry scenario and verify the corrective worker receives the complete accumulated change context."
+      ],
+      "resolved_allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "resolved_candidate_root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+      "resolution_note": "Supervisor bound generic planner paths to the already-existing reviewed controller and E2E file; no additional source path or new test suite is authorized."
+    },
+    {
+      "id": "C03_IMMUTABLE_SOURCE_AND_REVISION_GATES",
+      "findings": [
+        "C01-R02",
+        "C01-R03"
+      ],
+      "source_revision_sha256": "e34ce3cbe5274d3e2da43f3ba6a9c2b54e76ec2e9614e6062eab614598b23ed9",
+      "allowed_paths_base": "The isolated controller source directory bound under C01_AUTHORITY_AND_ACCOUNTING.",
+      "allowed_paths": [
+        "controller.py",
+        "tests/test_controller_cli_e2e.py"
+      ],
+      "path_rule": "Exact relative file paths only; reuse existing snapshot and evidence mechanisms where sound.",
+      "coder": "Codex gpt-6-luna",
+      "reviewer": "Codex gpt-6-astra, independently invoked under protected supervision",
+      "budget": {
+        "execution": "DEFERRED",
+        "proposed_future_coding_launch_cap": 1,
+        "authorization": "Requires a new explicit coding and wall-active allocation. Cannot execute under the currently reserved twelve-launch coding budget."
+      },
+      "depends_on": [
+        "C01_AUTHORITY_AND_ACCOUNTING",
+        "C02_REPLAY_AND_REVIEW_RETRY"
+      ],
+      "required_behavior": [
+        "Create one authoritative immutable unit baseline before the first code attempt. Never replace it implicitly with a retry's immediate workspace.",
+        "Collect every attempt's complete accumulated workspace delta against that baseline, including additions, modifications, deletions and relevant file metadata. Enforce the selected card's allowed paths against that accumulated delta.",
+        "After a failed attempt, retain mutation evidence and block retry when unauthorized changes remain. Require explicit supervised restoration or reconciliation with recorded evidence; ordinary retry must not adopt those changes as a new baseline.",
+        "Give shell-disabled planning workers actual immutable source contents and bootstrap evidence contents. Give review workers original and resulting contents for the complete accumulated change, deleted-file originals, relevant surrounding source and actual required evidence.",
+        "Use a manifest binding every supplied context item to its path, kind, digest and source revision. Apply explicit bounded payload limits; fail closed for missing, unreadable, unrepresentable or oversized required context. Never silently truncate or substitute worker summaries for source or evidence.",
+        "Require review launch input to equal the collected code revision. Bind the review request and result to that exact revision and context manifest.",
+        "Immediately before UNIT_COMPLETE, verify the current workspace still equals the independently reviewed revision and that required context coverage is complete. A syntactically valid PASS alone must never satisfy acceptance."
+      ],
+      "public_cli_e2e_cases": [
+        "Use shell-disabled fixture workers to confirm planning receives source and bootstrap evidence bytes, and review receives modified originals/results, additions, deleted-file contents and surrounding source.",
+        "Cause required review context to omit a changed file or exceed its bound; verify public commands cannot reach UNIT_COMPLETE even if a fixture returns PASS.",
+        "Make a failed code attempt write outside the card, then attempt a successful retry; verify the mutation cannot become an adopted baseline and completion remains blocked until supervised reconciliation.",
+        "Mutate the workspace between code collection and review launch; verify review dispatch is rejected.",
+        "Mutate the workspace after review collection; verify advance cannot complete the unit.",
+        "Exercise failed review followed by corrective code and second review; verify both attempts' accumulated changes are included and only the exact final reviewed revision can complete."
+      ],
+      "resolved_allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "resolved_candidate_root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+      "resolution_note": "Supervisor bound generic planner paths to the already-existing reviewed controller and E2E file; no additional source path or new test suite is authorized."
+    },
+    {
+      "id": "C04_PROVIDER_RUNTIME_AND_CLEANUP",
+      "findings": [
+        "C01-R04",
+        "C01-R08",
+        "C01-R10"
+      ],
+      "source_revision_sha256": "e34ce3cbe5274d3e2da43f3ba6a9c2b54e76ec2e9614e6062eab614598b23ed9",
+      "allowed_paths_base": "The isolated controller source directory bound under C01_AUTHORITY_AND_ACCOUNTING.",
+      "allowed_paths": [
+        "controller.py",
+        "tests/test_controller_cli_e2e.py"
+      ],
+      "path_rule": "Exact relative file paths only. Extend the existing embedded installation/runtime schema; if its authoritative implementation is elsewhere, stop for a separately authorized path amendment.",
+      "coder": "Codex gpt-6-luna",
+      "reviewer": "Codex gpt-6-astra, independently invoked under protected supervision",
+      "budget": {
+        "execution": "DEFERRED",
+        "proposed_future_coding_launch_cap": 1,
+        "authorization": "Requires a new explicit coding and wall-active allocation. Cannot execute under the currently reserved twelve-launch coding budget."
+      },
+      "depends_on": [
+        "C03_IMMUTABLE_SOURCE_AND_REVISION_GATES"
+      ],
+      "required_behavior": [
+        "Define an explicit supervisor-selected authentication/runtime configuration in the existing installation schema. Validate required credential locations, environment inputs and runtime identities before provider spawn.",
+        "Construct the worker environment from an explicit allowlist and the selected arrangement. Keep scratch HOME where appropriate while supplying configured readable credentials; preserve existing user files and deny worker writes to protected authentication inputs.",
+        "Bind configuration identity and nonsecret validation evidence without copying credential values into prompts, history or reports. Reject missing authentication explicitly.",
+        "On timeout, overflow or inherited-pipe cleanup, retain responsibility for the allocated process group after the parent exits. Perform bounded TERM/KILL escalation and verify group termination using available supported mechanisms.",
+        "Persist cleanup uncertainty and affected identities whenever termination cannot be established. Parent reaping or closed streams must not clear the blocker or permit another launch.",
+        "Separate accounting reconstruction from dispatch eligibility so print-handoff reports consumed/remaining budgets, affected job/process-group identities, evidence and cleanup blockers even when dispatch is prohibited.",
+        "Emit shell-quoted handoff commands containing the absolute supervisor-pinned Python executable, absolute installed controller path and required workflow arguments. Preserve interpreter identity validation.",
+        "Do not claim complete descendant tracking or enable unattended dispatch."
+      ],
+      "public_cli_e2e_cases": [
+        "Use fixture credentials and a provider that checks required environment values and reads the configured credential location; verify successful configured startup and explicit rejection when authentication is missing.",
+        "Attempt credential writes from the worker; verify denial and unchanged existing user files, including tracked and untracked protected checkout state.",
+        "Use a parent that exits on SIGTERM while its same-group child ignores SIGTERM and closes its streams; verify confirmed group cleanup or a durable dispatch block.",
+        "Exercise timeout, output overflow and inherited-pipe cases; require informative public handoff output for every uncertain result and rejection of subsequent launch while uncertainty persists.",
+        "Install the validated private Python outside PATH, execute the exact emitted next command under supervision and verify the intended controller and interpreter identity checks are used."
+      ],
+      "resolved_allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "resolved_candidate_root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+      "resolution_note": "Supervisor bound generic planner paths to the already-existing reviewed controller and E2E file; no additional source path or new test suite is authorized."
+    }
+  ],
+  "required_before_controller_acceptance": [
+    "All ten findings remain unresolved until independently verified against repaired source and public CLI evidence. This plan is not acceptance and does not complete the overall task.",
+    "Preserve SUPERVISED_ESY_FIRST. Existing coding allocations remain reserved through launch ten, launch eleven remains for real esy E2Es, and launch twelve remains solely for review-driven esy corrections. Do not borrow an unused reservation for controller work.",
+    "Obtain a new explicit continuation allocation before executing these cards: up to four separately bounded Luna coding launches, with explicit wall-active limits and reconciliation of all previously consumed launches and time. A proposed cap is not authorization; no automatic retry or budget rollover is permitted.",
+    "Before authorizing coding, bind each exact relative allowed path to the reviewed controller snapshot and its absolute isolated location. The supplied findings establish no repository directory for controller.py. If the actual layout requires different files, obtain an explicit revised path allocation rather than guessing or broadening scope.",
+    "Use a separate fresh planner process, Codex gpt-6-luna for coding and Codex gpt-6-astra for independent review. This returned plan does not itself prove process separation or any reviewer invocation.",
+    "Keep controller candidates isolated, unaccepted and unimported. Preserve sound existing control architecture; add no framework. No unattended dispatch is authorized, including during future validation.",
+    "For each card, obtain protected independent Astra diff review before executing changed implementation or tests. Bind approval to the exact candidate source manifest, parent revision, card scope and review evidence.",
+    "Run only public CLI E2Es under continuous root supervision using reviewed fixed commands. Fixture workers and temporary fixture data must be driven through the public CLI; add no unit tests. Controlled fixtures demonstrate behavior but cannot serve as independent acceptance reviewers.",
+    "After all cards, run the combined public CLI acceptance matrix against the exact final candidate, including cross-card retry, accumulated-delta, authority, accounting and cleanup scenarios. Record commands, exit statuses, bounded immutable outputs and exact source/evidence identities.",
+    "Require a final independently protected Astra invocation covering the complete accumulated controller diff and actual E2E evidence. Reconcile every finding explicitly. Worker assertions, reported PASS strings, empty agent waits and approval of an earlier revision are never proof.",
+    "Any post-review source or evidence change invalidates the affected approval and requires fresh bound review. Guarded controller import requires separate independent acceptance of the exact candidate and verification that the protected dirty checkout is preserved.",
+    "The macOS NOTE_TRACK errno45 descendant-tracking limitation remains explicit. These process-group repairs do not remove it or authorize unattended operation.",
+    "Esy work independently retains its pre-execution Astra review, real Docker E2Es, exact-candidate acceptance and guarded-import requirements. Exhausted limits or unresolved acceptance requirements leave the overall work INCOMPLETE."
+  ],
+  "no_changes_authorized_now": true
+}

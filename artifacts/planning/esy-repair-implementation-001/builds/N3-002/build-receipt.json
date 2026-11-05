@@ -1,0 +1,13 @@
+{
+  "status": "BUILT_NOT_ACCEPTED",
+  "started_epoch": 1792662716.21014,
+  "dockerfile_sha256": "f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f",
+  "builder_environment": {
+    "DOCKER_BUILDKIT": "0"
+  },
+  "base_image": "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+  "derivative_image": "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+  "base_layer_prefix_verified": true,
+  "seed_inventory_verified": false,
+  "finished_epoch": 1792662755.981496
+}

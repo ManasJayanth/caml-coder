@@ -1,0 +1,51 @@
+Fresh separate Astra planner. Prior attempt timed out, preserve failure. Validate this fully specified SMALL card, return strict JSON {"approved_card":boolean,"required_adjustments":[],"card":...}. Keep response <=1800words. No tools/code/execution. Actualparenthash supplied; no pendingvalues. This is authoring scope only; root performs independentexecutionreview later. If card too large identify one concrete split, do not designwholefuture architecture.
+{
+  "card_id": "L1-022",
+  "finding_ids": [
+    "C17-03-prerequisite"
+  ],
+  "parent_revision_sha256": "239261f300fc01bac4144a0ef5df186a54561e1bad0909e11d1aa0807ba59097",
+  "input_artifacts": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/parent-manifest.json",
+      "sha256": "239261f300fc01bac4144a0ef5df186a54561e1bad0909e11d1aa0807ba59097"
+    }
+  ],
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+    "tests/e2e/test_esy_lifecycle.py"
+  ],
+  "prerequisites": [
+    "New files absent; existing candidate must remain unchanged.",
+    "No containers; no imports/tests by coder.",
+    "Native worker containment refresh passed; real Pi smoke must pass before launch."
+  ],
+  "required_behavior": [
+    "Standalone supervisor probe CLI: probe --scenario docker-metadata|fork-denial|timeout|caller-eof|output-overflow --state-directory ABS. No production serve/capture/run yet.",
+    "Separate process with caller-only stdin liveness pipe; child stdin DEVNULL, close_fds=True. Supervisor keeps single direct child; tracks waitpid WNOHANG, signals only while unreaped, never signals after reap.",
+    "Child commands are fixed reviewed literals only. Real docker metadata uses /usr/local/bin/docker with --host pinned resolved local unix Docker socket, private HOME/DOCKER_CONFIG, native sandbox-exec deny process-fork and file-write*. No arbitrary executable, argv or endpoint request.",
+    "Process-only probes may use fixed Python -c fixtures under same native nofork rule: try os.fork expecting denial; sleep for timeout/EOF; fixed bounded excessive stdout for overflow. No fake Docker success.",
+    "Record ready.json after direct child creation before test closes parent pipe. Loop caps each stream64KiB, records total counts/retained hashes, monotonictimeout<=10seconds, kills and reaps within5seconds cleanup allowance. Oversize/timeout/EOF are failed probe outcomes even if E2E expects them.",
+    "Require fresh private state dir; immutable report with actualargv/executable/profile hashes, requestedscenario, exit/reason, reaped, retained/totalstreamsizes. Recheck executablehash. No success when failed,truncated or cleanupunverified.",
+    "Public test script CLI: --supervisor ABS --output-dir ABS --scenario client-primitive. It invokes only supervisor subprocesses and checks all5scenario expectedoutcomes. No helperimports/unit tests. Preserve independent unrelated-process canary; verify ownedchild absence plus reapedreceipt. No publicregistryedit yet."
+  ],
+  "forbidden_changes": [
+    "No containers, existing runner/harness edits, dependencies, lockfiles, workflowcontroller, arbitrary command framework.",
+    "No code execution by coding worker."
+  ],
+  "e2e_recipe_ids": [
+    "lifecycle-client-primitive"
+  ],
+  "expected_outcomes": [
+    "metadata and fork-denial: probe success only when authentic command/denial observed.",
+    "timeout, caller-eof, overflow: nonzero probe exit with expectedreason, reapedchild, boundedlogs; E2E row passes only when all predicates match.",
+    "All5requiredrows present once, no skippedtest."
+  ],
+  "evidence_outputs": [
+    "Only two new sourcefiles; supervisor freezesdiff; E2Es after Astra preexecutionreview."
+  ],
+  "stop_conditions": [
+    "Requires additionalpath or unboundedframework.",
+    "Unsupported native policy or Docker metadata configuration."
+  ]
+}

@@ -1,0 +1,251 @@
+Fresh Astra authorization review. Return strictJSON safe_for_high_smoke_and_one_correction boolean, findings. ONLY approve exact thinking=high PiLuna smoke, then ONE coding23 corrective authoring launch if smokepasses, no cleanupuncertainty, parentvalidated and separatefreshplanner suppliesL1correction card. All hosttests/Dockerexecution/import remainprohibited until independentexactsource review. Same model gpt-6-luna (not fallback); installedPi1.3.0 help supports --thinking high. Existingno-forkprofile/guardian unchanged; latestnativeprobe andrealPi smoke passed. Source22has defects and unexecuted; it is the correctionparent, onlytwoL1files allowed. Freshsource-review currentlyrunning and itsfindings must be included in planner card beforedispatch. Newdispatcher differs only by --thinking high; samecap36/32400,22consumed,15ksecremaining. Higherreasoning requested for correcting lifecycle defects; defaultworker produced missing-p andpipecloseerrors. Review current fullsetup and priorproofs below.
+
+FILE launch-pi-card-high.py
+"""Supervised single-card dispatch only; no test execution or import."""
+import hashlib,json,os,shutil,stat,subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent;S=D.parent;R=D/'pi-runtime-v2';job=sys.argv[1];card=Path(sys.argv[2]);round_number=int(sys.argv[3]);assert job.replace('-','').isalnum();assert 22<=round_number<=36
+lock=D/'coding-dispatch.lock';fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600);os.close(fd)
+jobdir=D/'coding-jobs'/job;jobdir.mkdir(parents=True,exist_ok=False);workspace=R/('workspace-'+job);guardian_reaped=False
+try:
+ allocation=json.loads((D/'allocation.json').read_text());remaining=32400-allocation['prior_active_seconds']-(time.time()-allocation['current_turn_started_epoch']);assert remaining>=660,'active budget insufficient'
+ ledger=D/'coding-ledger.json';used=json.loads(ledger.read_text())['coding_launches_consumed'] if ledger.exists() else 21;assert round_number==used+1
+ source=S/'candidate'
+ for p in source.rglob('*'):
+  if p.is_symlink() or not(p.is_dir() or p.is_file()):raise RuntimeError('unsupported source entry')
+ shutil.copytree(source,workspace,copy_function=shutil.copy2)
+ def manifest(root):
+  rows=[]
+  for p in sorted(root.rglob('*')):
+   if p.is_symlink() or not(p.is_dir() or p.is_file()):raise RuntimeError('unsupported entry')
+   if p.is_file():rows.append({'path':str(p.relative_to(root)),'mode':stat.S_IMODE(p.stat().st_mode),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'size':p.stat().st_size})
+  return rows
+ parent=manifest(source);assert parent==manifest(workspace);(jobdir/'parent-manifest.json').write_text(json.dumps(parent,indent=2));(jobdir/'prompt.txt').write_bytes(card.read_bytes());prompt=R/(job+'-prompt.txt');prompt.write_bytes(card.read_bytes())
+ env={k:os.environ[k] for k in ['PATH','LANG','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS'] if k in os.environ};env.update(HOME=str(R/'home'),PI_CODING_AGENT_DIR=str(R/'private-pi'),PI_CODING_AGENT_SESSION_DIR=str(R/'sessions'),PI_TELEMETRY='0',TMPDIR=str(R))
+ argv=['/usr/bin/sandbox-exec','-f',str(D/'pi-nofork-v3.sb'),'/opt/homebrew/bin/pi','--print','--mode','json','--provider','openai-codex','--model','gpt-6-luna','--thinking','high','--no-session','--no-extensions','--no-mcp','--no-skills','--no-prompt-templates','--no-context-files','--no-themes','--no-approve','--offline','--tools','read,edit,write','@'+str(prompt)]
+ spec={'argv':argv,'env':env,'cwd':str(workspace),'output':str(jobdir/'guardian'),'timeout':600,'cap':2097152,'auth_source':'real'};sp=jobdir/'spec.json';sp.write_text(json.dumps(spec,indent=2))
+ with ledger.open('w') as f:json.dump({'coding_launches_consumed':round_number,'coding_launch_cap':36,'reserved_job':job,'epoch':time.time()},f);f.flush();os.fsync(f.fileno())
+ p=subprocess.Popen([sys._base_executable,'-B',str(D/'guardian-v2.py'),str(sp)],stdin=subprocess.PIPE,start_new_session=True)
+ try:p.wait(timeout=615)
+ except subprocess.TimeoutExpired:p.stdin.close();p.wait(timeout=10)
+ receipt=json.loads((jobdir/'guardian/receipt.json').read_text());guardian_reaped=receipt['worker_reaped'];assert guardian_reaped and receipt['credential_removed'],'cleanup unverified'
+ current=manifest(workspace);(jobdir/'result-manifest.json').write_text(json.dumps(current,indent=2));assert manifest(source)==parent,'candidate changed concurrently'
+ before={x['path']:x for x in parent};after={x['path']:x for x in current};changed=[k for k in sorted(set(before)|set(after)) if before.get(k)!=after.get(k)];allow={'artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py','tests/e2e/test_esy_lifecycle.py'}
+ result={'status':'UNACCEPTED','coding_round':round_number,'changed_paths':changed,'scope_valid':set(changed)<=allow,'receipt':receipt,'workspace':str(workspace),'imported':False}
+ shutil.copytree(workspace,jobdir/'frozen',copy_function=shutil.copy2);(jobdir/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+finally:
+ if guardian_reaped:lock.unlink()
+
+FILE pi-smoke-high.py
+import hashlib,json,os,subprocess,sys
+from pathlib import Path
+D=Path(__file__).resolve().parent;R=D/'pi-runtime-v2';work=R/'workspace';(work/'probe.txt').write_text('before\n')
+env={k:os.environ[k] for k in ['PATH','LANG','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS'] if k in os.environ};env.update(HOME=str(R/'home'),PI_CODING_AGENT_DIR=str(R/'private-pi'),PI_CODING_AGENT_SESSION_DIR=str(R/'sessions'),PI_TELEMETRY='0',TMPDIR=str(R))
+argv=['/usr/bin/sandbox-exec','-f',str(D/'pi-nofork-v3.sb'),'/opt/homebrew/bin/pi','--print','--mode','json','--provider','openai-codex','--model','gpt-6-luna','--thinking','high','--no-session','--no-extensions','--no-mcp','--no-skills','--no-prompt-templates','--no-context-files','--no-themes','--no-approve','--offline','--tools','read,edit,write','Use read/edit/write tools to change only probe.txt from before to after, retaining newline. Do not run commands. This is an isolated capability test.']
+spec={'argv':argv,'env':env,'cwd':str(work),'output':str(D/'pi-smoke-high'),'timeout':120,'cap':131072,'auth_source':'real'};sp=D/'pi-smoke-high.spec.json';sp.write_text(json.dumps(spec,indent=2));p=subprocess.Popen([sys._base_executable,'-B',str(D/'guardian-v2.py'),str(sp)],stdin=subprocess.PIPE,start_new_session=True)
+try:p.wait(timeout=135)
+except subprocess.TimeoutExpired:p.stdin.close();p.wait(timeout=10)
+receipt=json.loads((D/'pi-smoke-high/receipt.json').read_text())
+def strict(pairs):
+ out={}
+ for k,v in pairs:
+  if k in out:raise ValueError('duplicate JSON key')
+  out[k]=v
+ return out
+identity=[];parse_error=None
+try:
+ events=[json.loads(line,object_pairs_hook=strict) for line in (D/'pi-smoke-high/stdout').read_text().splitlines() if line.strip()]
+ for e in events:
+  m=e.get('message',{})
+  if e.get('type')=='message_end' and m.get('role')=='assistant':identity.append({'provider':m.get('provider'),'model':m.get('model'),'stopReason':m.get('stopReason')})
+except (ValueError,TypeError) as e:parse_error=type(e).__name__
+checks={'exact_fixture':(work/'probe.txt').read_bytes()==b'after\n','reaped':receipt['worker_reaped'],'exit0':receipt['exit_code']==0,'no_failure':receipt['reason'] is None,'credential_removed':receipt['credential_removed'] and not (R/'private-pi/auth.json').exists(),'model_identity':bool(identity) and all(x['provider']=='openai-codex' and x['model']=='gpt-6-luna' and x['stopReason'] not in ['error','aborted'] for x in identity),'complete_json':parse_error is None}
+result={'status':'PASSED' if all(checks.values()) else 'FAILED','checks':checks,'reported_identity':identity,'guardian':receipt,'profile_sha256':hashlib.sha256((D/'pi-nofork-v3.sb').read_bytes()).hexdigest(),'scope':'isolated provider smoke only'};(D/'pi-smoke-high-result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result));raise SystemExit(0 if result['status']=='PASSED' else 1)
+
+FILE guardian-v2.py
+"""Trusted single-child supervisor; experimental, not accepted workflow control."""
+import base64,json,os,selectors,signal,stat,subprocess,sys,time
+from pathlib import Path
+spec_path=Path(sys.argv[1]); spec=json.loads(spec_path.read_text()); out=Path(spec['output']);out.mkdir(exist_ok=False)
+signal.signal(signal.SIGCHLD,signal.SIG_DFL)
+D=Path(__file__).resolve().parent;runtime=D/'pi-runtime-v2';authdir=runtime/'private-pi';authfd=None;auth_created=False;credential_removed=False
+p=None;sel=selectors.DefaultSelector();logs={'stdout':bytearray(),'stderr':bytearray()};reason=None;reaped=False;status=None;started=time.monotonic();deadline=started+spec['timeout'];exit_deadline=None
+try:
+ for directory in [runtime,authdir]:
+  if directory.is_symlink():raise RuntimeError('symlink directory')
+  directory.mkdir(mode=0o700,exist_ok=True)
+  st=directory.stat()
+  if stat.S_IMODE(st.st_mode)!=0o700 or st.st_uid!=os.getuid():raise RuntimeError('private directory mode/owner')
+ if runtime.resolve()!=runtime or authdir.resolve()!=authdir:raise RuntimeError('path redirection')
+ for ancestor in D.parents:
+  st=ancestor.stat()
+  if st.st_mode & 0o022 and not (st.st_mode & stat.S_ISVTX):raise RuntimeError('writable ancestor')
+ authfd=os.open(authdir,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+ source=Path.home()/'.codex/auth.json' if spec['auth_source']=='real' else D/'tests/fixture-auth.json'
+ if spec['auth_source'] not in ['real','fixture']:raise RuntimeError('unknown auth source')
+ tokens=json.loads(source.read_text())['tokens'];access=tokens['access_token'];body=access.split('.')[1];claims=json.loads(base64.urlsafe_b64decode(body+'='*((-len(body))%4)));expiry=claims['exp']*1000
+ if expiry<time.time()*1000+600000:raise RuntimeError('insufficient access token lifetime')
+ credential={'openai-codex':{'type':'oauth','access':access,'refresh':'','expires':expiry,'accountId':tokens['account_id']}}
+ fd=os.open('auth.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=authfd);auth_created=True
+ try:
+  st=os.fstat(fd)
+  if not stat.S_ISREG(st.st_mode) or stat.S_IMODE(st.st_mode)!=0o600 or st.st_uid!=os.getuid():raise RuntimeError('credential mode/owner')
+  with os.fdopen(fd,'w',closefd=False) as stream:json.dump(credential,stream);stream.flush();os.fsync(fd)
+ finally:os.close(fd)
+ (out/'auth-ready.json').write_text(json.dumps({'credential_mode':384,'private_parent_mode':448}))
+ if spec.get('inject')=='after-auth':raise RuntimeError('injected setup failure')
+ import select
+ if select.select([sys.stdin.buffer],[],[],0)[0] and not os.read(sys.stdin.fileno(),1):raise RuntimeError('launcher absent before spawn')
+ p=subprocess.Popen(spec['argv'],cwd=spec['cwd'],env=spec['env'],stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True)
+ (out/'ready.json').write_text(json.dumps({'guardian_pid':os.getpid(),'worker_pid':p.pid,'started_epoch':time.time()}))
+ sel.register(sys.stdin.buffer,selectors.EVENT_READ,'parent')
+ for pipe,name in [(p.stdout,'stdout'),(p.stderr,'stderr')]:os.set_blocking(pipe.fileno(),False);sel.register(pipe,selectors.EVENT_READ,name)
+ while True:
+  if not reaped:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:
+    reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status
+  if reaped and not any(k.data!='parent' for k in sel.get_map().values()):break
+  if time.monotonic()>=deadline and reason is None:reason='timeout'
+  if reason and not reaped:
+   # This direct child has not been reaped. Its PID cannot be reused.
+   try:os.kill(p.pid,signal.SIGKILL)
+   except ProcessLookupError:pass
+   if exit_deadline is None:exit_deadline=time.monotonic()+5
+  if exit_deadline and time.monotonic()>=exit_deadline:break
+  for key,_ in sel.select(.02):
+   data=os.read(key.fileobj.fileno(),16384)
+   if key.data=='parent':
+    if not data:
+     sel.unregister(key.fileobj)
+     if not reaped:reason=reason or 'launcher-eof'
+    continue
+   if not data:sel.unregister(key.fileobj);continue
+   buf=logs[key.data];left=spec['cap']-len(buf);buf.extend(data[:max(0,left)])
+   if len(data)>left:reason=reason or 'output-cap'
+except BaseException as e:reason='guardian-exception:'+type(e).__name__
+finally:
+ if p is not None and not reaped:
+  try:os.kill(p.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+  until=time.monotonic()+5
+  while time.monotonic()<until:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status;break
+   time.sleep(.01)
+ if authfd is not None:
+  if auth_created and (p is None or reaped):
+   try:os.unlink('auth.json',dir_fd=authfd)
+   except FileNotFoundError:pass
+   try:os.stat('auth.json',dir_fd=authfd,follow_symlinks=False)
+   except FileNotFoundError:credential_removed=True
+  os.close(authfd)
+ sel.close()
+ for k,v in logs.items():(out/k).write_bytes(v)
+ result={'status':'TERMINATED' if reaped else 'CLEANUP_UNVERIFIED','worker_pid':p.pid if p else None,'worker_reaped':reaped,'exit_code':status,'reason':reason,'elapsed_seconds':round(time.monotonic()-started,3),'single_worker_assumption':'requires separately proven native process-fork denial','credential_removed':credential_removed}
+ (out/'receipt.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps(result),flush=True)
+
+FILE pi-nofork-v3.sb
+(version 1)
+(allow default)
+(deny process-fork)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2"))
+(deny network-outbound (remote unix-socket))
+(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))
+(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))
+(deny signal)
+(allow signal (target self) (target children))
+(deny file-read* (subpath "/Users/psac"))
+(allow file-read* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2"))
+(deny file-read* (subpath "/Users/psac/.codex"))
+(deny file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/private-pi"))
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/private-pi/auth.json.lock"))
+(allow file-read-metadata (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts") (literal "/Users/psac/development/prometheansacrifice/ocaml-rl-sft") (literal "/Users/psac/development/prometheansacrifice") (literal "/Users/psac/development") (literal "/Users/psac"))
+
+FILE native-probe-002.json
+{
+  "exit_code": 0,
+  "stdout": "{\"realpath\":true,\"original_denied\":true,\"auth_denied\":true,\"private_write\":true,\"spawn_denied\":true,\"docker_socket_denied\":true}\n",
+  "stderr": "",
+  "invocation": "node -e, unchanged reviewed probe code"
+}
+
+FILE pi-smoke-v3-result.json
+{
+  "status": "PASSED",
+  "checks": {
+    "exact_fixture": true,
+    "reaped": true,
+    "exit0": true,
+    "no_failure": true,
+    "credential_removed": true,
+    "model_identity": true,
+    "complete_json": true
+  },
+  "reported_identity": [
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "toolUse"
+    },
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "toolUse"
+    },
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "stop"
+    }
+  ],
+  "guardian": {
+    "status": "TERMINATED",
+    "worker_pid": 62727,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 7.51,
+    "single_worker_assumption": "requires separately proven native process-fork denial",
+    "credential_removed": true
+  },
+  "profile_sha256": "6f5bd2ea5f14e95d4583167d7362a4a136655c1195b62b3d09448eb2c1b089c7",
+  "scope": "isolated provider smoke only"
+}
+
+INITIAL APPROVAL
+{
+  "safe_for_refresh_and_one_L1_launch": true,
+  "findings": [
+    {
+      "severity": "info",
+      "detail": "Conditional approval for native containment refresh, the exact attached 120-second Pi/Luna smoke, then one supervised authoring launch 22. No unconditional dispatch approval."
+    },
+    {
+      "severity": "required",
+      "detail": "Fresh native evidence under the exact new profile must show workspace realpath success, original pyproject r+ denial without writing, /usr/bin/true spawn EPERM, actual Docker Unix-socket connection EPERM, and successful private-file writing. Prior proofs do not establish containment at the new path."
+    },
+    {
+      "severity": "required",
+      "detail": "Every smoke predicate must pass. Confirm worker reaping and credential removal independently before dispatch. Any failed check or cleanup uncertainty blocks launch."
+    },
+    {
+      "severity": "warning",
+      "detail": "Dispatcher releases its lock when worker_reaped is true even if credential_removed is false. The supervising operator must enforce the cleanup stop; lock absence alone is not clearance."
+    },
+    {
+      "severity": "required",
+      "detail": "Before launch 22, verify consumption remains 21, sufficient active budget remains, and the separate planner card matches L1: standalone direct-child event loop using a public process primitive, metadata and fixed local fixtures. Permit edits only to artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py and tests/e2e/test_esy_lifecycle.py."
+    },
+    {
+      "severity": "warning",
+      "detail": "Dispatcher accepts rounds through 36 and does not validate the planner card or refresh evidence. This approval authorizes only round 22, with no automatic retry, unattended controller, containers, changed-host tests, execution of authored code, or import. Results remain UNACCEPTED pending frozen-diff review."
+    },
+    {
+      "severity": "info",
+      "detail": "Reviewed supplied text only; no tools or code executed. Preservation of original72, indexed1316, prior reviews and proofs, and unchanged guardian/profile functionality beyond relocation relies on supplied assertions and must remain intact."
+    }
+  ]
+}

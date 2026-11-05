@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "scope": "incomplete progress, not model readiness",
+  "reports": [
+    {
+      "path": "artifacts/e2e/progress006-control-001.json",
+      "sha256": "c1723705f32887e6da77a77ebb72808b9db7d1d3f17a7d91b69e0582dc707a8c",
+      "status": "FAILED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 174
+    },
+    {
+      "path": "artifacts/e2e/progress006-eligibility-001.json",
+      "sha256": "38d150f9c2059b185f470d422d1011fe8e85f1ff19164b800ea899681ed86852",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 32
+    },
+    {
+      "path": "artifacts/e2e/progress006-extraction-001.json",
+      "sha256": "0905ce685b8ef90250f9ef081fb43a78f92155389bdc46e570d747635acadaa3",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 60
+    },
+    {
+      "path": "artifacts/e2e/progress006-fetch-001.json",
+      "sha256": "d8d1e28828535cc6f1716e1a8b55446f2af7a867b15afda25b7f92c28298940d",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 61
+    },
+    {
+      "path": "artifacts/e2e/progress006-handoff-001.json",
+      "sha256": "4e94c23e136d62311a58cca8bbcb16b52dbf06b2dd56c6a638efd9b7670e5204",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 18
+    },
+    {
+      "path": "artifacts/e2e/progress006-ledger-001.json",
+      "sha256": "221e4fbc4164d4f76665645ba7b36580af71bfcb5d461f8581505f2cc62cccd2",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 48
+    },
+    {
+      "path": "artifacts/e2e/progress006-models-001.json",
+      "sha256": "ed6749608c50fcc1a7b4bb5eb9dae1d713194de8446be7d97743d84ce66e6286",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 42
+    },
+    {
+      "path": "artifacts/e2e/progress006-preflight-001.json",
+      "sha256": "55a3101782aa5a912f8f2787a563d0bf88e3eabaa40b45baf029d8cc8c1954b8",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 13
+    },
+    {
+      "path": "artifacts/e2e/progress006-splits-001.json",
+      "sha256": "1233f7c9660b817d156322b6892af2d566d04a7d5493d09c322d87c1328553b7",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 34
+    },
+    {
+      "path": "artifacts/e2e/progress006-tokenizer-001.json",
+      "sha256": "acee745362e212a165f54a8b6e270e9f4ebb274ddb65c1197c152b8c55e587b2",
+      "status": "PASSED",
+      "implementation_hash": "20a33d31e9e386b77a5c4aff12f45cd961d45a0d5bf74d7d4c7eb0c3ef9ea118",
+      "assertions": 28
+    }
+  ],
+  "passed_suites": 9,
+  "passed_suite_assertions": 336,
+  "control_failure": "T12C positive scenario is named bonito_conversion; registered card requires bonito-conversion. Proposed fixture repair remains under NEEDS_REPLAN.",
+  "held_cards": [
+    "T10",
+    "T12C-BONITO-CONVERSION"
+  ],
+  "current_workflow_passes": "Earlier passes are STALE because implementation changed; no stale evidence was renewed or held card bypassed.",
+  "download_snapshot": {
+    "verified_cache_bytes": 767,
+    "unverified_partial_bytes": 7540310016,
+    "expected_inventory_bytes": 111816711985,
+    "complete_official_manifest": false
+  },
+  "student_selected": false,
+  "training_performed": false,
+  "model_promoted": false
+}

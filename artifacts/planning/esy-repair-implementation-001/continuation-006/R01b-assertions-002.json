@@ -1,0 +1,20 @@
+{
+  "status": "PASS_REPORTING_CONTRACT_ONLY",
+  "checks": {
+    "status": true,
+    "manifest": true,
+    "scope": true,
+    "scenarios": true,
+    "exit_expected": true,
+    "clean": true,
+    "source": true,
+    "paths_absent": true,
+    "stdout_hash": true,
+    "stderr_hash": true
+  },
+  "external_deadline_seconds": 19,
+  "stream_cap_bytes": 65536,
+  "supervision_source": "preflight-005/probe.py prefix before env initialization; cap replaced from262144 to65536; executed by supervisor inline; exact execution retained in chat tool record",
+  "absence_checks": "os.path.lexists on both paths before and after",
+  "limitations": "No real cleanup runner tests. These explicit assertions supplement but do not replace independent final acceptance."
+}

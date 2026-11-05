@@ -1,0 +1,17 @@
+{
+  "revision_sha256": "c12450764871de533a08a03956c02b233a88c44f5feb7d7e022ccbf334eda09b",
+  "files": [
+    {
+      "path": "scripts/esy-repair/controller.py",
+      "sha256": "63db0b93671ac0af9f3099c6338775b319555350c7cf20bfb3045b0511dbba0f"
+    },
+    {
+      "path": "scripts/esy-repair/codex-worker.sh",
+      "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+    },
+    {
+      "path": "tests/e2e/test_esy_repair_controller.py",
+      "sha256": "24e9afde3fe2df2e8d9fcefae4cdaa4c2ea8200ce62a2825db50db40d2bb9355"
+    }
+  ]
+}

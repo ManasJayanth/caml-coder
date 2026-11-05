@@ -1,0 +1,28 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 28,
+  "approved_card_id": "B1a-Lifecycle-028",
+  "reviewed_plan_sha256": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef",
+  "reviewed_plan_section": "launch_028",
+  "parent_revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one source-authoring attempt for the exact launch_028 card. Scope is limited to separating cleanup success from the primary invocation failure and recording two fixed signal observations in tests/e2e/test_review_adapter_e2e.py. The card preserves failure propagation and lifecycle control flow, adds no execution controls or scenarios, and explicitly leaves the six other findings open."
+    },
+    {
+      "severity": "info",
+      "message": "All six input hashes match. Candidate test hash dd9c4f8fbfab2657582ad36c204d5c8781ce990188b184100b476d5adc406689 matches frozen27. The supplied independent-validation receipt records complete provider/tool/scope/manifest/cleanup validation. Coding27 guardian reports reaped, exit zero, no failure and credential removal. Launcher/guardian/profile hashes remain unchanged; ledger is 27/36."
+    },
+    {
+      "severity": "info",
+      "message": "This is the requested fresh replan after attempts25/26/27. It permits only one further attempt and preserves cumulative attempt history. No additional smoke is requested because root reports unchanged provider/configuration/binaries and continuing valid supervision evidence."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_028, reserve slot28 from ledger27, and use a fresh unique isolated job. Resolve listed input paths against the explicit repository input_path_base without expanding worker access.",
+    "Maintain all previous supervision, exclusive-runtime, credential-absence, complete-manifest and unchanged-control checks. Enforce current reconciled active time, 32400-second/36-launch limits and the launcher's 660-second reserve; do not use the approximate plan checkpoint as fresh accounting.",
+    "Allow only read/edit/write source authoring in the one test file. No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls, extra findings or later-card activation.",
+    "Independently validate provider completion, tools, scope, bindings and cleanup after authoring; freeze the output as UNACCEPTED for exact-revision Astra source review. No import or execution is approved, and later execution retains separate source/environment and outer-wrapper review gates."
+  ]
+}

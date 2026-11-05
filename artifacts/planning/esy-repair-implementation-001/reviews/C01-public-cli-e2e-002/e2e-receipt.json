@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/.venv/bin/python",
+    "-B",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/tests/e2e/test_esy_repair_controller.py"
+  ],
+  "exit_code": 1,
+  "elapsed_seconds": 1.2478789170272648,
+  "reviewed_hashes": {
+    "tests/e2e/test_esy_repair_controller.py": "7dbd8fc9c780794e163dcf6bc02be242c35042b255e40c975739b8499cb46222",
+    "scripts/esy-repair/controller.py": "63db0b93671ac0af9f3099c6338775b319555350c7cf20bfb3045b0511dbba0f",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "stdout_sha256": "4b9d7a283aa3d41d9e63d76fc3774d21852464647239919024dd03200845992f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "acceptance": "NOT_ACCEPTED; controller findings remain unresolved"
+}

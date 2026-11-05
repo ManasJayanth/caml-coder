@@ -1,0 +1,43 @@
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0",
+  "parent_revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+  "source_sha256": "62de4d8beb975d777ab145d5c626d9ade201842e58d0dd5934867132df27646a",
+  "input_hashes": {
+    "astra-plan-030.json": "5f356361dde171ce8a84b81a254f2720ac5c478a191e183b3357c79a43e862c9",
+    "astra-source-review-029.json": "19f9d4fa59f9073b38d13ad97e828d153b899f27d60ce2dca763fb4aba5856ab",
+    "coding-jobs/B1a-Records-030/diff.patch": "a631d342742d6ea61bf5fcad4c427d2bb9723badc9192c90d2c299747da79ef5",
+    "coding-jobs/B1a-Records-030/independent-validation.json": "cfd19f09023c382f7148d7daf129b56264feae01e033e3b95e3947f6c6e5b1b2",
+    "claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_card_closed": false,
+  "safe_for_execution": false,
+  "scope": "Read complete frozen test, plan30, review29, diff and validation. Independently verified all 82 frozen manifest entries by hash, size and mode, parent-manifest binding, exact diff and unchanged adapter hashes. Only the allowed test differs from frozen29. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "raw-record-collector": "Source corrected: binary unbuffered collection retains at most 16385 raw bytes, closes through a context manager, and rejects overflow before splitting or parsing. All four record reads use it; both former read_bytes sites and newline-excluding size calculation are removed.",
+    "public-controls": "Exactly two fixed enum controls use the actual adapter, fixtures, sandbox and shared bounded_run, verifying response and cleanup first. Boundary receipts retain observed bytes, protocol_evaluated=false, original failure and lifecycle state. Required boundary construction is blocked by the finding below.",
+    "prior-source-closures": "Ownership and deadline source closures remain preserved: bounded_run, existing controls, constants, fixed environment, newline stdin and cleanup logic are unchanged. Runtime acceptance remains open."
+  },
+  "findings": [
+    {
+      "id": "B1a-Records-030-boundary-newline-escaping",
+      "priority": "P1",
+      "path": "tests/e2e/test_review_adapter_e2e.py",
+      "lines": [414, 423, 426],
+      "finding": "Both new literals b\"\\\\n\" denote two bytes (backslash and n), not LF. The fixture writes a real LF, so both controls fail at line 414 with unexpected initial record size before exercising either boundary. Independently, line 423 would append twice the required byte count; subtracting that write count makes remaining negative and the next empty write fails. Fixing only the guard is insufficient.",
+      "required_correction": "Use the single-LF byte literal at both sites so the guard matches the real fixture and each padding repetition adds exactly one newline byte. Preserve the capped collector and receipt semantics; obtain fresh exact-revision source review."
+    }
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-per-case-routing (card31)",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "Card30 source closure requires correction of both newline literals; record-bound acceptance remains open.",
+    "No runtime evidence. After all source/environment blockers and separate outer-wrapper approval are resolved, run the public exact-limit, one-over and lifecycle-normal controls and collect bounded receipts plus independent outer completion. Exact-limit must observe 16384 and exit zero; one-over must observe 16385 and fail with record-overflow; both must retain successful actual invocation cleanup and protocol_evaluated=false.",
+    "Per-case deltas31, arity, diagnostics and result receipt work remain pending. Prior ownership/deadline runtime obligations remain open."
+  ]
+}

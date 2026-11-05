@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "stage": "model_assets",
+  "kind": "official",
+  "repo_id": "BatsResearch/bonito-v1",
+  "revision": "0b70064ffa8956ab6bec867b87fc85762dd26d81",
+  "files": [
+    {
+      "path": "tokenizer.json",
+      "sha256": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+      "max_bytes": 1795303
+    },
+    {
+      "path": "tokenizer_config.json",
+      "sha256": "721b201f5b5f152cb662e7844ab980fc908a49a1d84b1c6266bf653460a6ece6",
+      "max_bytes": 953
+    },
+    {
+      "path": "special_tokens_map.json",
+      "sha256": "ee44c53d80823df437070f5297210fa0f4ca17a822aafdf89829a4b755a2ff3c",
+      "max_bytes": 145
+    },
+    {
+      "path": "added_tokens.json",
+      "sha256": "d606246b713e31b1b43dfe913554dd47819089b9e44b9ebaa294eda2589a6b4c",
+      "max_bytes": 42
+    },
+    {
+      "path": "config.json",
+      "sha256": "e40be983c285b6e3f9a327bdcf30813ac6b65f067bcd6e35e1a26c1ee5ea6f6e",
+      "max_bytes": 614
+    }
+  ],
+  "special_tokens": {
+    "<s>": 1,
+    "</s>": 2,
+    "<unk>": 0
+  },
+  "protocol_tokens": {
+    "<|tasktype|>": [
+      523,
+      28766,
+      5553,
+      1123,
+      28766,
+      28767
+    ],
+    "<|context|>": [
+      523,
+      28766,
+      2714,
+      28766,
+      28767
+    ],
+    "<|task|>": [
+      523,
+      28766,
+      5553,
+      28766,
+      28767
+    ],
+    "<|pipe|>": [
+      523,
+      28766,
+      12911,
+      28766,
+      28767
+    ]
+  },
+  "probe_texts": [
+    "Hello",
+    "let greet name = \"Hello, \" ^ name",
+    "(* Unicode: λ café *)\nlet x = 42",
+    "<|tasktype|>question answering without choices<|context|>let x = 1<|task|>"
+  ]
+}

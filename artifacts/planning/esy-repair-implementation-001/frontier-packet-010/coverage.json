@@ -1,0 +1,93 @@
+{
+  "required_parts": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-000.txt",
+      "bytes": 1609,
+      "sha256": "63181bdb4116144ddf147c0f178eaaac08cf270726f8821a85f96905d27ce285"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-001.txt",
+      "bytes": 26559,
+      "sha256": "e748e3be9f2028ac017d76bf307cc824c0b7a98c0897dc7bfdbc2897c9e49f73"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-002.txt",
+      "bytes": 115341,
+      "sha256": "541781f55620033ad0a290329d5ea3fc1a344d584769b87bb67c859a4edd7619"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-003.txt",
+      "bytes": 70810,
+      "sha256": "078db94795f232934141cb1229bd3a16aecd0da08771f61ce4ab8fb31e45901d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-004.txt",
+      "bytes": 2121,
+      "sha256": "42defac169dba40c2075d13b069201ce17a31c7aebaedb51fb9c79414bc8ced9"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-005.txt",
+      "bytes": 3069,
+      "sha256": "4623fefeb07ef16c1d918d22cc296e5175e292718db83e60332137e7c7946e90"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-006.txt",
+      "bytes": 170982,
+      "sha256": "68239327204b6e3ef5dfe3e156879ba9dc601d0717d2cdb5e80040fd3f8c560f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-007.txt",
+      "bytes": 1241,
+      "sha256": "d98fdf4478ca0da36c3ac07c2e3cc525822925ec84953e1c9d3660c27f195850"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-008.txt",
+      "bytes": 12560,
+      "sha256": "f818be8f11c1ec4bea553116dad3449ebc491661e39e100e0afb2e592c436405"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-009.txt",
+      "bytes": 47237,
+      "sha256": "2c2851cf1f78dad78335aac347362f9264d3db54173015f5f911f43ee32758df"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/source-010.txt",
+      "bytes": 62348,
+      "sha256": "309f0f4642e1958e25f44d2aa421b044f8c8c6a842054a6f048e9fa2d2f38d9e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/review-history.txt",
+      "bytes": 112346,
+      "sha256": "c4e47aea4e74d739e9e18cbbbfb6af2b64531c3e22832b0b1f3d61c3d4fa4eac"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/separate-frontier-cards.txt",
+      "bytes": 145817,
+      "sha256": "7c51ecfe7df45f1ab12072199493f011609077653f30cf89b585af9ff6bba3aa"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-010/inline-orchestration.txt",
+      "bytes": 114835,
+      "sha256": "8d28233f4112d0a78b77d56fa3401ca7ff43eb2c3fc9b1b321b435d01806592d"
+    }
+  ],
+  "historical_context": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/FRONTIER_HANDOFF-009.txt",
+      "bytes": 76330,
+      "sha256": "60d8eddb52569b3bd014d39904aa328934ef6dc322b65bf3954dc890cc89d52d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/handoff-008-subagent-review.json",
+      "bytes": 11801,
+      "sha256": "46cef73372975707f9f7f901c5e3efc30807d06ca3635a70504d9828b45a9368"
+    }
+  ],
+  "authorized_original_plan": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/authorized-plan.txt",
+    "bytes": 25299,
+    "sha256": "760cf01e6405ca75b3ae30a25fc4c109236868ca516656276aad22e300601c7e"
+  },
+  "latest_override": "Use Codex Astra in a separate agent; Claude unavailable. No Fable fallback.",
+  "coverage_limit": "Reviews025-036 are source-card reviews only, through explicit user-authorized separate Astra agents. They do not satisfy final CLI-through-adapter review, public E2E, broader controller/source coverage or final acceptance. Read every indexed required part; unread context is BLOCKED."
+}

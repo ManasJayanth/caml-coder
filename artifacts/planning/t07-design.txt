@@ -1,0 +1,350 @@
+T07 eligibility design (planning only)
+======================================
+
+Purpose and scope
+-----------------
+
+T07 should produce a deterministic *candidate* eligibility decision for each
+file in the immutable official-stable-sources-002 snapshot. It is a gate for
+content ingestion, not a legal opinion, compiler compatibility result, or
+approval to generate training data. Source eligibility and actual version
+compatibility are separate facts. Even an eligible candidate stays out of the
+generation corpus until an exact reviewed decision exists and the matching
+toolchain profile has passed the later offline reference-build gate.
+
+Use only these authority inputs: config/sources.json, the fetched snapshot's
+manifest and bytes, and artifacts/decisions/melange-user-confirmation-20261016.json.
+The last file is the user's permission decision for the pinned Melange snapshot;
+it does not identify an SPDX license and does not approve pilot/data/training.
+Never fetch moving refs while preparing eligibility.
+
+Evidence observed in official-stable-sources-002
+------------------------------------------------
+
+The snapshot pins esy at 4afe7a5fba92ff1b7dc168bc63e6d06155ff1a7a, OCaml.org at
+9b36b51e0b0155c613f19c5b5177228ae5b0446c, Melange docs at
+107c594b44d01f066e853efeda3e38b09fe1d687, and Reason docs at
+046babf98f91aad42cb015a9e98adad3f412325d. Its manifest contains 33 esy,
+63 OCaml, 21 Melange, and 53 Reason entries, including each domain's license
+file(s). The snapshot manifest itself is hash-bound by the user confirmation
+for Melange (34f156d8f5f60a42f4cc8a41184576eae10fe763c2b4735d433f1c03a7825c17).
+
+License evidence and allowed categories:
+
+* esy/LICENSE explicitly says BSD 2-Clause for esy. Treat that as repository
+  content evidence only when no file-local/embedded notice overrides it. The
+  handbook includes a community page, contribution docs, and docs with
+  embedded/license references; those are excluded or handled per path/content
+  below, not made eligible merely by the repository license.
+* OCaml.org/LICENSE explicitly distinguishes content prose (CC BY-SA 4.0),
+  code examples (UNLICENSE), site implementation (ISC), site design (all
+  rights reserved), logo (UNLICENSE), and contributor-retained abstracts and
+  slides. Eligible tutorial prose and code therefore need distinct
+  `license_category` evidence and attribution/share-alike handling. Never
+  apply ISC to tutorial text. Check LICENSE-3RD-PARTY and any local notices;
+  third-party material with ambiguous scope is quarantined.
+* reason/LICENSE.txt says MIT. It is the source's repository-level evidence;
+  a file that is only a redirect or community link still fails the content
+  policy. The repo's historical references to ReScript are not themselves a
+  different source domain.
+* The Melange repository has no license file among the pinned manifest files.
+  Record evidence category `user_confirmed_copyright_free`, authority
+  `artifacts/decisions/melange-user-confirmation-20261016.json`, statement
+  hash / decision ID, and `spdx_license: null`. Do not translate “copyright
+  free” into MIT, CC0, public domain, or any SPDX identifier. That decision
+  supersedes the prior permission blocker for this snapshot only. A local
+  file notice such as the MIT notice embedded at the start of
+  `docs/bindings-cookbook.md` is additional file evidence and its attribution
+  must be retained; it must not be generalized to all Melange files.
+
+Candidate include/exclude rules by domain:
+
+* esy: only manifest entries below `docs/`. Candidate include explanatory
+  concepts, configuration, commands, environment, dependency/build workflows,
+  compiler setup and getting-started material where its concrete instructions
+  are compatible with the eventual esy/NPM compiler profile. Exclude
+  `docs/community.md`, `docs/contributing.md`, and
+  `docs/contributing/**` (community/contributor/maintenance rather than user
+  coding guidance). Exclude material explicitly labeled deprecated or
+  superseded, including the deprecated portions of `docs/concepts.md`; if a
+  deprecated section can be isolated only after Markdown extraction, mark the
+  file mixed and require section-level review instead of silently accepting
+  the stale instructions. `docs/ocaml-compiler.md` is experimental and
+  `docs/opam-workflow.md` has experimental guidance: quarantine pending a
+  reviewer and offline profile proof. `docs/getting-started.md` mentions
+  community in a contact aside but otherwise contains substantive user setup;
+  do not reject it from keyword matching.
+* OCaml: only manifest entries below `data/tutorials/`. Include tutorial,
+  language, guide, platform and configuration/reference material after
+  section-level version review. Exclude the three `guides/rs_*` entries
+  (`rs_00_guidelines.md`, `rs_01_common_error_messages.md`,
+  `rs_02_comparison_of_standard_containers.md`) because these are Reason
+  guidance, not native OCaml-domain material; they may be reconsidered under
+  Reason only with its own source/license/version evidence. Explicitly exclude
+  stale/deprecated/obsolete material and unrelated community/contributor
+  sections. Known review flags in this snapshot include the deprecated
+  editor setup `getting-started/2_00_editor_setup.md`, obsolete profiling
+  guidance `guides/1wf_03_profiling.md`, obsolete `guides/rs_00_guidelines.md`,
+  the deprecated loop section of `language/0it_02_loops_and_recursion.md`,
+  deprecated metaprogramming sections in `language/4ad_00_metaprogramming.md`,
+  and old compiler frontend references in
+  `language/5rt_02_compiler_frontend.md`. These flags mean exclude a clearly
+  marked obsolete section or quarantine for review; do not exclude a whole
+  otherwise-current tutorial merely because it discusses an old version in
+  a historical comparison. For OCaml files retain separate text/code
+  categories, and reject any third-party license category not in the explicit
+  allowlist.
+* Melange: only manifest entries below `docs/`. Candidate include tutorials,
+  language, build, package and JS-interop guidance when scoped to the pinned
+  stable release and later reference builds pass. Exclude `docs/community.md`
+  and roadmap/community planning from training questions; quarantine
+  `docs/roadmap.md` as time-sensitive planning, and any experimental content
+  (including the getting-started page's experimental scaffold directions)
+  until reviewer disposition. The word “ReScript” alone is not a rejection:
+  examples use Reason syntax and some docs compare predecessor BuckleScript /
+  ReScript. Mark a file `rescript_relation` as `none`, `historical_context`,
+  `comparison`, or `ambiguous`; quarantine only when task substance teaches
+  ReScript behavior or cannot distinguish the compiler/runtime. Review
+  flags include the explicitly deprecated portions of
+  `attributes-and-extension-nodes.md`, `how-to-guides.md`, and
+  `language-concepts.md`; don't blanket exclude a whole file if stable parts
+  can be separated. `bindings-cookbook.md` has a separate embedded MIT notice
+  and an upstream cookbook reference; retain that notice/attribution and
+  inspect copied-material scope before any reviewed inclusion.
+* Reason: only manifest entries below `docs/`. Include substantial language,
+  module, type, syntax, interop, Dune/esy and current tooling explanations.
+  Exclude `community.md`, `events.md`, `articles-and-videos.md`,
+  `draft-blog-posts.md`, and contributor/community-only portions. Treat
+  one-paragraph files such as `boolean.md`, `if-else.md`, `imperative-loops.md`,
+  `integer-and-float.md`, `list-and-array.md`, `more-on-type.md`, `mutation.md`,
+  `null-undefined-option.md`, `promise.md`, `quickstart-javascript.md`,
+  `regular-expression.md`, `string-and-char.md`, and `tuple.md` as redirect
+  stubs when their body is only a link/forwarding notice: exclude with
+  `redirect_stub`, don't mistake their `.md` extension for usable content.
+  `converting-from-js.md`, `libraries.md`, `faq.md`, and `what-and-why.md`
+  mention ReScript / historical npm packages; classify their relation and
+  keep only substantive Reason guidance that clearly identifies the current
+  target. Exclude legacy-only npm advice called outdated in `libraries.md`;
+  do not exclude current OCaml/opam guidance adjacent to it.
+
+These rules define initial candidate outcomes, not manual review outcomes.
+The file flags above are based on text at the pinned paths; all otherwise
+eligible files remain pending review until the reviewer records exact spans,
+reason and evidence hash. Keyword scans can surface review flags but cannot
+alone decide eligibility.
+
+Version/profile policy
+----------------------
+
+Keep source revision and runnable toolchain profile as separate version
+dimensions. For each source record the immutable repository revision and, if
+available in the fetch record, the stable release/tag ref and its peeled commit
+as source-version evidence. The source commit is not automatically a claim
+that every command/API in its docs works today. For every candidate passage,
+record `version_scope`: `current_candidate`, `historical_context`, `obsolete`,
+`experimental`, `mixed`, or `unknown`, plus extracted version statements and
+the profile ID(s) the text claims to describe. A file with old+current material
+is `mixed` pending extraction/review. Explicitly marked obsolete material is
+excluded; unknown or ambiguous temporal scope is quarantined. Preserve
+historical comparisons only when labelled as such and not presented as
+instructions to follow.
+
+Toolchain profiles must be named and versioned per Plan: native OCaml/Reason/
+Melange/Dune, and esy with its independent NPM compiler package. T07 may bind a
+candidate to a planned profile ID, but must not call the profile compatible or
+the candidate reviewed. Before `prepare` emits model-facing content, require
+the exact profile's T12 offline reference-build evidence, exact lock/container
+digest, and a hash-bound content review. A missing profile, moving version,
+unproven version or no reference-build receipt leaves content non-usable.
+Do not invent current version numbers in T07; select and prove them in the
+toolchain work card.
+
+Strict producer config proposal for config/sources.json
+-------------------------------------------------------
+
+Use `schema_version: 2`, `kind: official`, and a closed schema with `additionalProperties:
+false` at every object. Make each source object contain exactly:
+
+`domain`, `repository`, `revision`, `prefixes`, `source_version`,
+`license_evidence`, `include_rules`, `exclude_rules`, `planned_profile_ids`.
+
+`source_version` contains `kind` (`stable_tag_commit`, `pinned_commit_only`,
+or `user_decision_scope`), `ref` (nullable), and `resolved_commit` (must equal
+the pinned commit for stable tag evidence; null for absent evidence). Melange
+must state `user_decision_scope`, with `ref:null` and commit pinned separately.
+
+`license_evidence` is a list of closed records with `category`, `evidence_path`
+(inside pinned snapshot or repository-relative decision path),
+`evidence_sha256`, `scope` (`repository_content`, `prose`, `code_example`,
+`embedded_notice`, `third_party`, `user_decision`), `spdx_license` (nullable),
+and `requires_attribution` / `requires_share_alike` booleans. Categories are
+an enum such as `BSD-2-Clause`, `CC-BY-SA-4.0`, `UNLICENSE`, `ISC`, `MIT`,
+`user_confirmed_copyright_free`, `unknown`, `third_party_unresolved`;
+`category` is evidence vocabulary and is not permission to infer SPDX.
+Every manifest file must resolve to one explicit evidence record or a
+quarantine rule. File-local evidence overrides repository inheritance and
+unresolved conflicting notices quarantine.
+
+`include_rules` and `exclude_rules` use only literal normalized relative paths
+or directory prefixes plus explicit `reason` and optional `review_required`;
+no free-form shell/glob expressions, network locations or implicit defaults.
+Unknown path, domain, license category, version/profile ID or config key is a
+hard error. Domain is an enum of exactly `esy`, `ocaml`, `melange`, `reason`;
+each manifest path must have exactly one domain match and remain within its
+configured prefix. An unmatched/overlapping rule is an error, not a default
+allow.
+
+Eligibility output contract
+---------------------------
+
+Write a canonical JSONL file under the explicit run's immutable prepare
+directory; one record per manifest content file, sorted by domain then path.
+Include license files in a separate evidence index, not as candidate content.
+Each row has `schema_version`, `snapshot_id`, `snapshot_manifest_sha256`,
+`source_domain`, `repository`, `revision`, `source_path`, `artifact_path`,
+`source_file_sha256`, `license_evidence_ids`, `license_category`,
+`spdx_license` (nullable), `version_scope`, `version_claims`,
+`profile_ids`, `rescript_relation`, `candidate_status`, `reason_codes`,
+`review_status`, `review_ref`, and `record_sha256`.
+
+Allowed `candidate_status`: `candidate_include`, `candidate_exclude`,
+`quarantine`. Allowed `review_status`: always `pending` at T07. Reviewer
+disposition later is a distinct immutable record keyed to the exact row hash;
+it can be `reviewed_include`, `reviewed_exclude`, or `reviewed_quarantine`.
+There is no `eligible` or `approved` state in the T07 output. The prepare
+consumer accepts only `reviewed_include` plus exact offline profile evidence;
+it checks source, file, config, snapshot and decision hashes before use.
+Candidate outputs never overwrite prior run evidence. Any input or config
+change makes dependent receipts stale.
+
+Use stable machine reason codes including `path_out_of_scope`,
+`domain_mismatch`, `license_unknown`, `license_conflict`,
+`third_party_scope_unknown`, `user_decision_hash_mismatch`,
+`obsolete_guidance`, `experimental_guidance`, `version_unknown`,
+`profile_unproven`, `rescript_ambiguous`, `rescript_target_content`,
+`community_or_contributor`, `draft_content`, `redirect_stub`,
+`non_instructional_or_navigation`, and `malformed_source`. Preserve a human
+explanation and source span for each content-based decision. Never drop a
+manifest file without emitting a decision or explicit non-content evidence
+classification.
+
+CLI prepare dispatch
+--------------------
+
+Keep the public command as `./scripts/sft prepare --run-id ID --config
+config/sources.json` with strict required arguments and closed producer config.
+The dispatcher resolves the exact completed fetch manifest, validates config
+and snapshot hashes before writing anything, then runs eligibility against
+only manifest-listed regular files. It writes resolved config/hash, candidate
+JSONL and a summary containing counts by domain/status/license/version flag;
+then prints those paths and exits 0 for a complete candidate pass even when
+individual records are quarantined. Missing fetch evidence, bad config,
+unknown fields, hash mismatch, path traversal/symlink/non-manifest input, or
+incomplete output is a nonzero failure with no committed result. Generation
+and chunking commands must refuse candidate-only content. Prepare must not
+invoke Bonito or any model. Keep `src/sft/eligibility.py` as the policy
+evaluator; `src/sft/cli.py` dispatches it. Since current CLI has only command
+stubs and T07 scopes no CLI file, a separate tiny T07a card should own
+`prepare` dispatch if it cannot be implemented within the existing card/file
+budget; do not silently expand T07's allowed files.
+
+E2E cases for `eligibility`
+--------------------------
+
+Positive cases:
+
+1. Complete pinned fixture snapshot with 4 domains; substantive current
+   tutorial entries emit `candidate_include`, exact manifest hashes, license
+   evidence ID and `review_status=pending`.
+2. OCaml tutorial prose and code blocks produce separate CC BY-SA and UNLICENSE
+   evidence categories and retain attribution/share-alike flags without
+   calling either the site ISC.
+3. Melange evidence accepts only the exact user decision + exact snapshot hash,
+   outputs `user_confirmed_copyright_free` and null SPDX; embedded cookbook
+   notice is preserved as separate MIT evidence.
+4. Current Reason language content with a historical ReScript comparison gets
+   `historical_context`, not ReScript-domain misclassification.
+5. Rerunning same immutable input/config yields byte-identical output;
+   review receipt for exact candidate hash stays separate from candidate row.
+
+Negative/quarantine cases:
+
+1. Unknown or conflicting license, missing evidence, third-party ambiguity,
+   Melange decision for another commit/hash, or fabricated SPDX -> quarantine
+   or hard config/evidence failure; never include.
+2. Unknown domain, overlapping/unmatched prefixes, unknown field/category/
+   profile, unpinned or floating revision -> fail closed.
+3. Explicitly obsolete OCaml profiling / guidelines or deprecated guidance,
+   experimental material, Reason draft, community/contributor-only pages,
+   redirect-only Reason stub, ReScript-targeted example -> exclude or
+   quarantine with the expected reason, never a positive include.
+4. A body merely mentioning “community”, “deprecated”, “ReScript”, or an old
+   version in a negation/comparison must not be auto-excluded by substring;
+   it becomes a review flag with excerpt. Positive control: esy getting-started
+   has a community contact aside but substantive setup.
+5. Missing/unproven toolchain profile or absent offline reference-build
+   receipt means prepare cannot create model-facing docs, even if the source
+   candidate is included.
+6. Symlink, `..` traversal, unmanifested file, mutated source bytes, duplicate
+   manifest paths or malformed JSON fails closed and commits no candidate set.
+
+Card dependency repair and small follow-on cards
+------------------------------------------------
+
+Current cards T01-T11 run before T12 model acquisition. T10 explicitly needs
+the actual Bonito tokenizer, but T10 precedes T12, which pins/downloads the
+models. This is a real blocker/cycle in the workflow, not a model's
+implementation failure. Keep T07 early (it needs only T06 snapshot evidence),
+then arrange the document pipeline as:
+
+T06 fetch -> T07 eligibility -> T08 extraction -> T09 grouping -> T12 model
+pin/acquisition -> T10 tokenizer-aware chunking -> T11 attempts.
+
+Because the plan says ordered deliverables T01-T11 then T12-T22, T10 must
+either be split or T12 moved ahead of T10 in the dependency graph and `work
+next` must use dependency readiness rather than ordinal order. A clean split:
+
+* T10a: bounded extraction-to-chunk-structure and grouping handoff; only
+  tokenizer-independent structural validation, with no claims about token
+  bounds. Depends on T09.
+* T12: pin/acquire/verify Bonito and teacher assets (existing card).
+* T10b: count with the verified Bonito tokenizer; enforce whole-code and
+  prerequisite context bounds. Depends on T10a + T12.
+* T11: attempts ledger; depends on T10b.
+
+The plan also says “eligible only after toolchain proof,” but T12 is the model
+card, while the toolchain card T14 comes later. Do not block metadata
+eligibility on T14 if that would create a cycle with corpus preparation.
+Instead use two gates: T07 emits candidates; later `prepare` finalization /
+T14 receipt makes a reviewed candidate usable. Split T07 implementation from
+producer dispatch if needed:
+
+* T07a eligibility policy/config/schema + record contract + file/path/license/
+  version classification E2Es. Depends on T06; no model/toolchain claim.
+* T07b `prepare` dispatcher + reviewed-decision/profile-evidence enforcement
+  and CLI E2Es. Depends on T07a and the profile receipt interface from T14;
+  it may be coded earlier against a frozen receipt contract but cannot pass
+  its real integration E2E until T14 has evidence. No generation before then.
+
+The whole T07 goal can be recorded only after required eligibility E2Es prove
+candidate distinction and prepare refuses candidate-only/unproven-profile
+content. If cards remain indivisible, amend dependencies to make T07 depend on
+T14 and allow scheduler to pick ready T08/T09/T12 first, but then T08/T09
+should consume only the reviewed file inventory and preserve quarantined
+decisions. Prefer T07a/T07b because it keeps immutable candidate inventory
+available for extraction while withholding it from model-facing generation.
+
+Additional bounded sequencing fixes for card owners (not edits here):
+
+* T09's grouping expects extracted text from T08; preserve source/file lineage
+  through extraction and do not split/quarantine an entire source's ancestry.
+* T10 token counting cannot be accepted on a fake tokenizer; real Bonito
+  tokenizer files and exact hash must exist first (T12).
+* T14 toolchain/profile proof should precede final prepare/corpus usability,
+  pilot generation, and any assertion that current-version docs compile.
+* Candidate/reviewed eligibility and T14 toolchain receipts must be explicit
+  prerequisites of T16/authoring and T17 generation so provisional docs
+  cannot leak into generation.
+
+No production changes, source fetches, installs, model downloads or model
+calls are part of this design artifact.

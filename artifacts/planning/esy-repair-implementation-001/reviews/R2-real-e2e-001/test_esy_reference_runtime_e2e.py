@@ -1,0 +1,883 @@
+#!/usr/bin/env python3
+"""Black-box Docker E2E matrix for run_esy_reference.py.
+
+Run from any directory with an immutable local image ID, a reviewed JSON
+expectation document, and an output directory outside the candidate checkout:
+
+  python3 -B test_esy_reference_runtime_e2e.py --image sha256:<64 hex> \\
+      --expectations /path/to/expectations.json --output-dir /path/outside/candidate
+
+The expectation document is intentionally explicit: it supplies the exact
+identity/resource evidence for the locally built image and the expected
+outcome/check IDs for each fixed matrix scenario. Missing matrix entries are
+fatal. This driver never imports the runner, mocks Docker, edits the protected
+checkout, or treats an unsupported/failing case as a skip.
+"""
+
+from __future__ import annotations
+
+import argparse
+import concurrent.futures
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+import threading
+import time
+import uuid
+
+
+IMAGE_ID_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+RUN_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
+SHA_RE = re.compile(r"^[0-9a-f]{64}$")
+MAX_HOST_LOG = 64 * 1024
+MAX_REPORT = 2 * 1024 * 1024
+DOCKER_DEADLINE = 30
+DEFAULT_RUNNER_DEADLINE = 180
+SCENARIOS = (
+    "positive_compile_exact_stdout",
+    "compilable_wrong_assertion",
+    "syntax_invalid_let_broken",
+    "writable_cache_esy",
+    "writable_cache_node",
+    "readonly_package",
+    "readonly_lock",
+    "readonly_compiler",
+    "missing_installation_state",
+    "corrupt_seed_entry",
+    "missing_seed_entry",
+    "wrong_image_expectation",
+    "wrong_package_expectation",
+    "wrong_lock_expectation",
+    "wrong_compiler_expectation",
+    "added_lockfile",
+    "missing_lockfile",
+    "independent_fresh_run_a",
+    "independent_fresh_run_b",
+    "timeout",
+    "excessive_output_bounded_logs",
+    "resource_exhaustion_evidence",
+    "container_startup_failure",
+    "invalid_run_id_preserves_reports",
+    "duplicate_run_id_preserves_reports",
+    "concurrent_unique_runs",
+    "immutable_integrity_and_exact_resources",
+)
+
+POSITIVE_SOURCE = b'''let square x = x * x\n\nlet () =\n  let actual = List.map square [ 1; 2; 3; 4 ] in\n  let expected = [ 1; 4; 9; 16 ] in\n  if actual <> expected then failwith "List.map assertion failed";\n  print_endline "esy-ocaml-reference:passed"\n'''
+WRONG_ASSERTION_SOURCE = b'''let square x = x * x\n\nlet () =\n  let actual = List.map square [ 1; 2; 3; 4 ] in\n  let expected = [ 0 ] in\n  assert (actual = expected);\n  print_endline "esy-ocaml-reference:passed"\n'''
+SYNTAX_INVALID_SOURCE = b'''let square x = x * x\n\nlet () =\n  let broken =\n'''
+
+
+class MatrixFailure(Exception):
+    pass
+
+
+def canonical(value: object) -> bytes:
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"),
+                      allow_nan=False).encode("utf-8") + b"\n"
+
+
+def digest_file(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            hasher.update(block)
+    return hasher.hexdigest()
+
+
+def write_immutable(path: Path, raw: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    fd = os.open(path, flags, 0o600)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(raw)
+            stream.flush()
+            os.fsync(stream.fileno())
+        folder = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(folder)
+        finally:
+            os.close(folder)
+    except BaseException:
+        try:
+            path.unlink()
+        except OSError:
+            pass
+        raise
+    return hashlib.sha256(raw).hexdigest()
+
+
+class BoundedCapture:
+    """Drain a child pipe completely while retaining at most MAX_HOST_LOG."""
+
+    def __init__(self, pipe, path: Path, limit: int = MAX_HOST_LOG):
+        self.pipe, self.path, self.limit = pipe, path, limit
+        self.size = 0
+        self.sha256 = None
+        self.error = None
+
+    def drain(self) -> None:
+        hasher = hashlib.sha256()
+        kept = 0
+        try:
+            with self.path.open("xb") as output:
+                while True:
+                    block = self.pipe.read(8192)
+                    if not block:
+                        break
+                    hasher.update(block)
+                    self.size += len(block)
+                    if kept < self.limit:
+                        chunk = block[:self.limit - kept]
+                        output.write(chunk)
+                        kept += len(chunk)
+                output.flush()
+                os.fsync(output.fileno())
+            self.sha256 = hasher.hexdigest()
+        except BaseException as exc:  # preserve drain errors as evidence
+            self.error = f"{type(exc).__name__}: {exc}"
+        finally:
+            try:
+                self.pipe.close()
+            except OSError:
+                pass
+
+
+def bounded_process(argv: list[str], *, cwd: Path, stdin: bytes | None,
+                    deadline: float, stdout_path: Path, stderr_path: Path,
+                    env: dict[str, str] | None = None) -> dict:
+    """Execute one bounded subprocess and safely terminate its owned process group."""
+    start = time.monotonic()
+    stdout_path.parent.mkdir(parents=True, exist_ok=True)
+    stderr_path.parent.mkdir(parents=True, exist_ok=True)
+    proc = subprocess.Popen(argv, cwd=str(cwd), stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
+                            start_new_session=(os.name == "posix"))
+    out, err = BoundedCapture(proc.stdout, stdout_path), BoundedCapture(proc.stderr, stderr_path)
+    out_thread = threading.Thread(target=out.drain, name="e2e-stdout-drain", daemon=True)
+    err_thread = threading.Thread(target=err.drain, name="e2e-stderr-drain", daemon=True)
+    out_thread.start()
+    err_thread.start()
+    if stdin is not None:
+        try:
+            assert proc.stdin is not None
+            proc.stdin.write(stdin)
+            proc.stdin.close()
+        except BrokenPipeError:
+            pass
+    timed_out = False
+    try:
+        proc.wait(timeout=deadline)
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        if os.name == "posix":
+            try:
+                os.killpg(proc.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+        else:
+            proc.terminate()
+        try:
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            if os.name == "posix":
+                try:
+                    os.killpg(proc.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            else:
+                proc.kill()
+            proc.wait()
+    out_thread.join(timeout=5)
+    err_thread.join(timeout=5)
+    if out_thread.is_alive() or err_thread.is_alive():
+        # A child escaped the owned process group while holding a pipe open.
+        # Record the anomaly; do not kill unrelated processes by name.
+        try:
+            proc.stdout.close()
+            proc.stderr.close()
+        except OSError:
+            pass
+    return {
+        "argv": argv,
+        "cwd": str(cwd),
+        "exit_code": proc.returncode,
+        "timed_out": timed_out,
+        "deadline_seconds": deadline,
+        "elapsed_seconds": round(time.monotonic() - start, 3),
+        "stdout_path": str(stdout_path), "stdout_bytes": out.size,
+        "stdout_sha256": out.sha256, "stdout_truncated": out.size > MAX_HOST_LOG,
+        "stdout_drain_error": out.error,
+        "stderr_path": str(stderr_path), "stderr_bytes": err.size,
+        "stderr_sha256": err.sha256, "stderr_truncated": err.size > MAX_HOST_LOG,
+        "stderr_drain_error": err.error,
+    }
+
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise MatrixFailure(message)
+
+
+def docker_json(*args: str, cwd: Path, label: str) -> object:
+    with tempfile.TemporaryDirectory(prefix="esyref-docker-") as temp:
+        root = Path(temp)
+        result = bounded_process(["docker", *args], cwd=cwd, stdin=None, deadline=DOCKER_DEADLINE,
+                                 stdout_path=root / "stdout.log", stderr_path=root / "stderr.log")
+        require(not result["timed_out"] and result["exit_code"] == 0,
+                f"Docker {label} failed: {result}")
+        raw = (root / "stdout.log").read_bytes()
+        require(not result["stdout_truncated"], f"Docker {label} output exceeded bound")
+        try:
+            return json.loads(raw)
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise MatrixFailure(f"Docker {label} returned invalid JSON: {exc}") from exc
+
+
+def image_evidence(image: str, expectation: dict, cwd: Path) -> dict:
+    rows = docker_json("image", "inspect", image, cwd=cwd, label="image inspect")
+    require(isinstance(rows, list) and len(rows) == 1, "image must resolve to exactly one local image")
+    info = rows[0]
+    require(info.get("Id") == image, f"provided image is not its immutable local image ID: {info.get('Id')}")
+    rootfs = info.get("RootFS", {}).get("Layers")
+    require(isinstance(rootfs, list) and all(SHA_RE.fullmatch(str(x).removeprefix("sha256:")) for x in rootfs),
+            "image layer inventory is absent or malformed")
+    expected = expectation.get("image", {})
+    require(expected.get("id") == image, "expectations.image.id must equal --image")
+    require(expected.get("rootfs_layers") == rootfs, "local image layer identity differs from expectations")
+    return {"id": info.get("Id"), "repo_digests": info.get("RepoDigests", []),
+            "rootfs_layers": rootfs, "created": info.get("Created"), "os": info.get("Os"),
+            "architecture": info.get("Architecture"), "config": info.get("Config", {})}
+
+
+def inspect_image_variant(image: str, expected: dict, cwd: Path) -> dict:
+    info = image_evidence(image, {"image": expected}, cwd)
+    require(expected.get("id") == info["id"], "variant image ID mismatch")
+    require(expected.get("rootfs_layers") == info["rootfs_layers"], "variant layer list mismatch")
+    return info
+
+
+def build_startup_failure_variant(parent_image: str, parent_evidence: dict, output: Path,
+                                  nonce: str) -> dict:
+    """Build the one fixed fixture whose missing /bin/sh causes real startup failure."""
+    context = output / "owned-image-variants" / "startup-failure"
+    context.mkdir(parents=True, exist_ok=False)
+    tag = f"r2-esyref-startup-{nonce[:12]}:owned"
+    owner = f"r2-real-e2e-matrix:{nonce}"
+    dockerfile = ("FROM " + parent_image + "\n"
+                  "USER 0\n"
+                  "RUN mv /bin/sh /bin/sh.r2-hidden\n"
+                  "LABEL org.prometheansacrifice.r2-owner=\"" + owner + "\"\n")
+    (context / "Dockerfile").write_text(dockerfile, encoding="utf-8")
+    logs = context / "build-logs"
+    logs.mkdir()
+    iidfile = context / "image-id.txt"
+    result = bounded_process(["docker", "build", "--network", "none", "--pull=false", "--iidfile",
+                              str(iidfile), "--label", f"org.prometheansacrifice.r2-owner={owner}",
+                              "--tag", tag, str(context)], cwd=context, stdin=None,
+                             deadline=300, stdout_path=logs / "stdout.log", stderr_path=logs / "stderr.log")
+    require(not result["timed_out"] and result["exit_code"] == 0,
+            f"owned startup-failure image build failed: {result}")
+    require(not result["stdout_truncated"] and not result["stderr_truncated"],
+            "owned startup-failure image build output exceeded host capture bounds")
+    require(iidfile.is_file(), "Docker build did not return an image ID")
+    built_id = iidfile.read_text(encoding="ascii").strip()
+    require(IMAGE_ID_RE.fullmatch(built_id) is not None, "Docker returned malformed variant image ID")
+    rows = docker_json("image", "inspect", built_id, cwd=context, label="variant image inspect")
+    require(isinstance(rows, list) and len(rows) == 1, "built variant image is not locally inspectable")
+    info = rows[0]
+    layers = info.get("RootFS", {}).get("Layers", [])
+    base_layers = parent_evidence["rootfs_layers"]
+    require(info.get("Id") == built_id, "built variant ID differs from docker build result")
+    require(layers[:len(base_layers)] == base_layers and len(layers) > len(base_layers),
+            "startup variant does not retain the pinned parent layer chain plus a new layer")
+    labels = info.get("Config", {}).get("Labels", {}) or {}
+    require(labels.get("org.prometheansacrifice.r2-owner") == owner,
+            "variant image lacks unique ownership label")
+    return {"id": built_id, "tag": tag, "owner_label": owner, "rootfs_layers": layers,
+            "parent_id": parent_image, "parent_rootfs_layers": base_layers,
+            "build": result, "build_stdout_path": result["stdout_path"],
+            "build_stderr_path": result["stderr_path"], "iidfile": str(iidfile),
+            "context": str(context), "cleanup": "pending"}
+
+
+def cleanup_owned_image(variant: dict, cwd: Path) -> dict:
+    """Remove only the exact test-built image after verifying its unique ownership label."""
+    rows = docker_json("image", "inspect", variant["id"], cwd=cwd, label="owned image cleanup preflight")
+    require(isinstance(rows, list) and len(rows) == 1, "owned variant disappeared before cleanup")
+    info = rows[0]
+    labels = info.get("Config", {}).get("Labels", {}) or {}
+    require(info.get("Id") == variant["id"] and
+            labels.get("org.prometheansacrifice.r2-owner") == variant["owner_label"],
+            "refusing cleanup without exact ID and ownership proof")
+    with tempfile.TemporaryDirectory(prefix="esyref-image-rm-") as temp:
+        root = Path(temp)
+        result = bounded_process(["docker", "image", "rm", variant["id"]], cwd=cwd, stdin=None,
+                                 deadline=DOCKER_DEADLINE, stdout_path=root / "stdout.log",
+                                 stderr_path=root / "stderr.log")
+        evidence = {"exit_code": result["exit_code"], "stdout_sha256": result["stdout_sha256"],
+                    "stderr_sha256": result["stderr_sha256"], "id": variant["id"]}
+    require(not result["timed_out"] and result["exit_code"] == 0, "owned image cleanup failed")
+    return evidence
+
+
+def validate_expectations(value: object, image: str) -> dict:
+    require(isinstance(value, dict), "expectations must be a JSON object")
+    require(value.get("schema_version") == 1, "expectations.schema_version must be 1")
+    require(value.get("image", {}).get("id") == image, "expectations must pin --image exactly")
+    cases = value.get("scenarios")
+    require(isinstance(cases, dict), "expectations.scenarios must be an object")
+    require(set(cases) == set(SCENARIOS),
+            f"expectation scenario set mismatch; missing={sorted(set(SCENARIOS)-set(cases))}, "
+            f"extra={sorted(set(cases)-set(SCENARIOS))}")
+    require(all(isinstance(cases[name], dict) and isinstance(cases[name].get("expected"), dict)
+                for name in SCENARIOS), "every scenario must define an expected outcome object")
+    required_identity = {"package_sha256", "lock_files", "compiler_path", "compiler_version"}
+    identity = value.get("identity", {})
+    require(required_identity <= set(identity), "expectations.identity is incomplete")
+    require(SHA_RE.fullmatch(str(identity.get("package_sha256", ""))), "invalid package SHA256 expectation")
+    require(isinstance(identity.get("lock_files"), list) and identity["lock_files"],
+            "identity.lock_files must list exact required lock files")
+    require(all(isinstance(row, dict) and row.get("path") and SHA_RE.fullmatch(str(row.get("sha256", "")))
+                for row in identity["lock_files"]), "invalid lock identity row")
+    resources = value.get("resources", {})
+    required_resources = {"memory_bytes", "nano_cpus", "pids_limit", "readonly_rootfs", "network_mode",
+                          "user", "cap_drop", "security_opt", "mounts", "tmpfs"}
+    require(required_resources <= set(resources), "expectations.resources is incomplete")
+    require(resources["memory_bytes"] == 2 * 1024**3 and resources["nano_cpus"] == 2_000_000_000 and
+            resources["pids_limit"] == 128 and resources["readonly_rootfs"] is True and
+            resources["network_mode"] == "none" and resources["user"] == "1000:1000" and
+            resources["cap_drop"] == ["ALL"] and "no-new-privileges:true" in resources["security_opt"] and
+            resources["mounts"] == [], "resource expectations must preserve the approved fixed isolation")
+    require(isinstance(value.get("variants", {}), dict), "variants must be an object")
+    required_evidence = {
+        "writable_cache_esy": "cache_esy_writable",
+        "writable_cache_node": "cache_node_writable",
+        "readonly_package": "package_readonly",
+        "readonly_lock": "lock_readonly",
+        "readonly_compiler": "compiler_readonly",
+        "missing_installation_state": "missing_installation_state",
+        "corrupt_seed_entry": "corrupt_seed_detected",
+        "missing_seed_entry": "missing_seed_detected",
+        "wrong_image_expectation": "identity_rejected",
+        "wrong_package_expectation": "identity_rejected",
+        "wrong_lock_expectation": "identity_rejected",
+        "wrong_compiler_expectation": "identity_rejected",
+        "added_lockfile": "lock_inventory_exact",
+        "missing_lockfile": "lock_inventory_exact",
+        "timeout": "timeout_enforced",
+        "excessive_output_bounded_logs": "bounded_output",
+        "resource_exhaustion_evidence": "resource_exhaustion_evidence",
+        "container_startup_failure": "container_startup_failure",
+        "immutable_integrity_and_exact_resources": "immutable_integrity",
+    }
+    for name, check_id in required_evidence.items():
+        require(check_id in cases[name]["expected"].get("must_pass_checks", []),
+                f"scenario {name} must require evidence check {check_id}")
+    for name in ("wrong_image_expectation", "wrong_package_expectation", "wrong_lock_expectation",
+                 "wrong_compiler_expectation"):
+        require(cases[name]["expected"].get("candidate_commands_must_not_execute") is True,
+                f"scenario {name} must require pre-execution identity rejection")
+    require(cases["container_startup_failure"].get("variant") == "startup_failure",
+            "container startup scenario must select the owned missing-/bin/sh image variant")
+    require(cases["positive_compile_exact_stdout"].get("source_mode") == "positive",
+            "positive scenario must use the fixed positive source control")
+    require(cases["compilable_wrong_assertion"].get("source_mode") == "wrong_assertion",
+            "wrong assertion scenario must use the fixed compilable assertion control")
+    require(cases["syntax_invalid_let_broken"].get("source_mode") == "syntax_invalid",
+            "syntax scenario must use the fixed `let broken =` source control")
+    return value
+
+
+def assert_required_outcome(scenario: str, report: dict, expected: dict) -> list[str]:
+    """Apply fixed acceptance invariants, then the exact reviewed expected subset."""
+    failures = []
+    checks = report.get("checks", [])
+    check_map = {row.get("id"): row for row in checks if isinstance(row, dict)}
+
+    def check(ok: bool, label: str) -> None:
+        if not ok:
+            failures.append(label)
+
+    if scenario in ("positive_compile_exact_stdout", "independent_fresh_run_a", "independent_fresh_run_b",
+                    "writable_cache_esy", "writable_cache_node", "immutable_integrity_and_exact_resources"):
+        check(report.get("status") == "PASSED", "positive run did not pass")
+        positive = report.get("results", {}).get("run-positive", {})
+        check(positive.get("exit_code") == 0, "positive native program did not exit zero")
+        check(positive.get("stdout") == "esy-ocaml-reference:passed\n", "positive stdout was not exact")
+        check(positive.get("stderr") == "", "positive stderr was not empty")
+    if scenario == "compilable_wrong_assertion":
+        results = report.get("results", {})
+        check(results.get("compile-wrong-result", {}).get("exit_code") == 0, "wrong assertion did not compile")
+        check(results.get("run-wrong-result", {}).get("exit_code", 0) != 0, "wrong assertion did not fail")
+        check("Assert_failure" in results.get("run-wrong-result", {}).get("stderr", "") +
+              results.get("run-wrong-result", {}).get("stdout", ""), "wrong assertion lacks OCaml failure evidence")
+    if scenario == "syntax_invalid_let_broken":
+        result = report.get("results", {}).get("compile-malformed", {})
+        diagnostic = result.get("stderr", "") + result.get("stdout", "")
+        check(result.get("exit_code", 0) != 0, "syntax-invalid source compiled")
+        check("syntax" in diagnostic.lower() or "syntax error" in diagnostic.lower(),
+              "syntax failure lacks compiler diagnostic")
+    if scenario in ("timeout",):
+        check(report.get("timed_out") is True, "runner did not report timeout")
+        check(report.get("elapsed_seconds", float("inf")) <= expected.get("maximum_elapsed_seconds", 150),
+              "timeout exceeded documented upper bound")
+    if scenario == "excessive_output_bounded_logs":
+        for result in report.get("results", {}).values():
+            check(result.get("stdout_bytes", 0) <= expected.get("max_command_stream_bytes", 8192),
+                  "container stdout exceeded bound")
+            check(result.get("stderr_bytes", 0) <= expected.get("max_command_stream_bytes", 8192),
+                  "container stderr exceeded bound")
+            check(len(result.get("stdout", "").encode()) <= expected.get("max_command_stream_bytes", 8192),
+                  "reported stdout excerpt exceeded bound")
+            check(len(result.get("stderr", "").encode()) <= expected.get("max_command_stream_bytes", 8192),
+                  "reported stderr excerpt exceeded bound")
+    if scenario == "resource_exhaustion_evidence":
+        check(report.get("status") == "FAILED", "resource exhaustion unexpectedly passed")
+        evidence = expected.get("evidence_field")
+        check(bool(evidence) and bool(report.get(evidence)), "resource failure lacks required concrete evidence")
+    if scenario == "container_startup_failure":
+        check(report.get("status") == "FAILED", "startup-failure image unexpectedly passed")
+        check(report.get("exit_code") not in (None, 0), "startup failure lacks nonzero container result")
+    if scenario in ("wrong_image_expectation", "wrong_package_expectation", "wrong_lock_expectation",
+                    "wrong_compiler_expectation"):
+        check(report.get("status") == "FAILED", "wrong identity expectation unexpectedly passed")
+        executed = [name for name, item in report.get("results", {}).items()
+                    if name.startswith(("compile-", "run-")) and isinstance(item, dict)]
+        check(not executed, f"candidate commands executed before identity rejection: {executed}")
+    if scenario in ("added_lockfile", "missing_lockfile"):
+        check(report.get("status") == "FAILED", "lock inventory mutation was not rejected")
+    if scenario in ("missing_installation_state", "corrupt_seed_entry", "missing_seed_entry"):
+        check(report.get("status") == "FAILED", "invalid installation/cache seed state was not rejected")
+    if scenario.startswith("readonly_"):
+        check(report.get("status") == "PASSED", "readonly dependency probe failed")
+    if scenario.startswith("writable_cache_"):
+        check(report.get("status") == "PASSED", "writable cache probe failed")
+    if scenario in ("invalid_run_id_preserves_reports", "duplicate_run_id_preserves_reports"):
+        check(expected.get("preservation_verified") is True, "existing immutable report was not preserved")
+    if scenario == "concurrent_unique_runs":
+        check(expected.get("child_reports_passed") == 2, "both concurrent unique runs did not pass")
+        check(expected.get("report_ids_unique") is True, "concurrent report IDs were not unique")
+    for name in expected.get("must_pass_checks", []):
+        check(check_map.get(name, {}).get("passed") is True, f"required check did not pass: {name}")
+    for name in expected.get("must_fail_checks", []):
+        check(check_map.get(name, {}).get("passed") is False, f"expected visible failure check missing: {name}")
+    for key, value in expected.items():
+        if key.startswith("report_"):
+            field = key[len("report_"):]
+            if report.get(field) != value:
+                failures.append(f"report field {field} expected {value!r}, got {report.get(field)!r}")
+    return failures
+
+
+def ensure_owned_output(output: Path, candidate: Path) -> None:
+    resolved = output.resolve()
+    candidate = candidate.resolve()
+    require(resolved != candidate and candidate not in resolved.parents,
+            "--output-dir must be outside the candidate tree")
+    require(not resolved.exists() or resolved.is_dir(), "output path exists and is not a directory")
+    resolved.mkdir(parents=True, exist_ok=True)
+    require(not any(resolved.iterdir()), "output directory must be empty for immutable evidence")
+
+
+def tree_digest(root: Path) -> str:
+    """Hash all paths, symlink targets, and regular-file bytes without following links."""
+    hasher = hashlib.sha256()
+    for parent, dirs, files in os.walk(root, topdown=True, followlinks=False):
+        dirs.sort()
+        files.sort()
+        base = Path(parent)
+        for name in list(dirs):
+            path = base / name
+            rel = path.relative_to(root).as_posix()
+            if path.is_symlink():
+                dirs.remove(name)
+                hasher.update(b"L\0" + rel.encode() + b"\0" + os.readlink(path).encode() + b"\0")
+            else:
+                hasher.update(b"D\0" + rel.encode() + b"\0")
+        for name in files:
+            path = base / name
+            rel = path.relative_to(root).as_posix()
+            if path.is_symlink():
+                hasher.update(b"L\0" + rel.encode() + b"\0" + os.readlink(path).encode() + b"\0")
+            elif path.is_file():
+                hasher.update(b"F\0" + rel.encode() + b"\0")
+                with path.open("rb") as stream:
+                    for block in iter(lambda: stream.read(1024 * 1024), b""):
+                        hasher.update(block)
+                hasher.update(b"\0")
+    return hasher.hexdigest()
+
+
+def copy_proposal(source_dir: Path, destination: Path) -> Path:
+    require(source_dir.is_dir(), f"runner proposal directory not found: {source_dir}")
+    shutil.copytree(source_dir, destination, symlinks=False,
+                    ignore=shutil.ignore_patterns("__pycache__", ".pytest_cache", "esy-results"))
+    runner = destination / "run_esy_reference.py"
+    require(runner.is_file() and not runner.is_symlink(), "copied public runner is absent or a symlink")
+    return runner
+
+
+def save_report_copy(path: Path, destination: Path) -> tuple[dict | None, str | None]:
+    if not path.exists() or path.is_symlink():
+        return None, None
+    raw = path.read_bytes()
+    require(len(raw) <= MAX_REPORT, f"runner report exceeds {MAX_REPORT} bytes")
+    copied = destination / "runner-report.json"
+    write_immutable(copied, raw)
+    try:
+        report = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None, hashlib.sha256(raw).hexdigest()
+    return report, hashlib.sha256(raw).hexdigest()
+
+
+def run_one(runner: Path, image: str, run_id: str, case_dir: Path, deadline: float,
+            extra_args: list[str] | None = None) -> dict:
+    proposal = runner.parent
+    stdout_path, stderr_path = case_dir / "runner.stdout.log", case_dir / "runner.stderr.log"
+    argv = [sys.executable, "-B", str(runner), "--image", image, "--run-id", run_id]
+    if extra_args:
+        argv.extend(extra_args)
+    result = bounded_process(argv, cwd=proposal, stdin=None, deadline=deadline,
+                             stdout_path=stdout_path, stderr_path=stderr_path,
+                             env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
+    stdout = stdout_path.read_bytes()[:MAX_HOST_LOG]
+    try:
+        cli = json.loads(stdout.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        cli = None
+    report_path = None
+    report = None
+    report_sha = None
+    if isinstance(cli, dict) and isinstance(cli.get("report"), str):
+        candidate = Path(cli["report"])
+        if not candidate.is_absolute():
+            candidate = proposal / candidate
+        report_path = candidate
+        report, report_sha = save_report_copy(report_path, case_dir)
+    return {"process": result, "cli": cli, "source_report_path": str(report_path) if report_path else None,
+            "saved_report_path": str(case_dir / "runner-report.json") if report is not None else None,
+            "report_sha256": report_sha, "report": report}
+
+
+def assert_exact_resource_argv(report: dict, expected: dict) -> list[str]:
+    failures = []
+    argv = report.get("docker_argv", [])
+    pairs = {"--network": expected["network_mode"], "--memory": "2g", "--cpus": "2",
+             "--pids-limit": "128", "--user": "1000:1000", "--read-only": None}
+    for option, value in pairs.items():
+        if option not in argv:
+            failures.append(f"docker argv omitted {option}")
+        elif value is not None:
+            index = argv.index(option)
+            if index + 1 >= len(argv) or argv[index + 1] != value:
+                failures.append(f"docker argv has wrong {option} value")
+    if argv.count("--read-only") != 1:
+        failures.append("docker argv did not configure readonly root filesystem exactly once")
+    if "--cap-drop" not in argv or argv[argv.index("--cap-drop") + 1] != "ALL":
+        failures.append("docker argv did not drop all capabilities")
+    if "--security-opt" not in argv or argv[argv.index("--security-opt") + 1] != "no-new-privileges:true":
+        failures.append("docker argv did not enable no-new-privileges")
+    if any(token in ("-v", "--volume", "--mount", "--privileged") for token in argv):
+        failures.append("docker argv contains a host bind or privileged mode")
+    if argv.count("--tmpfs") < 2:
+        failures.append("docker argv omitted writable work/cache tmpfs controls")
+    for required in expected.get("tmpfs", []):
+        if required not in argv:
+            failures.append(f"docker argv omitted exact tmpfs configuration {required}")
+    if argv.count("--network") != 1 or argv.count("--memory") != 1 or argv.count("--cpus") != 1:
+        failures.append("docker resource options were duplicated")
+    return failures
+
+
+def run_scenario(name: str, case: dict, image: str, runner_source: Path, output: Path,
+                 expectation: dict, nonce: str) -> dict:
+    scenario_dir = output / "scenarios" / name
+    scenario_dir.mkdir(parents=True, exist_ok=False)
+    runner = copy_proposal(runner_source.parent, scenario_dir / "proposal")
+    # Mutations occur only in an owned copy under --output-dir. The supported
+    # source controls are fixed byte strings, never arbitrary host filenames.
+    source_mode = case.get("source_mode")
+    if source_mode is not None:
+        source = runner.parent / "main.ml"
+        require(source.is_file() and not source.is_symlink(), "owned main.ml copy is absent")
+        modes = {"positive": POSITIVE_SOURCE, "wrong_assertion": WRONG_ASSERTION_SOURCE,
+                 "syntax_invalid": SYNTAX_INVALID_SOURCE}
+        require(source_mode in modes, f"unsupported source mode in expectations: {source_mode}")
+        source.write_bytes(modes[source_mode])
+    selected_image = case.get("image", image)
+    if case.get("variant") == "startup_failure":
+        selected_image = expectation["variants"]["startup_failure"]["id"]
+    # Every image selection is local and immutable, and its complete layer
+    # chain is pinned by the expectation document.
+    if selected_image != image:
+        variants = expectation.get("variants", {})
+        variant_name = case.get("variant")
+        require(variant_name in variants, f"scenario {name} references undeclared image variant")
+        inspect_image_variant(selected_image, variants[variant_name], runner.parent)
+    run_id = f"r2-{name[:28]}-{nonce[:10]}"
+    require(RUN_ID_RE.fullmatch(run_id), f"internal run ID invalid for {name}")
+    deadline = float(case.get("deadline_seconds", DEFAULT_RUNNER_DEADLINE))
+    require(1 <= deadline <= 600, f"invalid bounded deadline for {name}")
+    run = run_one(runner, selected_image, run_id, scenario_dir, deadline,
+                  extra_args=case.get("runner_extra_args"))
+    report = run.get("report")
+    failures = []
+    expected = case["expected"]
+    if report is None:
+        failures.append("runner did not publish a parseable report")
+    else:
+        failures.extend(assert_required_outcome(name, report, expected))
+        failures.extend(assert_exact_resource_argv(report, expectation["resources"]))
+    if run["process"].get("timed_out") and name != "timeout":
+        failures.append("host runner process exceeded its deadline")
+    if run["process"].get("stdout_truncated") or run["process"].get("stderr_truncated"):
+        if name != "excessive_output_bounded_logs":
+            failures.append("host subprocess output exceeded its capture bound")
+    if run["process"].get("stdout_drain_error") or run["process"].get("stderr_drain_error"):
+        failures.append("host subprocess output drain failed")
+    outcome = {"id": name, "expected": expected, "actual": {
+        "runner_exit_code": run["process"].get("exit_code"), "runner_timed_out": run["process"].get("timed_out"),
+        "cli": run.get("cli"), "report": report, "report_sha256": run.get("report_sha256"),
+        "subprocess": run["process"], "subprocess_output_paths": {
+            "stdout": run["process"]["stdout_path"], "stderr": run["process"]["stderr_path"]},
+        "report_path": run.get("saved_report_path")},
+        "failures": failures, "passed": not failures}
+    return outcome
+
+
+def run_duplicate_case(case: dict, image: str, runner_source: Path, output: Path,
+                       nonce: str) -> dict:
+    name = "duplicate_run_id_preserves_reports"
+    case_dir = output / "scenarios" / name
+    case_dir.mkdir(parents=True, exist_ok=False)
+    runner = copy_proposal(runner_source.parent, case_dir / "proposal")
+    run_id = f"r2-duplicate-{nonce[:12]}"
+    first = run_one(runner, image, run_id, case_dir / "first", DEFAULT_RUNNER_DEADLINE)
+    first_report_path = runner.parent / "esy-results" / f"{run_id}.json"
+    require(first_report_path.is_file(), "first duplicate-control report was not published")
+    original = first_report_path.read_bytes()
+    original_sha = hashlib.sha256(original).hexdigest()
+    second = run_one(runner, image, run_id, case_dir / "second", DEFAULT_RUNNER_DEADLINE)
+    preserved = first_report_path.is_file() and first_report_path.read_bytes() == original
+    failures = []
+    if not preserved:
+        failures.append("duplicate invocation changed or removed the original immutable report")
+    if second["process"].get("exit_code") not in (1, 2):
+        failures.append("duplicate run ID was not rejected")
+    if second.get("report") is not None:
+        failures.append("duplicate run ID produced a replacement report")
+    outcome = {"id": name, "expected": case["expected"], "actual": {
+        "first": {"exit_code": first["process"].get("exit_code"), "report_sha256": first.get("report_sha256"),
+                  "process": first["process"], "report": first.get("report"),
+                  "report_path": first.get("saved_report_path")},
+        "second": {"exit_code": second["process"].get("exit_code"), "cli": second.get("cli"),
+                   "process": second["process"], "report": second.get("report"),
+                   "report_path": second.get("saved_report_path")},
+        "preservation_verified": preserved, "original_report_sha256": original_sha,
+        "report_path": str(first_report_path)}, "failures": failures, "passed": not failures}
+    return outcome
+
+
+def run_invalid_id_case(case: dict, image: str, runner_source: Path, output: Path,
+                        nonce: str) -> dict:
+    name = "invalid_run_id_preserves_reports"
+    case_dir = output / "scenarios" / name
+    case_dir.mkdir(parents=True, exist_ok=False)
+    runner = copy_proposal(runner_source.parent, case_dir / "proposal")
+    valid_id = f"r2-invalid-control-{nonce[:12]}"
+    first = run_one(runner, image, valid_id, case_dir / "baseline", DEFAULT_RUNNER_DEADLINE)
+    existing = runner.parent / "esy-results" / f"{valid_id}.json"
+    require(existing.is_file(), "control report for invalid-ID preservation was not published")
+    original = existing.read_bytes()
+    original_sha = hashlib.sha256(original).hexdigest()
+    invalid = run_one(runner, image, "../escape", case_dir / "invalid", DEFAULT_RUNNER_DEADLINE)
+    preserved = existing.is_file() and existing.read_bytes() == original
+    escaped = (runner.parent.parent / "escape.json").exists()
+    failures = []
+    if not preserved:
+        failures.append("invalid run ID damaged existing report")
+    if escaped:
+        failures.append("invalid run ID wrote outside owned report directory")
+    if invalid["process"].get("exit_code") not in (1, 2):
+        failures.append("invalid run ID was not rejected")
+    if invalid.get("report") is not None:
+        failures.append("invalid run ID produced a report")
+    return {"id": name, "expected": case["expected"], "actual": {
+        "control_exit_code": first["process"].get("exit_code"), "control_process": first["process"],
+        "control_report": first.get("report"), "invalid_exit_code": invalid["process"].get("exit_code"),
+        "invalid_process": invalid["process"], "invalid_cli": invalid.get("cli"),
+        "preservation_verified": preserved, "original_report_sha256": original_sha,
+        "escaped_report_created": escaped, "report_path": str(existing)},
+        "failures": failures, "passed": not failures}
+
+
+def run_concurrent_case(case: dict, image: str, runner_source: Path, output: Path,
+                        nonce: str) -> dict:
+    name = "concurrent_unique_runs"
+    case_dir = output / "scenarios" / name
+    case_dir.mkdir(parents=True, exist_ok=False)
+    invocations = []
+    for suffix in ("a", "b"):
+        local = case_dir / suffix
+        local.mkdir()
+        runner = copy_proposal(runner_source.parent, local / "proposal")
+        run_id = f"r2-concurrent-{suffix}-{nonce[:12]}"
+        invocations.append((runner, run_id, local))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="esyref-e2e") as pool:
+        futures = [pool.submit(run_one, runner, image, run_id, local, DEFAULT_RUNNER_DEADLINE)
+                   for runner, run_id, local in invocations]
+        runs = [future.result() for future in futures]
+    reports = [run.get("report") for run in runs]
+    passed = sum(bool(report and report.get("status") == "PASSED") for report in reports)
+    ids = [report.get("id") for report in reports if report]
+    failures = []
+    if passed != 2:
+        failures.append("both parallel fresh runner executions did not pass")
+    if len(ids) != 2 or len(set(ids)) != 2:
+        failures.append("concurrent unique runs did not publish distinct report IDs")
+    return {"id": name, "expected": case["expected"], "actual": {
+        "child_reports_passed": passed, "report_ids": ids, "report_ids_unique": len(ids) == 2 and len(set(ids)) == 2,
+        "children": [{"exit_code": row["process"].get("exit_code"), "report_sha256": row.get("report_sha256"),
+                      "report": row.get("report"), "report_path": row.get("saved_report_path"),
+                      "process": row["process"]}
+                     for row in runs]}, "failures": failures, "passed": not failures}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--image", required=True, help="immutable local Docker image ID: sha256:<64 lowercase hex>")
+    parser.add_argument("--expectations", required=True, type=Path, help="reviewed identity/resource/scenario JSON")
+    parser.add_argument("--output-dir", required=True, type=Path, help="empty evidence directory outside candidate")
+    args = parser.parse_args(argv)
+    manifest_path = None
+    manifest = {"schema_version": 1, "suite": "R2_REAL_E2E_MATRIX", "image": args.image,
+                "started_unix": time.time(), "expected_scenarios": list(SCENARIOS), "scenarios": [],
+                "status": "FAILED", "failures": []}
+    try:
+        require(IMAGE_ID_RE.fullmatch(args.image) is not None, "--image must be an immutable sha256 image ID")
+        expectation_path = args.expectations.resolve(strict=True)
+        require(expectation_path.is_file() and not expectation_path.is_symlink(), "expectations must be a regular file")
+        expectation_raw = expectation_path.read_bytes()
+        require(len(expectation_raw) <= 1024 * 1024, "expectation file exceeds 1 MiB")
+        expectation = validate_expectations(json.loads(expectation_raw), args.image)
+        resolved_test = Path(__file__).resolve()
+        candidate_root = resolved_test.parents[4]
+        source_runner = resolved_test.parents[1] / "run_esy_reference.py"
+        if not source_runner.is_file():
+            # In the implementation staging tree, the reviewed proposal runner
+            # remains in the adjacent planning artifact until guarded import.
+            source_runner = resolved_test.parents[6] / "esy-reference-proposal-001" / "run_esy_reference.py"
+        require(source_runner.is_file() and not source_runner.is_symlink(),
+                "expected real runner beside this test file")
+        ensure_owned_output(args.output_dir, candidate_root)
+        output = args.output_dir.resolve()
+        manifest_path = output / "scenario-manifest.json"
+        candidate_before = tree_digest(candidate_root)
+        manifest.update({"expectations_path": str(expectation_path),
+                         "expectations_sha256": hashlib.sha256(expectation_raw).hexdigest(),
+                         "output_dir": str(output), "runner_source_path": str(source_runner),
+                         "runner_source_sha256": digest_file(source_runner),
+                         "candidate_root": str(candidate_root),
+                         "candidate_tree_sha256_before": candidate_before,
+                         "image_evidence": image_evidence(args.image, expectation, output)})
+        nonce = uuid.uuid4().hex
+        variant = None
+        try:
+            variant = build_startup_failure_variant(args.image, manifest["image_evidence"], output, nonce)
+            expectation.setdefault("variants", {})["startup_failure"] = {
+                "id": variant["id"], "rootfs_layers": variant["rootfs_layers"]}
+            manifest["owned_image_variants"] = [variant]
+        except BaseException as exc:
+            manifest["failures"].append({"scenario": "container_startup_failure",
+                                         "details": [f"variant build failed: {type(exc).__name__}: {exc}"]})
+        for name in SCENARIOS:
+            case = expectation["scenarios"][name]
+            try:
+                if name == "container_startup_failure" and variant is None:
+                    raise MatrixFailure("required owned startup-failure image could not be built")
+                if name == "duplicate_run_id_preserves_reports":
+                    outcome = run_duplicate_case(case, args.image, source_runner, output, nonce)
+                elif name == "invalid_run_id_preserves_reports":
+                    outcome = run_invalid_id_case(case, args.image, source_runner, output, nonce)
+                elif name == "concurrent_unique_runs":
+                    outcome = run_concurrent_case(case, args.image, source_runner, output, nonce)
+                else:
+                    outcome = run_scenario(name, case, args.image, source_runner, output, expectation, nonce)
+                if not outcome["passed"]:
+                    manifest["failures"].append({"scenario": name, "details": outcome["failures"]})
+                manifest["scenarios"].append(outcome)
+            except BaseException as exc:
+                # A required scenario that cannot run is a failed scenario, never a skip.
+                failure = {"type": type(exc).__name__, "message": str(exc)}
+                manifest["failures"].append({"scenario": name, "details": [failure]})
+                manifest["scenarios"].append({"id": name, "expected": case.get("expected"),
+                                               "actual": {"setup_or_execution_error": failure},
+                                               "failures": [str(exc)], "passed": False})
+        if variant is not None:
+            try:
+                variant["cleanup_evidence"] = cleanup_owned_image(variant, output)
+                variant["cleanup"] = "removed"
+            except BaseException as exc:
+                variant["cleanup"] = "failed"
+                variant["cleanup_error"] = f"{type(exc).__name__}: {exc}"
+                manifest["failures"].append({"image_cleanup": variant["cleanup_error"]})
+        candidate_after = tree_digest(candidate_root)
+        manifest["candidate_tree_sha256_after"] = candidate_after
+        if candidate_after != candidate_before:
+            manifest["failures"].append({"candidate_integrity": "candidate bytes or paths changed during E2E"})
+        require([row.get("id") for row in manifest["scenarios"]] == list(SCENARIOS),
+                "scenario manifest is incomplete, duplicated, or reordered")
+        require(digest_file(source_runner) == manifest["runner_source_sha256"],
+                "runner integrity changed during matrix execution")
+        require(len(manifest["scenarios"]) == len(SCENARIOS) and
+                all(row.get("passed") is True for row in manifest["scenarios"]),
+                "one or more required matrix scenarios failed")
+        require(not manifest["failures"], "suite recorded setup, integrity, cleanup, or scenario failures")
+        manifest["status"] = "PASSED"
+    except BaseException as exc:
+        manifest["failures"].append({"suite": {"type": type(exc).__name__, "message": str(exc)}})
+    if len(manifest["scenarios"]) < len(SCENARIOS):
+        already = {row.get("id") for row in manifest["scenarios"]}
+        for name in SCENARIOS:
+            if name not in already:
+                failure = "scenario could not start because suite setup failed"
+                manifest["scenarios"].append({"id": name,
+                                               "expected": None,
+                                               "actual": {"setup_or_execution_error": failure},
+                                               "failures": [failure], "passed": False})
+                manifest["failures"].append({"scenario": name, "details": [failure]})
+    if "candidate_tree_sha256_before" in manifest and "candidate_tree_sha256_after" not in manifest:
+        try:
+            manifest["candidate_tree_sha256_after"] = tree_digest(Path(manifest["candidate_root"]))
+            if manifest["candidate_tree_sha256_after"] != manifest["candidate_tree_sha256_before"]:
+                manifest["failures"].append({"candidate_integrity": "candidate bytes or paths changed during E2E"})
+        except BaseException as exc:
+            manifest["failures"].append({"candidate_integrity": f"post-snapshot failed: {exc}"})
+    if len(manifest["scenarios"]) != len(SCENARIOS) or \
+            [row.get("id") for row in manifest["scenarios"]] != list(SCENARIOS):
+        manifest["failures"].append({"scenario_manifest": "required scenarios omitted, duplicated, or reordered"})
+    manifest["finished_unix"] = time.time()
+    if manifest_path is not None:
+        try:
+            manifest_sha = write_immutable(manifest_path, canonical(manifest))
+        except BaseException as exc:
+            manifest["failures"].append({"manifest_write": {"type": type(exc).__name__, "message": str(exc)}})
+            manifest["status"] = "FAILED"
+    summary = {"status": manifest["status"], "manifest": str(manifest_path) if manifest_path else None,
+               "manifest_sha256": locals().get("manifest_sha"), "failures": len(manifest["failures"])}
+    sys.stdout.write(json.dumps(summary, sort_keys=True) + "\n")
+    return 0 if manifest["status"] == "PASSED" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

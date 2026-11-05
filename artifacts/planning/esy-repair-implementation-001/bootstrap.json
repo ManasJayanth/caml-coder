@@ -1,0 +1,11 @@
+{
+  "status": "BOOTSTRAP",
+  "started_at": "2026-10-22T05:44:19.756553+00:00",
+  "repo": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+  "head": "70de30502cbaf450b2c0621091b82d34583709b2",
+  "git_status": " M README.md\n M config/cards.json\n M config/execution-policy.json\n M config/handoff-progress.json\n M config/sources.json\n M docs/PLAN.md\n M pyproject.toml\n M src/sft/cli.py\n M src/sft/corpus.py\n M src/sft/e2e.py\n M src/sft/handoff.py\n M src/sft/workflow.py\n M tests/e2e/test_control.py\n M tests/e2e/test_handoff.py\n M tests/e2e/test_sources.py\n M uv.lock\n?? config/chunks.json\n?? config/eligibility.json\n?? config/extraction.json\n?? config/model-assets.json\n?? config/models.json\n?? config/split-annotations.json\n?? config/splits.json\n?? scripts/check_ocaml_probe.py\n?? scripts/probe_qwen35.py\n?? scripts/probe_qwen35_adapters.py\n?? src/sft/chunks.py\n?? src/sft/conversion.py\n?? src/sft/eligibility.py\n?? src/sft/extract.py\n?? src/sft/ledger.py\n?? src/sft/model_assets.py\n?? src/sft/models.py\n?? src/sft/splits.py\n?? tests/e2e/test_bonito_conversion.py\n?? tests/e2e/test_chunks.py\n?? tests/e2e/test_eligibility.py\n?? tests/e2e/test_extraction.py\n?? tests/e2e/test_ledger.py\n?? tests/e2e/test_models.py\n?? tests/e2e/test_ocaml_checker.py\n?? tests/e2e/test_qwen35_probe.py\n?? tests/e2e/test_splits.py\n?? tests/e2e/test_tokenizer.py\n",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "max_rounds": 12,
+  "max_active_seconds": 21600,
+  "rounds": 0
+}

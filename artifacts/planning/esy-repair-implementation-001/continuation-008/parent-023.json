@@ -1,0 +1,488 @@
+[
+  {
+    "path": "README.md",
+    "mode": 420,
+    "sha256": "5a0f2d4cb52640940069d26a56214d55e2f67a70a25523194e5afdaa98adab62",
+    "size": 3085
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/Dockerfile",
+    "mode": 420,
+    "sha256": "4f0fd63f93dde9c9edd8423345562fea8f2b7a478e270f88d5937efb084940ab",
+    "size": 405
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime",
+    "mode": 420,
+    "sha256": "f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f",
+    "size": 651
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/README.txt",
+    "mode": 420,
+    "sha256": "671af1f3d4b3a4e1756ced43b1322b07639c02c69c511377a041a6d8a048d1b6",
+    "size": 2341
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/REVIEW.txt",
+    "mode": 420,
+    "sha256": "f0ae76f327352c55de91921c3f90b67fb0298218cc42813a55cbe26be70598c6",
+    "size": 1459
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/build-attempt-001.json",
+    "mode": 420,
+    "sha256": "f0da4fd08f6f2acb5c81614bfdc743c01a845aa87c840457a0431ec85771cb7c",
+    "size": 7439
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/build-attempt-001.log",
+    "mode": 420,
+    "sha256": "8caa5f858c38cf34e6d777319f40eed01aa375db127b2e4b3ae6ef3221faec9c",
+    "size": 2295
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/build-inputs.json",
+    "mode": 420,
+    "sha256": "31d723251b0426d54c7cbd99217032fa1998a8a54054f908ed81eaab0203e406",
+    "size": 567
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/build-started.json",
+    "mode": 420,
+    "sha256": "a8061ff7e382d1cf0745bba4e9849d3befe46883d52be8fdec586c8921d8fdb1",
+    "size": 299
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/esy-results/esy-reference-run-001.json",
+    "mode": 384,
+    "sha256": "f069296361053479019842141e24592bc775408cbd907e499aa3a4da0d891a8d",
+    "size": 4953
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/esy-results/esy-reference-run-002.json",
+    "mode": 384,
+    "sha256": "31e48468f348e05ef56452bf613e05baf8510befa684489f91b6bda249b630fd",
+    "size": 18160
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/esy-results/esy-reference-run-003.json",
+    "mode": 384,
+    "sha256": "29eda722ec076a7d173cebf2d3d70f7fcb5f2fa6ee5d1dd9a226750f7232732e",
+    "size": 11422
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/esy-results/esy-reference-run-004.json",
+    "mode": 384,
+    "sha256": "a5c3a235dca8bd102aa77ff9a8f49d6b4bcad52bac899ac1f7566365105ac631",
+    "size": 12794
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+    "mode": 420,
+    "sha256": "a8a1ff57ad24003c4f3e9eb0df0cd7c5fdf6fb75fd9460db1e29a2effd8392ed",
+    "size": 7715
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/latest-compiler-source-audit.json",
+    "mode": 420,
+    "sha256": "1b51850d9b04db8d37d342b4b0729aba120a53b35d9e2fe8323a744d4e6e8c29",
+    "size": 2363
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/main.ml",
+    "mode": 420,
+    "sha256": "984b9a5b9d105315ef8d6e549a2b6b0537ebdf682d5a4a8e40f76d515af7acb6",
+    "size": 240
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/package-ocaml-5.3.0-historical.json",
+    "mode": 420,
+    "sha256": "a937fc573d4b42ef55d526635bfa60416d02120081343177a8704955f818ccf2",
+    "size": 129
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/package.json",
+    "mode": 420,
+    "sha256": "db35d242767029ee595cbf23760fb3a902c72ad8c363108554b67e0289a6b44d",
+    "size": 132
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/registry-5.3.0.json",
+    "mode": 420,
+    "sha256": "14b065f986f78ccc08f78382409fad772fc556415e755fa8835d629cfbb835e6",
+    "size": 1930
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/registry-latest.json",
+    "mode": 420,
+    "sha256": "9dbedc768d238ad4a36131400260ddea143dea58976ba1ccb9cad4af69a9e91c",
+    "size": 2303
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/registry-receipt.json",
+    "mode": 420,
+    "sha256": "667730535be270b8e9090e7e46bf80f989af0bf0b55e6027806d9a8fbbb8b946",
+    "size": 3924
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "mode": 420,
+    "sha256": "19405ad6d79c959bf140f203b5e6c347190e4b25f9b7a40f87b698029daa5e09",
+    "size": 48757
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+    "mode": 420,
+    "sha256": "1765a2eca5f9dea8b2a5eea5d4a59310cb364ac165669393f4d67370f18563f9",
+    "size": 34954
+  },
+  {
+    "path": "config/cards.json",
+    "mode": 420,
+    "sha256": "274a791632943561326bd7256773a6485ee1f961d95111719cceef45d96fb603",
+    "size": 447429
+  },
+  {
+    "path": "config/chunks.json",
+    "mode": 420,
+    "sha256": "5e01cb5fc0d037cdd204dcacc8c8dc2263414f8e7678c2e3e1f7191c07b3417b",
+    "size": 589
+  },
+  {
+    "path": "config/doctor.json",
+    "mode": 420,
+    "sha256": "1af10476a79792337673cdde91a63e5ee9aa9328db1ba478f1eb4bd435782eba",
+    "size": 135
+  },
+  {
+    "path": "config/eligibility.json",
+    "mode": 420,
+    "sha256": "cf9e4db4a499ade3ce2fa0d9851770071116d554dd66c836887df58d372eb23d",
+    "size": 3288
+  },
+  {
+    "path": "config/execution-policy.json",
+    "mode": 420,
+    "sha256": "9a8ffe6e8e1357fbc59ad1e5b08cb6c2160a1a41ca2683041161c4f893bab999",
+    "size": 6758
+  },
+  {
+    "path": "config/extraction.json",
+    "mode": 420,
+    "sha256": "ce6365094808b5b9b98777e9c806ec41d1b638c09040205cb3fb435a23117e06",
+    "size": 237
+  },
+  {
+    "path": "config/handoff-progress.json",
+    "mode": 420,
+    "sha256": "efcd856362cce875d7c2e0506f6e199b0aec3fa9b9bde24ace0eb5f1607304a2",
+    "size": 12339
+  },
+  {
+    "path": "config/model-assets.json",
+    "mode": 420,
+    "sha256": "e9e19355db565c5d8a26cff63868aeedb0090683b47e58d5156ac28fa9feb935",
+    "size": 1634
+  },
+  {
+    "path": "config/models.json",
+    "mode": 420,
+    "sha256": "171591eb827c8a89ba52b27a65eb8262f67a9e95c38839cd4a73051c14a3fbf5",
+    "size": 17250
+  },
+  {
+    "path": "config/sources.json",
+    "mode": 420,
+    "sha256": "5443c1db05fd307dbe2a88cf83973e4940086e62b8926641b74eb9de89ec5855",
+    "size": 1016
+  },
+  {
+    "path": "config/split-annotations.json",
+    "mode": 420,
+    "sha256": "094486dc844f0374097a19fbcd4da772f5d9c6730fea700927d603d6b9c91b7c",
+    "size": 593
+  },
+  {
+    "path": "config/splits.json",
+    "mode": 420,
+    "sha256": "ad7b30384a5b52fd317ab0f5bd6a15bbcaa742315079e61af1cf77afa5c21351",
+    "size": 378
+  },
+  {
+    "path": "docs/PLAN.md",
+    "mode": 420,
+    "sha256": "2f49199685abcd262268c359c6eb32cd54925c9fa55d2aca6e9b5f1f6834fde5",
+    "size": 31406
+  },
+  {
+    "path": "pyproject.toml",
+    "mode": 420,
+    "sha256": "49841d7f9771ab90b97b6293d4ca03f64052947266c88a93166624947b1758de",
+    "size": 790
+  },
+  {
+    "path": "scripts/check_ocaml_probe.py",
+    "mode": 493,
+    "sha256": "2b8fc9fa2cd2c2f1c17f2a069ae36e6c5a9f2dcfd360a3597455e512d18b2a00",
+    "size": 11329
+  },
+  {
+    "path": "scripts/esy-repair/claude-worker.sh",
+    "mode": 493,
+    "sha256": "9c774c821615dc604eaea1fdcaed8bf38b67909288e309d9913bf028dae5c63c",
+    "size": 683
+  },
+  {
+    "path": "scripts/esy-repair/codex-worker.sh",
+    "mode": 493,
+    "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2",
+    "size": 1425
+  },
+  {
+    "path": "scripts/esy-repair/controller.py",
+    "mode": 493,
+    "sha256": "63db0b93671ac0af9f3099c6338775b319555350c7cf20bfb3045b0511dbba0f",
+    "size": 84776
+  },
+  {
+    "path": "scripts/esy-repair/pi-worker.sh",
+    "mode": 493,
+    "sha256": "bbb9c26e41ea6a7ba6d17558d6dff7f614b75f7ca378084f218e0f5c8bedf794",
+    "size": 522
+  },
+  {
+    "path": "scripts/probe_qwen35.py",
+    "mode": 420,
+    "sha256": "05efd515090800cedb320ec13abc3af9816ad6a9c5cbbef503bbc7dcc8b6270c",
+    "size": 14609
+  },
+  {
+    "path": "scripts/probe_qwen35_adapters.py",
+    "mode": 420,
+    "sha256": "3d1c25a706df27fbaefece5d1bc1837db005fa7e4d9dcc86839c5660b7905ba3",
+    "size": 30536
+  },
+  {
+    "path": "scripts/sft",
+    "mode": 493,
+    "sha256": "78c9424608e11cc7cc21f0fb5c879752010cf18b23115a56fe16e32f38064903",
+    "size": 325
+  },
+  {
+    "path": "src/sft/__init__.py",
+    "mode": 420,
+    "sha256": "2e0301bafbea4b262780a8c55bbb3fbe74b2be7e9c2a5d8b3d07f89b0b33696a",
+    "size": 65
+  },
+  {
+    "path": "src/sft/__main__.py",
+    "mode": 420,
+    "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "size": 48
+  },
+  {
+    "path": "src/sft/artifacts.py",
+    "mode": 420,
+    "sha256": "85af4919d95edc103b894b191bcc36dd7e39073c71ec3c28b35c0c37102ddc89",
+    "size": 5639
+  },
+  {
+    "path": "src/sft/chunks.py",
+    "mode": 420,
+    "sha256": "d9dd77e46c8609b21bec8dc2c7378914d7707d5cd9b86514769c1446295ae40e",
+    "size": 31548
+  },
+  {
+    "path": "src/sft/cli.py",
+    "mode": 420,
+    "sha256": "df39dcbb19a0e9e18b8d4abec11f82b22d4750a4f6853fb12349f18ea89eed94",
+    "size": 6757
+  },
+  {
+    "path": "src/sft/conversion.py",
+    "mode": 420,
+    "sha256": "353366fcc3deb78eba0321209f3e4d1f6135e64eee66ea3d1b41d406e4aa873d",
+    "size": 30330
+  },
+  {
+    "path": "src/sft/corpus.py",
+    "mode": 420,
+    "sha256": "0028a8f878557625269b27cb3a839c2e22ae2b49aef04bc0ea35ea69aa0a0b0c",
+    "size": 15937
+  },
+  {
+    "path": "src/sft/doctor.py",
+    "mode": 420,
+    "sha256": "df70ff75e8da91d0b597bd3c2a134da1537b28b5ccb58e410f7ab45c30b52cd8",
+    "size": 3997
+  },
+  {
+    "path": "src/sft/e2e.py",
+    "mode": 420,
+    "sha256": "411619392a7059ec26fa4c1cfb8a276448e3cf94ad441b4d6bfe368fa444826c",
+    "size": 3731
+  },
+  {
+    "path": "src/sft/eligibility.py",
+    "mode": 420,
+    "sha256": "6a19808b125ee057142f6ab4d028da1e260873875acd3e22564da5937f017048",
+    "size": 18130
+  },
+  {
+    "path": "src/sft/extract.py",
+    "mode": 420,
+    "sha256": "c0dc445374465003100562fdf627f7befce99ae963089307a5f9d41af1190e96",
+    "size": 28327
+  },
+  {
+    "path": "src/sft/handoff.py",
+    "mode": 420,
+    "sha256": "72d4bfb8459268c194c5c40184a0332c724821276e363afb508d4d2c895f66e1",
+    "size": 13749
+  },
+  {
+    "path": "src/sft/ledger.py",
+    "mode": 420,
+    "sha256": "4dab2c19e2cb345d6a4b9a24000bef350e51c566aff109c313c520fc0de382c0",
+    "size": 12662
+  },
+  {
+    "path": "src/sft/model_assets.py",
+    "mode": 420,
+    "sha256": "c32fd91408e33d27ea88613e9d4f96da17c20d6395f45a408111de6fad3f5fd9",
+    "size": 18378
+  },
+  {
+    "path": "src/sft/models.py",
+    "mode": 420,
+    "sha256": "2ea9f79d5665ebce12a423beb0e882c7517baecd452bccb72b785c259095e66b",
+    "size": 33472
+  },
+  {
+    "path": "src/sft/process.py",
+    "mode": 420,
+    "sha256": "2f5c86ca22f273d27620cd397b16872a2bfe0cf40bf4e172f4936312123c8861",
+    "size": 1274
+  },
+  {
+    "path": "src/sft/splits.py",
+    "mode": 420,
+    "sha256": "4b3abec9b03c5a4d898ae750c45997fd9f4573a40b42626704759d893b2457a0",
+    "size": 24951
+  },
+  {
+    "path": "src/sft/workflow.py",
+    "mode": 420,
+    "sha256": "e68a62b3bf76a9f0dbcf274e5cbed4fc7186983154087d3e53fd579dcc7bf4a2",
+    "size": 8988
+  },
+  {
+    "path": "tests/e2e/scripted_provider.py",
+    "mode": 420,
+    "sha256": "d89feb219168b8c610e5578bcca58635df0dc2689297c43b986daa36f32070f7",
+    "size": 1245
+  },
+  {
+    "path": "tests/e2e/test_bonito_conversion.py",
+    "mode": 420,
+    "sha256": "4af0c1caf5fb065f4847766847eb9c4578ab1fba12aa4cb9b178857fbd476551",
+    "size": 16649
+  },
+  {
+    "path": "tests/e2e/test_chunks.py",
+    "mode": 420,
+    "sha256": "b6123a08b77081d6d78a4b84a44e48699580fe7c120f588954da63adc511fbfb",
+    "size": 14377
+  },
+  {
+    "path": "tests/e2e/test_control.py",
+    "mode": 420,
+    "sha256": "58e9b73b1e9e76031577a69a68f81d67de0b2befd7f58303873d761512657fdf",
+    "size": 21496
+  },
+  {
+    "path": "tests/e2e/test_eligibility.py",
+    "mode": 420,
+    "sha256": "c8a39afc9102558f129b2d54f2b34f63f1000cb6d82b4cc76edb8830635389bf",
+    "size": 16478
+  },
+  {
+    "path": "tests/e2e/test_esy_lifecycle.py",
+    "mode": 420,
+    "sha256": "4ccbf9db13f17bf6197046f61b834fd3af9abed31020b8dec4950b7abb2906b7",
+    "size": 6139
+  },
+  {
+    "path": "tests/e2e/test_esy_repair_controller.py",
+    "mode": 420,
+    "sha256": "7dbd8fc9c780794e163dcf6bc02be242c35042b255e40c975739b8499cb46222",
+    "size": 23310
+  },
+  {
+    "path": "tests/e2e/test_extraction.py",
+    "mode": 420,
+    "sha256": "3732363d8cb12e06533d3e64e7bc35637c13f0af00f4b56dfb1bbabb1c440d46",
+    "size": 23791
+  },
+  {
+    "path": "tests/e2e/test_handoff.py",
+    "mode": 420,
+    "sha256": "c59cfb9c13525e63e532cf6a8a7331a9e7dbef5205a96d90f74ebd16b8185fe1",
+    "size": 4831
+  },
+  {
+    "path": "tests/e2e/test_ledger.py",
+    "mode": 420,
+    "sha256": "caa428e1b0ed200520ed62ed924fd3467823f6acb374dbf803700e6c6910bc22",
+    "size": 12356
+  },
+  {
+    "path": "tests/e2e/test_models.py",
+    "mode": 420,
+    "sha256": "7fb10ae83915293be101c9b909f65dfd03caf2987c7f3e6b29293aa45cc70fb2",
+    "size": 16650
+  },
+  {
+    "path": "tests/e2e/test_ocaml_checker.py",
+    "mode": 420,
+    "sha256": "bd9e14bc0823314570749f43a31c3bb0511f76890143085f6d7c13fbfd81a337",
+    "size": 3816
+  },
+  {
+    "path": "tests/e2e/test_preflight.py",
+    "mode": 420,
+    "sha256": "f795160a49bd332cd24a45a6725f93a13510408d75143a13525acbeca5d46f1b",
+    "size": 2904
+  },
+  {
+    "path": "tests/e2e/test_qwen35_probe.py",
+    "mode": 420,
+    "sha256": "485b19f46cc184bdb8b575d5ae8334f50a4642280867c2ca58b0ea7e61cdbb9a",
+    "size": 5597
+  },
+  {
+    "path": "tests/e2e/test_sources.py",
+    "mode": 420,
+    "sha256": "cda66548ff3adc4e9d1ec76ae49f1aa9cfc78f3242e547ef122e42c854410007",
+    "size": 11783
+  },
+  {
+    "path": "tests/e2e/test_splits.py",
+    "mode": 420,
+    "sha256": "823ee98af21067f4cce942ed546da163a1936d4fd13bdb83f6bd25e1b5e508cb",
+    "size": 20281
+  },
+  {
+    "path": "tests/e2e/test_tokenizer.py",
+    "mode": 420,
+    "sha256": "b5396226299475232e7bb315b25c0c4223ddb27aef1ef42c69b127794fde885f",
+    "size": 11151
+  },
+  {
+    "path": "uv.lock",
+    "mode": 420,
+    "sha256": "3dacc98fe3a959f78056b1b19e4ff45e9c4e55dda70e4c408aa52b8412808329",
+    "size": 87084
+  }
+]

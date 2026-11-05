@@ -1,0 +1,47 @@
+[
+  {
+    "scenario": "policy",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 38217,
+      "worker_reaped": true,
+      "exit_code": 0,
+      "reason": null,
+      "elapsed_seconds": 0.803,
+      "single_worker_assumption": "requires separately proven native process-fork denial",
+      "credential_removed": true
+    },
+    "credential_absent": true
+  },
+  {
+    "scenario": "setup-failure",
+    "passed": true,
+    "receipt": {
+      "status": "CLEANUP_UNVERIFIED",
+      "worker_pid": null,
+      "worker_reaped": false,
+      "exit_code": null,
+      "reason": "guardian-exception:RuntimeError",
+      "elapsed_seconds": 0.001,
+      "single_worker_assumption": "requires separately proven native process-fork denial",
+      "credential_removed": true
+    },
+    "credential_absent": true
+  },
+  {
+    "scenario": "launcher-death",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 38223,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "launcher-eof",
+      "elapsed_seconds": 0.064,
+      "single_worker_assumption": "requires separately proven native process-fork denial",
+      "credential_removed": true
+    },
+    "credential_absent": true
+  }
+]

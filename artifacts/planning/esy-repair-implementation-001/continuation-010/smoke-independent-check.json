@@ -1,0 +1,8 @@
+{
+  "complete_events": true,
+  "terminal_agent_settled": true,
+  "matching_tool_events": true,
+  "tool_errors": false,
+  "exact_identity": true,
+  "sha256": "71e1c3d365011964eb200f04b8d9790e440e72fcfe106b5bdded3ff4fdee5a1c"
+}

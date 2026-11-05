@@ -1,0 +1,10 @@
+{
+  "time": 1792719910.553233,
+  "query_exit": 0,
+  "matching_processes": [],
+  "auth_absent": {
+    "A8-high-correction-dispatch-review-001": true,
+    "A8-L1-correction-plan-001": true
+  },
+  "prior_receipts_preserved": true
+}

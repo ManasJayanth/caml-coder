@@ -1,0 +1,182 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "Authorized coding cap36 exhausted. Complete result receipt/invocation inventory and independently reviewed outer execution wrapper are missing; public adapter/lifecycle/runner E2Es have not run. Broader supervisor/controller/import gates remain open.",
+  "review_policy": "Astra only. Claude/Fable unavailable and disabled by latest human instruction.",
+  "coding_launches_consumed": 36,
+  "coding_launch_cap": 36,
+  "coding_launches_remaining": 0,
+  "active_seconds_consumed_at_packet": 24923.746,
+  "active_seconds_limit": 32400,
+  "active_seconds_remaining_at_packet": 7476.254,
+  "working_candidate": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/candidate",
+  "working_candidate_sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4",
+  "revision_identity_definition": "SHA256 of exact final coding result-manifest.json; candidate files independently matched its 82 entries",
+  "normalized_candidate_inventory_sha256": "39f83f0be0555f7c6538f9e4c4ff2a597fd07a5807e1467136de7110189eb803",
+  "last_coding_revision_manifest": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/result-manifest.json",
+    "bytes": 14469,
+    "sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4"
+  },
+  "original_entries_verified": 72,
+  "historical_artifacts_verified": 2020,
+  "original_mismatches": [],
+  "imported": false,
+  "containers_created": false,
+  "public_candidate_e2es_executed": false,
+  "source_review_final": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-036.json",
+    "bytes": 5619,
+    "sha256": "c58ad686e500d647288bcd1b6dfa7cdde428d47c4de6703235e9560b980f4a56"
+  },
+  "remaining_frontier_plan": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/remaining-frontier-plan.json",
+    "bytes": 18048,
+    "sha256": "9c0b5f3802bac49fa3795d7280aafbf598f7acc259a2ea3642167800aeadb539"
+  },
+  "jobs": [
+    {
+      "job": "B1a-Arity-035",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Arity-035/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "18fce1e4316898c27c0942882ad5b2801ded5ca1a36bd6334384ed829a8aff66"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Deadline-029",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Deadline-029/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "4d2ae02b045cfce9cffc85c087ab9f8bc8a34efb8a02511c773170e47736d412"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Diagnostics-036",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "656e49e650b81518feb8459ecc6dfa534c6107a08591deb7d638757772ac9356"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Lifecycle-026",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "6f6a3fa750e8d22b80cf50ba6a39ac89d7e79447853e9bdb49eed88194dda330"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Lifecycle-027",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-027/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "e85cc39e6c82ea8eb69b6783b14db1e44d5ba156a7613d6097369392847e69b5"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Newline-031",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Newline-031/guardian/receipt.json",
+        "bytes": 258,
+        "sha256": "f761a8d4a8aa48e9573fa2376c60b5d4bfa929894eb6645ce935556899c1babb"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Receipt-028",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Receipt-028/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "dc544afe993c164e368bdec158daceedba70ee465553806dcdc936baec8798fe"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Records-030",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Records-030/guardian/receipt.json",
+        "bytes": 258,
+        "sha256": "855f545a650b730e225085a3a449b838a9e2f57f224d2e3cdd2e15db99ca4e89"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Routing-032",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-032/guardian/receipt.json",
+        "bytes": 268,
+        "sha256": "d74c542e77002342b68809fec14469858410428acdb31994318ad3ddb8ffa913"
+      },
+      "exit_code": -9,
+      "reason": "output-cap",
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "FAILED_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Routing-033",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-033/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "ce2542f59730f42c4b8c75b1e180de16b4859a94f3625c565debb44ac022e29a"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    },
+    {
+      "job": "B1a-Routing-034",
+      "receipt": {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-034/guardian/receipt.json",
+        "bytes": 259,
+        "sha256": "09f1ee7bd6ae74af38534d01ec21cf3c0af18e6f644f8c6c96d18706937b4908"
+      },
+      "exit_code": 0,
+      "reason": null,
+      "worker_reaped": true,
+      "credential_removed": true,
+      "status": "SOURCE_ONLY_RUNTIME_UNACCEPTED"
+    }
+  ],
+  "next_step": "New human coding allocation is required before any further coding. Reconcile tail active time and idle intervals, preserve all budgets, bind future cards to this source, and satisfy missing receipts/wrapper and real E2Es before acceptance. No automatic import or dispatch."
+}

@@ -1,0 +1,41 @@
+{
+  "status": "PASSED",
+  "checks": {
+    "exact_fixture": true,
+    "reaped": true,
+    "exit0": true,
+    "no_failure": true,
+    "credential_removed": true,
+    "model_identity": true,
+    "complete_json": true
+  },
+  "reported_identity": [
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "toolUse"
+    },
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "toolUse"
+    },
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "stop"
+    }
+  ],
+  "guardian": {
+    "status": "TERMINATED",
+    "worker_pid": 38689,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 7.164,
+    "single_worker_assumption": "requires separately proven native process-fork denial",
+    "credential_removed": true
+  },
+  "profile_sha256": "3e500b89a9bbfafd8a6bc5a88e19c280593d9da17c13af777eb7eb65ced95aac",
+  "scope": "isolated provider smoke only"
+}

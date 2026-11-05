@@ -1,0 +1,515 @@
+EXECUTION PLAN 011 — REVIEW-WORKER ADAPTER ACCEPTANCE
+
+Disposition: PLAN ONLY. This document creates no execution approval, reservation,
+budget entry, implementation, test run or worker launch. Its instructions describe
+future execution after the prerequisite gates below. Do not run its snippets now.
+
+1. Target and authoritative starting point
+
+The next milestone is acceptance of the review-worker adapter: complete bounded
+receipts, its fixed public E2Es, independent process completion evidence, a real
+Astra provider smoke through the actual adapter, and a fresh final Astra review.
+Do not expand to LoRA, training, dataset generation, the wider esy fault matrix,
+general controller repairs, or import into original repository source.
+
+Read RESULT-010.json and continuation-010/{remaining-frontier-plan.json,
+execution-envelope-plan.json,astra-source-review-036.json} together. The latter
+two files live under continuation-010, not directly under the planning directory.
+Preserve these historical files. The user's subsequent allocation supersedes
+only their exhausted coding-cap statements: 36 launches consumed; cap now 48;
+the twelve possible additional launches are 37–48. Their technical findings and
+absence of runtime acceptance still apply. Failed launches consume a slot.
+
+Starting revision is SHA256 of the exact result-manifest.json for
+continuation-010/coding-jobs/B1a-Diagnostics-036:
+4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4.
+The candidate directory is continuation-010/candidate. Its normalized inventory
+hash is 39f83f0be0555f7c6538f9e4c4ff2a597fd07a5807e1467136de7110189eb803.
+The test source hash is
+345b8c7b052bda1d0a77c2d12fb70b3ca41181ade5e3f3ccb2e012b3404325fe.
+Review036 hash is
+c58ad686e500d647288bcd1b6dfa7cdde428d47c4de6703235e9560b980f4a56.
+The envelope design hash is
+067233313fbc3f8a974adf7c1da2f685da9405f23144ab7365da4d4ba877a8c6.
+
+Execution starts by independently checking the complete 82-entry parent manifest,
+including size, mode, nonsymlink regular-file inventory and no extra entries;
+checking these bindings and historical/original preservation evidence; and
+freezing a fresh continuation-011 candidate. Do not treat this planning read as
+that check. Every later card binds the actual last accepted immutable manifest,
+not permanently revision036. A changed input requires a new bound review.
+
+Only Astra may plan or review. Claude/Fable is unavailable and disabled. Coding
+uses gpt-6-luna with high reasoning through the proven isolated Pi route. A
+separate-agent source review may gate source work; it does not substitute for
+the final real-provider, through-adapter review.
+
+2. Accounting and stop rules
+
+The active-time ceiling remains 32400 seconds. The packet checkpoint is
+24923.746 seconds, leaving at most 7476.254 seconds before unreconciled tail,
+subsequent planning/review/cleanup, and current work. Reconcile that tail and
+document provable idle intervals before any dispatch. The current planning
+interval is pending reconciliation; this file does not change any ledger.
+Use existing interval-accounting semantics, preserve historical entries, and
+never subtract idle by inference or reset a clock at continuation boundaries.
+Record active intervals with monotonic elapsed durations and wall-clock anchors;
+recover interrupted intervals conservatively. Serial work avoids double counting.
+
+At execution, acquire the exclusive workflow lock and record a durable next-slot
+reservation immediately before attempting a coding launch. Never reuse a slot
+after a failed/uncertain launch. Reconcile source review, E2Es, provider runs,
+cleanup and planning against time even when they consume no coding slot.
+No active-time increase is authorized. Retain a cleanup/handoff reserve of at
+least 180 seconds; do not dispatch a 600-second coding job without at least
+840 seconds available for its deadline, bounded cleanup and that reserve.
+Do not interpret twelve launches as twelve promised 600-second runs.
+
+Stop when the cap/time gate would fail, source/environment bindings differ,
+cleanup/ownership is uncertain, a transport is unavailable, or a card exceeds
+its scope. After three failed attempts on one objective, obtain a fresh separate
+Astra frontier plan before another attempt; this does not reset either budget.
+An uncertainty stop retains the lock and evidence. No automatic orphan salvage.
+
+3. Transport facts and the pre-dispatch bootstrap gate
+
+The existing continuation-010/launch-correction.py cannot launch37: it asserts
+24<=round<=36, records cap36, fixes continuation010 paths, and derives remaining
+time from an old wall-clock start. Do not edit or run that historical launcher.
+The old continuation-009/run-B1a-e2e.py is rejected and remains disabled.
+
+Before37, prepare a narrow continuation-011/dispatch-coding.py, a new operational
+bootstrap rather than a candidate/controller replacement. This is a proposed
+file, NOT an existing callable interface. Its only operation is one approved
+Pi coding card; retain the proven guardian/spec contract, isolated workspace
+location and credential lifecycle. Bind its exact source and independent Astra
+review before execution. Root-authored bootstrap work does not bypass accounting
+or review; if a coding worker authors it, that launch consumes one of37–48 and
+must itself use an already independently accepted launch path. If no such path
+exists, stop at the bootstrap gate instead of executing an unreviewed bootstrap.
+
+Limit bootstrap changes from launch-correction.py to new output paths, cap48,
+continuation-aware interval accounting, strict card/manifest gates, guarded
+ownership cleanup and bounded evidence. Keep one frozen card/workspace per job,
+copy only explicit allowed files back into the continuation candidate after
+review, and never import into original source. Independently test this exact
+bootstrap end to end with its fixed real Pi read/edit/write operation before
+accepting its completion handling. Use the first authorized coding card for
+that test so there is no uncounted coding smoke. Any added credential-fixture
+test must use a separately reviewed fixed E2E recipe and needs no coding launch;
+do not execute helpers or import the bootstrap to unit-test it.
+
+Guardians are not interchangeable:
+  - continuation-008/guardian-v2.py takes ONE JSON spec pathname. The keys are
+    argv, env, cwd, output, timeout, cap, auth_source; auth_source is 'real' for
+    coding. Its parent stdin must remain an open liveness pipe while the parent
+    supervises it. It creates output itself, so output must not already exist.
+    Its existing runtime/auth path is continuation-008/pi-runtime-v2/private-pi.
+  - Its source calls itself experimental. Revalidate the exact prior native
+    nofork evidence and guardian approval; receipt claims alone are insufficient.
+    The new bootstrap must independently supervise guardian completion, bound
+    its own streams, protect exceptions and acquisition, observe a direct reap,
+    and verify credential removal. Missing/uncertain receipts stop the workflow.
+  - The nofork Pi profile permits writes only under continuation-008/pi-runtime-v2.
+    Keep job workspaces/prompts there; new manifests and receipts may live under
+    continuation011. Do not silently relocate or broaden that sandbox.
+  - candidate/scripts/esy-repair/pi-worker.sh accepts code, workspace, prompt,
+    profile plus PI_BIN/PI_PROVIDER/PI_CODING_MODEL. It does not specify high
+    reasoning or all proven isolation flags. It is NOT the authorized high
+    transport. Do not replace the proven Pi invocation with this shorter adapter.
+
+Actual review route, with five arguments after the adapter path:
+  /bin/bash CLAUDE_ADAPTER review WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE
+claude-worker.sh review execs sibling codex-worker.sh review; it does not invoke
+Claude. codex-worker.sh plan/review fixes gpt-6-astra, read-only, shell disabled,
+apps/plugins/hooks/multi_agent/shell_snapshot disabled, ignored user config and
+ephemeral execution. The supplied Codex executable must be absolute, executable
+and nonsymlink; do not invent a path or model override. CLAUDE_BIN is irrelevant
+to this route. Claude code, Fable, Codex code, arbitrary fallback transports and
+direct helper/unit tests remain disabled.
+
+4. Receipt schema decision — independent review BEFORE implementation
+
+The earlier demand to fit all rows, exact argv, lifecycle inventory and retained
+logs into one 65536-byte JSON object is inconsistent with its worst-case data.
+Adopt a bounded index plus bounded detail files. This is an explicit schema
+change to the frontier/envelope contract and must receive its own independent
+Astra design verdict; do not smuggle it into a receipt implementation card.
+
+Proposed version2 layout beneath each validated scenario output directory:
+  result.json: at most65536 raw bytes, strict JSON, fixed schema version/scenario,
+    source binding, overall status, primary failure, completeness/publication
+    state, ordered planned row summaries, and ordered invocation references.
+  detail/call-NN.json: at most65536 raw bytes EACH; at most32 files; exact argv,
+    adapter argv/count, expected/observed statuses and byte-safe streams, routing
+    and record checks, process identity/ownership/finalization observations.
+  Existing lifecycle.json/deadline.json/record-bound.json/routing.json remain
+    bounded scenario evidence; references carry relative path, size and SHA256.
+  Retained outer stdout/stderr are separate raw files, each at most65536 bytes.
+    records.jsonl keeps its independent16384 acceptance/16385 observation limit.
+
+Every reference is a unique fixed relative nonsymlink regular file within the
+owned output, with exact size/hash. Readers cap at limit+1 BEFORE JSON parsing,
+reject duplicate keys/references, unexpected entries, unsupported schema and
+missing/hash-mismatched files. At most32 calls,18 matrix rows,32 detail files and
+3MiB total scenario evidence; no recursive references or unbounded directory scan.
+The schema review supplies a field-by-field byte budget proving the index/detail
+maxima, including JSON/base64 expansion. No reliance on usual short logs.
+
+Matrix/routing rows are precreated in the exact nine response + nine arity order.
+Each row has stable ID, pass/fail/not-run, invocation reference or null, and
+primary failure or null. Control scenarios have fixed scenario rows; diagnostic
+controls explicitly record zero invocations and childless classification. All
+18 matrix rows remain present after an early failure, with later rows not-run.
+Exact argv and full bounded observations may live in a hash-bound detail rather
+than repeated in the index. Expected and observed values remain distinct.
+
+Stream fields: encoding=base64, observed/retained byte lengths, overflow/truncation
+flags, payload, EOF observation; null means not observed, never an empty success.
+Preserve the existing4096 per-stream behavior and the4097 overflow observation;
+do not enlarge the process limits to accommodate evidence. Exact expected bytes
+remain available. Bound argv aggregate to8192 UTF-8 bytes and all variable error
+text/counts explicitly. An exceeded schema bound yields deterministic nonzero
+publication/inventory failure; never discard an invocation or silently truncate
+an ownership fact to claim complete evidence. Truncated diagnostic text is marked.
+
+Register an invocation BEFORE each bounded_run attempt, including exhausted
+no-child attempts. Bind caller/scenario ID and actual acquired PID, PGID/session
+leader identity, acquisition/ownership phase, signal intent/attempt/result,
+first signal, reap, pipes including independently observed EOF versus merely
+closed, selector, handler restoration, primary failure and cleanup errors.
+Record partial bounded output and status on failures before re-raising.
+Source review proves every call site and spawn-handoff/exception path is covered.
+Persist post-validation handled failures; validation/parser failures have an
+outer receipt but cannot claim a validated result directory. Uncatchable death,
+missing inventory or uncertain publication is uncertainty, never zero children.
+
+Write bounded detail files first with exclusive creation; publish an atomically
+replaced, fsynced index only after hash/size verification. Publication failure
+is nonzero and cannot mask the original failure. The outer observer rejects
+incomplete detail sets. The schema review must settle precise field names,
+types/null rules, fixed counters and overflow/error-index behavior before37.
+
+5. Serial queue: small cards with explicit paths and evidence
+
+Numbers below are provisional next slots, not reservations. Corrections take
+the next actual number, shifting later cards; never run unrelated cards in one
+launch to fit48. Each prompt includes one objective, exact parent/input hashes,
+allowed paths, acceptance rows, a stop condition and read/edit/write-only rules.
+All coding patches target less than3000 characters per edit, output cap2MiB,
+no worker execution/import/compilation/tests/Docker/provider calls/delegation.
+
+A — result publication (nominal37)
+  Allowed: tests/e2e/test_review_adapter_e2e.py only.
+  Prerequisites: reviewed version2 schema; validated parent; accepted bootstrap
+  source; reconciled budgets and prior cleanup.
+  Concern: precreate/persist complete planned rows on success/handled failure,
+  bounded index/detail publisher, explicit not-run rows and publication failure.
+  Do not claim complete all-call inventory until B. Preserve all source closures.
+  Evidence: exact diff, parent/result manifests, scope validation, guardian/reap/
+  credential evidence, fresh Astra source review; runtime still unaccepted.
+
+B — all-call inventory (next slot, nominal38)
+  Allowed: tests/e2e/test_review_adapter_e2e.py only.
+  Prerequisite: accepted A source, its exact manifest and schema review.
+  Concern: register every bounded_run, retain failure bytes/status and complete
+  ownership observations using the reviewed schema; explicit diagnostic no-child.
+  Preserve lifecycle signaling/deadlines and all existing scenario receipts.
+  Evidence: independently reviewed call-site inventory and all schema bounds,
+  immutable manifests/diff, complete worker cleanup. No runtime claim yet.
+
+C — fixed sequential runner (next slot, nominal39)
+  Allowed: one new runner source, staged as run-review-adapter-e2e-011.py in
+  the isolated card workspace and frozen under continuation-011 after review.
+  No candidate test/adapters/dependencies/controller/history edits.
+  Prerequisite: source-closed A+B, explicit environment bindings, independently
+  approved detailed execution-envelope contract including version2 receipt reads.
+  Concern: fixed scenario argv/deadlines, child ownership/finalizer, raw bounds,
+  receipt validation and independent descendant observation. No arbitrary argv,
+  dynamic scenario discovery, config/plugin imports or provider activation.
+  This partial runner remains non-executable pending D. Evidence is source only.
+
+D — independent bootstrap (next slot, nominal40)
+  Allowed: only the same run-review-adapter-e2e-011.py in its isolated workspace.
+  Prerequisite: exact C source review and reviewed bootstrap/runner role protocol.
+  Concern: two internal fixed roles in that single file; independent deadlines,
+  private bounded liveness/control pipe, protected bootstrap acquisition/finalizer,
+  independent runner completion/descendant checks and durable uncertainty receipt.
+  Evidence: separate Astra exact-source review of the COMPLETE file, both actual
+  adapters/generated fake/profile and environment; then real public E2Es below.
+  Neither C nor D is approved by the rejected old controller or by self-report.
+
+E — real-provider containment, only if the accepted envelope does not already
+    supply a specifically reviewed fixed provider operation
+  Allowed: same new envelope source only; no candidate adapter changes.
+  Prerequisite: accepted full public fake E2Es, explicit actual Codex executable,
+  availability, review profile and credential/config exposure review.
+  Concern: one fixed smoke then fixed final-review invocation via the existing
+  claude-worker.sh review route, with bounded evidence and complete descendant
+  ownership proof. Real Codex may fork; fake process-fork denial is not proof.
+  If descendant groups can escape, or provider behavior cannot meet the finite
+  contract, block provider acceptance; do not grow a general controller here.
+  Independently review and test this exact source before provider acceptance.
+
+Reserve remaining slots (nominal42–48 if E consumes41; otherwise41–48) for narrow
+corrections identified by Astra or actual E2Es. This is a budget strategy, not a
+claim the milestone fits. A/B or C/D may need further splitting before dispatch;
+reduce the correction reserve visibly rather than bundling concerns. Runtime
+evidence gathering/reviews do not themselves spend coding launches, but consume
+active time. Every source correction restarts relevant exact-revision evidence.
+
+6. Public E2E and independent containment acceptance
+
+Use the complete final script as a process, actual frozen adapters and native
+sandbox. No imports, helper invocation, monkeypatching, unit tests or sandbox
+replacement. Before any run, independently bind the final source manifest,
+envelope hash, /opt/homebrew/Cellar/uv/0.13.5/bin/uv, actual resolved project venv
+Python, pyproject.toml, uv.lock and environment. Wrong uv path blocks; no implicit
+upgrade/download/sync. Verify -I preserves required public behavior. Fixed env:
+PATH=/usr/bin:/bin, LANG=C, private HOME/TMPDIR/UV_CACHE_DIR, UV_OFFLINE=1,
+UV_PYTHON_DOWNLOADS=never; no credentials/inherited provider configuration for
+fake E2Es. Fresh owned nonsymlink0700 directories, no previous uncertain jobs.
+
+Literal scenario list and expected public status:
+  matrix                                  0
+  lifecycle-normal                        0
+  lifecycle-setup-failure                  1
+  lifecycle-post-reap-exception            1
+  lifecycle-post-reap-interrupt          130
+  lifecycle-timeout                        1
+  lifecycle-stdout-overflow                1
+  lifecycle-stderr-overflow                1
+  lifecycle-cleanup-interrupt              1
+  deadline-suite-before-first              1
+  deadline-suite-before-next               1
+  records-exact-limit                      0
+  records-one-over                         1
+  routing-missing                         1
+  routing-duplicate                       1
+  diagnostic-ascii                        1
+  diagnostic-multibyte                    1
+  diagnostic-interrupt                  130
+
+For each status also assert exact final-source expected raw streams and receipts.
+Matrix:18 pass rows/18 accounted invocations; nine exact response transparencies;
+nine invalid total-argument cases return64/empty streams/no new routing records.
+Malformed/identity/context fake responses demonstrate transparency, not provider
+trust. Routing missing/duplicate: attempt1 only, observed0/2 versus expected1,
+first row fail and17 not-run, actual response unchanged, cleanup accounted.
+Record controls:16384 accepted;16385 rejected before parsing; padding provides
+size evidence only, not protocol evidence. Deadline controls: exhausted attempt
+has no child (one preceding successful child only for before-next), no negative
+sleep. Lifecycle controls preserve their precise injected failure and independent
+reap/EOF/signal/descendant observations. Post-reap controls never signal reaped
+identities; cleanup-interrupt may report cleanup failed while independent actual
+obligations are accounted. Diagnostics: empty stdout, raw stderr exactly4096
+bytes for ASCII/multibyte, fixed b'KeyboardInterrupt\n' for interrupt, no fixtures
+or children; allow only the newly required receipt publication.
+
+Fixed bound: matrix200s; other scenarios20s each;5s cleanup per scenario. At
+most32 scenarios (actual18). Each independent ps query5s/1MiB maximum. The final
+reviewed file enumerates its exact query count and computes the full outer
+deadline as sum of scenario+cleanup+query allowances plus30s. Reconcile that
+whole allowance against remaining active time BEFORE starting the suite; no
+parallel scenarios or silent omission to fit time. Host streams65536 each;
+receipt reads65537; record reads16385. Overflow rejects before parse.
+
+Handlers precede acquisition; every exception/setup/collection path reaches a
+guarded finalizer. Bootstrap owns runner; runner owns each uv/harness leader;
+the harness owns its adapter leaders. Signal only a currently owned unreaped
+direct leader/group. Set reap-uncertain BEFORE waitpid; never signal after reap
+or uncertain ownership. Outer timeout/interruption gives the owned harness
+SIGTERM and3s finalizer grace; SIGKILL only with certain ownership. Forced outer
+termination prevents acceptance. Injected harness lifecycle signals are assessed
+against their specific expected control, not confused with outer failure.
+
+Bootstrap independently bounds runner/host streams and observes pipe EOF;
+runner observes bootstrap liveness. After harness reap and actual stream EOF,
+bootstrap runs fixed /bin/ps -axo pid=,ppid=,pgid= with independently supervised
+5s/1MiB bounds. Validate every row and compare complete inventoried adapter
+groups plus harness and (after exit) runner groups. Establish no group escape
+across Bash/substitution/dirname, adapters and fake before relying on this gate.
+EOF, receipt cleanup=success or exec_command completion is insufficient alone.
+Surviving/reused group IDs, query failure, incomplete inventory, acquisition gap,
+broken liveness, missing final receipt or crash means BLOCKED_CLEANUP_UNCERTAIN.
+Never kill saved PIDs/PGIDs, signal reaped leaders, pkill by name or salvage
+orphans automatically. Preserve evidence/lock and stop further launches.
+
+Test the new envelope itself through the real full-script public success and
+negative controls: independent process completion, expected failures, retained
+receipt/bytes, all finalizers and descendant queries. Any extra envelope failure
+control must be a fixed, independently reviewed public end-to-end recipe; no
+unbounded fault framework. Review/test the outer bootstrap, not only the child.
+
+7. Inline portable orchestration fragments (not an execution authorization)
+
+These Python3 fragments express EXISTING CLI contracts; they do not implement
+supervision. Materialize them only inside the independently reviewed proposed
+bootstrap/envelope. All binding objects below must be filled from verified
+absolute paths and hashes at execution; no placeholder may reach a launch.
+Portability means no shell interpolation or machine path guessing; native
+sandbox-exec and the explicitly pinned macOS dependencies remain mandatory.
+
+Coding spec builder, matching the inspected proven Pi invocation exactly:
+
+    from pathlib import Path
+    import json
+
+    def coding_spec(base, prompt, workspace, output, verified_env):
+        base = Path(base)  # verified planning-directory absolute path
+        runtime = base / 'continuation-008/pi-runtime-v2'
+        assert Path(prompt).is_relative_to(runtime)
+        assert Path(workspace).is_relative_to(runtime)
+        return {
+            'argv': ['/usr/bin/sandbox-exec', '-f',
+                str(base / 'continuation-008/pi-nofork-v3.sb'),
+                '/opt/homebrew/bin/pi', '--print', '--mode', 'json',
+                '--provider', 'openai-codex', '--model', 'gpt-6-luna',
+                '--thinking', 'high', '--no-session', '--no-extensions',
+                '--no-mcp', '--no-skills', '--no-prompt-templates',
+                '--no-context-files', '--no-themes', '--no-approve',
+                '--offline', '--tools', 'read,edit,write', '@' + str(prompt)],
+            'env': verified_env, 'cwd': str(workspace), 'output': str(output),
+            'timeout': 600, 'cap': 2097152, 'auth_source': 'real'}
+
+    # The reviewed bootstrap serializes the spec exclusively to job/spec.json.
+    # Exact guardian command vector, with verified interpreter identity:
+    guardian_argv = [VERIFIED_BOOTSTRAP_PYTHON, '-B',
+        str(BASE / 'continuation-008/guardian-v2.py'), str(SPEC_PATH)]
+    # Launch only in its protected owned-child block, stdin=PIPE held open,
+    # start_new_session=True; bound wait/streams and independently reap guardian.
+    # Do NOT use subprocess.run(check=True) or close the liveness pipe early.
+
+verified_env is an explicitly reviewed mapping, retaining only required pinned
+PATH/LANG/TLS trust entries and HOME=runtime/home,
+PI_CODING_AGENT_DIR=runtime/private-pi,
+PI_CODING_AGENT_SESSION_DIR=runtime/sessions, PI_TELEMETRY=0, TMPDIR=runtime.
+Credentials are provisioned/removed by the inspected guardian, never printed or
+embedded in prompts/spec evidence. Check no auth.json remains independently.
+Existing paths and the prior native sandbox/CLI bindings require reverification.
+
+Fixed E2E command construction inside the reviewed envelope:
+
+    SCENARIOS = (
+      'matrix', 'lifecycle-normal', 'lifecycle-setup-failure',
+      'lifecycle-post-reap-exception', 'lifecycle-post-reap-interrupt',
+      'lifecycle-timeout', 'lifecycle-stdout-overflow',
+      'lifecycle-stderr-overflow', 'lifecycle-cleanup-interrupt',
+      'deadline-suite-before-first', 'deadline-suite-before-next',
+      'records-exact-limit', 'records-one-over', 'routing-missing',
+      'routing-duplicate', 'diagnostic-ascii', 'diagnostic-multibyte',
+      'diagnostic-interrupt')
+    def e2e_argv(scenario, output):
+        assert scenario in SCENARIOS
+        return ['/opt/homebrew/Cellar/uv/0.13.5/bin/uv', 'run', '--offline',
+          '--project', VERIFIED_PROJECT_ROOT, '--locked', '--no-sync',
+          VERIFIED_VENV_PYTHON, '-I', '-B', VERIFIED_FROZEN_TEST,
+          '--adapter', VERIFIED_FROZEN_CLAUDE_ADAPTER,
+          '--output-dir', str(output), '--scenario', scenario]
+
+    # Execute sequentially only inside C+D's reviewed owned-child/finalizer
+    # blocks. Independently validate each receipt/detail/descendant gate before
+    # next scenario; persist expected failure separately from envelope failure.
+
+Fixed real reviewer invocation after provider-containment approval:
+
+    review_argv = ['/bin/bash', VERIFIED_FROZEN_CLAUDE_ADAPTER, 'review',
+                   VERIFIED_REVIEW_WORKSPACE, VERIFIED_REVIEW_PROMPT,
+                   VERIFIED_REVIEW_PROFILE, VERIFIED_CODEX_EXECUTABLE]
+    # This is the existing adapter interface. It is NOT a controller command.
+    # The reviewed fixed provider envelope supplies lifetime/output bounds,
+    # environment/credential policy and independent reap/descendant observation.
+
+The expanded Codex command is already in codex-worker.sh; do not duplicate or
+change its model/settings. Smoke first verifies actual provider/model identity,
+available authentication, complete context and cleanup through this route.
+Then use the same approved transport for the fresh final review. Unavailable
+Codex/Astra transport => BLOCKED_PROVIDER_UNAVAILABLE with reason/evidence;
+never substitute Claude, fake routing, a root-written review, or a separate-agent
+source review as final runtime acceptance. No nonexistent generic controller
+subcommands such as 'dispatch', 'accept', or 'run-card' are assumed here.
+
+8. Correction loop and final Astra prompt
+
+After each coding attempt, freeze outputs, independently verify complete file
+inventory and allowed-path diff, reconcile slot/time and actual cleanup, then
+obtain a fresh separate Astra source review. Worker success is not acceptance.
+Any finding or missing item goes to a fresh separate Astra planner, which makes
+one small correction card bound to current evidence. Re-run the relevant full
+public scenarios after correction; changes to common receipt/lifecycle/envelope
+code require the whole18-scenario suite. Final evidence must all bind one exact
+revision/environment; no mixing passing fragments from incompatible revisions.
+
+Use this prompt template for the final independent Astra review. Bracketed
+fields are to be filled with real values at execution, not assertions made now.
+Freeze/hash the filled prompt and include it in the evidence manifest. The
+review prompt must include complete relevant source, accumulated diffs, and bounded
+raw evidence inline; paths alone are insufficient because review tools are disabled.
+The supervisor independently verifies file hashes and supplies those verification
+receipts. If the packet exceeds supported context, use explicitly indexed review
+parts and require complete coverage plus a final synthesis; never silently truncate.
+No credentials enter any packet.
+
+  You are the independent final reviewer of review-worker adapter acceptance
+  only. Use gpt-6-astra through the actual reviewed adapter route. Do not edit,
+  execute code, delegate, or infer runtime evidence from source closure.
+
+  Revision identity: [exact result-manifest path, bytes, SHA256].
+  Parent revision: [path, bytes, SHA256].
+  Source inventory: [all frozen paths/modes/bytes/hashes; exact inventory hash].
+  Allowed changes/card dispositions: [card IDs and reviewed scope/evidence].
+  Receipt schema approval: [version2 design/source review paths and hashes].
+  Bootstrap/runner/provider-envelope binding: [paths, bytes, hashes, independent
+  source reviews, exact tested public commands and independent completion].
+  Environment: [OS/native sandbox, uv, resolved Python, venv/dependency lock,
+  adapters, real Codex executable/provider/model and configuration bindings].
+  Public E2Es: [all18 literal scenario IDs; exact argv; expected/actual statuses;
+  raw stdout/stderr lengths/hashes; bounded index/detail paths/hashes; row and
+  call inventories; original failures; actual reap/EOF/cleanup; independent ps].
+  Provider smoke: [actual adapter argv, provider/model identity, complete context,
+  availability result, raw evidence hashes, bounds and cleanup observations].
+  Review coverage: [file/byte inventory supplied; all files read or omissions;
+  context/output truncation flags; transport's complete terminal response].
+  Accounting: [launches consumed/cap48; all failed launches; active intervals/
+  total/remaining within32400; checkpoint/tail reconciliation; cleanup reserve].
+  Preservation: [original/historical inventory checks, no import, lock disposition].
+
+  Inspect the supplied independent hash/size verification receipts, schema bounds
+  and complete evidence coverage. Do not claim to have read path-only files or
+  recalculated hashes without an execution tool.
+  Check correctness, regression, provenance, process ownership, finite failure
+  contract and all milestone acceptance criteria. Distinguish expected negative
+  controls from envelope failure. Zero findings alone is insufficient if evidence
+  is missing. Return a bounded structured report with revision, findings (stable
+  ID/severity/location/evidence), missing_evidence, coverage/truncation state,
+  cleanup disposition and verdict ACCEPTED or INCOMPLETE/BLOCKED. Acceptance
+  requires zero findings AND zero missing evidence, all18 E2Es plus real smoke,
+  independently completed envelope and preserved accounting/source bindings.
+
+If output/context is truncated or response is malformed, no acceptance. Fix the
+bounded review packet/transport and repeat a fresh independent review. Every
+final finding/missing item returns to the same planner/correction/E2E/review loop
+subject to the unchanged budgets. Do not promise completion when time is short.
+
+9. Final handoff printed in full, including on a stop
+
+At the end of execution, write a new RESULT-011 and human-readable handoff under
+continuation011; never replace RESULT-010. Print the entire final handoff in the
+conversation, not only a link. Include:
+  - milestone verdict, exact accepted/unaccepted revision and environment hashes;
+  - complete card/launch ledger (including failures), cap48 and remaining slots;
+  - checkpoint, reconciled tail/idle evidence, final active total/remaining32400;
+  - each18 scenario's expected/actual result and evidence reference;
+  - schema, source and envelope reviews, independent completion/cleanup/locks;
+  - real-provider smoke and final Astra report with zero/missing findings status;
+  - source/original preservation, credential cleanup and any uncertainty;
+  - precise open blockers and the next bound small card, if incomplete;
+  - the fully populated independent-review prompt, complete relevant source and
+    accumulated diff, or indexed complete parts with coverage receipts. Include
+    the returned review and the separate planning disposition of every finding.
+
+Even milestone ACCEPTED does not authorize original-source import or establish
+the broader supervisor/controller, esy fault matrix, native paired acceptance,
+LoRA/training, or global readiness gates. Preserve those open dispositions from
+the frontier plan. A stopped run is an honest INCOMPLETE/BLOCKED handoff with
+all artifacts retained, not a reason to enlarge scope or reset budgets.

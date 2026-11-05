@@ -1,0 +1,3 @@
+Latest human instruction: use Codex Astra for review, followed by go.
+Mandatory review: fresh Codex gpt-6-astra process. Separate fresh Astra planner. Coding model: gpt-6-luna. Pi openai-codex backend activated only for individually reviewed supervised authoring after real smoke and native no-fork containment evidence; native Codex code-mode requires forbidden spawn and is not activated for coding.
+Historical Fable and prior budget text remains historical. Coding cap24, actual consumed count in coding-ledger.json; cumulative six-hour budget in allocation.json, never reset. No unattended controller or original source import authorized before complete acceptance.

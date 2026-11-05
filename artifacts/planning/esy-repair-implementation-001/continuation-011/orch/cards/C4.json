@@ -1,0 +1,29 @@
+{
+ "acceptance_rows": [
+  "R1 When cmd_review sets st['milestone']='ACCEPTED' it also sets st['milestone_revision']=st['parent_hash'], and every st['reviews'] entry records 'revision'.",
+  "R2 cmd_replan, when it writes any new PENDING card, sets st['milestone']='REPLANNED' and clears st['milestone_revision']; accepting a card in cmd_review (parent_hash change) also clears st['milestone_revision'] and sets st['milestone'] to 'REPLANNED' if it was 'ACCEPTED'.",
+  "R3 cmd_handoff prints MILESTONE VERDICT: ACCEPTED only when st['milestone']=='ACCEPTED' and st['milestone_revision']==st['parent_hash']; otherwise it prints MILESTONE VERDICT: INCOMPLETE with reason MILESTONE_STALE and the current REVISION.",
+  "R4 run_e2e.py gains scenario O47: milestone reviewed ACCEPTED; review --subject with findings; replan adds a card; run-card and review --card accepted; handoff must print INCOMPLETE with MILESTONE_STALE; a subsequent milestone review ACCEPTED on the new parent makes handoff print ACCEPTED with REVISION equal to the new parent_hash."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [
+  "C3"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O47"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C4",
+ "objective": "Bind milestone acceptance to a revision so handoff cannot report ACCEPTED for a parent that was never final-reviewed (F3)",
+ "stop_condition": "print CARD_BLOCKED C4 if scenario id O47 already exists in e2e/run_e2e.py, or if cmd_handoff does not derive its verdict from st['milestone'] as quoted in the finding",
+ "timeout": 480
+}

@@ -1,0 +1,155 @@
+Fresh separate frontier planning: turn the 20 independent E2E findings into a compact ordered repair card for final coding launch12. Existing runner correction plan covers R1. Limit edits to runner, Dockerfile.esy-runtime, and designated test file under artifacts/planning/esy-reference-proposal-001. No coding, execution, delegation, no controller work, no budget reset. Return JSON ordered small tasks mapped to every E2E finding ID. Keep actual existing CLI --image --expectations --output-dir; tests accept captured runner expectations (schema1/image string/base/derivative/source hashes), not invented expected outcomes document. Fixed test predicates; real Docker only. Unsafe/unavailable real fault injection must be explicit missing evidence, never a mock pass. Build/test commands belong to root only after fresh safety review. Only code authoring in final Luna launch. Allow simplifying/replacing faulty test architecture. Include exact command and unresolved limitations, do not claim zero-gap acceptance.
+FINDINGS
+{
+  "safe_to_execute": false,
+  "findings": [
+    {
+      "id": "E2E-01",
+      "location": "validate_expectations(), run_scenario(), run_one()",
+      "problem": "Scenario names do not establish their required setups. Wrong package/lock/compiler expectations are never constructed or installed. Missing installation, seed mutations, and lockfile mutations have no mandatory setup. Timeout/output/resource controls depend on optional runner_extra_args. Multiple named scenarios can therefore execute the same ordinary invocation. The suite expectations document is not connected to the runner's expectation input.",
+      "required_change": "Implement a fixed setup and CLI mapping for every scenario. Create isolated runner expectation copies and apply exactly the intended mutation. Require and record the before/after expectation hashes, selected control, actual image, and mutation evidence. Reject missing or contradictory setup before launching.",
+      "required_e2e": "Demonstrate that every required scenario has its distinct intended trigger, and that omitting a control or mutation fails suite validation rather than executing an ordinary run."
+    },
+    {
+      "id": "E2E-02",
+      "location": "run_scenario(): runner_extra_args and selected_image",
+      "problem": "Unvalidated runner_extra_args are appended after the generated --image and --run-id. They can supply those options again and undermine the inspected image, unique run ID, and recorded invocation contract. Other accepted runner options are unrestricted.",
+      "required_change": "Generate arguments internally from fixed scenario definitions. Allow only explicitly supported control parameters with fixed bounds, and reject duplicate identity, output, capture, or configuration options.",
+      "required_e2e": "Reject expectation documents attempting to override the image, run ID, output destination, or unrelated runner modes before any subprocess starts."
+    },
+    {
+      "id": "E2E-03",
+      "location": "run_scenario(): source_mode; POSITIVE_SOURCE, WRONG_ASSERTION_SOURCE, SYNTAX_INVALID_SOURCE",
+      "problem": "The suite replaces the copied main.ml to select controls instead of using the runner's fixed controls. This can change the reference positive fixture or break fixture derivation, producing setup failures unrelated to the intended assertion or syntax case. The syntax fixture is also a larger program rather than exactly 'let broken ='.",
+      "required_change": "Preserve the reference main.ml and select the documented fixed runner controls. Bind the actual generated fixture bytes and hashes to each scenario, including the exact required malformed source.",
+      "required_e2e": "Show that the reference positive source remains unchanged, the wrong assertion compiles before failing at runtime, and the syntax control compiles exactly the prescribed malformed input."
+    },
+    {
+      "id": "E2E-04",
+      "location": "run_scenario(), inspect_image_variant(), build_startup_failure_variant()",
+      "problem": "Only the startup variant is built by the suite. Other variants may be arbitrary pre-existing images supplied in expectations. Their layer lists are compared with caller-provided lists, but their ancestry, suite ownership, and intended filesystem mutations are not established. A variant name alone also does not select its image except for startup_failure.",
+      "required_change": "Build all required filesystem variants in new owned contexts from the inspected immutable parent using network-none and pull-false builds. Verify parent layer prefixes and exact mutation inventories. Adjust only the necessary expectation fields so unrelated image identity failures cannot satisfy a seed, installation, or lockfile scenario.",
+      "required_e2e": "Produce owned variants for missing installation state, corrupt/missing seed entries, and added/missing locks; demonstrate each reaches and fails its intended gate. Reject unrelated or externally supplied variant images."
+    },
+    {
+      "id": "E2E-05",
+      "location": "bounded_process()",
+      "problem": "The process supervisor is not reliably bounded. After a direct child exits, descendants may retain stdout/stderr; closing a buffered pipe while its drain thread is blocked can itself block. A post-SIGKILL wait has no timeout. Exceptions or interruption bypass process-group termination. A drain thread that remains alive is not necessarily recorded as an error. Non-POSIX cleanup terminates only the direct child.",
+      "required_change": "Use a supervisor with bounded stream collection, a single monotonic deadline, and effective finally-based cleanup. Bound every wait, handle retained pipes without blocking close calls, verify owned descendants terminate, and fail explicitly on drain or termination uncertainty. Restrict supported platforms if equivalent containment is unavailable.",
+      "required_e2e": "Exercise a real child retaining pipes, an interrupted supervisor, and a timeout. Verify bounded supervisor return, explicit failure evidence, and no surviving owned processes."
+    },
+    {
+      "id": "E2E-06",
+      "location": "run_one(), run_scenario(), main()",
+      "problem": "There is no suite-level container ownership tracking, cleanup, or absence verification. Killing the runner/Docker client process group does not terminate Docker daemon-managed containers. The suite can proceed through further scenarios after leaving a container alive, and it never requires successful cleanup evidence even on ordinary runs.",
+      "required_change": "Track each owned container using its exact returned or successfully inspected ID and corroborating ownership labels. Add an effective finally path that performs bounded cleanup and proves absence through a successful daemon query. Preserve ownership mismatches and daemon uncertainty as failures without removing foreign containers.",
+      "required_e2e": "Force a host runner timeout and interruption; verify the owned container terminates and is confirmed absent. Exercise inspect/query failure and ownership mismatch without treating errors as absence or deleting foreign containers."
+    },
+    {
+      "id": "E2E-07",
+      "location": "build_startup_failure_variant(), cleanup_owned_image(), main(): variant lifecycle",
+      "problem": "Image ownership is registered only after all build validation succeeds. A successful build followed by truncated output, malformed evidence, or an inspection failure can leave an image/tag that main cannot clean because variant remains null. Timing out the Docker build client does not establish that daemon-side build work stopped. Cleanup is outside a finally block and image removal is not followed by a successful absence query.",
+      "required_change": "Track build lifecycle evidence immediately, including any returned image ID before subsequent validation. Provide bounded cancellation of owned build work and finally-based cleanup of exact proven-owned image IDs. Confirm removal with a successful daemon query and retain build/cleanup evidence when any intermediate step fails.",
+      "required_e2e": "Exercise build timeout and failure after image creation. Demonstrate no continuing owned build or residual owned image, and no deletion based only on a tag or failed inspection."
+    },
+    {
+      "id": "E2E-08",
+      "location": "main(): expectation_raw; save_report_copy(); run_one(): CLI report path; copy_proposal()",
+      "problem": "Host input bounds are checked after complete read_bytes calls. A large expectations file or report can exhaust memory before rejection. Runner-provided report paths are not confined to the owned report directory and need not be regular files, permitting unrelated host-file reads or blocking on a FIFO. copy_proposal follows symlinks and recursively copies the entire proposal without a size bound, potentially reading unrelated host files.",
+      "required_change": "Perform bounded reads of verified regular files, including an overflow sentinel. Confine report paths to the expected owned report root and reject symlink traversal. Copy only the required reviewed inputs, with explicit symlink and size policies, into owned destinations.",
+      "required_e2e": "Verify prompt rejection of oversized files, a FIFO report, report paths outside the owned tree, and proposal symlinks escaping the allowed input root. Confirm no unrelated host contents enter evidence."
+    },
+    {
+      "id": "E2E-09",
+      "location": "assert_exact_resource_argv(), image_evidence(), validate_expectations(): resources",
+      "problem": "Resource checks inspect intended argv rather than actual Docker configuration. They permit additional tmpfs mounts, allow an empty expected tmpfs list, and miss alternate option spellings such as --privileged=true or --mount=.... They do not verify actual image identity, workdir, ownership, inherited volumes, or the complete effective mount set.",
+      "required_change": "Validate successful real container inspection against the full fixed configuration, including exact allowed tmpfs destinations/options, mounts, ownership, image, user, workdir, networking, capabilities, security options, and resource limits. Treat argv validation as supplementary. Reject inherited volumes and unexpected writable locations.",
+      "required_e2e": "Record and verify actual configuration for normal runs, and demonstrate rejection of a derivative declaring an unexpected volume and of a configuration mismatch."
+    },
+    {
+      "id": "E2E-10",
+      "location": "validate_expectations(): identity; assert_required_outcome(): cache/readonly/immutable scenarios",
+      "problem": "The identity object is largely unused after validation and does not require a compiler hash or complete seed inventory. Cache, readonly, and immutable scenarios primarily trust named passed checks. They do not verify complete pre/post inventories, directory metadata, canonical compiler identity, successful writes to both caches, or existing readonly targets failing specifically because writing is prohibited.",
+      "required_change": "Require and compare complete identity and inventory evidence, including compiler path/hash/version and relevant directory metadata. Validate concrete probe records for both caches and every protected target, including existence, attempted operation, and the precise denial reason.",
+      "required_e2e": "Exercise changed seed metadata, missing probe targets, writable protected files, both writable caches, compiler identity mismatch, and pre/post immutable changes. None may pass through a missing record or generic open failure."
+    },
+    {
+      "id": "E2E-11",
+      "location": "assert_required_outcome(): syntax_invalid_let_broken and compilable_wrong_assertion",
+      "problem": "The syntax assertion repeats the known false-positive pattern: any nonzero result containing 'syntax', including a filename such as syntax.ml, is accepted. Neither compiler-control assertion excludes timeout, output overflow, signals, or unrelated infrastructure failures. The assertion case searches for a substring without establishing a normal execution of the intended compiled binary.",
+      "required_change": "Require normal compiler/process completion with the specific expected OCaml diagnostic or exception and exclude infrastructure failures. Bind the diagnostic and execution to the exact fixture and compiled artifact.",
+      "required_e2e": "Accept the actual syntax diagnostic for the exact malformed fixture and reject an unrelated error mentioning syntax.ml. Accept the compiled assertion failure and reject timeout, signal termination, and unrelated compiler failures."
+    },
+    {
+      "id": "E2E-12",
+      "location": "assert_required_outcome(): timeout, excessive_output_bounded_logs, resource_exhaustion_evidence",
+      "problem": "Control evidence is insufficient. Timeout trusts a self-reported elapsed value with a caller-adjustable default ceiling of 150 seconds and does not require a lowered runner timeout or measure container lifetime. Output accepts bounded excerpts without proving overflow occurred, and can iterate over no results. Resource exhaustion accepts any truthy caller-selected top-level field, including status='FAILED'. None requires compiled OCaml control evidence.",
+      "required_change": "Fix control selection and acceptance criteria in the suite. Require successful compilation of each prescribed OCaml fixture, precise observed termination reasons, the required nonzero runner outcome, and independent deadline/cleanup evidence. Separate total produced output from retained bytes and distinguish allocation failure or inspected OOM from generic command failure.",
+      "required_e2e": "Measure a real OCaml infinite loop under a lowered shared deadline; trigger real output overflow with bounded retained logs; trigger allocation pressure with concrete allocation/OOM evidence. Verify ordinary truncation and generic failures cannot satisfy these controls."
+    },
+    {
+      "id": "E2E-13",
+      "location": "assert_required_outcome(): wrong identity scenarios and installation/seed/lock failures",
+      "problem": "Negative identity non-execution is inferred solely from the absence of result keys beginning compile- or run-. That does not prove commands were not executed before an early failure or omitted from the report, and it ignores compiler-version and esy execution. Seed, installation, and lock mutation cases do not enforce pre-execution rejection at all.",
+      "required_change": "Require positive evidence identifying the rejected integrity gate and the execution stages reached. Add fixed variant canaries or equivalent observable evidence for affected compiler/fixture execution. Apply the required ordering checks to all relevant integrity-negative scenarios.",
+      "required_e2e": "Demonstrate that each altered expectation or image state fails its intended gate before the affected compiler or fixture runs, and that empty results from an unrelated startup/configuration failure cannot satisfy the scenario."
+    },
+    {
+      "id": "E2E-14",
+      "location": "build_startup_failure_variant(); assert_required_outcome(): container_startup_failure",
+      "problem": "The startup scenario only requires FAILED, a nonzero report exit_code, and a named check. It does not establish that Docker attempted the intended missing entrypoint or distinguish OCI startup failure from image identity rejection, configuration parsing failure, or another runner error.",
+      "required_change": "Keep the normal effective confinement configuration, ensure the variant passes all prerequisite identity checks, and require Docker startup evidence identifying the deliberately missing entrypoint binary.",
+      "required_e2e": "Show an actual Docker startup attempt failing specifically because the configured entrypoint binary is absent. Demonstrate that a wrong image expectation or unrelated runner failure does not satisfy this case."
+    },
+    {
+      "id": "E2E-15",
+      "location": "run_scenario(), run_duplicate_case(), run_invalid_id_case(), run_concurrent_case()",
+      "problem": "There is no common invocation acceptance contract. Ordinary positive scenarios can pass despite a nonzero runner exit if the report says PASSED. Special-case functions bypass the normal expected-outcome, resource, drain, truncation, and timeout checks. Their expected objects are mostly recorded rather than enforced.",
+      "required_change": "Apply common process, report, identity, resource, and cleanup validation to every invocation, including baseline and concurrent children. Fix the expected exit/status relationship for each control and reject contradictory or unsupported expectation fields.",
+      "required_e2e": "Verify that a nonzero positive runner exit, an incomplete drain, a child timeout, a missing cleanup receipt, or a special-case expectation mismatch always fails the suite."
+    },
+    {
+      "id": "E2E-16",
+      "location": "run_concurrent_case(); independent_fresh_run_a/b",
+      "problem": "Concurrent runs use separate proposal/report directories, so they do not test concurrent unique IDs sharing the runner's report store. Freshness is inferred from names and PASSED reports without verifying distinct containers and independent writable state. Concurrent reuse of the same run ID is absent.",
+      "required_change": "Run concurrent unique IDs against one owned proposal/report store and add a concurrent same-ID reservation test. Verify independent container IDs and fresh writable state for the two fresh runs while retaining identical immutable identities.",
+      "required_e2e": "Require two valid immutable receipts for concurrent unique IDs, exactly one reserved receipt for simultaneous same-ID attempts, and observable isolation between fresh writable states."
+    },
+    {
+      "id": "E2E-17",
+      "location": "run_duplicate_case(), run_invalid_id_case()",
+      "problem": "Preservation checks cover only one existing report. The invalid-ID escape check targets runner.parent.parent/escape.json, whereas traversal from runner.parent/esy-results/../escape.json would land at runner.parent/escape.json. Duplicate rejection is also incorrectly treated as replacement whenever the CLI returns a pointer to the unchanged existing report.",
+      "required_change": "Snapshot and compare the complete owned report namespace and relevant surrounding paths. Check the actual potential traversal destinations. Distinguish referencing an unchanged receipt from creating or overwriting one.",
+      "required_e2e": "Verify invalid IDs create no escaped files and preserve all existing receipts. Verify a rejected duplicate may reference the original unchanged receipt without being falsely classified as an overwrite."
+    },
+    {
+      "id": "E2E-18",
+      "location": "BoundedCapture.drain(), docker_json(), cleanup_owned_image(), run_one(), main(): manifest",
+      "problem": "Recorded stream SHA256 values hash all drained bytes, while the named log files contain only retained prefixes; hashes therefore do not identify those files when truncation occurs. Docker inspection/removal logs are deleted with temporary directories. Exceptions after execution can discard process/report details, and setup-failure rows use expected=null even when expectations were already loaded. The manifest is consequently incomplete as durable evidence.",
+      "required_change": "Record separate full-stream and retained-file hashes and byte counts. Preserve bounded Docker inspection, build, removal, and absence-query logs under the owned evidence directory. Retain partial execution records on failure and populate every scenario's fixed expected outcome before setup begins.",
+      "required_e2e": "Recompute every evidence-file hash from its recorded path, including truncated logs. Inject setup, inspection, report-parsing, and cleanup failures and verify each yields a complete immutable manifest with surviving bounded evidence."
+    },
+    {
+      "id": "E2E-19",
+      "location": "main(): source_runner fallback and integrity snapshots; copy_proposal()",
+      "problem": "The fallback may execute a runner outside the candidate tree. Only that runner file is hashed; the original proposal's main.ml, Dockerfile, and other copied inputs are not covered by the candidate snapshot. There is no required binding between the actual copied runner/input set and reviewed expected hashes.",
+      "required_change": "Resolve the intended runner/input root explicitly and bind its required files to reviewed expectations before copying. Snapshot and compare all protected original and candidate inputs after execution, including failure paths, and record exactly which bytes each invocation used.",
+      "required_e2e": "Verify unchanged original and candidate inputs, reject a runner or fixture hash mismatch before execution, and demonstrate detection of a protected-input change before receipt publication."
+    },
+    {
+      "id": "E2E-20",
+      "location": "SCENARIOS and suite-wide coverage",
+      "problem": "The suite has no explicit coverage for several required regression cases identified in R1: failed inspect versus confirmed absence, daemon-query failure, ownership mismatch, oversized manifests/image metadata, unrelated syntax diagnostics, unexpected declared volumes, early reserved-attempt failure receipts, and source-change rejection. These are absent scenarios, distinct from valid tests failing against the rejected runner.",
+      "required_change": "Add explicit bounded real-E2E coverage for these cases, with exact ownership and no fake Docker or host-wide daemon disruption. Where safe real fault induction cannot be provided, record the requirement as an explicit failed limitation rather than claiming complete coverage.",
+      "required_e2e": "Provide one reviewable evidence record per requirement showing the intended trigger, actual outcome, immutable receipt behavior, bounded execution, and confirmed owned-resource cleanup."
+    }
+  ],
+  "missing_evidence": [
+    "This is a static review of the supplied test text and R1 findings. No code, tests, Docker commands, or agents were executed.",
+    "The supplied test SHA256 was not independently verified against a local file.",
+    "The full current runner source, its exact public CLI/report schema, the original approved plan, and an actual suite expectations document were not supplied here; compatibility with those artifacts remains unverified.",
+    "No real evidence establishes successful expectation capture, positive OCaml compilation, distinct negative triggers, exact effective confinement, control termination reasons, bounded container/build lifetimes, or confirmed cleanup.",
+    "No pre/post evidence establishes preservation of all original and candidate inputs.",
+    "The unsafe verdict includes defects in the test supervisor, build/container lifecycle, and evidence handling. Expected failures exposing the separately rejected runner's bugs are not themselves test defects."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 26,
+  "approved_card_id": "B1a-E2E-026-owned-process-lifecycle",
+  "reviewed_plan_sha256": "3cefd6a053e04cb61fc52acf3157aa307e177df7f148dff188d948f9c27c8758",
+  "reviewed_plan_section": "launch_026",
+  "findings": [
+    {
+      "severity": "info",
+      "id": "exact-authoring-card-approved",
+      "message": "The exact launch_026 section is suitable for one supervised read/edit/write-only Luna authoring attempt. Its only writable source is tests/e2e/test_review_adapter_e2e.py; it repairs process ownership and narrowly scoped fixed lifecycle probes. It expressly forbids worker execution, imports of project helpers, tests, Docker, Claude, provider subprocesses, arbitrary command controls, adapter copies, policy changes, and unrelated repairs."
+    },
+    {
+      "severity": "info",
+      "id": "ownership-requirement-adequate-for-authoring",
+      "message": "The card explicitly requires cleanup coverage from successful spawn, a no-signal region before potentially reaping operations, interruption-aware ownership transitions, bounded cleanup, and failure on unknown ownership. Public scenarios are a closed enum, each non-matrix probe invokes at most one adapter, and post-reap faults must not signal. These are sound authoring requirements; implementation correctness still requires independent review."
+    },
+    {
+      "severity": "info",
+      "id": "bindings-and-smoke-observed",
+      "message": "Computed parent manifest, current D10 candidate test, both current candidate adapters, original card25, and retry review SHA256 values all match the plan. The fresh smoke result reports PASSED, exit zero, reaping, removed credentials and matching profile hash. Inspected final stream events show stopReason stop, agent_end willRetry false and agent_settled aborted false; private-pi is empty. Root must finish its full-stream and full-manifest consistency checks before launch."
+    },
+    {
+      "severity": "warning",
+      "id": "scope-and-time-remain-supervised",
+      "message": "The plan contains seven launch templates but this approval covers only launch26. Its active_checkpoint_seconds is stale and lower than D10 allocation.prior_active_seconds; use the reconciled allocation and current active elapsed time, as the plan itself requires. Ledger remains 25/36. All previous launch-control review conditions remain applicable."
+    },
+    {
+      "severity": "warning",
+      "id": "no-execution-acceptance",
+      "message": "The existing source remains unsafe to execute, and the other six findings deliberately remain open. This approval neither accepts the resulting source nor permits the lifecycle probes, matrix, adapters, rejected controller, import, or any unattended activation to run."
+    }
+  ],
+  "conditions": [
+    "Dispatch exactly the reviewed launch_026 section, with only non-expanding operational author-only instructions. Preserve its exact source scope, fixed restrictions and stop conditions. Do not send remaining_cards as additional work to perform or activate later launches automatically.",
+    "Complete root's fresh smoke full-envelope/tool-activity checks, full parent-manifest/candidate binding checks, and current no-worker/credential-absence checks. Keep the exclusive S workflow lock and unchanged reviewed launcher, guardian and nofork profile.",
+    "Root verifies any outside-sandbox input bindings itself; their absolute paths in the card do not authorize expanding worker filesystem access. Supply only necessary verified non-secret reference content through the existing prompt/workspace mechanism.",
+    "Use a fresh unique job/workspace, reserve coding slot26 from ledger25, and enforce the global 36-launch and 32400-active-second limits using D10's reconciled allocation plus elapsed activity. Require the launcher's 660-second remaining reserve.",
+    "After authoring, independently verify complete provider completion, exact tool activity and single-file scope, parent/candidate immutability, frozen manifests, worker reaping and credential absence. Keep the result UNACCEPTED pending independent Astra source review.",
+    "A source review must inspect every reap/interruption transition and cleanup path; fixed fault probes alone cannot prove ownership safety. No later execution occurs until all execution-safety blockers and the outer execution wrapper receive the required independent reviews."
+  ]
+}

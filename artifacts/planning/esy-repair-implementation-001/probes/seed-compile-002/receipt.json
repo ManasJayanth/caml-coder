@@ -1,0 +1,14 @@
+{
+  "status": "DIAGNOSTIC_PASS",
+  "image": "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+  "script_sha256": "d85c96d7a568fc106f9cbf0cb16e0d019c7d848b613583f76cf2a074fb3147d1",
+  "runner_acceptance": false,
+  "started_epoch": 1792663820.575242,
+  "container_id": "4132108ff63945e464fca43dfe4df524d2642fe286a43c8017a2b910786d602f",
+  "actual_configuration_verified": true,
+  "command_exit": 0,
+  "command_failure": null,
+  "stdout": "esy-cache-probe:passed\n",
+  "cleanup_verified": true,
+  "finished_epoch": 1792663821.201785
+}

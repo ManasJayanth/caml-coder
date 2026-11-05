@@ -1,0 +1,7 @@
+(version 1)
+(allow default)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/runtime"))
+(deny network-outbound (remote unix-socket))
+(deny signal)
+(allow signal (target self) (target children))

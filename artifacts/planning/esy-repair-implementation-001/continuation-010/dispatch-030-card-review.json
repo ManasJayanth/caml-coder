@@ -1,0 +1,28 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 30,
+  "approved_card_id": "B1a-RecordBound-030",
+  "reviewed_plan_sha256": "5f356361dde171ce8a84b81a254f2720ac5c478a191e183b3357c79a43e862c9",
+  "reviewed_plan_section": "launch_030",
+  "parent_revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one bounded-record source-authoring attempt. The card centralizes raw binary reads at a 16385-byte maximum, rejects over 16384 before parsing, counts separators, and replaces both existing unbounded reads. Two fixed boundary controls and a small bounded observation receipt remain confined to the allowed test file. They explicitly evaluate bounds only, not protocol/routing acceptance."
+    },
+    {
+      "severity": "info",
+      "message": "All eight input hashes match. Current candidate test matches frozen29. Bound review29 closes deadline source work and preserves ownership source closure while withholding execution approval. Launcher/guardian/profile hashes remain unchanged. Ledger records 29/36; coding29 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "Per-invocation record checks, arity, diagnostic-byte bounds and full result receipts remain separate open findings. No worker execution, additional controls, later cards, import or runtime acceptance is approved."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_030, reserve slot30 from ledger29, and use a fresh isolated job with tests/e2e/test_review_adapter_e2e.py as its sole writable source. Resolve input_path_base without expanding worker access.",
+    "Retain prior exclusive-runtime, worker/credential-absence, complete frozen29 candidate binding, unchanged dispatch-control and valid smoke gates. Reconcile active elapsed time against 32400 seconds and launches against 36, preserving the launcher's 660-second reserve and existing attempt/replan accounting.",
+    "Read/edit/write source authoring only; no candidate execution, imports, tests, subprocess tools, Docker, Claude or provider calls. Preserve reviewed ownership/deadline semantics and the fixed environment/sandbox/adapters.",
+    "After authoring, independently validate complete provider/tool/scope/binding/cleanup evidence and freeze the result UNACCEPTED for exact-revision Astra source review. Later execution still requires complete source/environment and outer-wrapper approval."
+  ]
+}

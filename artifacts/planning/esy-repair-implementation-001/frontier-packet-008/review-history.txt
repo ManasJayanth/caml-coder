@@ -1,0 +1,629 @@
+JOB A8-L1-correction-plan-001
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": "cleanup-denied",
+  "elapsed_seconds": 107.486,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-correction-plan-001/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-correction-plan-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-correction-plan-001/sandbox.sb"
+  ],
+  "status": "FAILED"
+}
+
+FINAL
+{
+  "cards": [
+    {
+      "order": 1,
+      "id": "L1a",
+      "correction": 23,
+      "title": "Correct supervisor lifecycle and evidence",
+      "path": "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+      "worker": {
+        "model": "Luna",
+        "thinking": "high"
+      },
+      "parent_binding": "Root must bind the actual parent hash immediately before dispatch.",
+      "scope": "Modify only this existing unaccepted candidate file. Preserve the original, prior failure evidence, fixed policy, five scenarios, CLI and existing artifact locations. No harness edits, new features or additional paths.",
+      "fix_strategy": [
+        "Insert -p between SANDBOX and the decoded literal PROFILE in both command constructions. Preserve all remaining executable arguments and the exact policy bytes.",
+        "Fork fixture: call fork exactly once; immediately exit the child when its return value is zero. The unexpected-success parent must reap that exact PID before emitting the fixed policy-failure record and exiting nonzero. Only the complete fixed FORK_DENIED record with EPERM or EACCES qualifies as denial. Never weaken policy to exercise successful fork.",
+        "Overflow fixture: advance an offset through the constant 65537-byte payload until every byte is written, handling short writes and interruptions without configurable input.",
+        "Initialize reportable state before socket validation, hashing or launch. Register caller liveness before launch where possible; registration failure is terminal. Publish readiness only after successful stream and liveness setup. Unregister EOF channels immediately after recording their condition.",
+        "Use one lifecycle state machine for ordinary completion and every post-launch failure. Keep child-reaped, stdout-EOF and stderr-EOF independent. Retain the three-second execution deadline. Enter a separate, immutable five-second finishing allowance on the first terminal failure or successful reap, whichever occurs first; never restart it on another exception.",
+        "Use exactly one reaper: waitpid for the owned child with WNOHANG, only while unreaped. Preserve the actual returned PID and raw status, decode status, and immediately synchronize Popen.returncode. Never poll, wait, communicate, signal or reap that child after its successful receipt. A missing or inconsistent receipt is cleanup-unverified.",
+        "On terminal failure, signal only the still-unreaped owned child, then continue bounded nonblocking collection and WNOHANG reaping. On normal reap, continue draining without signaling or reaping. Finish early only after reap and both stream EOFs; otherwise stop at the finishing deadline and expose incomplete drains truthfully. Exceptions use this same bounded path; remove blocking waitpid.",
+        "Count every byte actually read independently for stdout and stderr; retain at most 65536 bytes each. Check overflow during execution and finishing, including after reap. Preserve the first terminal cause even when exit status is zero; record additional failures separately. EOF must mean an actual zero-length read, never reap, timeout or pipe closure.",
+        "Success requires monitored caller liveness, a genuine zero-exit wait receipt, complete bounded streams and scenario validation. Docker stdout must contain exactly one complete JSON object with nonempty string Version and ApiVersion. Fork stdout must equal an allowed fixed denial record including its terminator. Classify invalid metadata, unsupported policy and observed successful fork explicitly; none can become success.",
+        "Finalize structured evidence for initialized states, including configuration, initial-hash and launch failures. Record first terminal cause, stream completeness, cleanup status and integrity independently. Attempt both post-run executable hashes even following earlier failure; mismatch or unavailable hashes independently invalidate the outcome. Guard finalization errors and exit nonzero; unavailable reports must remain detectable failures.",
+        "Preserve private directories and read-only report publication. Supply typed readiness/report evidence sufficient to cross-check supervisor PID, positive child PID, launch identity, exact argv/environment, resolved executables, both before/after hashes, profile hash, pinned socket, raw/decoded wait receipt, retained artifact lengths/hashes and truthful stream counts/EOF."
+      ],
+      "required_observations": [
+        "Source review finds no stop-on-reap shortcut, blocking child cleanup, ignored liveness registration, implicit caller-stdin closure, or terminal-cause overwrite.",
+        "Positive outcomes require complete validated metadata or exact denial. Overflow remains terminal after zero exit and records all 65537 stdout bytes when fully drained, with only 65536 retained.",
+        "Cleanup verification requires the actual owned-PID wait receipt; incomplete streams remain independently visible. Integrity failure remains fatal alongside an expected timeout, EOF or overflow."
+      ],
+      "execution_gate": "Freeze the corrected source hash and root parent binding. AST/source checks are not execution approval. Before either script runs, obtain independent fresh execution review of source bindings, exact fixed argv, native-policy suitability, Docker/socket configuration, ownership/deadline design and private artifact setup. Only that review may authorize an intermediate direct public metadata probe; collect its complete public evidence without containers. Unsupported policy, configuration, integrity or containment halts launches.",
+      "acceptance": "Supervisor source remains unaccepted until L1b and the paired public five-scenario E2E pass. An intermediate metadata probe cannot close this acceptance unit. If no intermediate execution is safe, keep the unit open and dispatch the required harness follow-up."
+    },
+    {
+      "order": 2,
+      "id": "L1b",
+      "correction": 24,
+      "title": "Correct harness ownership, predicates and publication",
+      "path": "tests/e2e/test_esy_lifecycle.py",
+      "worker": {
+        "model": "Luna",
+        "thinking": "high"
+      },
+      "parent_binding": "Root must bind the actual parent hash immediately before dispatch, incorporating the reviewed L1a candidate.",
+      "dependency": "Required continuation of L1a within the same L1 acceptance unit; no supervisor edits and no move to L2.",
+      "scope": "Modify only this existing unaccepted harness file. Preserve originals, failure evidence, existing output locations and exactly the five required scenarios. No new features or additional paths.",
+      "fix_strategy": [
+        "Replace communicate with nonblocking collection throughout readiness and termination. Keep the caller-owned stdin writer open until ordinary supervisor termination. Track launched and readiness_valid separately; executed means successful supervisor launch. Deliberately close stdin only for caller-eof after complete readiness validation, recording that ordering.",
+        "Use an absolute ten-second per-supervisor collection deadline, including readiness, plus at most five seconds for owned-supervisor cleanup. Independently cap retained stdout/stderr at 65536 bytes and observation at 65537 bytes each. On excess, stop normal collection and enter bounded failure cleanup; report observed counts as incomplete when collection stops before EOF. Bound artifact reads before parsing.",
+        "Retain the active supervisor handle through all exceptions and finally cleanup. Every termination, reap and drain has an absolute deadline; remove all unbounded waits. Forced supervisor termination is containment failure even if its own reap succeeds: it does not prove child cleanup. Do not kill reported child PIDs without safe ownership. Clean the canary separately through its owned handle with bounded terminate/kill waits, and incorporate cleanup failure before final publication.",
+        "Precreate exactly five ordered result rows before launches, including canary setup. Convert launch, readiness, artifact, validation and cleanup exceptions into explicit failures. Mark blocked rows failed/not-run with the blocking reason. Publish the final result after bounded cleanup whenever the initialized output location remains writable; publication failure exits nonzero.",
+        "Validate complete typed schemas without truthiness shortcuts or vacuous stream checks. Require exactly stdout and stderr, integer fields excluding booleans, valid hashes, scenario equality, supervisor PID matching the owned process, positive child PID, and identical launch identity/readiness/report bindings.",
+        "Independently validate exact sandbox argv including -p, literal profile hash, fixed fixture arguments, environment whitelist and values, resolved executables and matching before/after hashes against approved bindings. Check pinned Docker socket consistency and expected non-Docker socket absence, private directory modes, read-only report mode, and retained-file lengths/hashes.",
+        "Validate genuine owned-child wait receipts, decoded exit/signal consistency, cleanup status, supervisor exit versus probe_exit, and all stream counts/EOF relationships in every row. Positive rows require zero child exit and complete uncapped streams. Timeout and caller-eof require their intended cause and termination receipt. Overflow requires exactly 65537 observed stdout bytes, 65536 retained, correct hash and latched overflow; its child may exit zero or be killed.",
+        "Parse Docker metadata independently and match fork denial exactly. Record every common and scenario predicate with explicit failure details. Overall success requires all five scenarios launched, valid readiness, all predicates passing, and successful canary cleanup.",
+        "Centralize stop evaluation, including absent reports: unsupported native policy, successful fork, unsupported Docker configuration, unavailable/mismatched hashes, invalid evidence, missing/inconsistent cleanup receipts, forced supervisor termination, canary death and collection/cleanup exceptions prevent every later launch. Expected negative causes permit continuation only when all common predicates pass."
+      ],
+      "execution_and_acceptance": "Freeze both source bindings and preserve earlier failures. Obtain independent execution-review approval before running either script. Root then runs the approved fixed-argv recipe in a fresh private directory with real local Docker metadata and no containers. The outer 90-second/64-KiB wrapper supplements internal bounds and never substitutes for child receipts. Verify strict CLI/path rejection, private modes, validated readiness, terminal reports, exact argv/profile hashes in every live row, bounded streams, caller-writer ordering, authentic metadata/denial, canary survival and bounded cleanup. Review exception/stop paths and deterministic five-row publication without weakening native policy. Close this single acceptance unit only when all five public live rows pass; source-only review or unsafe/unavailable execution leaves it open."
+    }
+  ]
+}
+
+JOB A8-L1-correction-plan-002
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 112.769,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-correction-plan-002/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-correction-plan-002/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-correction-plan-002/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "cards": [
+    {
+      "id": "L1a",
+      "order": 1,
+      "correction": 23,
+      "title": "Repair supervisor lifecycle and evidence",
+      "dispatch": {
+        "model": "Luna",
+        "thinking": "high",
+        "parent_hash": "Root must bind the actual current parent hash immediately before dispatch."
+      },
+      "allowed_path": "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+      "scope": "Modify only the existing unaccepted candidate supervisor. Preserve original sources and prior failure evidence. No harness edits, new features, or additional paths.",
+      "fix_strategy": [
+        "Construct both sandbox commands as [SANDBOX, '-p', PROFILE.decode(), ...], preserving the exact fixed profile and remaining arguments. Preserve the fixed Docker server-metadata command, pinned socket, isolated environment, strict CLI, and private directories.",
+        "Replace fork-denial with one os.fork call. On success, immediately exit the child; the parent must reap that exact PID before emitting FORK_POLICY_FAILURE and exiting nonzero. Accept only complete stdout equal to FORK_DENIED:<EPERM integer> followed by newline or FORK_DENIED:<EACCES integer> followed by newline, with empty stderr and zero child exit. Unexpected fork success is containment failure; never weaken policy to exercise it.",
+        "Make the overflow fixture advance through its constant 65537-byte payload using actual write return values until all bytes are written. Handle interrupted and short writes without configurable input.",
+        "Initialize reportable state before socket/hash checks, including nullable readiness and launch identity. Register caller liveness before publishing readiness; registration failure is terminal, never silently ignored. Unregister channels after EOF and latch caller-eof once.",
+        "Use one lifecycle state machine and one explicit reaper for all post-launch paths, including exceptions. Track child ownership, successful reap, stdout EOF, stderr EOF, first terminal cause, and cleanup verification independently. Use only waitpid(owned_pid, WNOHANG); record returned PID and raw status, decode it, and immediately synchronize Popen.returncode. Never call Popen poll/wait/communicate or otherwise reap again. Never signal after successful reap.",
+        "Keep the three-second execution deadline. On a terminal cause, enter one nonrenewable five-second cleanup allowance; signal only the owned unreaped child, then interleave bounded nonblocking draining and WNOHANG checks. Exceptions enter or continue this same cleanup state, never restart its deadline. If reaped first, continue draining without signals or further waitpid calls. If streams finish first, continue bounded reap checks. Completion requires both EOFs and a verified reap; expiry records missing observations and cleanup-unverified separately from the original cause.",
+        "Apply identical stream accounting in execution and cleanup: count every observed byte, retain at most 65536 bytes independently per stream, hash retained bytes, and latch overflow whenever either observed count exceeds its cap. Reap is never an EOF substitute. Incomplete drains retain truthful counts and false EOF flags; zero exit cannot erase a terminal failure.",
+        "Before positive success, require complete bounded streams and zero decoded child exit. Docker stdout must parse as exactly one complete JSON object with nonempty string Version and ApiVersion; reject null, malformed, trailing records, client-only, and truncated output. Classify invalid metadata, policy failure, and child failure explicitly.",
+        "Finalize structured evidence for initialized states, including configuration, hash, launch, and supervisor failures. Attempt both post-run executable hashes independently even after another failure. Record before/after hashes, comparison status, first cause, and cleanup status separately; missing hashes or mismatch always invalidate the outcome. Record exact argv/environment, resolved executables, profile hash, pinned socket identity evidence, launch identity, readiness, timings, actual wait receipt, stream records, and existing retained artifacts. Preserve report mode 0400. If publication itself fails, exit unsuccessfully; the harness must treat missing evidence as a stop condition."
+      ],
+      "required_observations": [
+        "Reap and EOF are independently demonstrated; normal and cleanup loops cannot stop merely because waitpid succeeds.",
+        "Overflow observes all 65537 stdout bytes, retains exactly 65536, reaches truthful EOFs, and preserves output-overflow after reap.",
+        "Every launched outcome has actual owned-child wait evidence or explicit cleanup-unverified; prelaunch failures identify cleanup as not required.",
+        "Integrity failures remain visible alongside timeout, caller-eof, overflow, or supervisor-error."
+      ],
+      "gate_and_handoff": "Perform source review only by default; freeze the new source binding and document the evidence schema for L1b. No script execution is authorized by this card. A direct public Docker-metadata probe may run only after fresh independent safety approval bound to these sources and required prerequisites. It cannot complete acceptance. If no intermediate probe is safe, retain the unit open and proceed to mandatory L1b. Correction 23 remains supervisor-only."
+    },
+    {
+      "id": "L1b",
+      "order": 2,
+      "correction": 24,
+      "title": "Repair harness ownership, validation, and publication",
+      "depends_on": "L1a source completion and frozen evidence contract",
+      "dispatch": {
+        "model": "Luna",
+        "thinking": "high",
+        "parent_hash": "Root must bind the actual current parent hash after L1a and immediately before dispatch."
+      },
+      "allowed_path": "tests/e2e/test_esy_lifecycle.py",
+      "scope": "Modify only the existing unaccepted candidate harness. Do not edit the supervisor or introduce features or paths. Any supervisor defect keeps this same acceptance unit open.",
+      "fix_strategy": [
+        "Precreate exactly five ordered rows: docker-metadata, fork-denial, timeout, caller-eof, output-overflow. Record executed immediately after successful supervisor Popen; track readiness_valid separately. Convert launch, parsing, validation, collection, and cleanup exceptions into explicit row failures. Publish result.json after bounded cleanup even when later rows are not run.",
+        "Replace communicate with nonblocking selector collection starting immediately at launch. Keep caller-owned stdin open until ordinary supervisor termination. Only caller-eof deliberately closes it while running, and only after complete readiness validation. Readiness timeout, malformed data, or a truthy partial object never authorizes that close.",
+        "Use absolute deadlines: readiness within five seconds, supervisor completion within ten seconds of launch, and at most two seconds each for terminate and kill/reap fallback. Independently retain at most 65536 bytes and observe at most 65537 bytes per supervisor stream; excess stops collection and fails containment with truthful incomplete-stream evidence. Bound artifact reads too. Retain the active supervisor handle through finally. Forced termination always fails containment; it never proves child cleanup. Clean the canary separately through its owned handle with bounded terminate and kill waits.",
+        "Require complete typed schemas, rejecting booleans as integer PIDs/counts/statuses, and exactly stdout/stderr records. Cross-check scenario, owned supervisor PID, positive child PID, and launch identity between readiness and report. Validate exact fixed argv including -p, literal fixture arguments, environment, profile digest, resolved executable paths, independently checked before/after hashes, and pinned Docker socket consistency.",
+        "Validate private directory modes, report mode 0400, retained artifact lengths and hashes, nonnegative observed counts, retained=min(observed,65536), and EOF/count consistency on every row. Verify actual waitpid returned the owned child PID, terminal raw wait status decodes correctly, report exit matches the owned supervisor return code, and cleanup is verified. Missing streams cannot pass vacuously.",
+        "Independently parse complete Docker server JSON and exact fork-denial bytes; require zero child exit for positives. Negative rows require their exact latched cause, nonzero supervisor exit, valid decoded child wait receipt, complete common evidence, and complete streams. Overflow additionally requires observed stdout exactly 65537 and retained stdout exactly 65536. Emit named predicates and concrete failure details.",
+        "Centralize blocking predicates independently of reason strings and report availability. Stop subsequent launches for unsupported policy/configuration, unexpected fork success, unavailable or mismatched hashes, inconsistent identity/evidence, missing cleanup receipts, forced termination, output excess, or canary death. Preserve remaining rows as failed/not-run with the blocking reason. Overall success requires all five executed and passed, plus verified canary cleanup."
+      ],
+      "execution_and_acceptance": [
+        "Freeze both source bindings and preserve prior failures. Obtain independent execution-review approval with executable/profile bindings, native-policy support, real local Docker/socket prerequisites, ownership/cleanup review, and the bounded fixed-argv recipe before launching either script.",
+        "After approval, root runs the paired public E2E in a fresh private directory using real local Docker metadata and no containers. The outer 90-second/64-KiB wrapper supplements internal bounds; it is never a child cleanup receipt.",
+        "Verify strict CLI/path rejection, private directories, validated readiness before caller-eof closure, ordinary caller liveness, terminal reports, complete bounded streams, integrity checks, canary survival and cleanup, and exactly five passing live rows. Review failure handling for unusable liveness, exceptions, missing evidence, and stop propagation without weakening policy.",
+        "These cards decompose one acceptance unit. Source-only review or an intermediate metadata probe leaves acceptance open; required paired public E2E is neither waived nor moved to L2."
+      ]
+    }
+  ]
+}
+
+JOB A8-L1-plan-001
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": -9,
+  "failure": "timeout",
+  "elapsed_seconds": 180.19,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-plan-001/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-plan-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-plan-001/sandbox.sb"
+  ],
+  "status": "FAILED"
+}
+
+FINAL
+The card will distinguish probe results from E2E assertions: timeout, caller EOF, and overflow must produce non-PASS results, while their E2Es pass only after verifying bounded cleanup. The parent hash and required field schema are still pending; local read tools are unavailable.
+
+JOB A8-L1-plan-002
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 105.18,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-plan-002/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-plan-002/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-plan-002/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "approved_card": false,
+  "required_adjustments": [
+    "The scope is small enough; no split is required. However, the metadata command, socket-selection rule, environment isolation, and authentic-success predicates must be explicit.",
+    "Resolve the conflict between invoking only supervisor subprocesses and creating an independent canary. Permit one fixed canary subprocess owned directly by the E2E script.",
+    "Specify stdin-liveness handling, readiness contents, stream accounting, terminal-report publication, and cleanup-failure behavior so expected failure cannot be mistaken for successful containment.",
+    "Define fork-denial evidence and process-identity verification. A generic child failure or a numeric PID absence check alone is insufficient.",
+    "Preserve the prior timed-out attempt as failure. This revised authoring card does not establish that containment refresh, Pi smoke, or independent execution review passed."
+  ],
+  "card": {
+    "card_id": "L1-022",
+    "finding_ids": [
+      "C17-03-prerequisite"
+    ],
+    "parent_revision_sha256": "239261f300fc01bac4144a0ef5df186a54561e1bad0909e11d1aa0807ba59097",
+    "input_artifacts": [
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/parent-manifest.json",
+        "sha256": "239261f300fc01bac4144a0ef5df186a54561e1bad0909e11d1aa0807ba59097"
+      }
+    ],
+    "allowed_paths": [
+      "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+      "tests/e2e/test_esy_lifecycle.py"
+    ],
+    "scope": "Author exactly two new standalone Python source files. Root performs independent execution review and subsequent execution. No production integration.",
+    "prerequisites": [
+      "Both allowed paths must be absent. Preserve every pre-existing candidate file.",
+      "Preserve the prior timed-out attempt and its failure evidence; do not replace or relabel it.",
+      "Coding worker performs no code execution, imports, tests, containers, or environment probes.",
+      "Before launching either authored script, root independently verifies the parent artifact hash, successful native worker containment refresh, successful real Pi smoke, and execution-review approval.",
+      "Execution requires macOS native sandbox-exec, the fixed Docker executable, and the supported local Unix socket configuration."
+    ],
+    "required_behavior": [
+      "Supervisor CLI is exactly: probe --scenario docker-metadata|fork-denial|timeout|caller-eof|output-overflow --state-directory ABS. Reject unknown arguments, relative paths, existing state directories, and arbitrary command or endpoint input. No serve/capture/run interface.",
+      "The supervisor creates its state directory with mode 0700 beneath an existing parent. It creates private HOME and DOCKER_CONFIG directories before launching the child. Reports and retained streams remain inside this state directory.",
+      "Launch exactly one direct child through /usr/bin/sandbox-exec. Use a fixed profile containing allow default, deny process-fork, and deny file-write*. Supply the profile by literal argument. Do not weaken policy when a scenario fails. Child stdin is DEVNULL and close_fds=True; the caller-liveness pipe must not reach the child.",
+      "For docker-metadata, resolve /var/run/docker.sock once to an absolute existing Unix socket and pin that resolved path. The command following sandbox-exec is /usr/local/bin/docker --host unix://RESOLVED_SOCKET version --format '{{json .Server}}'. RESOLVED_SOCKET denotes only the validated runtime realpath, not caller input. Do not start containers or contact registries.",
+      "Construct the child environment explicitly: HOME and DOCKER_CONFIG name the private directories, PATH is /usr/bin:/bin, and LANG is C. Inherit no other environment variables. Supply the same environment policy to Python fixtures.",
+      "Docker success requires exit zero and complete stdout parsing as one JSON object with nonempty string Version and ApiVersion fields. Null, client-only output, malformed JSON, nonzero exit, truncation, or failed cleanup cannot succeed. Record the pinned socket path.",
+      "Process-only scenarios use the resolved interpreter running the supervisor and fixed inline Python -c literals under the identical sandbox profile. No fixture text, executable, arguments, or expected marker may come from the request.",
+      "The fork-denial fixture calls os.fork exactly once. Success requires OSError with EPERM or EACCES and an exact fixture-generated denial record. Any other exception fails. If fork unexpectedly succeeds, its child exits immediately, its parent reaps it and emits an explicit policy-failure record, and root must halt subsequent execution for containment review.",
+      "Timeout and caller-eof fixtures sleep for 30 seconds without producing output. The overflow fixture writes exactly 65537 bytes to stdout and then exits. These are fixed literals, not configurable workloads.",
+      "The caller owns the only write end of the supervisor stdin-liveness pipe. Keep it open throughout every scenario except caller-eof. EOF before successful completion is a failed probe outcome. Do not use a subprocess API pattern that closes stdin automatically in the other scenarios.",
+      "After successful direct-child creation, publish ready.json containing scenario, supervisor PID, child PID, and launch identity. The E2E script waits for valid readiness before deliberately closing the caller-eof pipe.",
+      "Use one monotonic deadline of 3 seconds beginning immediately before child launch. Multiplex stdout, stderr, liveness, and waitpid WNOHANG without allowing any stream to block another. Retain at most 65536 raw bytes independently per stream. Overflow means observed bytes exceed that limit.",
+      "On timeout, caller EOF, overflow, or another fatal supervisor error, latch the first terminal reason, kill the owned direct child while it remains unreaped, and perform cleanup within a separate 5-second allowance. Use a single reaper; never signal after successful reap. An expected failure remains failure even if the child subsequently exits zero.",
+      "Continue bounded draining during cleanup. Track bytes actually observed, bytes retained, and SHA-256 of retained raw bytes separately for stdout and stderr. Never describe observed counts as complete production totals when EOF was not reached. Record whether each stream reached EOF.",
+      "Reap with waitpid and record its actual result. If cleanup cannot be verified within the allowance, report cleanup-unverified, exit nonzero, and have the E2E script stop launching additional children. Do not block indefinitely to manufacture a reaped receipt.",
+      "Publish report.json once after finalization, without overwriting any existing report, and make it read-only. Record scenario, exact argv and environment, resolved executable paths, SHA-256 hashes of sandbox-exec and the selected command executable, SHA-256 of exact profile bytes, before/after executable-hash comparison, child PID, wait status, reason, probe exit, reaped status, stream counts/hashes/EOF flags, and timing. Hash mismatch fails the probe. Read-only publication is a protocol guarantee, not a claim of tamper resistance against the directory owner.",
+      "Public E2E CLI is exactly: --supervisor ABS --output-dir ABS --scenario client-primitive. Require a fresh private output directory. Standard-library imports are permitted; importing the supervisor, project helpers, or unit-test modules is forbidden.",
+      "E2E invokes the supervisor as a subprocess for each of the five scenarios, using distinct fresh state directories. The sole additional subprocess exception is one fixed sleeping Python canary owned directly by the E2E script, outside every supervisor's ownership.",
+      "Check that the canary remains alive after each row using the still-owned process handle. Clean it up separately in an E2E finally block. Verify each probe child through the supervisor's successful waitpid receipt and consistency with ready.json, and verify supervisor termination. Do not use a bare PID-existence test as proof or signal any PID taken from a report.",
+      "Write one E2E result row per required scenario, exactly once, with explicit predicates and failure details. No skipped rows: if containment failure prevents a later launch, record that row as failed/not-run with the blocking reason. Overall E2E success requires all five rows to have executed and passed."
+    ],
+    "forbidden_changes": [
+      "No containers, existing runner/harness edits, dependencies, lockfiles, workflow controller, public registry edits, or arbitrary command framework.",
+      "No code execution by the coding worker.",
+      "No changes to prior failure evidence."
+    ],
+    "e2e_recipe_ids": [
+      "lifecycle-client-primitive"
+    ],
+    "expected_outcomes": [
+      "docker-metadata: successful authentic server metadata, matching executable hashes, complete bounded streams, and verified reap.",
+      "fork-denial: successful explicit EPERM/EACCES denial record, matching executable hashes, complete bounded streams, and verified reap.",
+      "timeout: nonzero probe exit, timeout reason, bounded logs, and verified reap.",
+      "caller-eof: nonzero probe exit, caller-eof reason after readiness, bounded logs, and verified reap.",
+      "output-overflow: nonzero probe exit, output-overflow reason, stdout observed count greater than 65536, retained count at most 65536, and verified reap.",
+      "Expected negative probe outcomes pass their E2E rows only when every containment and evidence predicate matches."
+    ],
+    "evidence_outputs": [
+      "Only the two new source files are authored in this card.",
+      "Root freezes and reviews the source diff before execution.",
+      "Root-run execution produces readiness, bounded retained streams, terminal reports, and the five-row E2E result in fresh private output directories.",
+      "Prior timeout evidence remains a recorded failure."
+    ],
+    "stop_conditions": [
+      "Either allowed source path already exists, or implementation requires another source path or an unbounded framework.",
+      "Unsupported native policy, unexpected successful fork, unsupported Docker metadata configuration, executable-hash mismatch, or unverified cleanup.",
+      "Missing or failed prerequisite evidence prevents launch; it does not prevent authoring the two source files."
+    ]
+  }
+}
+
+JOB A8-L1-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 169.613,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1-review-001/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "safe_to_execute": false,
+  "findings": [
+    {
+      "id": "L1-022-01",
+      "severity": "high",
+      "location": "esy_lifecycle.py: both sandbox-exec argv constructions",
+      "problem": "The literal profile is passed without -p, so sandbox-exec does not receive the required profile argument.",
+      "required_change": "Construct both commands as [SANDBOX, '-p', PROFILE.decode(), ...], preserving the exact fixed policy and executable arguments.",
+      "required_e2e": "Verify the exact recorded argv and profile hash in all five live scenarios. Unsupported native policy must halt subsequent launches."
+    },
+    {
+      "id": "L1-022-02",
+      "severity": "high",
+      "location": "esy_lifecycle.py: FIXTURES['fork-denial']",
+      "problem": "The fixture discards the fork return value. Unexpected parent and child both print policy failure, and the parent never reaps its child.",
+      "required_change": "Call os.fork exactly once, branch on its return value, immediately exit the child, and have the parent reap that exact child before emitting the fixed policy-failure record. Accept only the exact EPERM/EACCES denial record as success.",
+      "required_e2e": "Verify authentic denial under the fixed native policy. Any observed successful fork must fail the row and stop execution for containment review; do not weaken policy to exercise this branch."
+    },
+    {
+      "id": "L1-022-03",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: proc.stdin handling and proc.communicate",
+      "problem": "communicate closes stdin in every ordinary scenario, violating caller liveness. Calling it after explicitly closing stdin can raise ValueError. The caller-eof branch also accepts any truthy readiness object after the polling loop, even if validation never succeeded.",
+      "required_change": "Use bounded nonblocking output collection that keeps the caller-owned stdin writer open until ordinary supervisor termination. Track readiness validation explicitly and close the writer for caller-eof only after complete validation.",
+      "required_e2e": "Demonstrate that only caller-eof deliberately closes liveness, that it closes after valid readiness, and that other scenarios reach their intended outcomes without incidental caller-eof failures."
+    },
+    {
+      "id": "L1-022-04",
+      "severity": "high",
+      "location": "esy_lifecycle.py: normal and cleanup loops",
+      "problem": "Both loops stop immediately after successful waitpid, potentially leaving buffered output unread and EOF unobserved. This can miss overflow and permits successful probes with incomplete streams.",
+      "required_change": "Track reap and stream EOF independently. Continue bounded draining after reap without further signaling or reaping. Require complete streams before success, and preserve terminal failures even if the child exits zero.",
+      "required_e2e": "Verify complete metadata and denial streams, detection of all 65537 overflow bytes, independent retention caps, and truthful EOF flags and observed counts for incomplete drains."
+    },
+    {
+      "id": "L1-022-05",
+      "severity": "high",
+      "location": "esy_lifecycle.py: exception handler and child ownership",
+      "problem": "Exception cleanup uses blocking waitpid(pid, 0), outside any cleanup deadline. Direct waitpid also leaves Popen.returncode unset, allowing Popen lifecycle handling to attempt another reap.",
+      "required_change": "Use one cleanup state machine and one reaper for every post-launch failure, with WNOHANG, bounded draining, and a separate five-second allowance. Synchronize the Popen return code after successful reap, never signal afterward, and expose cleanup-unverified separately from the first terminal cause.",
+      "required_e2e": "Verify bounded termination and actual waitpid receipts on negative and supervisor-error paths. Unverified cleanup must stop subsequent launches; an outer timeout is not a cleanup receipt."
+    },
+    {
+      "id": "L1-022-06",
+      "severity": "high",
+      "location": "esy_lifecycle.py: exitcode and reason calculation",
+      "problem": "Supervisor success depends only on zero wait status and absence of a latched reason. It never validates Docker server metadata or the exact fork-denial record.",
+      "required_change": "Before reporting success, require complete bounded streams and scenario-specific parsing: one complete JSON object with nonempty string Version and ApiVersion, or the exact fixed denial record for an allowed errno. Explicitly classify policy failure and invalid metadata.",
+      "required_e2e": "Require authentic real Docker metadata and exact native fork denial. Null, malformed, client-only, truncated, wrong-marker, and nonzero-exit outcomes must never qualify as success."
+    },
+    {
+      "id": "L1-022-07",
+      "severity": "high",
+      "location": "esy_lifecycle.py: liveness registration",
+      "problem": "Failure to register stdin as the liveness channel is silently ignored, allowing a probe to succeed without monitoring its caller.",
+      "required_change": "Fail closed when liveness cannot be monitored and enter bounded cleanup if a child already exists. Unregister EOF channels after latching their terminal condition.",
+      "required_e2e": "Verify caller-eof handling and rejection of an unusable liveness channel, with no successful outcome when monitoring was unavailable."
+    },
+    {
+      "id": "L1-022-08",
+      "severity": "high",
+      "location": "esy_lifecycle.py: socket validation, executable hashing, and finalization",
+      "problem": "Socket and initial hash failures bypass reporting; post-run hash failures also bypass finalization. A hash mismatch is hidden by an earlier timeout/EOF/overflow reason, allowing an expected-negative E2E row to pass despite executable changes.",
+      "required_change": "Finalize structured failure evidence for initialized states, including launch failures. Record first terminal cause, hash comparison, and cleanup status independently. Any hash mismatch or unverifiable hash must invalidate the row and halt further execution even when another reason occurred first.",
+      "required_e2e": "Verify matching before/after hashes for both executables in every row and fail-closed handling of unavailable configuration or hashes. Expected-negative reasons must not mask integrity failures."
+    },
+    {
+      "id": "L1-022-09",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: supervisor collection and finally block",
+      "problem": "communicate buffers output without a byte cap; its timeout fallback calls communicate without a timeout. Canary cleanup also contains an unbounded wait. Exceptions can leave the active supervisor unmanaged, and killing the supervisor does not verify cleanup of its child.",
+      "required_change": "Bound E2E stdout/stderr observation and retention independently, bound every wait, and retain ownership of the active supervisor through finally cleanup. Treat forced supervisor termination or missing child cleanup receipts as containment failure. Clean the canary separately through its owned handle.",
+      "required_e2e": "Demonstrate bounded collection and cleanup on timeout, output excess, and exceptions. The proposed outer 90-second/64-KiB wrapper must not substitute for internal bounds or descendant cleanup verification."
+    },
+    {
+      "id": "L1-022-10",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: blocked assignment",
+      "problem": "Later children are blocked only for two exact reason strings. Unsupported native policy, unexpected fork success, unsupported Docker configuration, missing or inconsistent cleanup receipts, forced supervisor termination, and canary death can all be followed by additional launches.",
+      "required_change": "Centralize stop-condition evaluation using explicit evidence predicates, including failures that prevent report creation. Record remaining scenarios as failed/not-run with the blocking reason.",
+      "required_e2e": "Verify that every containment, configuration, integrity, and cleanup stop condition prevents subsequent launches while preserving exactly five result rows."
+    },
+    {
+      "id": "L1-022-11",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: readiness, report, and scenario predicates",
+      "problem": "Evidence checks omit executable/profile hashes, exact argv/environment, pinned socket consistency, artifact hashes and lengths, report permissions, full launch identity consistency, and decoded wait-status consistency. Stream checks can pass vacuously for missing streams; negative rows omit most stream checks. Fork denial uses an unsafe substring match.",
+      "required_change": "Require complete typed schemas and exactly stdout/stderr records. Cross-check readiness scenario, supervisor PID, positive child PID, and launch identity against the report and owned process. Validate exact command/environment policy, executable hashes, socket evidence, retained files, EOF/count relationships, read-only report mode, actual wait status, and exact scenario records. Emit explicit predicates and failure details.",
+      "required_e2e": "All five live rows must pass every common containment/evidence predicate plus their scenario predicates. Verify zero child exit for positive rows and correctly decoded wait receipts for negative rows."
+    },
+    {
+      "id": "L1-022-12",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: row loop and result publication",
+      "problem": "Launch, artifact-read, validation, or cleanup exceptions can abort the loop before result.json is written, leaving fewer than five rows. executed currently means readiness was truthy rather than recording whether the scenario was actually launched.",
+      "required_change": "Create all five rows deterministically, track launch and valid readiness separately, convert exceptions into explicit failures, perform bounded ownership cleanup, and publish the final result even when later rows must be marked not-run.",
+      "required_e2e": "Verify exactly one row per required scenario on success and failure paths, with no omissions or duplicates. Overall success must require all five scenarios to execute and pass."
+    },
+    {
+      "id": "L1-022-13",
+      "severity": "medium",
+      "location": "esy_lifecycle.py: FIXTURES['output-overflow']",
+      "problem": "One os.write call does not guarantee that all 65537 bytes were written; its return value is ignored.",
+      "required_change": "Use a fixed literal workload that advances through the constant payload until exactly 65537 bytes have been written, handling short writes without introducing configurable input.",
+      "required_e2e": "Verify observed stdout exceeds 65536, retained stdout never exceeds 65536, hashes match retained bytes, and the overflow reason remains latched after reap."
+    },
+    {
+      "id": "L1-022-14",
+      "severity": "high",
+      "location": "proposed execution gate and lifecycle-client-primitive evidence",
+      "problem": "These sources are not approved for execution. AST parsing and source review cannot establish native containment, authentic Docker metadata, or completion of the required E2Es.",
+      "required_change": "Correct only the two allowed files, preserve prior failure evidence, freeze new source bindings, and obtain independent execution-review approval with the required prerequisite evidence before launching either script.",
+      "required_e2e": "After approval, root must run the bounded fixed-argv recipe in a fresh private directory, using real local Docker metadata and no containers. Verify strict CLI/path rejection, private directories, readiness, terminal reports, bounded streams, canary survival and cleanup, and all five passing rows. Source-only review must leave the E2E requirement open."
+    }
+  ]
+}
+
+JOB A8-L1a-023-review
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 1,
+  "failure": null,
+  "elapsed_seconds": 4.153,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1a-023-review/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1a-023-review/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-L1a-023-review/sandbox.sb"
+  ],
+  "status": "FAILED"
+}
+
+FINAL
+
+
+JOB A8-bootstrap-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 84.457,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-bootstrap-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-bootstrap-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-bootstrap-review-001/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "safe_for_refresh_and_one_L1_launch": true,
+  "findings": [
+    {
+      "severity": "info",
+      "detail": "Conditional approval for native containment refresh, the exact attached 120-second Pi/Luna smoke, then one supervised authoring launch 22. No unconditional dispatch approval."
+    },
+    {
+      "severity": "required",
+      "detail": "Fresh native evidence under the exact new profile must show workspace realpath success, original pyproject r+ denial without writing, /usr/bin/true spawn EPERM, actual Docker Unix-socket connection EPERM, and successful private-file writing. Prior proofs do not establish containment at the new path."
+    },
+    {
+      "severity": "required",
+      "detail": "Every smoke predicate must pass. Confirm worker reaping and credential removal independently before dispatch. Any failed check or cleanup uncertainty blocks launch."
+    },
+    {
+      "severity": "warning",
+      "detail": "Dispatcher releases its lock when worker_reaped is true even if credential_removed is false. The supervising operator must enforce the cleanup stop; lock absence alone is not clearance."
+    },
+    {
+      "severity": "required",
+      "detail": "Before launch 22, verify consumption remains 21, sufficient active budget remains, and the separate planner card matches L1: standalone direct-child event loop using a public process primitive, metadata and fixed local fixtures. Permit edits only to artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py and tests/e2e/test_esy_lifecycle.py."
+    },
+    {
+      "severity": "warning",
+      "detail": "Dispatcher accepts rounds through 36 and does not validate the planner card or refresh evidence. This approval authorizes only round 22, with no automatic retry, unattended controller, containers, changed-host tests, execution of authored code, or import. Results remain UNACCEPTED pending frozen-diff review."
+    },
+    {
+      "severity": "info",
+      "detail": "Reviewed supplied text only; no tools or code executed. Preservation of original72, indexed1316, prior reviews and proofs, and unchanged guardian/profile functionality beyond relocation relies on supplied assertions and must remain intact."
+    }
+  ]
+}
+
+JOB A8-high-correction-dispatch-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": "cleanup-denied",
+  "elapsed_seconds": 41.618,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-high-correction-dispatch-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-high-correction-dispatch-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-high-correction-dispatch-review-001/sandbox.sb"
+  ],
+  "status": "FAILED"
+}
+
+FINAL
+{
+  "safe_for_high_smoke_and_one_correction": true,
+  "findings": [
+    {
+      "severity": "info",
+      "detail": "Conditional approval for the exact supplied thinking=high Pi smoke, followed by at most ONE coding23 corrective authoring launch. Provider must remain openai-codex and model gpt-6-luna; no fallback, retry, or additional launch is authorized."
+    },
+    {
+      "severity": "required",
+      "detail": "Preserve the reviewed guardian and no-fork profile unchanged. Confirm the active profile matches the prior proof hash 6f5bd2ea5f14e95d4583167d7362a4a136655c1195b62b3d09448eb2c1b089c7. The earlier smoke establishes baseline capability, not passage of the new high-thinking smoke."
+    },
+    {
+      "severity": "required",
+      "detail": "Before coding23, every high-smoke predicate must pass. Independently confirm worker reaping and credential absence. Any failed check, incomplete evidence, or cleanup uncertainty blocks dispatch."
+    },
+    {
+      "severity": "required",
+      "detail": "Validate candidate and the copied workspace against the exact source22 parent manifest. Source22 remains defective and unexecuted. A separate fresh planner must supply the L1 correction card, incorporating the completed fresh source-review findings before dispatch, including the missing-p and pipe-close defects."
+    },
+    {
+      "severity": "required",
+      "detail": "The correction card must preserve L1 scope and permit changes only to artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py and tests/e2e/test_esy_lifecycle.py. Verify consumption is exactly 22, reserve round 23 once, and retain the 36-launch/32400-second caps with at least the dispatcher's required 660 seconds remaining."
+    },
+    {
+      "severity": "warning",
+      "detail": "The dispatcher does not enforce smoke passage, planner-card validity, source22 provenance, or this one-launch authorization. Its round range extends through 36, and its lock can be removed after reaping despite failed credential cleanup. The supervising operator must enforce these gates; lock absence is not clearance."
+    },
+    {
+      "severity": "required",
+      "detail": "All host tests, Docker execution, execution of authored code, and import remain prohibited under this approval. Freeze the correction and retain UNACCEPTED status pending independent exact-source review; successful authoring is not acceptance."
+    },
+    {
+      "severity": "info",
+      "detail": "Reviewed supplied text only; no tools or code executed. Installed Pi 1.3.0 high-thinking support, unchanged containment, prior probe results, and remaining budget rely on supplied evidence and assertions."
+    }
+  ]
+}
+
+JOB A8-high-correction-dispatch-review-002
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 37.652,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-high-correction-dispatch-review-002/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-high-correction-dispatch-review-002/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A8-high-correction-dispatch-review-002/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "safe_for_high_smoke_and_one_correction": true,
+  "findings": [
+    {
+      "severity": "info",
+      "detail": "Conditional approval only: run the exact supplied pi-smoke-high.py, then at most one corrective authoring launch, coding23, after every prerequisite below is satisfied. Both must use openai-codex/gpt-6-luna with --thinking high. No fallback, retry, or further launch is authorized."
+    },
+    {
+      "severity": "required",
+      "detail": "Preserve the reviewed guardian and no-fork profile unchanged. Confirm their identity against the prior proofs, including profile SHA-256 6f5bd2ea5f14e95d4583167d7362a4a136655c1195b62b3d09448eb2c1b089c7. Prior smoke success does not replace the high-thinking smoke."
+    },
+    {
+      "severity": "required",
+      "detail": "Every high-thinking smoke predicate must pass. Independently confirm supervisor completion, worker reaping, and absence of the temporary credential before coding23. Any failure, stale evidence, active prior worker, or cleanup uncertainty blocks dispatch."
+    },
+    {
+      "severity": "required",
+      "detail": "Before coding23, validate that the candidate and copied workspace exactly match the intended source22 correction parent. The currently running independent exact-source review must finish, and a separate fresh planner must incorporate its findings into the L1 correction card before dispatch."
+    },
+    {
+      "severity": "required",
+      "detail": "The planner card must address the reviewed lifecycle defects, including the missing-p and pipe-close errors, within L1. Authorize changes only to artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py and tests/e2e/test_esy_lifecycle.py."
+    },
+    {
+      "severity": "required",
+      "detail": "Immediately before dispatch, confirm coding_launches_consumed is 22, request round 23, retain the 36-launch and 32400-second caps, and recompute sufficient remaining active budget, including the dispatcher's minimum 660 seconds. Preserve the supplied smoke and authoring timeout/output limits."
+    },
+    {
+      "severity": "warning",
+      "detail": "The dispatcher does not enforce smoke success, planner freshness, review incorporation, or authorization limited to round 23. Its scope check is retrospective, and it releases the lock when worker_reaped is true even if credential removal failed. The supervising operator must enforce these gates; lock absence is not cleanup clearance."
+    },
+    {
+      "severity": "required",
+      "detail": "Source22 and coding23 output remain UNACCEPTED. All host tests, Docker execution, execution of authored code, and import remain prohibited pending independent review of the exact resulting source and separate authorization. This approval covers only the specified isolated smoke and conditional authoring launch."
+    },
+    {
+      "severity": "info",
+      "detail": "Reviewed supplied text only; no tools or code executed. Installed Pi 1.3.0 support for --thinking high, unchanged containment, prior proof authenticity, and current budget are supplied assertions requiring the stated pre-dispatch validation."
+    }
+  ]
+}

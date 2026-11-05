@@ -1,0 +1,1114 @@
+Implement ONLY this source-authoring card with read/edit/write. No commands/tests/imports/code execution. All outside artifact context is inlined below; edit only the allowed relative file. Preserve other findings open.
+{
+  "card_id": "B1a-Deadline-029",
+  "objective": "Reject an exhausted suite budget before every child spawn and use one saved remaining duration per wait decision.",
+  "finding_ids": [
+    "B1a-E2E-025-deadline-race"
+  ],
+  "parent_revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "input_path_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/",
+  "inputs": [
+    {
+      "path": "coding-jobs/B1a-Receipt-028/result-manifest.json",
+      "sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca"
+    },
+    {
+      "path": "coding-jobs/B1a-Receipt-028/frozen/tests/e2e/test_review_adapter_e2e.py",
+      "sha256": "df3260094ed9e55055e13040520900103e765217237c5ec5a62e3b31d13a804e"
+    },
+    {
+      "path": "coding-jobs/B1a-Receipt-028/frozen/scripts/esy-repair/claude-worker.sh",
+      "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+    },
+    {
+      "path": "coding-jobs/B1a-Receipt-028/frozen/scripts/esy-repair/codex-worker.sh",
+      "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+    },
+    {
+      "path": "astra-plan-028.json",
+      "sha256": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef"
+    },
+    {
+      "path": "retry-astra-review-025.json",
+      "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+    },
+    {
+      "path": "astra-source-review-028.json",
+      "sha256": "eddbbc3a70fd91b94467ff89580f9239ee4d9acae575b8bf55796949abf06848"
+    }
+  ],
+  "allowed_paths": [
+    "tests/e2e/test_review_adapter_e2e.py"
+  ],
+  "prerequisites": [
+    "The independently hashed review28 closes receipt28 and the ownership source concern for this exact parent. Root rechecks this binding before dispatch; withdrawn or mismatched closure blocks dispatch. Ownership runtime acceptance and whole-program execution approval remain open.",
+    "Root verifies every listed hash, complete parent manifest, exact working copy, adapter identity and remaining budget. Start from frozen28. No substitute parent or future hash is authorized.",
+    "Luna authors using read/edit/write only; no shell, execution, imports, compilation, tests, subprocess, helper or provider invocation. Root freezes the output and obtains independent Astra exact-revision source review. Later execution requires complete source/environment approval and separate outer-wrapper approval. Claude remains unavailable/disabled."
+  ],
+  "required_behavior": [
+    "Establish one absolute suite deadline from main's existing start and SUITE_TIMEOUT. Pass that deadline to the existing bounded_run boundary for every response, valid-review, arity and lifecycle invocation; replace callers' relative-budget arithmetic. Immediately before the sole Popen, inside its existing protected region, take one monotonic observation, derive suite_remaining, and raise Failure('suite timeout') when <=0 without acquiring a child. Derive the invocation deadline from this observation, capped by both INVOCATION_TIMEOUT and the absolute suite deadline. All call paths share this guard; an earlier caller check alone is insufficient.",
+    "For each collection/reap wait decision, calculate one remaining duration, reject <=0 with the existing intended timeout outcome, and pass only min(fixed quantum, saved remaining) to select/sleep. Frozen28 already does this in ordinary collection/reap: preserve it. Replace cleanup-reap's double monotonic calculation with one saved remaining; on <=0 record the existing bounded-reap-expired cleanup error and stop waiting. Keep the independent two-second cleanup deadline and primary-failure preservation; never replace a primary timeout with ValueError or a cleanup timeout.",
+    "Add only two closed --scenario enum values: deadline-suite-before-first and deadline-suite-before-next. Both use existing fixtures, native sandbox and actual adapters. The first sets the internally supplied absolute suite deadline to the current monotonic time immediately before its first bounded_run. The second completes exactly one ordinary success invocation with the normal suite deadline, validates its existing response/cleanup, then sets the deadline to the current monotonic time immediately before attempting its second invocation. No caller-side bypass or preemptive synthetic failure: exercise the shared real pre-spawn guard.",
+    "For those two controls only, persist deadline.json under the validated output directory on success/failure, containing scenario and at most two attempted-invocation lifecycle states from actual bounded_run calls. Reuse existing state/finalization fields: exhausted attempt must retain spawned_pid=null, absent pipes/selector, no signal attempt, successful no-child cleanup and suite-timeout failure. Return nonzero for the intended exhaustion. This narrow observation is not a general matrix/result receipt implementation.",
+    "Preserve ownership transitions, signal receipt semantics, first failure, guarded handler restoration, independent close/reap obligations, fixed environment, newline stdin, stream/record limits, constants and existing lifecycle controls. Do not redesign resources or signals."
+  ],
+  "forbidden_changes": [
+    "No paths beyond the test file; no adapter, controller, policy, dependency or historical-artifact edits.",
+    "No general framework, helper/unit test, fake process, monkeypatch, clock substitution, arbitrary timeout/command/signal controls, provider calls or sandbox replacement.",
+    "Do not repair record collection, per-case routing, arity offsets, diagnostic bytes or result.json; all five remain open. No execution by Luna."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-deadline-before-first",
+    "B1a-public-deadline-before-next",
+    "B1a-public-lifecycle-timeout",
+    "B1a-public-lifecycle-normal"
+  ],
+  "public_e2e_recipe": {
+    "executor": "Root only after both approvals; execute the complete public program, never imported helpers.",
+    "invocation": [
+      "VERIFIED_ABSOLUTE_PYTHON",
+      "VERIFIED_ABSOLUTE_TEST",
+      "--adapter",
+      "VERIFIED_ACTUAL_CLAUDE_ADAPTER",
+      "--output-dir",
+      "FRESH_OWNED_EMPTY_0700_DIRECTORY",
+      "--scenario",
+      "FIXED_ENUM_SCENARIO"
+    ],
+    "evidence": "Collect bounded stdout/stderr/status, deadline.json or existing lifecycle.json, and independently bounded outer completion. Read records.jsonl through the approved outer collector with a raw 16385-byte maximum; this does not repair candidate record collection.",
+    "assertions": "Before-first: nonzero suite timeout, zero records, one unspawned state. Before-next: one successful reaped invocation and one unspawned suite-timeout state, exactly one matching record; no subsequent launch. Lifecycle-timeout: nonzero invocation timeout, no negative-sleep ValueError, existing bounded cleanup observations. Lifecycle-normal: unchanged successful output/status and cleanup. Static review additionally verifies all matrix call sites reach the same guard and every sleep/select uses a positive saved duration; runtime controls do not prove arbitrary scheduling interleavings."
+  },
+  "expected_outcomes": [
+    "Deadline finding addressed in source without reopening receipt28; runtime closure remains pending separately approved evidence."
+  ],
+  "evidence_outputs": [
+    "Luna: changed test only. Root: frozen revision, manifests and diff. Astra: exact-revision dispositions and safety verdict. Later approved root: four bounded public receipts."
+  ],
+  "stop_conditions": [
+    "Receipt28 source closure absent, hash mismatch, budget exhaustion, expanded scope, extra-path need or worker execution: stop dispatch and report.",
+    "Any unresolved execution blocker or missing approval forbids execution; source-only changes do not establish runtime acceptance."
+  ]
+}
+REVIEW
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+  "parent_revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "source_sha256": "df3260094ed9e55055e13040520900103e765217237c5ec5a62e3b31d13a804e",
+  "input_hashes": {
+    "astra-plan-028.json": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef",
+    "astra-source-review-027.json": "20a80247c67b64381ebd23550a42e55cc5ff7977bfceddf91b13a51b576ae747",
+    "coding-jobs/B1a-Receipt-028/diff.patch": "fa705073916533baed36b96afe3eb53d5cd4ffff17b5662828495700e8a3f743",
+    "coding-jobs/B1a-Receipt-028/independent-validation.json": "5dad97e85c2f21536d9edd44c10516016692f430d778af6a18008e5ccd268359"
+  },
+  "source_card_closed": true,
+  "ownership_source_concern_closed": true,
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "execution_safety_verdict": "Limited source closure only. Full safety acceptance and execution remain blocked by the six known review025 findings, including record-bound, and missing source/environment and outer-wrapper approvals.",
+  "scope": "Reviewed the complete frozen source and exact diff against frozen27 within the finite cooperative SIGINT/SIGTERM and eight fixed lifecycle-scenario contract. Independently verified hashes, all 82 manifest entries (content, size, mode), exact parent-manifest identity, and exact diff. Only the allowed test file changed. No candidate execution, imports, compilation, tests, providers or delegation; wrote only this review.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Receipt-028/frozen/tests/e2e/test_review_adapter_e2e.py",
+  "adapter_hashes": {
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_dispositions": {
+    "B1a-E2E-027-cleanup-outcome-conflation": "Source closed: lines 319-324 derive cleanup solely from observed close/reap/selector outcomes, cleanup errors and interruption; restoration failures enter cleanup_errors. Lines 328-331 still re-raise the preserved primary failure independently.",
+    "B1a-E2E-027-signal-observation-receipt": "Source closed: first_signal initializes null and copies the handler-observed numeric signal or null after restoration (131,147-151,306-312); deliberate KeyboardInterrupt does not invent a signal. signal_attempt.phase initializes null and captures owned immediately before the sole killpg (132,260-263). No-attempt paths retain null.",
+    "B1a-E2E-025-owned-process-lifecycle": "Source concern closed through the cumulative26/27 ownership changes and these final receipt corrections, within the existing finite contract. Runtime acceptance remains open.",
+    "B1a-E2E-026-spawn-handoff": "Prior source closure preserved.",
+    "B1a-E2E-026-interrupted-cleanup": "Prior core source closure preserved; its signal-observation gap is now source closed.",
+    "B1a-E2E-026-finalization-receipt": "Remaining aggregate-cleanup and signal-observation source gaps closed."
+  },
+  "regressions": "None identified in this exact receipt-only diff. Ownership/reap transitions, first-failure persistence, independent close/reap obligations, single two-second cleanup deadline, guarded handler restoration, actual adapters, native sandbox, fixed environment, newline stdin, saved-duration waits, existing limits and closed CLI enum are unchanged.",
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-deadline-race",
+    "B1a-E2E-025-record-bound",
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime evidence exists for this revision. Source closure is not ownership runtime acceptance or full execution approval.",
+    "Resolve the six remaining review025 findings and obtain complete exact-revision source/environment approval plus separate outer-wrapper approval before execution.",
+    "After approval, collect bounded public exit/stdout/stderr and lifecycle.json for all eight existing lifecycle scenarios, with independent outer completion. Verify nonzero primary-failure exits alongside successful cleanup where obligations succeed; owned attempted-signal phase; post-reap no-attempt/null phase; cleanup-interrupt observed numeric SIGINT, preserved setup failure, failed cleanup, and independent resource/reap outcomes. Without an observed OS signal, first_signal must remain null."
+  ]
+}
+
+SOURCE tests/e2e/test_review_adapter_e2e.py
+#!/usr/bin/python3
+"""Source-only authoring for bounded fake-Codex review routing evidence."""
+
+import argparse
+import base64
+import json
+import os
+import selectors
+import signal
+import stat
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+LIMIT = 4096
+RECORD_LIMIT = 16384
+INVOCATION_TIMEOUT = 10.0
+SUITE_TIMEOUT = 180.0
+DIAGNOSTIC_LIMIT = 4096
+EXPECTED_ARGV = [
+    "exec", "--disable", "apps", "--disable", "plugins", "--disable",
+    "hooks", "--disable", "multi_agent", "--disable", "shell_snapshot",
+    "--disable", "shell_tool", "--ignore-user-config", "--ephemeral",
+    "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox",
+    "read-only", "--cd", "WORKSPACE", "--json", "-",
+]
+CASES = [
+    ("success", b"OK\n", b"", 0),
+    ("findings", b'{"findings":["fixture"]}\n', b"", 0),
+    ("availability", b"", b"unavailable\n", 69),
+    ("auth", b"", b"authentication required\n", 77),
+    ("permission", b"", b"permission denied\n", 77),
+    ("malformed", b"{broken\n", b"", 0),
+    ("identity", b"identity mismatch\n", b"", 0),
+    ("context", b"context missing\n", b"", 0),
+    ("cleanup", b"", b"cleanup failed\n", 23),
+]
+
+
+class Failure(Exception):
+    pass
+
+
+def absolute_nonsymlink(value, label):
+    if not os.path.isabs(value):
+        raise Failure(label + " must be absolute")
+    path = Path(value)
+    cur = Path(path.anchor)
+    for part in path.parts[1:]:
+        cur = cur / part
+        try:
+            mode = cur.lstat().st_mode
+        except OSError as exc:
+            raise Failure("invalid " + label) from exc
+        if stat.S_ISLNK(mode):
+            raise Failure(label + " has a symlink component")
+    return path
+
+
+def validate(args):
+    adapter = absolute_nonsymlink(args.adapter, "adapter")
+    if not stat.S_ISREG(adapter.lstat().st_mode):
+        raise Failure("adapter must be regular")
+    sibling = adapter.parent / "codex-worker.sh"
+    absolute_nonsymlink(str(sibling), "sibling adapter")
+    if not stat.S_ISREG(sibling.lstat().st_mode):
+        raise Failure("missing regular codex-worker.sh")
+    output = absolute_nonsymlink(args.output_dir, "output directory")
+    info = output.lstat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
+        raise Failure("output directory must be owned, empty, and mode 0700")
+    if os.listdir(output):
+        raise Failure("output directory must be empty")
+    return adapter, output
+
+
+def write_bytes(path, data, mode=0o600):
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(data)
+
+
+def make_fixtures(output):
+    workspace = output / "workspace"
+    workspace.mkdir(mode=0o700)
+    prompt = output / "prompt.txt"
+    write_bytes(prompt, b"review fixture\n")
+    home = output / "private-home"
+    home.mkdir(mode=0o700)
+    records = output / "records.jsonl"
+    write_bytes(records, b"")
+    config = workspace / "response.json"
+    fake = output / "fake-codex"
+    interpreter = Path(os.path.realpath(sys.executable))
+    absolute_nonsymlink(str(interpreter), "Python interpreter")
+    if not stat.S_ISREG(interpreter.lstat().st_mode) or not os.access(interpreter, os.X_OK):
+        raise Failure("Python interpreter is not executable")
+    literal = str(interpreter)
+    if any(c.isspace() for c in literal) or "\n" in literal or len(literal.encode()) > 120:
+        raise Failure("Python interpreter path unsuitable for shebang")
+    fake_source = '''#!INTERPRETER
+import base64, json, os, sys
+raw = sys.stdin.buffer.read(4097)
+if len(raw) > 4096:
+    raise SystemExit(125)
+with open(os.path.join(os.getcwd(), "response.json"), "r", encoding="utf-8") as f:
+    response = json.load(f)
+record = {"argv": sys.argv[1:], "cwd": os.getcwd(), "stdin": base64.b64encode(raw).decode("ascii")}
+with open(RECORDS, "a", encoding="utf-8") as f:
+    f.write(json.dumps(record, separators=(",", ":")) + "\\n")
+if response.get("sleep"):
+    import time
+    time.sleep(response["sleep"])
+sys.stdout.buffer.write(bytes.fromhex(response["stdout"]))
+sys.stderr.buffer.write(bytes.fromhex(response["stderr"]))
+raise SystemExit(response["status"])
+'''.replace("INTERPRETER", literal).replace("RECORDS", repr(str(records)))
+    write_bytes(fake, fake_source.encode("utf-8"), 0o700)
+    os.chmod(fake, 0o700)
+    escaped = str(output).replace("\\", "\\\\").replace('"', '\\"')
+    profile = output / "profile.sb"
+    text = ('(version 1)\n(allow default)\n(deny network*)\n(deny file-write*)\n'
+            '(allow file-write* (subpath "' + escaped + '"))\n(deny process-fork)\n')
+    write_bytes(profile, text.encode())
+    return workspace, prompt, profile, fake, config, records, home
+
+
+def bounded_run(argv, workspace, home, output, records, timeout, lifecycle=None, scenario="matrix"):
+    state = lifecycle if lifecycle is not None else {}
+    state.update({"spawned_pid": None, "first_signal": None,
+                  "signal_attempt": {"intended": False, "attempted": False, "result": "not-needed", "phase": None},
+                  "leader_reap": "not-reaped", "pipes": {"stdin": "absent", "stdout": "absent", "stderr": "absent"},
+                  "selector": "absent", "cleanup_interrupted": False, "cleanup": "pending",
+                  "cleanup_errors": [], "failure": None})
+    proc = None
+    selector = None
+    streams = {}
+    phase = "not-spawned"
+    handlers = {}
+    received = {"signal": 0, "cleanup": False}
+    finalizing = False
+    primary = None
+    cleanup_deadline = None
+    deadline = time.monotonic() + timeout
+
+    def deferred_handler(signum, frame):
+        if not received["signal"]:
+            received["signal"] = signum
+        if finalizing:
+            received["cleanup"] = True
+
+    def record_error(label, exc):
+        state["cleanup_errors"].append(label + ": " + type(exc).__name__ + ": " + str(exc))
+
+    def close_pipe(name, stream):
+        if state["pipes"][name] in ("closed", "already-closed"):
+            return
+        if stream is None or stream.closed:
+            state["pipes"][name] = "already-closed"
+            return
+        try:
+            stream.close()
+            state["pipes"][name] = "closed"
+        except BaseException as exc:
+            state["pipes"][name] = "failed/uncertain"
+            record_error(name + " close", exc)
+
+    def wait_once():
+        nonlocal phase
+        phase = "reap-uncertain"
+        try:
+            waited, raw = os.waitpid(proc.pid, os.WNOHANG)
+        except BaseException:
+            raise
+        if waited == 0:
+            phase = "owned"
+            return False
+        if waited != proc.pid:
+            raise Failure("unexpected waitpid result")
+        phase = "reaped"
+        state["leader_reap"] = "reaped"
+        proc.returncode = os.waitstatus_to_exitcode(raw)
+        return True
+
+    try:
+        for signum in (signal.SIGINT, signal.SIGTERM):
+            handlers[signum] = signal.signal(signum, deferred_handler)
+        env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "LANG": "C"}
+        proc = subprocess.Popen(argv, cwd=str(workspace), env=env, stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
+                               close_fds=True)
+        phase = "owned"
+        state["spawned_pid"] = proc.pid
+        state["pipes"] = {"stdin": "pending", "stdout": "pending", "stderr": "pending"}
+        streams = {proc.stdout: bytearray(), proc.stderr: bytearray()}
+        if received["signal"]:
+            raise Failure("interrupted after child acquisition")
+        if scenario in ("lifecycle-setup-failure", "lifecycle-cleanup-interrupt"):
+            raise Failure("deliberate selector setup failure")
+        selector = selectors.DefaultSelector()
+        state["selector"] = "open"
+        for stream in streams:
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, selectors.EVENT_READ)
+        os.set_blocking(proc.stdin.fileno(), False)
+        pending = memoryview(b"review fixture\n")
+        while selector.get_map() or pending:
+            if received["signal"]:
+                raise Failure("interrupted during collection")
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise Failure("invocation timeout")
+            if pending:
+                try:
+                    sent = os.write(proc.stdin.fileno(), pending)
+                    pending = pending[sent:]
+                except BlockingIOError:
+                    pass
+                except BrokenPipeError:
+                    pending = memoryview(b"")
+            if not pending:
+                close_pipe("stdin", proc.stdin)
+            for key, _ in selector.select(min(remaining, 0.1)):
+                chunk = os.read(key.fd, LIMIT + 1 - len(streams[key.fileobj]))
+                if chunk:
+                    streams[key.fileobj].extend(chunk)
+                    if len(streams[key.fileobj]) > LIMIT:
+                        raise Failure("stream overflow")
+                else:
+                    selector.unregister(key.fileobj)
+                    close_pipe("stdout" if key.fileobj is proc.stdout else "stderr", key.fileobj)
+            if received["signal"]:
+                raise Failure("interrupted during collection")
+        while True:
+            if received["signal"]:
+                raise Failure("interrupted during collection")
+            if wait_once():
+                break
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise Failure("invocation timeout")
+            time.sleep(min(0.02, remaining))
+        if scenario == "lifecycle-post-reap-exception":
+            raise Failure("deliberate post-reap exception")
+        if scenario == "lifecycle-post-reap-interrupt":
+            raise KeyboardInterrupt("deliberate post-reap interruption")
+    except BaseException as exc:
+        primary = exc
+        state["failure"] = type(exc).__name__ + ": " + str(exc)
+
+    # One finalizer owns all remaining obligations; signal handlers remain active.
+    finalizing = True
+    cleanup_deadline = time.monotonic() + 2.0
+    if scenario == "lifecycle-cleanup-interrupt" and proc is not None:
+        try:
+            os.kill(os.getpid(), signal.SIGINT)
+        except BaseException as exc:
+            record_error("cleanup probe signal", exc)
+    if primary is not None and proc is not None and phase in ("owned", "not-spawned") and phase != "not-spawned":
+        state["signal_attempt"] = {"intended": True, "attempted": True, "result": "pending", "phase": phase}
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+            state["signal_attempt"]["result"] = "sent"
+        except BaseException as exc:
+            state["signal_attempt"]["result"] = "failed"
+            record_error("group signal", exc)
+    elif phase == "reap-uncertain":
+        record_error("leader ownership", Failure("uncertain; refusing group signal"))
+
+    for stream, name in ((proc.stdout, "stdout"), (proc.stderr, "stderr")) if proc is not None else ():
+        if state["pipes"][name] not in ("closed", "already-closed"):
+            try:
+                os.set_blocking(stream.fileno(), False)
+                while time.monotonic() < cleanup_deadline:
+                    try:
+                        if not os.read(stream.fileno(), LIMIT):
+                            break
+                    except BlockingIOError:
+                        break
+            except BaseException as exc:
+                record_error(name + " drain", exc)
+            close_pipe(name, stream)
+    if proc is not None:
+        close_pipe("stdin", proc.stdin)
+        if phase in ("owned", "reap-uncertain") and phase == "owned":
+            try:
+                while True:
+                    if wait_once():
+                        break
+                    if time.monotonic() >= cleanup_deadline:
+                        record_error("leader reap", Failure("bounded reap expired"))
+                        break
+                    time.sleep(min(0.01, max(0.0, cleanup_deadline - time.monotonic())))
+            except BaseException as exc:
+                record_error("leader reap", exc)
+        elif phase == "reap-uncertain":
+            state["leader_reap"] = "uncertain"
+    if selector is not None and state["selector"] == "open":
+        try:
+            selector.close()
+            state["selector"] = "closed"
+        except BaseException as exc:
+            state["selector"] = "failed/uncertain"
+            record_error("selector close", exc)
+    for signum, previous in handlers.items():
+        try:
+            signal.signal(signum, previous)
+        except BaseException as exc:
+            record_error("signal handler restore", exc)
+    state["cleanup_interrupted"] = bool(received["cleanup"])
+    state["first_signal"] = received["signal"] or None
+    if received["signal"] and not received["cleanup"]:
+        if primary is None:
+            primary = Failure("deferred signal " + str(received["signal"]))
+            state["failure"] = str(primary)
+    if received["cleanup"]:
+        record_error("cleanup interruption", Failure("deferred signal observed"))
+    all_pipes_closed = all(value in ("absent", "closed", "already-closed") for value in state["pipes"].values())
+    reaped_or_absent = proc is None or phase == "reaped"
+    clean = (not state["cleanup_errors"] and not state["cleanup_interrupted"] and all_pipes_closed
+             and reaped_or_absent and state["selector"] in ("closed", "absent"))
+    state["pipe_closure"] = "closed" if all_pipes_closed else "failed"
+    state["cleanup"] = "success" if clean else "failed"
+    if not clean and primary is None:
+        primary = Failure("finalization failed")
+        state["failure"] = str(primary)
+    if primary is not None:
+        if state["cleanup_errors"]:
+            raise Failure(state["failure"] + "; cleanup failed: " + "; ".join(state["cleanup_errors"])) from primary
+        raise primary
+    return bytes(streams[proc.stdout]), bytes(streams[proc.stderr]), proc.returncode
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--adapter", required=True)
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--scenario", choices=("matrix", "lifecycle-normal", "lifecycle-setup-failure",
+                        "lifecycle-post-reap-exception", "lifecycle-post-reap-interrupt", "lifecycle-timeout",
+                        "lifecycle-stdout-overflow", "lifecycle-stderr-overflow", "lifecycle-cleanup-interrupt"), default="matrix")
+    args = parser.parse_args()
+    started = time.monotonic()
+    try:
+        adapter, output = validate(args)
+        workspace, prompt, profile, fake, config, records, home = make_fixtures(output)
+        if args.scenario != "matrix":
+            probe = args.scenario
+            response = {"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}
+            if probe == "lifecycle-timeout":
+                response["sleep"] = INVOCATION_TIMEOUT + 1
+            elif probe == "lifecycle-stdout-overflow":
+                response["stdout"] = (b"x" * (LIMIT + 1)).hex()
+            elif probe == "lifecycle-stderr-overflow":
+                response["stderr"] = (b"x" * (LIMIT + 1)).hex()
+            config.write_text(json.dumps(response), encoding="utf-8")
+            state = {"scenario": probe}
+            try:
+                result = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                                    workspace, home, output, records, INVOCATION_TIMEOUT, state, probe)
+                if result != (CASES[0][1], CASES[0][2], 0) or state["cleanup"] != "success":
+                    raise Failure("lifecycle probe completion invalid")
+            except BaseException as exc:
+                state["scenario"] = probe
+                if state.get("failure") is None:
+                    state["failure"] = type(exc).__name__ + ": " + str(exc)
+                (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+                raise
+            (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+            return 0
+        rows = []
+        for name, stdout, stderr, status in CASES:
+            if time.monotonic() - started > SUITE_TIMEOUT:
+                raise Failure("suite timeout")
+            config.write_text(json.dumps({"stdout": stdout.hex(), "stderr": stderr.hex(), "status": status}), encoding="utf-8")
+            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
+            actual_out, actual_err, actual_status = bounded_run(argv, workspace, home, output, records,
+                                                                  min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
+            rows.append((name, actual_out == stdout and actual_err == stderr and actual_status == status))
+            if (actual_out, actual_err, actual_status) != (stdout, stderr, status):
+                raise Failure("unexpected response for " + name)
+        lines = records.read_bytes().splitlines()
+        if len(lines) != len(CASES) or sum(map(len, lines)) > RECORD_LIMIT:
+            raise Failure("record count or size invalid")
+        expected = ["exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks", "--disable",
+                    "multi_agent", "--disable", "shell_snapshot", "--disable", "shell_tool", "--ignore-user-config",
+                    "--ephemeral", "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox", "read-only",
+                    "--cd", str(workspace), "--json", "-"]
+        for line in lines:
+            rec = json.loads(line)
+            if rec != {"argv": expected, "cwd": str(workspace), "stdin": base64.b64encode(b"review fixture\n").decode("ascii")}:
+                raise Failure("fake routing record mismatch")
+        # Four arguments after the role is the valid review interface; exercise it
+        # with real fixture paths. Never invoke the valid code branch.
+        out, err, status = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                                       workspace, home, output, records,
+                                       min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
+        if (out, err, status) != (CASES[-1][1], CASES[-1][2], CASES[-1][3]):
+            raise Failure("valid review arity failed")
+        arities = [("review", n) for n in (0, 1, 2, 3, 6)] + [("code", 5), ("unknown", 4), ("unknown", 5)]
+        for role, count in arities:
+            params = [role] + ["unused"] * count
+            out, err, status = bounded_run(["/bin/bash", str(adapter)] + params, workspace, home, output, records,
+                                           min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
+            if (out, err, status) != (b"", b"", 64):
+                raise Failure("invalid arity was not rejected")
+        if len(records.read_bytes().splitlines()) != len(CASES) + 1:
+            raise Failure("invalid arity reached provider")
+        print(json.dumps({"rows": [{"case": n, "status": "pass" if ok else "fail"} for n, ok in rows], "overall": "pass"}))
+        return 0
+    except Failure as exc:
+        print(str(exc)[:DIAGNOSTIC_LIMIT], file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print((type(exc).__name__ + ": " + str(exc))[:DIAGNOSTIC_LIMIT], file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+ACCUMULATED DIFF
+--- baseline/tests/e2e/test_review_adapter_e2e.py
++++ candidate/tests/e2e/test_review_adapter_e2e.py
+@@ -0,0 +1,420 @@
++#!/usr/bin/python3
++"""Source-only authoring for bounded fake-Codex review routing evidence."""
++
++import argparse
++import base64
++import json
++import os
++import selectors
++import signal
++import stat
++import subprocess
++import sys
++import time
++from pathlib import Path
++
++LIMIT = 4096
++RECORD_LIMIT = 16384
++INVOCATION_TIMEOUT = 10.0
++SUITE_TIMEOUT = 180.0
++DIAGNOSTIC_LIMIT = 4096
++EXPECTED_ARGV = [
++    "exec", "--disable", "apps", "--disable", "plugins", "--disable",
++    "hooks", "--disable", "multi_agent", "--disable", "shell_snapshot",
++    "--disable", "shell_tool", "--ignore-user-config", "--ephemeral",
++    "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox",
++    "read-only", "--cd", "WORKSPACE", "--json", "-",
++]
++CASES = [
++    ("success", b"OK\n", b"", 0),
++    ("findings", b'{"findings":["fixture"]}\n', b"", 0),
++    ("availability", b"", b"unavailable\n", 69),
++    ("auth", b"", b"authentication required\n", 77),
++    ("permission", b"", b"permission denied\n", 77),
++    ("malformed", b"{broken\n", b"", 0),
++    ("identity", b"identity mismatch\n", b"", 0),
++    ("context", b"context missing\n", b"", 0),
++    ("cleanup", b"", b"cleanup failed\n", 23),
++]
++
++
++class Failure(Exception):
++    pass
++
++
++def absolute_nonsymlink(value, label):
++    if not os.path.isabs(value):
++        raise Failure(label + " must be absolute")
++    path = Path(value)
++    cur = Path(path.anchor)
++    for part in path.parts[1:]:
++        cur = cur / part
++        try:
++            mode = cur.lstat().st_mode
++        except OSError as exc:
++            raise Failure("invalid " + label) from exc
++        if stat.S_ISLNK(mode):
++            raise Failure(label + " has a symlink component")
++    return path
++
++
++def validate(args):
++    adapter = absolute_nonsymlink(args.adapter, "adapter")
++    if not stat.S_ISREG(adapter.lstat().st_mode):
++        raise Failure("adapter must be regular")
++    sibling = adapter.parent / "codex-worker.sh"
++    absolute_nonsymlink(str(sibling), "sibling adapter")
++    if not stat.S_ISREG(sibling.lstat().st_mode):
++        raise Failure("missing regular codex-worker.sh")
++    output = absolute_nonsymlink(args.output_dir, "output directory")
++    info = output.lstat()
++    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
++        raise Failure("output directory must be owned, empty, and mode 0700")
++    if os.listdir(output):
++        raise Failure("output directory must be empty")
++    return adapter, output
++
++
++def write_bytes(path, data, mode=0o600):
++    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
++    with os.fdopen(fd, "wb") as stream:
++        stream.write(data)
++
++
++def make_fixtures(output):
++    workspace = output / "workspace"
++    workspace.mkdir(mode=0o700)
++    prompt = output / "prompt.txt"
++    write_bytes(prompt, b"review fixture\n")
++    home = output / "private-home"
++    home.mkdir(mode=0o700)
++    records = output / "records.jsonl"
++    write_bytes(records, b"")
++    config = workspace / "response.json"
++    fake = output / "fake-codex"
++    interpreter = Path(os.path.realpath(sys.executable))
++    absolute_nonsymlink(str(interpreter), "Python interpreter")
++    if not stat.S_ISREG(interpreter.lstat().st_mode) or not os.access(interpreter, os.X_OK):
++        raise Failure("Python interpreter is not executable")
++    literal = str(interpreter)
++    if any(c.isspace() for c in literal) or "\n" in literal or len(literal.encode()) > 120:
++        raise Failure("Python interpreter path unsuitable for shebang")
++    fake_source = '''#!INTERPRETER
++import base64, json, os, sys
++raw = sys.stdin.buffer.read(4097)
++if len(raw) > 4096:
++    raise SystemExit(125)
++with open(os.path.join(os.getcwd(), "response.json"), "r", encoding="utf-8") as f:
++    response = json.load(f)
++record = {"argv": sys.argv[1:], "cwd": os.getcwd(), "stdin": base64.b64encode(raw).decode("ascii")}
++with open(RECORDS, "a", encoding="utf-8") as f:
++    f.write(json.dumps(record, separators=(",", ":")) + "\\n")
++if response.get("sleep"):
++    import time
++    time.sleep(response["sleep"])
++sys.stdout.buffer.write(bytes.fromhex(response["stdout"]))
++sys.stderr.buffer.write(bytes.fromhex(response["stderr"]))
++raise SystemExit(response["status"])
++'''.replace("INTERPRETER", literal).replace("RECORDS", repr(str(records)))
++    write_bytes(fake, fake_source.encode("utf-8"), 0o700)
++    os.chmod(fake, 0o700)
++    escaped = str(output).replace("\\", "\\\\").replace('"', '\\"')
++    profile = output / "profile.sb"
++    text = ('(version 1)\n(allow default)\n(deny network*)\n(deny file-write*)\n'
++            '(allow file-write* (subpath "' + escaped + '"))\n(deny process-fork)\n')
++    write_bytes(profile, text.encode())
++    return workspace, prompt, profile, fake, config, records, home
++
++
++def bounded_run(argv, workspace, home, output, records, timeout, lifecycle=None, scenario="matrix"):
++    state = lifecycle if lifecycle is not None else {}
++    state.update({"spawned_pid": None, "first_signal": None,
++                  "signal_attempt": {"intended": False, "attempted": False, "result": "not-needed", "phase": None},
++                  "leader_reap": "not-reaped", "pipes": {"stdin": "absent", "stdout": "absent", "stderr": "absent"},
++                  "selector": "absent", "cleanup_interrupted": False, "cleanup": "pending",
++                  "cleanup_errors": [], "failure": None})
++    proc = None
++    selector = None
++    streams = {}
++    phase = "not-spawned"
++    handlers = {}
++    received = {"signal": 0, "cleanup": False}
++    finalizing = False
++    primary = None
++    cleanup_deadline = None
++    deadline = time.monotonic() + timeout
++
++    def deferred_handler(signum, frame):
++        if not received["signal"]:
++            received["signal"] = signum
++        if finalizing:
++            received["cleanup"] = True
++
++    def record_error(label, exc):
++        state["cleanup_errors"].append(label + ": " + type(exc).__name__ + ": " + str(exc))
++
++    def close_pipe(name, stream):
++        if state["pipes"][name] in ("closed", "already-closed"):
++            return
++        if stream is None or stream.closed:
++            state["pipes"][name] = "already-closed"
++            return
++        try:
++            stream.close()
++            state["pipes"][name] = "closed"
++        except BaseException as exc:
++            state["pipes"][name] = "failed/uncertain"
++            record_error(name + " close", exc)
++
++    def wait_once():
++        nonlocal phase
++        phase = "reap-uncertain"
++        try:
++            waited, raw = os.waitpid(proc.pid, os.WNOHANG)
++        except BaseException:
++            raise
++        if waited == 0:
++            phase = "owned"
++            return False
++        if waited != proc.pid:
++            raise Failure("unexpected waitpid result")
++        phase = "reaped"
++        state["leader_reap"] = "reaped"
++        proc.returncode = os.waitstatus_to_exitcode(raw)
++        return True
++
++    try:
++        for signum in (signal.SIGINT, signal.SIGTERM):
++            handlers[signum] = signal.signal(signum, deferred_handler)
++        env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "LANG": "C"}
++        proc = subprocess.Popen(argv, cwd=str(workspace), env=env, stdin=subprocess.PIPE,
++                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
++                               close_fds=True)
++        phase = "owned"
++        state["spawned_pid"] = proc.pid
++        state["pipes"] = {"stdin": "pending", "stdout": "pending", "stderr": "pending"}
++        streams = {proc.stdout: bytearray(), proc.stderr: bytearray()}
++        if received["signal"]:
++            raise Failure("interrupted after child acquisition")
++        if scenario in ("lifecycle-setup-failure", "lifecycle-cleanup-interrupt"):
++            raise Failure("deliberate selector setup failure")
++        selector = selectors.DefaultSelector()
++        state["selector"] = "open"
++        for stream in streams:
++            os.set_blocking(stream.fileno(), False)
++            selector.register(stream, selectors.EVENT_READ)
++        os.set_blocking(proc.stdin.fileno(), False)
++        pending = memoryview(b"review fixture\n")
++        while selector.get_map() or pending:
++            if received["signal"]:
++                raise Failure("interrupted during collection")
++            remaining = deadline - time.monotonic()
++            if remaining <= 0:
++                raise Failure("invocation timeout")
++            if pending:
++                try:
++                    sent = os.write(proc.stdin.fileno(), pending)
++                    pending = pending[sent:]
++                except BlockingIOError:
++                    pass
++                except BrokenPipeError:
++                    pending = memoryview(b"")
++            if not pending:
++                close_pipe("stdin", proc.stdin)
++            for key, _ in selector.select(min(remaining, 0.1)):
++                chunk = os.read(key.fd, LIMIT + 1 - len(streams[key.fileobj]))
++                if chunk:
++                    streams[key.fileobj].extend(chunk)
++                    if len(streams[key.fileobj]) > LIMIT:
++                        raise Failure("stream overflow")
++                else:
++                    selector.unregister(key.fileobj)
++                    close_pipe("stdout" if key.fileobj is proc.stdout else "stderr", key.fileobj)
++            if received["signal"]:
++                raise Failure("interrupted during collection")
++        while True:
++            if received["signal"]:
++                raise Failure("interrupted during collection")
++            if wait_once():
++                break
++            remaining = deadline - time.monotonic()
++            if remaining <= 0:
++                raise Failure("invocation timeout")
++            time.sleep(min(0.02, remaining))
++        if scenario == "lifecycle-post-reap-exception":
++            raise Failure("deliberate post-reap exception")
++        if scenario == "lifecycle-post-reap-interrupt":
++            raise KeyboardInterrupt("deliberate post-reap interruption")
++    except BaseException as exc:
++        primary = exc
++        state["failure"] = type(exc).__name__ + ": " + str(exc)
++
++    # One finalizer owns all remaining obligations; signal handlers remain active.
++    finalizing = True
++    cleanup_deadline = time.monotonic() + 2.0
++    if scenario == "lifecycle-cleanup-interrupt" and proc is not None:
++        try:
++            os.kill(os.getpid(), signal.SIGINT)
++        except BaseException as exc:
++            record_error("cleanup probe signal", exc)
++    if primary is not None and proc is not None and phase in ("owned", "not-spawned") and phase != "not-spawned":
++        state["signal_attempt"] = {"intended": True, "attempted": True, "result": "pending", "phase": phase}
++        try:
++            os.killpg(proc.pid, signal.SIGKILL)
++            state["signal_attempt"]["result"] = "sent"
++        except BaseException as exc:
++            state["signal_attempt"]["result"] = "failed"
++            record_error("group signal", exc)
++    elif phase == "reap-uncertain":
++        record_error("leader ownership", Failure("uncertain; refusing group signal"))
++
++    for stream, name in ((proc.stdout, "stdout"), (proc.stderr, "stderr")) if proc is not None else ():
++        if state["pipes"][name] not in ("closed", "already-closed"):
++            try:
++                os.set_blocking(stream.fileno(), False)
++                while time.monotonic() < cleanup_deadline:
++                    try:
++                        if not os.read(stream.fileno(), LIMIT):
++                            break
++                    except BlockingIOError:
++                        break
++            except BaseException as exc:
++                record_error(name + " drain", exc)
++            close_pipe(name, stream)
++    if proc is not None:
++        close_pipe("stdin", proc.stdin)
++        if phase in ("owned", "reap-uncertain") and phase == "owned":
++            try:
++                while True:
++                    if wait_once():
++                        break
++                    if time.monotonic() >= cleanup_deadline:
++                        record_error("leader reap", Failure("bounded reap expired"))
++                        break
++                    time.sleep(min(0.01, max(0.0, cleanup_deadline - time.monotonic())))
++            except BaseException as exc:
++                record_error("leader reap", exc)
++        elif phase == "reap-uncertain":
++            state["leader_reap"] = "uncertain"
++    if selector is not None and state["selector"] == "open":
++        try:
++            selector.close()
++            state["selector"] = "closed"
++        except BaseException as exc:
++            state["selector"] = "failed/uncertain"
++            record_error("selector close", exc)
++    for signum, previous in handlers.items():
++        try:
++            signal.signal(signum, previous)
++        except BaseException as exc:
++            record_error("signal handler restore", exc)
++    state["cleanup_interrupted"] = bool(received["cleanup"])
++    state["first_signal"] = received["signal"] or None
++    if received["signal"] and not received["cleanup"]:
++        if primary is None:
++            primary = Failure("deferred signal " + str(received["signal"]))
++            state["failure"] = str(primary)
++    if received["cleanup"]:
++        record_error("cleanup interruption", Failure("deferred signal observed"))
++    all_pipes_closed = all(value in ("absent", "closed", "already-closed") for value in state["pipes"].values())
++    reaped_or_absent = proc is None or phase == "reaped"
++    clean = (not state["cleanup_errors"] and not state["cleanup_interrupted"] and all_pipes_closed
++             and reaped_or_absent and state["selector"] in ("closed", "absent"))
++    state["pipe_closure"] = "closed" if all_pipes_closed else "failed"
++    state["cleanup"] = "success" if clean else "failed"
++    if not clean and primary is None:
++        primary = Failure("finalization failed")
++        state["failure"] = str(primary)
++    if primary is not None:
++        if state["cleanup_errors"]:
++            raise Failure(state["failure"] + "; cleanup failed: " + "; ".join(state["cleanup_errors"])) from primary
++        raise primary
++    return bytes(streams[proc.stdout]), bytes(streams[proc.stderr]), proc.returncode
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--adapter", required=True)
++    parser.add_argument("--output-dir", required=True)
++    parser.add_argument("--scenario", choices=("matrix", "lifecycle-normal", "lifecycle-setup-failure",
++                        "lifecycle-post-reap-exception", "lifecycle-post-reap-interrupt", "lifecycle-timeout",
++                        "lifecycle-stdout-overflow", "lifecycle-stderr-overflow", "lifecycle-cleanup-interrupt"), default="matrix")
++    args = parser.parse_args()
++    started = time.monotonic()
++    try:
++        adapter, output = validate(args)
++        workspace, prompt, profile, fake, config, records, home = make_fixtures(output)
++        if args.scenario != "matrix":
++            probe = args.scenario
++            response = {"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}
++            if probe == "lifecycle-timeout":
++                response["sleep"] = INVOCATION_TIMEOUT + 1
++            elif probe == "lifecycle-stdout-overflow":
++                response["stdout"] = (b"x" * (LIMIT + 1)).hex()
++            elif probe == "lifecycle-stderr-overflow":
++                response["stderr"] = (b"x" * (LIMIT + 1)).hex()
++            config.write_text(json.dumps(response), encoding="utf-8")
++            state = {"scenario": probe}
++            try:
++                result = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                                    workspace, home, output, records, INVOCATION_TIMEOUT, state, probe)
++                if result != (CASES[0][1], CASES[0][2], 0) or state["cleanup"] != "success":
++                    raise Failure("lifecycle probe completion invalid")
++            except BaseException as exc:
++                state["scenario"] = probe
++                if state.get("failure") is None:
++                    state["failure"] = type(exc).__name__ + ": " + str(exc)
++                (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
++                raise
++            (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
++            return 0
++        rows = []
++        for name, stdout, stderr, status in CASES:
++            if time.monotonic() - started > SUITE_TIMEOUT:
++                raise Failure("suite timeout")
++            config.write_text(json.dumps({"stdout": stdout.hex(), "stderr": stderr.hex(), "status": status}), encoding="utf-8")
++            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
++            actual_out, actual_err, actual_status = bounded_run(argv, workspace, home, output, records,
++                                                                  min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
++            rows.append((name, actual_out == stdout and actual_err == stderr and actual_status == status))
++            if (actual_out, actual_err, actual_status) != (stdout, stderr, status):
++                raise Failure("unexpected response for " + name)
++        lines = records.read_bytes().splitlines()
++        if len(lines) != len(CASES) or sum(map(len, lines)) > RECORD_LIMIT:
++            raise Failure("record count or size invalid")
++        expected = ["exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks", "--disable",
++                    "multi_agent", "--disable", "shell_snapshot", "--disable", "shell_tool", "--ignore-user-config",
++                    "--ephemeral", "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox", "read-only",
++                    "--cd", str(workspace), "--json", "-"]
++        for line in lines:
++            rec = json.loads(line)
++            if rec != {"argv": expected, "cwd": str(workspace), "stdin": base64.b64encode(b"review fixture\n").decode("ascii")}:
++                raise Failure("fake routing record mismatch")
++        # Four arguments after the role is the valid review interface; exercise it
++        # with real fixture paths. Never invoke the valid code branch.
++        out, err, status = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                                       workspace, home, output, records,
++                                       min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
++        if (out, err, status) != (CASES[-1][1], CASES[-1][2], CASES[-1][3]):
++            raise Failure("valid review arity failed")
++        arities = [("review", n) for n in (0, 1, 2, 3, 6)] + [("code", 5), ("unknown", 4), ("unknown", 5)]
++        for role, count in arities:
++            params = [role] + ["unused"] * count
++            out, err, status = bounded_run(["/bin/bash", str(adapter)] + params, workspace, home, output, records,
++                                           min(INVOCATION_TIMEOUT, SUITE_TIMEOUT - (time.monotonic() - started)))
++            if (out, err, status) != (b"", b"", 64):
++                raise Failure("invalid arity was not rejected")
++        if len(records.read_bytes().splitlines()) != len(CASES) + 1:
++            raise Failure("invalid arity reached provider")
++        print(json.dumps({"rows": [{"case": n, "status": "pass" if ok else "fail"} for n, ok in rows], "overall": "pass"}))
++        return 0
++    except Failure as exc:
++        print(str(exc)[:DIAGNOSTIC_LIMIT], file=sys.stderr)
++        return 1
++    except Exception as exc:
++        print((type(exc).__name__ + ": " + str(exc))[:DIAGNOSTIC_LIMIT], file=sys.stderr)
++        return 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+
+SOURCE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+case "$#" in
+  4|5) ;;
+  *) exit 64 ;;
+esac
+role=$1
+case "$role" in
+ review)
+  [[ $# -eq 5 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  codex_bin=$5
+  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
+  ;;
+ code)
+  [[ $# -eq 4 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
+  model=$CLAUDE_CODING_MODEL
+  tools="Read,Edit,Write,Glob,Grep"
+  permission=acceptEdits
+  ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+ACCUMULATED DIFF
+--- baseline/scripts/esy-repair/claude-worker.sh
++++ candidate/scripts/esy-repair/claude-worker.sh
+@@ -0,0 +1,32 @@
++#!/bin/bash
++set -euo pipefail
++case "$#" in
++  4|5) ;;
++  *) exit 64 ;;
++esac
++role=$1
++case "$role" in
++ review)
++  [[ $# -eq 5 ]] || exit 64
++  workspace=$2
++  prompt=$3
++  profile=$4
++  codex_bin=$5
++  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
++  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
++  ;;
++ code)
++  [[ $# -eq 4 ]] || exit 64
++  workspace=$2
++  prompt=$3
++  profile=$4
++  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
++  model=$CLAUDE_CODING_MODEL
++  tools="Read,Edit,Write,Glob,Grep"
++  permission=acceptEdits
++  ;;
++ *) exit 64 ;;
++esac
++: "${CLAUDE_BIN:?absolute executable required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+SOURCE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+ACCUMULATED DIFF
+--- baseline/scripts/esy-repair/codex-worker.sh
++++ candidate/scripts/esy-repair/codex-worker.sh
+@@ -0,0 +1,25 @@
++#!/bin/bash
++# Frozen role template. Every argument is supplied by the verified controller;
++# no environment variable can replace the executable, model, sandbox, or prompt.
++set -euo pipefail
++if [[ $# -ne 5 ]]; then
++  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
++  exit 64
++fi
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++codex_bin=$5
++case "$role" in
++  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
++  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
++  *) echo "unsupported role" >&2; exit 64 ;;
++esac
++[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
++[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
++[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
++[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
++
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"

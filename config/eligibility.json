@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "stage": "eligibility",
+  "snapshot_manifest": "artifacts/sources/official-stable-sources-002/manifest.json",
+  "snapshot_sha256": "34f156d8f5f60a42f4cc8a41184576eae10fe763c2b4735d433f1c03a7825c17",
+  "domains": [
+    {
+      "domain": "esy",
+      "revision": "4afe7a5fba92ff1b7dc168bc63e6d06155ff1a7a",
+      "prefixes": [
+        "docs"
+      ],
+      "exclude_paths": [
+        "docs/community.md",
+        "docs/contributing.md",
+        "docs/contributing/"
+      ],
+      "planned_profile_id": "esy-native",
+      "license_evidence": [
+        {
+          "category": "BSD-2-Clause",
+          "spdx_license": "BSD-2-Clause",
+          "path": "artifacts/sources/official-stable-sources-002/files/esy/LICENSE",
+          "sha256": "7a5639cb5630f3d9c3cd742e31a6217eb2782576eaf0ec6374e9b5d27700abc5",
+          "scope": "repository_content"
+        }
+      ]
+    },
+    {
+      "domain": "ocaml",
+      "revision": "9b36b51e0b0155c613f19c5b5177228ae5b0446c",
+      "prefixes": [
+        "data/tutorials"
+      ],
+      "exclude_paths": [
+        "data/tutorials/guides/rs_00_guidelines.md",
+        "data/tutorials/guides/rs_01_common_error_messages.md",
+        "data/tutorials/guides/rs_02_comparison_of_standard_containers.md"
+      ],
+      "planned_profile_id": "native-ocaml",
+      "license_evidence": [
+        {
+          "category": "CC-BY-SA-4.0",
+          "spdx_license": "CC-BY-SA-4.0",
+          "path": "artifacts/sources/official-stable-sources-002/files/ocaml/LICENSE",
+          "sha256": "b852a8e88087d56d8b1898e223c1ab0d364b66cab57ef91c056d7b61a00b383e",
+          "scope": "prose"
+        },
+        {
+          "category": "Unlicense",
+          "spdx_license": "Unlicense",
+          "path": "artifacts/sources/official-stable-sources-002/files/ocaml/LICENSE",
+          "sha256": "b852a8e88087d56d8b1898e223c1ab0d364b66cab57ef91c056d7b61a00b383e",
+          "scope": "code_example"
+        }
+      ]
+    },
+    {
+      "domain": "melange",
+      "revision": "107c594b44d01f066e853efeda3e38b09fe1d687",
+      "prefixes": [
+        "docs"
+      ],
+      "exclude_paths": [
+        "docs/community.md",
+        "docs/roadmap.md"
+      ],
+      "planned_profile_id": "melange-native",
+      "license_evidence": [
+        {
+          "category": "user_confirmed_copyright_free",
+          "spdx_license": null,
+          "path": "artifacts/decisions/melange-user-confirmation-20261016.json",
+          "sha256": "81bc8371f53ef16235b0c4c7982ddb5c92df0300d3a6d85c53dc613e35f1d52d",
+          "scope": "user_decision"
+        }
+      ]
+    },
+    {
+      "domain": "reason",
+      "revision": "046babf98f91aad42cb015a9e98adad3f412325d",
+      "prefixes": [
+        "docs"
+      ],
+      "exclude_paths": [
+        "docs/community.md",
+        "docs/events.md",
+        "docs/articles-and-videos.md",
+        "docs/draft-blog-posts.md"
+      ],
+      "planned_profile_id": "reason-native",
+      "license_evidence": [
+        {
+          "category": "MIT",
+          "spdx_license": "MIT",
+          "path": "artifacts/sources/official-stable-sources-002/files/reason/LICENSE.txt",
+          "sha256": "22a28f29cff8f5ecf9f463301d9c03b8245a2952ebae0bcab633fd654c0792fb",
+          "scope": "repository_content"
+        }
+      ]
+    }
+  ]
+}

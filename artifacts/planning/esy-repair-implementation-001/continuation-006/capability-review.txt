@@ -1,0 +1,198 @@
+Independent Astra pre-execution review, read-only. Return strict JSON safe_to_execute_launcher_death_e2es, safe_to_execute_isolated_cli_capability_smoke, findings, missing_acceptance_evidence. Scope preliminary trusted fixture/CLI capability experiment ONLY, no candidate modification/no runner coding launch/full acceptance. Prior guardian E2Es passed, root supervised. Evaluate attached scripts for writes only within continuation006, minimal authsymlink removed, nofork OS child denial, guardian direct-child PID pin via unreaped child, kill parent outside guardian session triggerspipeEOF. If tests pass, smoke can launch exact isolated gpt6luna to patch one private fixture with shell_tool disabled and process-fork denied. Determine if this bounded diagnostic is safe; acceptance of eventual coding remains separate. Do not require complete overall controller to approve a harmless isolated diagnostic; identify concrete remaining risks.
+
+FILE guardian.py
+"""Trusted single-child supervisor; experimental, not accepted workflow control."""
+import json,os,selectors,signal,subprocess,sys,time
+from pathlib import Path
+spec_path=Path(sys.argv[1]); spec=json.loads(spec_path.read_text()); out=Path(spec['output']);out.mkdir(exist_ok=False)
+signal.signal(signal.SIGCHLD,signal.SIG_DFL)
+p=None;sel=selectors.DefaultSelector();logs={'stdout':bytearray(),'stderr':bytearray()};reason=None;reaped=False;status=None;started=time.monotonic();deadline=started+spec['timeout'];exit_deadline=None
+try:
+ p=subprocess.Popen(spec['argv'],cwd=spec['cwd'],env=spec['env'],stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True)
+ (out/'ready.json').write_text(json.dumps({'guardian_pid':os.getpid(),'worker_pid':p.pid,'started_epoch':time.time()}))
+ sel.register(sys.stdin.buffer,selectors.EVENT_READ,'parent')
+ for pipe,name in [(p.stdout,'stdout'),(p.stderr,'stderr')]:os.set_blocking(pipe.fileno(),False);sel.register(pipe,selectors.EVENT_READ,name)
+ while True:
+  if not reaped:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:
+    reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status
+  if reaped and not any(k.data!='parent' for k in sel.get_map().values()):break
+  if time.monotonic()>=deadline and reason is None:reason='timeout'
+  if reason and not reaped:
+   # This direct child has not been reaped. Its PID cannot be reused.
+   try:os.kill(p.pid,signal.SIGKILL)
+   except ProcessLookupError:pass
+   if exit_deadline is None:exit_deadline=time.monotonic()+5
+  if exit_deadline and time.monotonic()>=exit_deadline:break
+  for key,_ in sel.select(.02):
+   data=os.read(key.fileobj.fileno(),16384)
+   if key.data=='parent':
+    if not data:
+     sel.unregister(key.fileobj)
+     if not reaped:reason=reason or 'launcher-eof'
+    continue
+   if not data:sel.unregister(key.fileobj);continue
+   buf=logs[key.data];left=spec['cap']-len(buf);buf.extend(data[:max(0,left)])
+   if len(data)>left:reason=reason or 'output-cap'
+except BaseException as e:reason='guardian-exception:'+type(e).__name__
+finally:
+ if p is not None and not reaped:
+  try:os.kill(p.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+  until=time.monotonic()+5
+  while time.monotonic()<until:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status;break
+   time.sleep(.01)
+ sel.close()
+ for k,v in logs.items():(out/k).write_bytes(v)
+ result={'status':'TERMINATED' if reaped else 'CLEANUP_UNVERIFIED','worker_pid':p.pid if p else None,'worker_reaped':reaped,'exit_code':status,'reason':reason,'elapsed_seconds':round(time.monotonic()-started,3),'single_worker_assumption':'requires separately proven native process-fork denial'}
+ (out/'receipt.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps(result),flush=True)
+
+FILE guardian-e2e.json
+[
+  {
+    "scenario": "normal",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36131,
+      "worker_reaped": true,
+      "exit_code": 0,
+      "reason": null,
+      "elapsed_seconds": 0.021,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "timeout",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36137,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "timeout",
+      "elapsed_seconds": 0.216,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "overflow",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36139,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "output-cap",
+      "elapsed_seconds": 0.021,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "detached-single",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36141,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "timeout",
+      "elapsed_seconds": 0.23,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  },
+  {
+    "scenario": "parent-eof",
+    "passed": true,
+    "receipt": {
+      "status": "TERMINATED",
+      "worker_pid": 36145,
+      "worker_reaped": true,
+      "exit_code": -9,
+      "reason": "launcher-eof",
+      "elapsed_seconds": 0.003,
+      "single_worker_assumption": "requires separately proven native process-fork denial"
+    }
+  }
+]
+
+FILE guardian-launcher-probe.py
+import subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent
+p=subprocess.Popen([sys.executable,'-B',str(D/'guardian.py'),sys.argv[1]],stdin=subprocess.PIPE,start_new_session=True)
+time.sleep(20)
+p.stdin.close();p.wait(timeout=10)
+
+FILE guardian-death-e2e.py
+import json,os,signal,subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent;env={k:os.environ[k] for k in ['PATH','HOME','USER','LANG'] if k in os.environ};rows=[]
+for phase in ['created','active']:
+ out=D/('guardian-death-'+phase);marker=D/'nofork-runtime'/('active-'+phase)
+ code="import os,time;from pathlib import Path;os.setsid();os.close(1);os.close(2);Path("+repr(str(marker))+").write_text('active');time.sleep(30)"
+ spec={'argv':['/usr/bin/sandbox-exec','-f',str(D/'nofork.sb'),sys.executable,'-B','-c',code],'env':env,'cwd':str(D),'output':str(out),'timeout':5,'cap':1024};path=D/('death-'+phase+'.spec.json');path.write_text(json.dumps(spec))
+ p=subprocess.Popen([sys.executable,'-B',str(D/'guardian-launcher-probe.py'),str(path)],start_new_session=True)
+ try:
+  trigger=out/'ready.json' if phase=='created' else marker
+  until=time.monotonic()+3
+  while not trigger.exists() and time.monotonic()<until:time.sleep(.01)
+  triggered=trigger.exists();os.kill(p.pid,signal.SIGKILL);p.wait(timeout=3)
+  until=time.monotonic()+7
+  while not (out/'receipt.json').exists() and time.monotonic()<until:time.sleep(.01)
+  receipt=json.loads((out/'receipt.json').read_text());rows.append({'phase':phase,'triggered':triggered,'passed':triggered and receipt['worker_reaped'] and receipt['reason']=='launcher-eof' and receipt['exit_code']==-9,'receipt':receipt})
+ finally:
+  if p.poll() is None:p.kill();p.wait(timeout=3)
+(D/'guardian-death-e2e.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(rows));raise SystemExit(0 if all(r['passed'] for r in rows) else 1)
+
+FILE codex-nofork-smoke.py
+import hashlib,json,os,subprocess,sys
+from pathlib import Path
+D=Path(__file__).resolve().parent;runtime=D/'nofork-runtime';work=runtime/'smoke';work.mkdir();(work/'probe.txt').write_text('before\n');config=runtime/'codex';config.mkdir();auth=config/'auth.json';auth.symlink_to(Path.home()/'.codex/auth.json')
+env={k:os.environ[k] for k in ['PATH','HOME','USER','LANG','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS'] if k in os.environ};env.update(CODEX_HOME=str(config),TMPDIR=str(runtime))
+argv=['/usr/bin/sandbox-exec','-f',str(D/'nofork.sb'),'/opt/homebrew/bin/codex','exec','--ignore-user-config','--ephemeral','--skip-git-repo-check','--model','gpt-6-luna','--sandbox','danger-full-access','--cd',str(work),'--disable','apps','--disable','plugins','--disable','hooks','--disable','multi_agent','--disable','shell_snapshot','--disable','shell_tool','--json','Use apply_patch to change only probe.txt from before to after, retaining its newline. Do not run any commands. Report whether the patch tool succeeded. This is an isolated capability smoke, not a repository implementation task.']
+spec={'argv':argv,'env':env,'cwd':str(work),'output':str(D/'codex-nofork-smoke'),'timeout':120,'cap':131072};p=D/'codex-nofork-smoke.spec.json';p.write_text(json.dumps(spec,indent=2))
+try:
+ proc=subprocess.Popen([sys.executable,'-B',str(D/'guardian.py'),str(p)],stdin=subprocess.PIPE,start_new_session=True)
+ try:proc.wait(timeout=130)
+ except subprocess.TimeoutExpired:
+  proc.stdin.close();proc.wait(timeout=10)
+ receipt=json.loads((D/'codex-nofork-smoke/receipt.json').read_text());result={'fixture_before':'before\n','fixture_after':(work/'probe.txt').read_text(),'expected':'after\n','guardian':receipt,'runner_coding_launches_consumed':0,'scope':'isolated provider capability smoke only, candidate unmodified','profile_sha256':hashlib.sha256((D/'nofork.sb').read_bytes()).hexdigest()};(D/'codex-nofork-smoke-result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+finally:auth.unlink(missing_ok=True)
+
+FILE nofork.sb
+(version 1)
+(allow default)
+(deny process-fork)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/nofork-runtime"))
+(deny network-outbound (remote unix-socket))
+(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))
+(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))
+(deny signal)
+(allow signal (target self) (target children))
+
+FILE nofork-probe-result.json
+{
+  "test": "native-no-fork",
+  "fork_denied": true,
+  "posix_spawn_denied": true,
+  "thread_works": true,
+  "exit_code": 0,
+  "profile_sha256": "446562ceacc57219ec3b59ed6374b2bb65dc7cfb4a667e067730d5c35d8a4bf6",
+  "probe_sha256": "93dbfadd877eb065694238b770301e19470274ed989cd0e32772f4711e339fed",
+  "scope": "OS feasibility probe only, not worker acceptance"
+}
+
+FILE nofork-positive-control.json
+{
+  "fork_denied": false,
+  "posix_spawn_denied": false,
+  "thread_works": true,
+  "exit_code": 1,
+  "expected": "outside native policy both creation routes succeed; negative-probe exit1 is expected positive-control outcome"
+}

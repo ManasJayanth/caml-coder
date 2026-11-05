@@ -1,0 +1,35 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 33,
+  "approved_card_id": "B1a-Routing-033",
+  "reviewed_plan": "astra-plan-033-v2.json",
+  "reviewed_plan_sha256": "227d0ed6ba500f008f28ef701c1503dbe01c61e63845aa57ac4ba25f28e35a8a",
+  "reviewed_plan_section": "launch_033 with complete v2 context",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "prior_review_disposition": "dispatch-033-card-review.json is preserved historical v1 review and was placed on HOLD by root for missing mandatory card fields. It is not an activation authority. This separate decision applies exclusively to the complete hash-bound v2 contract.",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "V2 contains the mandatory card fields: card_id, finding_ids, parent_revision_sha256, inputs, allowed_paths, prerequisites, required_behavior, forbidden_changes, e2e_recipe_ids, expected_outcomes, evidence_outputs and stop_conditions. Requirements retain the same bounded routing recovery scope; schema completion adds no execution authority."
+    },
+    {
+      "severity": "info",
+      "message": "All twelve absolute input hashes match the checks performed in this review turn. Candidate remains frozen31. Failed partial32 is planning evidence only; its guardian confirms output-cap termination, exit -9, reaping and credential removal. Unchanged launcher/guardian/profile retain the original 2 MiB cap and other controls; ledger remains 32/36."
+    },
+    {
+      "severity": "info",
+      "message": "Approve one source-authoring recovery attempt using the complete v2 card, small read/edit operations with each targeted patch under 3000 characters, and the two fixed routing controls. No full-file rewrite, whole-source dump, cap enlargement, acceptance weakening or partial32 import is allowed."
+    },
+    {
+      "severity": "warning",
+      "message": "Overall completion remains INCOMPLETE within the remaining allocation because the required outer wrapper has no slot. No future card, allocation extension, unallocated wrapper work, import or execution is approved."
+    }
+  ],
+  "conditions": [
+    "Inline the complete hash-bound v2 contract as root proposes; do not discard mandatory fields. Dispatch exactly one launch33 from the full verified frozen31 parent, using a fresh isolated job and durable ledger reservation from 32 to 33.",
+    "Only tests/e2e/test_review_adapter_e2e.py may change. Worker actions are read and edit only under the narrower card even though the unchanged launcher also exposes write. Preserve all authoring-size restrictions, unchanged collector/bounded_run, prior ownership/deadline semantics and all five routing requirements.",
+    "Retain exclusive-runtime, old-worker/credential-absence, full candidate-manifest binding, unchanged-control and valid smoke gates. Enforce current reconciled 32400-second/36-launch limits, the 660-second reserve and cumulative attempt/replan accounting.",
+    "No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls, delegation, unrelated findings or later-card activation. Absolute input paths do not expand worker access.",
+    "Independently validate complete provider/tool/scope/binding/cleanup evidence; freeze a completed result UNACCEPTED for exact-revision Astra review. Capped or incomplete output remains failed. All execution and outer-wrapper gates remain unsatisfied until separately established."
+  ]
+}

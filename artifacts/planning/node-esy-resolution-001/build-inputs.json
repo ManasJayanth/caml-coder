@@ -1,0 +1,6 @@
+{
+  "scope": "offline extension of validated compiler image; no esy project proof",
+  "dockerfile_sha256": "2049ce49a616ae6bec3ebf5634467451b45dd3b964d309a2d7c64e95e081d099",
+  "linux_postinstall_review": "Selects bundled linux-x64-static binaries; no Linux network install branch. Windows branch not executed.",
+  "build_network": "none"
+}

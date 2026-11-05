@@ -1,0 +1,82 @@
+Implement ONLY this tiny corrective card using read/edit/write tools. No commands, tests, Docker, or other edits. Only change the early-failure stdout JSON object in the E2E file by adding scope and scenarios. Preserve all production code and existing return status. The full separate frontier card follows.
+{
+  "card": "R01b",
+  "parent": "frozenR01-019",
+  "status": "PROPOSED_UNACCEPTED",
+  "allowedpath": "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+  "behavior": {
+    "change": "In main's manifest_path is None branch, add scope and the already-completed scenarios array to the stdout JSON object.",
+    "replacement_object": "{\"status\":\"FAILED\",\"manifest\":None,\"scope\":manifest[\"scope\"],\"scenarios\":manifest[\"scenarios\"],\"failures\":manifest[\"failures\"]}",
+    "retain": "Keep JSON serialization, newline, existing failures, return 1, and no publication to the unvalidated output directory.",
+    "boundaries": "Change only this early-failure stdout object. Preserve both production fixes, default seven-run behavior, scenario selection, and all missing-evidence requirements. Do not address other findings or implement timing fixtures."
+  },
+  "public_cli_regression": {
+    "classification": "HARNESS_REPORTING_CONTRACT_ONLY_NOT_OCAML",
+    "cwd": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "argv": [
+      "python3",
+      "-B",
+      "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+      "--image",
+      "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "--expectations",
+      "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/intentionally-missing-expectations.json",
+      "--output-dir",
+      "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/r01b-cli-output",
+      "--scenario",
+      "cleanup-results"
+    ],
+    "preconditions": [
+      "Independently review and freeze this exact single-launch setup before execution; the supplied record does not establish its earlier image and output arguments.",
+      "The explicit expectations path must remain nonexistent, including no dangling symlink. Do not create, replace, or supply expectations.",
+      "The output path must initially be absent and remain absent."
+    ],
+    "supervision": "One public CLI launch under an external 20-second deadline, with stdout and stderr each capped at 65536 retained bytes. Capture in memory; deadline expiry or capture overflow fails the regression. No rerun with valid expectations.",
+    "image_note": "The fixed all-zero image ID is syntactically valid and unreachable by Docker because missing expectations fail at resolve(strict=True). It supplies no image or runtime evidence."
+  },
+  "expectedoutcomes": {
+    "exit": 1,
+    "stdout": {
+      "status": "FAILED",
+      "manifest": null,
+      "scope": "cleanup-results",
+      "scenarios": [
+        {
+          "id": "R01-verified-cleanup-preserved",
+          "passed": false,
+          "evidence_status": "MISSING_FAILED",
+          "reason": "Missing reviewed deterministic timing fixture to prove verified cleanup is preserved."
+        },
+        {
+          "id": "R01-unverified-cleanup-retried",
+          "passed": false,
+          "evidence_status": "MISSING_FAILED",
+          "reason": "Missing reviewed forwarding fixture to prove a real bounded cleanup retry."
+        },
+        {
+          "id": "R01-stop-group-deadline-crossing",
+          "passed": false,
+          "evidence_status": "MISSING_FAILED",
+          "reason": "Missing reviewed race fixture to prove stop_group deadline-boundary behavior."
+        }
+      ]
+    },
+    "additional_assertions": [
+      "Parse the actual stdout as one JSON object and require exactly these three complete scenario rows.",
+      "Retain the suite FileNotFoundError and all three scenario failure entries.",
+      "No manifest or output directory is created; expectations remain nonexistent.",
+      "No docker_inspect, Docker subprocess, or runner invocation is reached."
+    ]
+  },
+  "evidence": {
+    "supplied_baseline": "The reported public CLI run exited 1 but omitted scope and scenarios; complete_rows was false.",
+    "supplied_revision_sha256": "4b8a0eed69a09223e4868778d3433101b4517bade62956725a3b8466880ac4cf",
+    "planner_verification": "None: no tools, edits, execution, or independent digest verification performed.",
+    "required_after_change": "Independent digest and frozen-path verification, a diff limited to the permitted stdout object, and externally captured exit, complete stdout rows, bounded supervision results, and path-absence checks.",
+    "remaining_blocked": "All three actual real R01 timing fixtures remain unavailable and MISSING_FAILED. This regression cannot establish OCaml acceptance or overall repair acceptance."
+  },
+  "handoff": {
+    "root_state": "Root confirmed code19 scope and maintains an UNACCEPTED working candidate; original untouched.",
+    "coding20_gate": "Fresh independent approval of the same frozen single-launch setup is required. This planner grants no execution approval and does not extend the earlier approval."
+  }
+}

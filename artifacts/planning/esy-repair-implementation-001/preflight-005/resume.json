@@ -1,0 +1,13 @@
+{
+  "started_epoch": 1792677991.4777548,
+  "artifact_mismatches": [],
+  "original_mismatches": [],
+  "candidate_mismatches": [],
+  "indexed_files_checked": 664,
+  "coding_launches_consumed": 18,
+  "coding_launch_cap": 24,
+  "prior_recorded_active_seconds": 10367.532,
+  "active_limit_seconds": 21600,
+  "subsequent_interval_accounting": "UNRECONCILED: intervening planning turns not timestamped in workflow ledger; blocks coding dispatch",
+  "authorization": "User approved six additional coding launches and explicitly requested this Fable plan implementation."
+}

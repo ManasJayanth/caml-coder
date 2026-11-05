@@ -1,0 +1,58 @@
+{
+  "plan_id": "B1a-deadline-correction-029",
+  "planner": "gpt-6-astra",
+  "status": "Source-authoring card; receipt28 source-closure prerequisite verified. Root must verify dispatch gates. Not execution approval.",
+  "scope": "Read-only inspection and hashing of frozen28 and planning/review inputs; only this plan is written. No candidate execution, imports, compilation, tests, providers, source edits or dispatch.",
+  "budget": {
+    "consumed_launches": 28,
+    "maximum_launches": 36,
+    "active_checkpoint_seconds_approximate": 23000,
+    "active_limit_seconds": 32400,
+    "allocation": "One deadline card plus five later finding cards leaves two launch slots if successful. Root reconciles actual launches and active time before dispatch; cumulative failures and existing three-failure fresh-replanning gate remain controlling."
+  },
+  "launch_029": {
+    "card_id": "B1a-Deadline-029",
+    "objective": "Reject an exhausted suite budget before every child spawn and use one saved remaining duration per wait decision.",
+    "finding_ids": ["B1a-E2E-025-deadline-race"],
+    "parent_revision_sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca",
+    "input_path_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/",
+    "inputs": [
+      {"path": "coding-jobs/B1a-Receipt-028/result-manifest.json", "sha256": "80bc73db73ab50c59ebf56a42ec07fc47cba5c618a32978bef54bb3d8da162ca"},
+      {"path": "coding-jobs/B1a-Receipt-028/frozen/tests/e2e/test_review_adapter_e2e.py", "sha256": "df3260094ed9e55055e13040520900103e765217237c5ec5a62e3b31d13a804e"},
+      {"path": "coding-jobs/B1a-Receipt-028/frozen/scripts/esy-repair/claude-worker.sh", "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"},
+      {"path": "coding-jobs/B1a-Receipt-028/frozen/scripts/esy-repair/codex-worker.sh", "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"},
+      {"path": "astra-plan-028.json", "sha256": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef"},
+      {"path": "retry-astra-review-025.json", "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"},
+      {"path": "astra-source-review-028.json", "sha256": "eddbbc3a70fd91b94467ff89580f9239ee4d9acae575b8bf55796949abf06848"}
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": [
+      "The independently hashed review28 closes receipt28 and the ownership source concern for this exact parent. Root rechecks this binding before dispatch; withdrawn or mismatched closure blocks dispatch. Ownership runtime acceptance and whole-program execution approval remain open.",
+      "Root verifies every listed hash, complete parent manifest, exact working copy, adapter identity and remaining budget. Start from frozen28. No substitute parent or future hash is authorized.",
+      "Luna authors using read/edit/write only; no shell, execution, imports, compilation, tests, subprocess, helper or provider invocation. Root freezes the output and obtains independent Astra exact-revision source review. Later execution requires complete source/environment approval and separate outer-wrapper approval. Claude remains unavailable/disabled."
+    ],
+    "required_behavior": [
+      "Establish one absolute suite deadline from main's existing start and SUITE_TIMEOUT. Pass that deadline to the existing bounded_run boundary for every response, valid-review, arity and lifecycle invocation; replace callers' relative-budget arithmetic. Immediately before the sole Popen, inside its existing protected region, take one monotonic observation, derive suite_remaining, and raise Failure('suite timeout') when <=0 without acquiring a child. Derive the invocation deadline from this observation, capped by both INVOCATION_TIMEOUT and the absolute suite deadline. All call paths share this guard; an earlier caller check alone is insufficient.",
+      "For each collection/reap wait decision, calculate one remaining duration, reject <=0 with the existing intended timeout outcome, and pass only min(fixed quantum, saved remaining) to select/sleep. Frozen28 already does this in ordinary collection/reap: preserve it. Replace cleanup-reap's double monotonic calculation with one saved remaining; on <=0 record the existing bounded-reap-expired cleanup error and stop waiting. Keep the independent two-second cleanup deadline and primary-failure preservation; never replace a primary timeout with ValueError or a cleanup timeout.",
+      "Add only two closed --scenario enum values: deadline-suite-before-first and deadline-suite-before-next. Both use existing fixtures, native sandbox and actual adapters. The first sets the internally supplied absolute suite deadline to the current monotonic time immediately before its first bounded_run. The second completes exactly one ordinary success invocation with the normal suite deadline, validates its existing response/cleanup, then sets the deadline to the current monotonic time immediately before attempting its second invocation. No caller-side bypass or preemptive synthetic failure: exercise the shared real pre-spawn guard.",
+      "For those two controls only, persist deadline.json under the validated output directory on success/failure, containing scenario and at most two attempted-invocation lifecycle states from actual bounded_run calls. Reuse existing state/finalization fields: exhausted attempt must retain spawned_pid=null, absent pipes/selector, no signal attempt, successful no-child cleanup and suite-timeout failure. Return nonzero for the intended exhaustion. This narrow observation is not a general matrix/result receipt implementation.",
+      "Preserve ownership transitions, signal receipt semantics, first failure, guarded handler restoration, independent close/reap obligations, fixed environment, newline stdin, stream/record limits, constants and existing lifecycle controls. Do not redesign resources or signals."
+    ],
+    "forbidden_changes": [
+      "No paths beyond the test file; no adapter, controller, policy, dependency or historical-artifact edits.",
+      "No general framework, helper/unit test, fake process, monkeypatch, clock substitution, arbitrary timeout/command/signal controls, provider calls or sandbox replacement.",
+      "Do not repair record collection, per-case routing, arity offsets, diagnostic bytes or result.json; all five remain open. No execution by Luna."
+    ],
+    "e2e_recipe_ids": ["B1a-public-deadline-before-first", "B1a-public-deadline-before-next", "B1a-public-lifecycle-timeout", "B1a-public-lifecycle-normal"],
+    "public_e2e_recipe": {
+      "executor": "Root only after both approvals; execute the complete public program, never imported helpers.",
+      "invocation": ["VERIFIED_ABSOLUTE_PYTHON", "VERIFIED_ABSOLUTE_TEST", "--adapter", "VERIFIED_ACTUAL_CLAUDE_ADAPTER", "--output-dir", "FRESH_OWNED_EMPTY_0700_DIRECTORY", "--scenario", "FIXED_ENUM_SCENARIO"],
+      "evidence": "Collect bounded stdout/stderr/status, deadline.json or existing lifecycle.json, and independently bounded outer completion. Read records.jsonl through the approved outer collector with a raw 16385-byte maximum; this does not repair candidate record collection.",
+      "assertions": "Before-first: nonzero suite timeout, zero records, one unspawned state. Before-next: one successful reaped invocation and one unspawned suite-timeout state, exactly one matching record; no subsequent launch. Lifecycle-timeout: nonzero invocation timeout, no negative-sleep ValueError, existing bounded cleanup observations. Lifecycle-normal: unchanged successful output/status and cleanup. Static review additionally verifies all matrix call sites reach the same guard and every sleep/select uses a positive saved duration; runtime controls do not prove arbitrary scheduling interleavings."
+    },
+    "expected_outcomes": ["Deadline finding addressed in source without reopening receipt28; runtime closure remains pending separately approved evidence."],
+    "evidence_outputs": ["Luna: changed test only. Root: frozen revision, manifests and diff. Astra: exact-revision dispositions and safety verdict. Later approved root: four bounded public receipts."],
+    "stop_conditions": ["Receipt28 source closure absent, hash mismatch, budget exhaustion, expanded scope, extra-path need or worker execution: stop dispatch and report.", "Any unresolved execution blocker or missing approval forbids execution; source-only changes do not establish runtime acceptance."]
+  },
+  "later_cards": "Keep record-bound30, per-case-routing31, arity-offset32, diagnostic-byte-cap33 and result-receipt34 open. These remain placeholders until individually planned against their immediately preceding accepted frozen revision with actual hashes."
+}

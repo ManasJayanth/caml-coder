@@ -1,0 +1,30 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "messages",
+    "tools",
+    "parent_id",
+    "target_event",
+    "split",
+    "token_count"
+  ],
+  "optional": [],
+  "enums": {
+    "split": [
+      "train",
+      "valid"
+    ]
+  },
+  "hashes": [],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "messages": "array",
+    "tools": "array",
+    "parent_id": "string",
+    "target_event": "integer",
+    "split": "string",
+    "token_count": "integer"
+  }
+}

@@ -1,0 +1,1 @@
+Provider coding readiness check. You are in an isolated workspace. Use your file editing tool to create ONLY the file scripts/esy-repair/coding-smoke.txt containing exactly: luna-ready followed by a newline. Do not modify anything else. Do not run commands or tools unrelated to this single edit. Final response exactly {"smoke":"ok"}.

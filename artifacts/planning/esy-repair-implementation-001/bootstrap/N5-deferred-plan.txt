@@ -1,0 +1,49 @@
+Separate frontier planning only, no execution/delegation. N5 ownership/lifecycle scopedreview below has7 unresolvedfindings. Final18 coding currentlyassignedONLY observedbasecompatibility/compiler/TMPDIR, do not reallocateorclaim7fixed. No morecodingbudget after18. Return compact JSON ordered small FUTURE repair cards addressingC17-01..07 and evidence, exactpaths runner/test only. Do not authorize executionorbudgetreset. Correct timeout interpretation: user hard120second bound is CONTAINER deadline, not necessarily hostpreflight/report fsync time; distinguish that from misleading end-to-end report labels (C17-06) without inventing stricteruserrequirements. Actual rootdiagnostic twice compiledOCaml inreadonlyofflineephemeralcacheswithTMPDIRwork; doesnotaccept publicrunner. These are deferredunresolvedcards, neededhandoff.
+{
+  "scoped_change_correct": false,
+  "findings": [
+    {
+      "id": "C17-01",
+      "problem": "In run() and capture_expectations(), cid is assigned before validation. A malformed nonempty create response disables recovery by name. cleanup_owned() can then confirm the malformed identifier absent while leaving the actual named container behind.",
+      "required_change": "Keep create output in a separate variable until validated. Recover through the persisted name and owner whenever the returned ID has not been corroborated; absence of an untrusted ID must not establish invocation cleanup."
+    },
+    {
+      "id": "C17-02",
+      "problem": "run_case() invokes independent cleanup only after supervisor() returns normally. A supervision exception, repeated interruption, or failure writing supervisor logs skips cleanup entirely, although the runner may already have created a container.",
+      "required_change": "Put independent owned-container cleanup in a finally path around runner supervision. Preserve both supervision failures and cleanup results in scenario evidence."
+    },
+    {
+      "id": "C17-03",
+      "problem": "Suite cancellation sends SIGTERM to the runner's process group, but the runner creates Docker clients in separate sessions and has no SIGTERM cleanup handler. The runner can terminate without executing finally, leaving Docker client groups outside suite supervision. Container removal alone does not verify those groups are gone.",
+      "required_change": "Handle SIGTERM through bounded runner cancellation and provide independent containment or verified recovery of separately launched client groups when the runner is forcibly terminated."
+    },
+    {
+      "id": "C17-04",
+      "problem": "After termination cleanup verifies absence, run() unconditionally repeats cleanup in finally and overwrites that evidence. If the removal deadline has expired, the second call returns cleanup-deadline-exhausted even though absence was already confirmed.",
+      "required_change": "Retain successful verified-absence evidence and avoid repeating removal for that invocation. Retry only cleanup whose absence remains unverified."
+    },
+    {
+      "id": "C17-05",
+      "problem": "suite_cleanup_owned() interprets retained Docker output without checking whether supervisor() truncated it. In the name-list fallback, a successful listing can exceed MAX_LOG and omit the exact target from its retained prefix, producing a false verified_absent result.",
+      "required_change": "Reject truncated cleanup-query output before parsing or asserting absence, using the supervisor's total and retained byte counts."
+    },
+    {
+      "id": "C17-06",
+      "problem": "The new lifetime check does not establish an end-to-end invocation deadline: it starts after image inspection and checks expiration before report serialization and atomic publication. Blocking report writes or fsync can exceed the deadline while publishing PASSED; suite supervision allows an additional 30 seconds.",
+      "required_change": "Define the timeout boundary explicitly and enforce it through completion with independent supervision. Include preflight if the timeout covers the invocation, and include report publication if the reported lifetime includes reporting."
+    },
+    {
+      "id": "C17-07",
+      "problem": "bounded_process.stop_group() can pass a negative duration to time.sleep(): the deadline may expire between the while-condition clock read and the clock read inside min(). ValueError then escapes the intended cleanup-result path.",
+      "required_change": "Recompute remaining time once per iteration, stop when it is nonpositive, and sleep only for a nonnegative bounded duration."
+    }
+  ],
+  "missing_evidence": [
+    "The six N4 correction statements were not supplied, so their individual acceptance criteria cannot be mapped conclusively.",
+    "No execution or delegation was performed; supplied SHA256 values were not independently verified.",
+    "No fault evidence demonstrates delayed Docker create completion after client cancellation, recovery from malformed create output, or cancellation while separately sessioned Docker clients remain alive.",
+    "No evidence demonstrates independent cleanup after supervisor exceptions, truncated absence queries, or deadline exhaustion following successful early cleanup.",
+    "Persisted-record crash durability is unproven: creation of owned-invocations does not fsync its parent, and record replacement does not fsync the containing directory.",
+    "Deferred compatibility, compiler, and mount checks remain with final18 and are excluded from these findings. This verdict provides no overall runtime approval."
+  ]
+}

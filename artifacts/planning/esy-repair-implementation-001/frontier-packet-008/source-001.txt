@@ -1,0 +1,277 @@
+FILE artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py
+COMPLETE CANDIDATE SOURCE
+#!/usr/bin/env python3
+"""Bounded, single-child Astra lifecycle probe supervisor."""
+import argparse
+import hashlib
+import json
+import os
+import selectors
+import signal
+import socket
+import stat
+import subprocess
+import sys
+import time
+
+LIMIT = 65536
+PROFILE = b'(version 1)\n(allow default)\n(deny process-fork)\n(deny file-write*)\n'
+DOCKER = '/usr/local/bin/docker'
+SANDBOX = '/usr/bin/sandbox-exec'
+SCENARIOS = ('docker-metadata', 'fork-denial', 'timeout', 'caller-eof', 'output-overflow')
+FIXTURES = {
+    'fork-denial': "import errno,os,sys\ntry:\n os.fork()\nexcept OSError as e:\n if e.errno in (errno.EPERM,errno.EACCES): print('FORK_DENIED:'+str(e.errno)); sys.exit(0)\n raise\nelse:\n if os.fork if False else False: pass\n print('FORK_POLICY_FAILURE'); sys.exit(71)\n",
+    'timeout': 'import time; time.sleep(30)',
+    'caller-eof': 'import time; time.sleep(30)',
+    'output-overflow': "import os; os.write(1,b'X'*65537)",
+}
+
+def digest(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for block in iter(lambda: f.read(131072), b''):
+            h.update(block)
+    return h.hexdigest()
+
+def main():
+    p = argparse.ArgumentParser(prog='esy_lifecycle.py', allow_abbrev=False)
+    sub = p.add_subparsers(dest='command', required=True)
+    q = sub.add_parser('probe', allow_abbrev=False)
+    q.add_argument('--scenario', required=True, choices=SCENARIOS)
+    q.add_argument('--state-directory', required=True)
+    a = p.parse_args()
+    if a.command != 'probe' or not os.path.isabs(a.state_directory) or os.path.lexists(a.state_directory):
+        p.error('state directory must be an unused absolute path')
+    parent = os.path.dirname(a.state_directory)
+    if not os.path.isdir(parent): p.error('state parent must exist')
+    os.mkdir(a.state_directory, 0o700)
+    os.chmod(a.state_directory, 0o700)
+    state = os.path.realpath(a.state_directory)
+    home, config = os.path.join(state, 'home'), os.path.join(state, 'docker-config')
+    os.mkdir(home, 0o700); os.mkdir(config, 0o700)
+    env = {'HOME': home, 'DOCKER_CONFIG': config, 'PATH': '/usr/bin:/bin', 'LANG': 'C'}
+    sock = None
+    if a.scenario == 'docker-metadata':
+        sock = os.path.realpath('/var/run/docker.sock')
+        if not os.path.isabs(sock) or not os.path.exists(sock) or not stat.S_ISSOCK(os.stat(sock).st_mode):
+            raise SystemExit('unsupported Docker socket')
+        argv = [SANDBOX, PROFILE.decode(), DOCKER, '--host', 'unix://' + sock, 'version', '--format', '{{json .Server}}']
+        exe = DOCKER
+    else:
+        interpreter = os.path.realpath(sys.executable)
+        argv = [SANDBOX, PROFILE.decode(), interpreter, '-c', FIXTURES[a.scenario]]
+        exe = interpreter
+    before = {'sandbox': digest(SANDBOX), 'command': digest(exe)}
+    start = time.monotonic(); deadline = start + 3.0
+    child = None; reason = None; wait_status = None; reaped = False; eof = {'stdout': False, 'stderr': False}
+    streams = {n: {'observed': 0, 'retained': bytearray()} for n in ('stdout', 'stderr')}
+    sel = selectors.DefaultSelector()
+    try:
+        child = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True, env=env)
+        ident = hashlib.sha256((str(os.getpid()) + ':' + str(child.pid) + ':' + str(start)).encode()).hexdigest()
+        ready = {'scenario': a.scenario, 'supervisor_pid': os.getpid(), 'child_pid': child.pid, 'launch_identity': ident}
+        with open(os.path.join(state, 'ready.json'), 'x') as f: json.dump(ready, f); f.flush(); os.fsync(f.fileno())
+        for name, pipe in (('stdout', child.stdout), ('stderr', child.stderr)):
+            os.set_blocking(pipe.fileno(), False); sel.register(pipe, selectors.EVENT_READ, name)
+        # The supervisor's stdin is the caller-liveness channel; it is never inherited by the child.
+        try: os.set_blocking(0, False); sel.register(0, selectors.EVENT_READ, 'liveness')
+        except (OSError, ValueError): pass
+        while True:
+            if time.monotonic() >= deadline: reason = reason or 'timeout'
+            for key, _ in sel.select(max(0, min(.05, deadline-time.monotonic()))):
+                if key.data == 'liveness':
+                    if not os.read(0, 1): reason = reason or 'caller-eof'
+                else:
+                    try: data = os.read(key.fd, 8192)
+                    except BlockingIOError: continue
+                    if not data:
+                        eof[key.data] = True; sel.unregister(key.fileobj); continue
+                    s = streams[key.data]; s['observed'] += len(data)
+                    remaining = max(0, LIMIT-len(s['retained'])); s['retained'].extend(data[:remaining])
+                    if s['observed'] > LIMIT: reason = reason or 'output-overflow'
+            if reason: break
+            got, status = os.waitpid(child.pid, os.WNOHANG)
+            if got: wait_status = status; reaped = True; break
+        if reason and not reaped:
+            try: os.kill(child.pid, signal.SIGKILL)
+            except ProcessLookupError: pass
+            end = time.monotonic()+5
+            while time.monotonic() < end:
+                for key, _ in sel.select(.05):
+                    if key.data == 'liveness':
+                        try: os.read(0, 4096)
+                        except OSError: pass
+                    else:
+                        try: data=os.read(key.fd,8192)
+                        except BlockingIOError: continue
+                        if not data: eof[key.data]=True; sel.unregister(key.fileobj)
+                        else:
+                            s=streams[key.data]; s['observed']+=len(data); s['retained'].extend(data[:max(0,LIMIT-len(s['retained']))])
+                got,status=os.waitpid(child.pid,os.WNOHANG)
+                if got: wait_status=status; reaped=True; break
+            if not reaped: reason='cleanup-unverified'
+    except Exception as e:
+        reason = reason or 'supervisor-error:'+type(e).__name__
+        if child is not None and not reaped:
+            try: os.kill(child.pid, signal.SIGKILL)
+            except OSError: pass
+            try: _, wait_status=os.waitpid(child.pid,0); reaped=True
+            except OSError: pass
+    finally:
+        sel.close()
+    after = {'sandbox': digest(SANDBOX), 'command': digest(exe)}
+    if before != after: reason = reason or 'executable-hash-mismatch'
+    exitcode = 0 if reason is None and reaped and wait_status == 0 else 1
+    if a.scenario in ('timeout','caller-eof','output-overflow'): exitcode = 1
+    results = {}
+    for name,s in streams.items():
+        raw=bytes(s['retained']); results[name]={'observed_bytes':s['observed'],'retained_bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'eof':eof[name]}
+        with open(os.path.join(state,name+'.bin'),'xb') as f: f.write(raw)
+    report={'scenario':a.scenario,'argv':argv,'environment':env,'resolved_executables':{'sandbox':os.path.realpath(SANDBOX),'command':os.path.realpath(exe)},'executable_sha256_before':before,'executable_sha256_after':after,'profile_sha256':hashlib.sha256(PROFILE).hexdigest(),'child_pid':child.pid if child else None,'wait_status':wait_status,'reason':reason or ('success' if exitcode==0 else 'child-failure'),'probe_exit':exitcode,'reaped':reaped,'streams':results,'started_monotonic':start,'finished_monotonic':time.monotonic(),'ready':ready if child else None,'socket':sock}
+    path=os.path.join(state,'report.json')
+    fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o400)
+    with os.fdopen(fd,'w') as f: json.dump(report,f,sort_keys=True); f.write('\n'); f.flush(); os.fsync(f.fileno())
+    os.chmod(path,0o400)
+    return exitcode
+
+if __name__ == '__main__': raise SystemExit(main())
+
+ACCUMULATED DIFF
+--- baseline/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py
++++ candidate/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py
+@@ -0,0 +1,135 @@
++#!/usr/bin/env python3
++"""Bounded, single-child Astra lifecycle probe supervisor."""
++import argparse
++import hashlib
++import json
++import os
++import selectors
++import signal
++import socket
++import stat
++import subprocess
++import sys
++import time
++
++LIMIT = 65536
++PROFILE = b'(version 1)\n(allow default)\n(deny process-fork)\n(deny file-write*)\n'
++DOCKER = '/usr/local/bin/docker'
++SANDBOX = '/usr/bin/sandbox-exec'
++SCENARIOS = ('docker-metadata', 'fork-denial', 'timeout', 'caller-eof', 'output-overflow')
++FIXTURES = {
++    'fork-denial': "import errno,os,sys\ntry:\n os.fork()\nexcept OSError as e:\n if e.errno in (errno.EPERM,errno.EACCES): print('FORK_DENIED:'+str(e.errno)); sys.exit(0)\n raise\nelse:\n if os.fork if False else False: pass\n print('FORK_POLICY_FAILURE'); sys.exit(71)\n",
++    'timeout': 'import time; time.sleep(30)',
++    'caller-eof': 'import time; time.sleep(30)',
++    'output-overflow': "import os; os.write(1,b'X'*65537)",
++}
++
++def digest(path):
++    h = hashlib.sha256()
++    with open(path, 'rb') as f:
++        for block in iter(lambda: f.read(131072), b''):
++            h.update(block)
++    return h.hexdigest()
++
++def main():
++    p = argparse.ArgumentParser(prog='esy_lifecycle.py', allow_abbrev=False)
++    sub = p.add_subparsers(dest='command', required=True)
++    q = sub.add_parser('probe', allow_abbrev=False)
++    q.add_argument('--scenario', required=True, choices=SCENARIOS)
++    q.add_argument('--state-directory', required=True)
++    a = p.parse_args()
++    if a.command != 'probe' or not os.path.isabs(a.state_directory) or os.path.lexists(a.state_directory):
++        p.error('state directory must be an unused absolute path')
++    parent = os.path.dirname(a.state_directory)
++    if not os.path.isdir(parent): p.error('state parent must exist')
++    os.mkdir(a.state_directory, 0o700)
++    os.chmod(a.state_directory, 0o700)
++    state = os.path.realpath(a.state_directory)
++    home, config = os.path.join(state, 'home'), os.path.join(state, 'docker-config')
++    os.mkdir(home, 0o700); os.mkdir(config, 0o700)
++    env = {'HOME': home, 'DOCKER_CONFIG': config, 'PATH': '/usr/bin:/bin', 'LANG': 'C'}
++    sock = None
++    if a.scenario == 'docker-metadata':
++        sock = os.path.realpath('/var/run/docker.sock')
++        if not os.path.isabs(sock) or not os.path.exists(sock) or not stat.S_ISSOCK(os.stat(sock).st_mode):
++            raise SystemExit('unsupported Docker socket')
++        argv = [SANDBOX, PROFILE.decode(), DOCKER, '--host', 'unix://' + sock, 'version', '--format', '{{json .Server}}']
++        exe = DOCKER
++    else:
++        interpreter = os.path.realpath(sys.executable)
++        argv = [SANDBOX, PROFILE.decode(), interpreter, '-c', FIXTURES[a.scenario]]
++        exe = interpreter
++    before = {'sandbox': digest(SANDBOX), 'command': digest(exe)}
++    start = time.monotonic(); deadline = start + 3.0
++    child = None; reason = None; wait_status = None; reaped = False; eof = {'stdout': False, 'stderr': False}
++    streams = {n: {'observed': 0, 'retained': bytearray()} for n in ('stdout', 'stderr')}
++    sel = selectors.DefaultSelector()
++    try:
++        child = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True, env=env)
++        ident = hashlib.sha256((str(os.getpid()) + ':' + str(child.pid) + ':' + str(start)).encode()).hexdigest()
++        ready = {'scenario': a.scenario, 'supervisor_pid': os.getpid(), 'child_pid': child.pid, 'launch_identity': ident}
++        with open(os.path.join(state, 'ready.json'), 'x') as f: json.dump(ready, f); f.flush(); os.fsync(f.fileno())
++        for name, pipe in (('stdout', child.stdout), ('stderr', child.stderr)):
++            os.set_blocking(pipe.fileno(), False); sel.register(pipe, selectors.EVENT_READ, name)
++        # The supervisor's stdin is the caller-liveness channel; it is never inherited by the child.
++        try: os.set_blocking(0, False); sel.register(0, selectors.EVENT_READ, 'liveness')
++        except (OSError, ValueError): pass
++        while True:
++            if time.monotonic() >= deadline: reason = reason or 'timeout'
++            for key, _ in sel.select(max(0, min(.05, deadline-time.monotonic()))):
++                if key.data == 'liveness':
++                    if not os.read(0, 1): reason = reason or 'caller-eof'
++                else:
++                    try: data = os.read(key.fd, 8192)
++                    except BlockingIOError: continue
++                    if not data:
++                        eof[key.data] = True; sel.unregister(key.fileobj); continue
++                    s = streams[key.data]; s['observed'] += len(data)
++                    remaining = max(0, LIMIT-len(s['retained'])); s['retained'].extend(data[:remaining])
++                    if s['observed'] > LIMIT: reason = reason or 'output-overflow'
++            if reason: break
++            got, status = os.waitpid(child.pid, os.WNOHANG)
++            if got: wait_status = status; reaped = True; break
++        if reason and not reaped:
++            try: os.kill(child.pid, signal.SIGKILL)
++            except ProcessLookupError: pass
++            end = time.monotonic()+5
++            while time.monotonic() < end:
++                for key, _ in sel.select(.05):
++                    if key.data == 'liveness':
++                        try: os.read(0, 4096)
++                        except OSError: pass
++                    else:
++                        try: data=os.read(key.fd,8192)
++                        except BlockingIOError: continue
++                        if not data: eof[key.data]=True; sel.unregister(key.fileobj)
++                        else:
++                            s=streams[key.data]; s['observed']+=len(data); s['retained'].extend(data[:max(0,LIMIT-len(s['retained']))])
++                got,status=os.waitpid(child.pid,os.WNOHANG)
++                if got: wait_status=status; reaped=True; break
++            if not reaped: reason='cleanup-unverified'
++    except Exception as e:
++        reason = reason or 'supervisor-error:'+type(e).__name__
++        if child is not None and not reaped:
++            try: os.kill(child.pid, signal.SIGKILL)
++            except OSError: pass
++            try: _, wait_status=os.waitpid(child.pid,0); reaped=True
++            except OSError: pass
++    finally:
++        sel.close()
++    after = {'sandbox': digest(SANDBOX), 'command': digest(exe)}
++    if before != after: reason = reason or 'executable-hash-mismatch'
++    exitcode = 0 if reason is None and reaped and wait_status == 0 else 1
++    if a.scenario in ('timeout','caller-eof','output-overflow'): exitcode = 1
++    results = {}
++    for name,s in streams.items():
++        raw=bytes(s['retained']); results[name]={'observed_bytes':s['observed'],'retained_bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'eof':eof[name]}
++        with open(os.path.join(state,name+'.bin'),'xb') as f: f.write(raw)
++    report={'scenario':a.scenario,'argv':argv,'environment':env,'resolved_executables':{'sandbox':os.path.realpath(SANDBOX),'command':os.path.realpath(exe)},'executable_sha256_before':before,'executable_sha256_after':after,'profile_sha256':hashlib.sha256(PROFILE).hexdigest(),'child_pid':child.pid if child else None,'wait_status':wait_status,'reason':reason or ('success' if exitcode==0 else 'child-failure'),'probe_exit':exitcode,'reaped':reaped,'streams':results,'started_monotonic':start,'finished_monotonic':time.monotonic(),'ready':ready if child else None,'socket':sock}
++    path=os.path.join(state,'report.json')
++    fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o400)
++    with os.fdopen(fd,'w') as f: json.dump(report,f,sort_keys=True); f.write('\n'); f.flush(); os.fsync(f.fileno())
++    os.chmod(path,0o400)
++    return exitcode
++
++if __name__ == '__main__': raise SystemExit(main())

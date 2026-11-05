@@ -1,0 +1,46 @@
+{
+  "review_type": "independent final source-only review; no runtime or end-to-end acceptance",
+  "revision_sha256": "4ea39762306cf11c7b00c93b9ab43ec01e625a2a1bc2a24218a3705b19181fd4",
+  "parent_revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+  "source_sha256": "345b8c7b052bda1d0a77c2d12fb70b3ca41181ade5e3f3ccb2e012b3404325fe",
+  "input_hashes": {
+    "astra-plan-036.json": "7b6c0fb15753c0366712dbfd97b750d71d181f2e85815f8f4f89db5d94b81c13",
+    "astra-source-review-035.json": "90a7d2086d0f9ca0f4a3beb392e075f085c31a2c93e1b12195a1055794b067ce",
+    "retry-astra-review-025.json": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825",
+    "coding-jobs/B1a-Diagnostics-036/diff.patch": "dff1f24c71a9f780a194f9741ab558c94c87298515079d2cfe171bd69f217106",
+    "coding-jobs/B1a-Diagnostics-036/independent-validation.json": "6e580cbdecb289bb54d09ea3e663ac7da9ece98b94ed94373610a453ed7a8a54"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "overall": "INCOMPLETE",
+  "scope": "Read frozen test, adapters, plan36, review35, original review25, diff and validation. Independently verified all 82 frozen entries by hash/size/mode, exact inventory, byte-identical parent manifest, exact diff and every plan input hash. Only the allowed test changed. No candidate execution, source import, compilation, tests, Docker, provider invocation or delegation. Original repository source was not imported or replaced. Wrote only this review.",
+  "source_dispositions": {
+    "normal_diagnostics": "Satisfied: DIAGNOSTIC_LIMIT remains 4096; Failure preserves str(exc), Exception preserves type name plus ': ' plus str(exc). Each encodes UTF-8 with replacement, slices to 4095 bytes, appends one newline byte and writes directly to stderr.buffer without decoding. Each returns 1.",
+    "interrupt_and_parser": "Satisfied: explicit KeyboardInterrupt handler writes only fixed b'KeyboardInterrupt\\n' and returns 130. No new broad BaseException handler or SystemExit interception; argparse parsing remains outside the guarded region. This closes only the specified finite handler diagnostics, not parser output, stream-write failures, startup/shutdown failures or repeated asynchronous interruption.",
+    "public_controls": "Satisfied: exactly three added choices. After validate and before make_fixtures, diagnostic-ascii raises fixed Failure('A' * 8192), diagnostic-multibyte raises fixed RuntimeError('é' * 4096), and diagnostic-interrupt raises KeyboardInterrupt(). No arbitrary payload input, fixture execution, child launch or routing evidence is introduced.",
+    "regressions": "Exact diff preserves response and corrected arity matrices, per-invocation routing, bounded records, lifecycle ownership/finalization, deadlines, cleanup, adapters and existing control receipts. No receipt framework was added. No new source-card defect identified."
+  },
+  "source_card_findings": [],
+  "closed_source_findings": ["B1a-E2E-025-diagnostic-byte-cap"],
+  "findings": [
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "severity": "high",
+      "classification": "acceptance_evidence_gap",
+      "status": "open; existing finding confirmed against final frozen source",
+      "location": "tests/e2e/test_review_adapter_e2e.py:536-623",
+      "problem": "No result.json is written. Matrix success prints rows and overall pass only; response rows lack exact launch argv, expected/actual streams and status, and retained lifecycle cleanup outcomes. Arity rows now carry argv/count and routing evidence, but lack complete expected/actual and cleanup evidence. Failure exits discard accumulated matrix rows, and later planned rows are not persisted as not-run. Scenario-specific lifecycle/deadline/record-bound/routing files do not supply the complete matrix receipt.",
+      "future_plan_requirement": "Under separately authorized future coding scope, specify a result.json beneath the validated output directory with every planned row marked pass/fail/not-run, exact launch arguments, bounded expected/actual output and status, record checks and cleanup outcome. Persist failures after validation; overall pass requires every required row to pass. No implementation authorized by this review: coding launches are exhausted at 36/36.",
+      "missing_evidence": "Complete success and early-failure receipts, including explicit not-run rows, cannot be produced by the current test."
+    }
+  ],
+  "other_open_findings": ["B1a-E2E-025-result-receipt"],
+  "missing_evidence": [
+    "No runtime evidence or execution approval. Separately approved complete-script diagnostic runs must establish status 1/1/130, empty stdout, exact 4096-byte ASCII and multibyte stderr or fixed interrupt bytes, and no fixture/child activity; compare raw bytes.",
+    "Exact-revision response/arity matrix, lifecycle, deadline, record-bound and routing controls still require runtime evidence and independent cleanup/completion evidence. Source closures do not establish their observed behavior.",
+    "Complete result receipt and final acceptance inventory remain incomplete; the outer execution wrapper still requires independent review and binding/gate verification before any execution.",
+    "Fake routing can establish routing/transparency only; real-provider identity and availability remain unestablished."
+  ],
+  "budget_disposition": "36/36 coding launches exhausted. Any source correction is future planning only. Separate final planner must dispose all remaining findings and evidence gaps; this source-card closure is not overall completion."
+}

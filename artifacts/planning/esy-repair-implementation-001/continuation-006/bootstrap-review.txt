@@ -1,0 +1,207 @@
+Independent Astra bootstrap review, no tools or edits. Return strict JSON: verdict PASS|CHANGES_REQUIRED|BLOCKED; safe_for_supervised_isolated_coding boolean; findings; missing_evidence. Review only whether the existing launcher/wrapper plus explicit root supervision may launch ONE bounded isolated Luna card. This is not unattended controller approval, host-test approval or overall repair acceptance. Root checks before/after source manifests and owned process state, never imports changes, coding worker has no Docker socket. Source is only candidate. Known limitation: detached-descendant containment unproven; determine if this blocks even one supervised coding launch and explain concrete required gate. User replaced Fable with Astra. Auth uses one read-only symlink, runtime private, fresh processes. No candidate code or tests execute on host before separate review. Output parses as provider completion only, never acceptance. Assess actual implementation; do not assume missing full controller permits unattended use. Model is requested gpt-6-astra; your completion also tests reviewer availability.
+
+FILE bootstrap/launch_worker.py
+"""Supervised bootstrap launcher; not the accepted unattended controller."""
+import argparse,hashlib,json,os,selectors,signal,subprocess,time
+from pathlib import Path
+p=argparse.ArgumentParser(); p.add_argument('--role',choices=['code','plan','review'],required=True); p.add_argument('--job',required=True); p.add_argument('--prompt',type=Path,required=True); p.add_argument('--timeout',type=int,default=600); a=p.parse_args()
+s=Path(__file__).resolve().parents[1]; candidate=s/'candidate'; jobs=s/'jobs'; jobs.mkdir(exist_ok=True)
+if not a.job.replace('-','').replace('_','').isalnum(): raise SystemExit('invalid job')
+j=jobs/a.job; j.mkdir(exist_ok=False); runtime=j/'runtime'; runtime.mkdir(); (runtime/'tmp').mkdir(); (runtime/'codex').mkdir()
+(j/'prompt.txt').write_bytes(a.prompt.read_bytes())
+wrapper=s/'bootstrap/trusted-codex-worker-003.sh'; (j/'worker.sh').write_bytes(wrapper.read_bytes())
+profile='(version 1)\n(allow default)\n(deny file-write*)\n(allow file-write* (subpath '+json.dumps(str(runtime))+'))\n(deny network-outbound (remote unix-socket))\n(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))\n(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))\n(deny signal)\n(allow signal (target self) (target children))\n'
+if a.role=='code': profile+='(allow file-write* (subpath '+json.dumps(str(candidate))+'))\n'
+(j/'sandbox.sb').write_text(profile)
+auth=runtime/'codex/auth.json'; auth.symlink_to(Path.home()/'.codex/auth.json')
+env={k:os.environ[k] for k in ('PATH','HOME','USER','LOGNAME','LANG','SHELL','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS') if k in os.environ}; env.update(CODEX_BIN='/opt/homebrew/bin/codex',CODEX_HOME=str(runtime/'codex'),TMPDIR=str(runtime/'tmp'))
+cmd=['/bin/bash',str(j/'worker.sh'),a.role,str(candidate),str(j/'prompt.txt'),str(j/'sandbox.sb')]
+started=time.monotonic(); proc=subprocess.Popen(cmd,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
+(j/'started.json').write_text(json.dumps({'pid':proc.pid,'role':a.role,'command':cmd,'timeout':a.timeout,'wall_started':time.time()}))
+sel=selectors.DefaultSelector(); sel.register(proc.stdout,selectors.EVENT_READ,'stdout'); sel.register(proc.stderr,selectors.EVENT_READ,'stderr'); logs={k:bytearray() for k in ('stdout','stderr')}; reason=None
+try:
+ while sel.get_map():
+  if time.monotonic()-started>a.timeout: reason='timeout'; break
+  for key,_ in sel.select(.2):
+   raw=os.read(key.fileobj.fileno(),16384)
+   if not raw: sel.unregister(key.fileobj); continue
+   buf=logs[key.data]
+   if len(buf)+len(raw)>2*1024*1024: reason='output-cap'; break
+   buf.extend(raw)
+  if reason: break
+finally:
+ if proc.poll() is None:
+  try: os.killpg(proc.pid,signal.SIGKILL)
+  except ProcessLookupError: pass
+  except PermissionError: reason='cleanup-denied'
+ try: proc.wait(timeout=5)
+ except subprocess.TimeoutExpired: reason='cleanup-unverified'
+ sel.close(); auth.unlink(missing_ok=True)
+for name,raw in logs.items(): (j/name).write_bytes(raw)
+report={'role':a.role,'requested_model':'gpt-6-luna' if a.role=='code' else 'gpt-6-astra','exit_code':proc.returncode,'failure':reason,'elapsed_seconds':round(time.monotonic()-started,3),'command':cmd,'status':'FAILED'}
+try:
+ events=[json.loads(line) for line in logs['stdout'].splitlines() if line.strip()]; messages=[e['item']['text'] for e in events if e.get('type')=='item.completed' and e.get('item',{}).get('type')=='agent_message']; (j/'final.txt').write_text(messages[-1] if messages else '')
+ if proc.returncode==0 and not reason and messages and any(e.get('type')=='turn.completed' for e in events) and not any(e.get('type') in ('error','turn.failed') for e in events): report['status']='PROVIDER_COMPLETED'
+except (ValueError,TypeError,KeyError): report['failure']='invalid-provider-output'
+(j/'receipt.json').write_text(json.dumps(report,indent=2)+'\n'); print(json.dumps(report)); print((j/'final.txt').read_text()[:12000] if (j/'final.txt').exists() else logs['stderr'].decode(errors='replace')[-2000:])
+raise SystemExit(0 if report['status']=='PROVIDER_COMPLETED' else 1)
+
+FILE bootstrap/trusted-codex-worker-003.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+case "$role" in
+ code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+ plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+ *) exit 64 ;;
+esac
+: "${CODEX_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CODEX_BIN" exec -c 'model_reasoning_effort="high"' --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+FILE bootstrap/containment-002.json
+{
+  "status": "PASSED",
+  "checks": [
+    {
+      "id": "allowed-code-write",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-outside",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-outside",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-baseline",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-baseline",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-original",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-original",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-symlink",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-symlink",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-unix-socket",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "review-input-readonly",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-signal-parent",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "scope": "bootstrap containment probes only; not full C0/C6 acceptance"
+}
+
+FILE preflight-005/containment.json
+{
+  "argv": [
+    "/usr/bin/sandbox-exec",
+    "-f",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/review.sb",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/.venv/bin/python",
+    "-c",
+    "import os,socket,json\nfrom pathlib import Path\nchecks={}\nfor label,path in [('original','/Users/psac/development/prometheansacrifice/ocaml-rl-sft/pyproject.toml'),('prompt','/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/prompt.txt')]:\n try: fd=os.open(path,os.O_WRONLY)\n except PermissionError: checks[label]=True\n else: os.close(fd);checks[label]=False\np=Path('/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/runtime/canary');p.write_text('probe');checks['runtime_write']=p.read_text()=='probe'\ns=socket.socket(socket.AF_UNIX)\ntry:s.connect('/private/tmp/esy005-17nxgn4_/s')\nexcept PermissionError:checks['socket_denied']=True\nexcept OSError:checks['socket_denied']=False\nelse:checks['socket_denied']=False\nprint(json.dumps(checks));raise SystemExit(0 if all(checks.values()) else 1)\n"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 0.031,
+  "owned_group_absent": true,
+  "logs": {
+    "stdout": {
+      "size": 81,
+      "sha256": "0605e06f36340ffb7628fe53b6c8115d306398e3683d1a0dbc58565dffdd50af"
+    },
+    "stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}
+
+FILE preflight-005/docker-socket-denial.json
+{
+  "argv": [
+    "/usr/bin/sandbox-exec",
+    "-f",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/preflight-005/review.sb",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/.venv/bin/python",
+    "-c",
+    "import socket; s=socket.socket(socket.AF_UNIX)\ntry:s.connect('/Users/psac/.docker/run/docker.sock')\nexcept PermissionError:print('DOCKER_SOCKET_DENIED');raise SystemExit(0)\nexcept OSError:raise SystemExit(2)\nelse:raise SystemExit(3)"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 0.027,
+  "owned_group_absent": true,
+  "logs": {
+    "stdout": {
+      "size": 21,
+      "sha256": "8e08e65a32c1e5bbd3c7ab9e5c9c13e107c6cf8b0aadcb05ffba40020a639d4c"
+    },
+    "stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

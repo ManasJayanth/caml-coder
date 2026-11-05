@@ -1,0 +1,10 @@
+{
+  "status": "TERMINATED",
+  "worker_pid": 38217,
+  "worker_reaped": true,
+  "exit_code": 0,
+  "reason": null,
+  "elapsed_seconds": 0.803,
+  "single_worker_assumption": "requires separately proven native process-fork denial",
+  "credential_removed": true
+}

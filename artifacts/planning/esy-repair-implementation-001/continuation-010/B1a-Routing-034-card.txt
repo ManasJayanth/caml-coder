@@ -1,0 +1,1474 @@
+Implement ONLY this source-authoring card with read/edit/write. No commands/tests/imports/code execution. All outside artifact context is inlined below; edit only the allowed relative file. Preserve other findings open.
+{
+  "card_id": "B1a-Routing-034",
+  "objective": "Make both fixed routing controls exercise the actual matrix loop and its first-mismatch stop.",
+  "finding_ids": [
+    "B1a-Routing-033-controls-bypass-matrix",
+    "B1a-E2E-025-per-case-routing"
+  ],
+  "parent_revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "inputs": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-033.json",
+      "sha256": "457d873b4c291167fbc7d3340fc1cfd92a83d69e82da891279e23b99ad79eccb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json",
+      "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-033/result-manifest.json",
+      "sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-033/frozen/tests/e2e/test_review_adapter_e2e.py",
+      "sha256": "d7c94d0f322ff870bcaaa8e7f85f9d043aba6e3de2587ee3b7c7bd2aed1d2fd2"
+    }
+  ],
+  "allowed_paths": [
+    "tests/e2e/test_review_adapter_e2e.py"
+  ],
+  "prerequisites": [
+    "Review33 binding is verified. Root must verify full frozen33 inventory, working-parent equality, all input hashes, proven prior cleanup, cumulative failure/time/launch gates before dispatch. Source33 is the correction parent, not accepted execution source."
+  ],
+  "required_behavior": [
+    "Delete the separate one-shot routing branch at frozen33 lines 503-532. Exclude both routing scenarios from the lifecycle branch so they enter the existing CASES loop at 563. Do not duplicate the loop or create another control-only invocation path.",
+    "Only the first success row selects existing literal missing/duplicate fake mode. Preserve the normal response bytes/status and unchanged fixed fake selector. Use the shared matrix bounded_run callsite, collect_records and validate_routing_delta with expected1 and exact argv/cwd/stdin. Preserve snapshot advancement only after successful validation and abort on the first mismatch before any subsequent invocation.",
+    "Move existing tiny routing.json evidence into that shared path: scenario, failing row, expected/observed delta, mismatch reason, bounded observation, invocation failure and lifecycle. Initialize attempted_invocations to 0 and increment at the actual shared callsite; pass the lifecycle dict into unchanged bounded_run. Persist the receipt before propagating the first-row mismatch. Receipt-write failure fails. Missing/duplicate must show observed 0/2, expected 1, attempted 1 and nonzero exit. Unexpected control completion must fail, never claim success.",
+    "Preserve normal matrix checks, valid-review and existing arity rows, newline handling, collector, bounds, ownership, deadlines, cleanup, adapters, other controls and all safeguards. No broader refactoring."
+  ],
+  "forbidden_changes": [
+    "Worker uses read/edit/write tools only: no shell, imports, compilation, tests, subprocess execution, providers or delegation. Each targeted patch under3000 characters; no full-file rewrite; unchanged 2MiB output cap.",
+    "No other paths, new framework, arbitrary controls, arity correction, diagnostic correction, general result receipt/inventory or outer-wrapper implementation."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-matrix",
+    "B1a-public-routing-missing",
+    "B1a-public-routing-duplicate"
+  ],
+  "expected_outcomes": [
+    "Fresh exact-revision review can close only the routing-control source defect. Future separately approved public controls must fail at the first actual matrix row, attempted1, with no later launches. Normal matrix behavior is preserved. No runtime acceptance or provider-identity/availability claim."
+  ],
+  "evidence_outputs": [
+    "Worker: changed test only. Root: frozen revision, parent/result manifests and diff. Independent reviewer: exact-revision source dispositions. Later approved root execution: bounded public outputs, routing.json, actual records and independent cleanup evidence."
+  ],
+  "stop_conditions": [
+    "Stop for unresolved review binding, hash/parent mismatch, failed budget/failure/cleanup gate, execution attempt, scope expansion or extra-path need. Outer execution remains blocked."
+  ],
+  "deferred": "Arity, diagnostic-byte-cap, complete result receipt/inventory and independently reviewed outer wrapper remain open beyond this correction. Two slots would remain after34; no merging, cap reset, automatic dispatch or completion promise."
+}
+REVIEW
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "source_sha256": "d7c94d0f322ff870bcaaa8e7f85f9d043aba6e3de2587ee3b7c7bd2aed1d2fd2",
+  "input_hashes": {
+    "astra-plan-033-v2.json": "227d0ed6ba500f008f28ef701c1503dbe01c61e63845aa57ac4ba25f28e35a8a",
+    "astra-source-review-031.json": "a00f29e03aeb3d178c354d63d3a7095823a857abff57f4b093ba99f58ac8ef64",
+    "coding-jobs/B1a-Routing-033/diff.patch": "acd599fb61e9f636cfaf45de66b0337476502e74fb87aaff3e76d012b3507f48",
+    "coding-jobs/B1a-Routing-033/independent-validation.json": "d3737499121d592556b5265cc842e4256f181ba8501ca51c736355af0c450685",
+    "coding-jobs/B1a-Routing-033/guardian/receipt.json": "ce2542f59730f42c4b8c75b1e180de16b4859a94f3625c565debb44ac022e29a",
+    "claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_card_closed": false,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, adapters, plan33-v2, review31, diff, validation and guardian receipt. Independently verified all 82 manifest entries by hash/size/mode, exact file inventory, byte-identical parent manifest binding to accepted31 and exact diff. Only the allowed test changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review. Provider recovery is reported successful, but does not establish source acceptance.",
+  "source_dispositions": {
+    "R1": "Satisfied at source for all required matrix callsites: nine response rows at 568-577, extra valid-review at 581-590, and eight preserved invalid-arity rows at 591-603 immediately collect bounded records and compare the retained raw prefix plus suffix. Snapshot advances only after routing match; mismatch raises before any later invocation.",
+    "R2": "Satisfied at source for those callsites: exact one matching argv/cwd/base64-stdin object for response and valid-review, zero raw bytes for invalid arities. Checker rejects prefix changes, blank/incomplete lines, count errors, malformed JSON and unequal objects. Row identity/deltas/outcome precede byte/status checks. New LF operations use bytes([10]); generated-source escaping remains correct.",
+    "R3": "Preserved: nine response fixtures, additional valid-review, eight existing invalid arities and response comparisons. Aggregate-only acceptance removed. Exact diff leaves collector, bounded_run, limits, deadline/ownership/cleanup logic, sandbox, existing controls and both adapters unchanged; no additional regression found in those areas.",
+    "R4": "Not satisfied: fixed public choices and literal fake zero/two-record modes exist, but controls execute a separate one-shot branch rather than the actual matrix response path.",
+    "R5": "Partially satisfied: separate control branch passes lifecycle state to unchanged bounded_run and writes routing.json with bounded record/response observations, expected/observed deltas, failure reason and count1 before returning nonzero. Receipt-write failure propagates. Count1 and absence of later launches are structural properties of that branch, not evidence that the matrix aborts on its first mismatching row."
+  },
+  "findings": [
+    {
+      "id": "B1a-Routing-033-controls-bypass-matrix",
+      "severity": "blocking",
+      "path": "tests/e2e/test_review_adapter_e2e.py",
+      "line": 503,
+      "detail": "Lines 503-532 independently invoke the adapter, check a delta and return before the matrix loop at 563-577. A regression removing the matrix routing check or allowing later matrix launches would not affect either control. This violates explicit R4 actual-matrix-path coverage and leaves the per-case-routing finding open."
+    }
+  ],
+  "requiredchanges": [
+    "Route matrix, routing-missing and routing-duplicate through the same response loop and its immediate collector/checker/abort path, bypassing only the lifecycle branch. Only the first success response in either control should select its literal missing/duplicate mode. Count actual invocation attempts there and persist the bounded control routing receipt with lifecycle state on the first mismatch, then exit nonzero before any later bounded_run. Preserve accepted normal callsite behavior and all existing safeguards."
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "Fresh exact-revision source review after the shared-matrix control correction; source33 is not accepted.",
+    "No runtime acceptance. After remaining source/environment blockers and separately reviewed outer wrapper, public matrix and both controls must establish matching one/zero deltas and actual first-row failures with observed0/2, attempted1, bounded receipts and independent cleanup/completion evidence.",
+    "Existing arity, diagnostic-byte-cap, result-receipt/inventory and outer-wrapper obligations remain open. Fake routing cannot establish provider identity or availability."
+  ]
+}
+
+SOURCE tests/e2e/test_review_adapter_e2e.py
+#!/usr/bin/python3
+"""Source-only authoring for bounded fake-Codex review routing evidence."""
+
+import argparse
+import base64
+import json
+import os
+import selectors
+import signal
+import stat
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+LIMIT = 4096
+RECORD_LIMIT = 16384
+INVOCATION_TIMEOUT = 10.0
+SUITE_TIMEOUT = 180.0
+DIAGNOSTIC_LIMIT = 4096
+EXPECTED_ARGV = [
+    "exec", "--disable", "apps", "--disable", "plugins", "--disable",
+    "hooks", "--disable", "multi_agent", "--disable", "shell_snapshot",
+    "--disable", "shell_tool", "--ignore-user-config", "--ephemeral",
+    "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox",
+    "read-only", "--cd", "WORKSPACE", "--json", "-",
+]
+CASES = [
+    ("success", b"OK\n", b"", 0),
+    ("findings", b'{"findings":["fixture"]}\n', b"", 0),
+    ("availability", b"", b"unavailable\n", 69),
+    ("auth", b"", b"authentication required\n", 77),
+    ("permission", b"", b"permission denied\n", 77),
+    ("malformed", b"{broken\n", b"", 0),
+    ("identity", b"identity mismatch\n", b"", 0),
+    ("context", b"context missing\n", b"", 0),
+    ("cleanup", b"", b"cleanup failed\n", 23),
+]
+
+
+class Failure(Exception):
+    pass
+
+
+class RecordOverflow(Failure):
+    def __init__(self, observed):
+        self.observed = observed
+        super().__init__("record-overflow")
+
+
+def collect_records(path):
+    chunks = []
+    total = 0
+    with open(path, "rb", buffering=0) as stream:
+        while total < RECORD_LIMIT + 1:
+            chunk = stream.read(RECORD_LIMIT + 1 - total)
+            if not chunk:
+                break
+            chunks.append(chunk)
+            total += len(chunk)
+    raw = b"".join(chunks)
+    if len(raw) > RECORD_LIMIT:
+        raise RecordOverflow(len(raw))
+    return raw
+
+
+def validate_routing_delta(current, previous, expected_count, expected_record=None):
+    result = {"expected_delta": expected_count, "observed_delta": 0,
+              "routing_outcome": "match", "mismatch_reason": None,
+              "observation": current[len(previous):][:512].decode("utf-8", "replace")
+              if current.startswith(previous) else current[:512].decode("utf-8", "replace")}
+    if not current.startswith(previous):
+        result.update({"routing_outcome": "mismatch", "mismatch_reason": "snapshot-prefix"})
+        return current, result
+    delta = current[len(previous):]
+    if expected_count == 0:
+        if delta:
+            result.update({"observed_delta": len(delta.split(bytes([10]))) - 1,
+                           "routing_outcome": "mismatch", "mismatch_reason": "unexpected-bytes"})
+        return current, result
+    lines = delta.split(bytes([10]))
+    result["observed_delta"] = len(lines) - 1 if lines[-1] == b"" else len(lines)
+    if not delta.endswith(bytes([10])) or any(line == b"" for line in lines[:-1]) or lines[-1] != b"":
+        result.update({"routing_outcome": "mismatch", "mismatch_reason": "blank-or-incomplete-line"})
+        return current, result
+    records = lines[:-1]
+    if len(records) != expected_count:
+        result.update({"routing_outcome": "mismatch", "mismatch_reason": "record-count"})
+        return current, result
+    try:
+        decoded = [json.loads(line) for line in records]
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        result.update({"routing_outcome": "mismatch", "mismatch_reason": "malformed-json"})
+        return current, result
+    if expected_record is not None and any(record != expected_record for record in decoded):
+        result.update({"routing_outcome": "mismatch", "mismatch_reason": "content-mismatch"})
+    return current, result
+
+
+def absolute_nonsymlink(value, label):
+    if not os.path.isabs(value):
+        raise Failure(label + " must be absolute")
+    path = Path(value)
+    cur = Path(path.anchor)
+    for part in path.parts[1:]:
+        cur = cur / part
+        try:
+            mode = cur.lstat().st_mode
+        except OSError as exc:
+            raise Failure("invalid " + label) from exc
+        if stat.S_ISLNK(mode):
+            raise Failure(label + " has a symlink component")
+    return path
+
+
+def validate(args):
+    adapter = absolute_nonsymlink(args.adapter, "adapter")
+    if not stat.S_ISREG(adapter.lstat().st_mode):
+        raise Failure("adapter must be regular")
+    sibling = adapter.parent / "codex-worker.sh"
+    absolute_nonsymlink(str(sibling), "sibling adapter")
+    if not stat.S_ISREG(sibling.lstat().st_mode):
+        raise Failure("missing regular codex-worker.sh")
+    output = absolute_nonsymlink(args.output_dir, "output directory")
+    info = output.lstat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
+        raise Failure("output directory must be owned, empty, and mode 0700")
+    if os.listdir(output):
+        raise Failure("output directory must be empty")
+    return adapter, output
+
+
+def write_bytes(path, data, mode=0o600):
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(data)
+
+
+def make_fixtures(output):
+    workspace = output / "workspace"
+    workspace.mkdir(mode=0o700)
+    prompt = output / "prompt.txt"
+    write_bytes(prompt, b"review fixture\n")
+    home = output / "private-home"
+    home.mkdir(mode=0o700)
+    records = output / "records.jsonl"
+    write_bytes(records, b"")
+    config = workspace / "response.json"
+    fake = output / "fake-codex"
+    interpreter = Path(os.path.realpath(sys.executable))
+    absolute_nonsymlink(str(interpreter), "Python interpreter")
+    if not stat.S_ISREG(interpreter.lstat().st_mode) or not os.access(interpreter, os.X_OK):
+        raise Failure("Python interpreter is not executable")
+    literal = str(interpreter)
+    if any(c.isspace() for c in literal) or "\n" in literal or len(literal.encode()) > 120:
+        raise Failure("Python interpreter path unsuitable for shebang")
+    fake_source = '''#!INTERPRETER
+import base64, json, os, sys
+raw = sys.stdin.buffer.read(4097)
+if len(raw) > 4096:
+    raise SystemExit(125)
+with open(os.path.join(os.getcwd(), "response.json"), "r", encoding="utf-8") as f:
+    response = json.load(f)
+record = {"argv": sys.argv[1:], "cwd": os.getcwd(), "stdin": base64.b64encode(raw).decode("ascii")}
+mode = response.get("routing_mode", "normal")
+if mode not in ("normal", "missing", "duplicate"):
+    raise SystemExit(125)
+if mode != "missing":
+    with open(RECORDS, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record, separators=(",", ":")) + "\\n")
+        if mode == "duplicate":
+            f.write(json.dumps(record, separators=(",", ":")) + "\\n")
+if response.get("sleep"):
+    import time
+    time.sleep(response["sleep"])
+sys.stdout.buffer.write(bytes.fromhex(response["stdout"]))
+sys.stderr.buffer.write(bytes.fromhex(response["stderr"]))
+raise SystemExit(response["status"])
+'''.replace("INTERPRETER", literal).replace("RECORDS", repr(str(records)))
+    write_bytes(fake, fake_source.encode("utf-8"), 0o700)
+    os.chmod(fake, 0o700)
+    escaped = str(output).replace("\\", "\\\\").replace('"', '\\"')
+    profile = output / "profile.sb"
+    text = ('(version 1)\n(allow default)\n(deny network*)\n(deny file-write*)\n'
+            '(allow file-write* (subpath "' + escaped + '"))\n(deny process-fork)\n')
+    write_bytes(profile, text.encode())
+    return workspace, prompt, profile, fake, config, records, home
+
+
+def bounded_run(argv, workspace, home, output, records, suite_deadline, lifecycle=None, scenario="matrix"):
+    state = lifecycle if lifecycle is not None else {}
+    state.update({"spawned_pid": None, "first_signal": None,
+                  "signal_attempt": {"intended": False, "attempted": False, "result": "not-needed", "phase": None},
+                  "leader_reap": "not-reaped", "pipes": {"stdin": "absent", "stdout": "absent", "stderr": "absent"},
+                  "selector": "absent", "cleanup_interrupted": False, "cleanup": "pending",
+                  "cleanup_errors": [], "failure": None})
+    proc = None
+    selector = None
+    streams = {}
+    phase = "not-spawned"
+    handlers = {}
+    received = {"signal": 0, "cleanup": False}
+    finalizing = False
+    primary = None
+    cleanup_deadline = None
+    invocation_deadline = None
+
+    def deferred_handler(signum, frame):
+        if not received["signal"]:
+            received["signal"] = signum
+        if finalizing:
+            received["cleanup"] = True
+
+    def record_error(label, exc):
+        state["cleanup_errors"].append(label + ": " + type(exc).__name__ + ": " + str(exc))
+
+    def close_pipe(name, stream):
+        if state["pipes"][name] in ("closed", "already-closed"):
+            return
+        if stream is None or stream.closed:
+            state["pipes"][name] = "already-closed"
+            return
+        try:
+            stream.close()
+            state["pipes"][name] = "closed"
+        except BaseException as exc:
+            state["pipes"][name] = "failed/uncertain"
+            record_error(name + " close", exc)
+
+    def wait_once():
+        nonlocal phase
+        phase = "reap-uncertain"
+        try:
+            waited, raw = os.waitpid(proc.pid, os.WNOHANG)
+        except BaseException:
+            raise
+        if waited == 0:
+            phase = "owned"
+            return False
+        if waited != proc.pid:
+            raise Failure("unexpected waitpid result")
+        phase = "reaped"
+        state["leader_reap"] = "reaped"
+        proc.returncode = os.waitstatus_to_exitcode(raw)
+        return True
+
+    try:
+        for signum in (signal.SIGINT, signal.SIGTERM):
+            handlers[signum] = signal.signal(signum, deferred_handler)
+        env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "LANG": "C"}
+        observed = time.monotonic()
+        suite_remaining = suite_deadline - observed
+        if suite_remaining <= 0:
+            raise Failure("suite timeout")
+        invocation_deadline = min(observed + INVOCATION_TIMEOUT, suite_deadline)
+        proc = subprocess.Popen(argv, cwd=str(workspace), env=env, stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
+                               close_fds=True)
+        phase = "owned"
+        state["spawned_pid"] = proc.pid
+        state["pipes"] = {"stdin": "pending", "stdout": "pending", "stderr": "pending"}
+        streams = {proc.stdout: bytearray(), proc.stderr: bytearray()}
+        if received["signal"]:
+            raise Failure("interrupted after child acquisition")
+        if scenario in ("lifecycle-setup-failure", "lifecycle-cleanup-interrupt"):
+            raise Failure("deliberate selector setup failure")
+        selector = selectors.DefaultSelector()
+        state["selector"] = "open"
+        for stream in streams:
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, selectors.EVENT_READ)
+        os.set_blocking(proc.stdin.fileno(), False)
+        pending = memoryview(b"review fixture\n")
+        while selector.get_map() or pending:
+            if received["signal"]:
+                raise Failure("interrupted during collection")
+            remaining = invocation_deadline - time.monotonic()
+            if remaining <= 0:
+                raise Failure("invocation timeout")
+            if pending:
+                try:
+                    sent = os.write(proc.stdin.fileno(), pending)
+                    pending = pending[sent:]
+                except BlockingIOError:
+                    pass
+                except BrokenPipeError:
+                    pending = memoryview(b"")
+            if not pending:
+                close_pipe("stdin", proc.stdin)
+            for key, _ in selector.select(min(remaining, 0.1)):
+                chunk = os.read(key.fd, LIMIT + 1 - len(streams[key.fileobj]))
+                if chunk:
+                    streams[key.fileobj].extend(chunk)
+                    if len(streams[key.fileobj]) > LIMIT:
+                        raise Failure("stream overflow")
+                else:
+                    selector.unregister(key.fileobj)
+                    close_pipe("stdout" if key.fileobj is proc.stdout else "stderr", key.fileobj)
+            if received["signal"]:
+                raise Failure("interrupted during collection")
+        while True:
+            if received["signal"]:
+                raise Failure("interrupted during collection")
+            if wait_once():
+                break
+            remaining = invocation_deadline - time.monotonic()
+            if remaining <= 0:
+                raise Failure("invocation timeout")
+            time.sleep(min(0.02, remaining))
+        if scenario == "lifecycle-post-reap-exception":
+            raise Failure("deliberate post-reap exception")
+        if scenario == "lifecycle-post-reap-interrupt":
+            raise KeyboardInterrupt("deliberate post-reap interruption")
+    except BaseException as exc:
+        primary = exc
+        state["failure"] = type(exc).__name__ + ": " + str(exc)
+
+    # One finalizer owns all remaining obligations; signal handlers remain active.
+    finalizing = True
+    cleanup_deadline = time.monotonic() + 2.0
+    if scenario == "lifecycle-cleanup-interrupt" and proc is not None:
+        try:
+            os.kill(os.getpid(), signal.SIGINT)
+        except BaseException as exc:
+            record_error("cleanup probe signal", exc)
+    if primary is not None and proc is not None and phase in ("owned", "not-spawned") and phase != "not-spawned":
+        state["signal_attempt"] = {"intended": True, "attempted": True, "result": "pending", "phase": phase}
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+            state["signal_attempt"]["result"] = "sent"
+        except BaseException as exc:
+            state["signal_attempt"]["result"] = "failed"
+            record_error("group signal", exc)
+    elif phase == "reap-uncertain":
+        record_error("leader ownership", Failure("uncertain; refusing group signal"))
+
+    for stream, name in ((proc.stdout, "stdout"), (proc.stderr, "stderr")) if proc is not None else ():
+        if state["pipes"][name] not in ("closed", "already-closed"):
+            try:
+                os.set_blocking(stream.fileno(), False)
+                while time.monotonic() < cleanup_deadline:
+                    try:
+                        if not os.read(stream.fileno(), LIMIT):
+                            break
+                    except BlockingIOError:
+                        break
+            except BaseException as exc:
+                record_error(name + " drain", exc)
+            close_pipe(name, stream)
+    if proc is not None:
+        close_pipe("stdin", proc.stdin)
+        if phase in ("owned", "reap-uncertain") and phase == "owned":
+            try:
+                while True:
+                    if wait_once():
+                        break
+                    remaining = cleanup_deadline - time.monotonic()
+                    if remaining <= 0:
+                        record_error("leader reap", Failure("bounded reap expired"))
+                        break
+                    time.sleep(min(0.01, remaining))
+            except BaseException as exc:
+                record_error("leader reap", exc)
+        elif phase == "reap-uncertain":
+            state["leader_reap"] = "uncertain"
+    if selector is not None and state["selector"] == "open":
+        try:
+            selector.close()
+            state["selector"] = "closed"
+        except BaseException as exc:
+            state["selector"] = "failed/uncertain"
+            record_error("selector close", exc)
+    for signum, previous in handlers.items():
+        try:
+            signal.signal(signum, previous)
+        except BaseException as exc:
+            record_error("signal handler restore", exc)
+    state["cleanup_interrupted"] = bool(received["cleanup"])
+    state["first_signal"] = received["signal"] or None
+    if received["signal"] and not received["cleanup"]:
+        if primary is None:
+            primary = Failure("deferred signal " + str(received["signal"]))
+            state["failure"] = str(primary)
+    if received["cleanup"]:
+        record_error("cleanup interruption", Failure("deferred signal observed"))
+    all_pipes_closed = all(value in ("absent", "closed", "already-closed") for value in state["pipes"].values())
+    reaped_or_absent = proc is None or phase == "reaped"
+    clean = (not state["cleanup_errors"] and not state["cleanup_interrupted"] and all_pipes_closed
+             and reaped_or_absent and state["selector"] in ("closed", "absent"))
+    state["pipe_closure"] = "closed" if all_pipes_closed else "failed"
+    state["cleanup"] = "success" if clean else "failed"
+    if not clean and primary is None:
+        primary = Failure("finalization failed")
+        state["failure"] = str(primary)
+    if primary is not None:
+        if state["cleanup_errors"]:
+            raise Failure(state["failure"] + "; cleanup failed: " + "; ".join(state["cleanup_errors"])) from primary
+        raise primary
+    return bytes(streams[proc.stdout]), bytes(streams[proc.stderr]), proc.returncode
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--adapter", required=True)
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--scenario", choices=("matrix", "lifecycle-normal", "lifecycle-setup-failure",
+                        "lifecycle-post-reap-exception", "lifecycle-post-reap-interrupt", "lifecycle-timeout",
+                        "lifecycle-stdout-overflow", "lifecycle-stderr-overflow", "lifecycle-cleanup-interrupt",
+                        "deadline-suite-before-first", "deadline-suite-before-next",
+                        "records-exact-limit", "records-one-over", "routing-missing",
+                        "routing-duplicate"), default="matrix")
+    args = parser.parse_args()
+    started = time.monotonic()
+    suite_deadline = started + SUITE_TIMEOUT
+    try:
+        adapter, output = validate(args)
+        workspace, prompt, profile, fake, config, records, home = make_fixtures(output)
+        if args.scenario in ("deadline-suite-before-first", "deadline-suite-before-next"):
+            probe = args.scenario
+            states = []
+            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
+            config.write_text(json.dumps({"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}), encoding="utf-8")
+            try:
+                if probe == "deadline-suite-before-next":
+                    first = {"attempt": 1}
+                    states.append(first)
+                    result = bounded_run(argv, workspace, home, output, records, suite_deadline, first, probe)
+                    if result != (CASES[0][1], CASES[0][2], 0) or first["cleanup"] != "success":
+                        raise Failure("deadline control first invocation invalid")
+                exhausted = {"attempt": len(states) + 1}
+                states.append(exhausted)
+                suite_deadline = time.monotonic()
+                bounded_run(argv, workspace, home, output, records, suite_deadline, exhausted, probe)
+                raise Failure("suite timeout was not enforced")
+            except BaseException:
+                (output / "deadline.json").write_text(json.dumps({"scenario": probe, "attempts": states}, sort_keys=True), encoding="utf-8")
+                raise
+            (output / "deadline.json").write_text(json.dumps({"scenario": probe, "attempts": states}, sort_keys=True), encoding="utf-8")
+            return 0
+        if args.scenario in ("records-exact-limit", "records-one-over"):
+            probe = args.scenario
+            state = {"scenario": probe}
+            observed = None
+            bounds_outcome = "not-evaluated"
+            original_failure = None
+            try:
+                config.write_text(json.dumps({"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}), encoding="utf-8")
+                result = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                                    workspace, home, output, records, suite_deadline, state, probe)
+                if result != (CASES[0][1], CASES[0][2], 0) or state["cleanup"] != "success":
+                    raise Failure("record-bound invocation completion invalid")
+                initial = collect_records(records)
+                observed = len(initial)
+                if not initial or not initial.endswith(b"\n") or len(initial) >= RECORD_LIMIT:
+                    raise Failure("unexpected initial record size")
+                target = RECORD_LIMIT if probe == "records-exact-limit" else RECORD_LIMIT + 1
+                padding = target - len(initial)
+                if padding <= 0:
+                    raise Failure("unexpected initial record size")
+                with open(records, "ab", buffering=0) as stream:
+                    remaining = padding
+                    while remaining:
+                        written = stream.write(b"\n" * remaining)
+                        if not written:
+                            raise Failure("record padding write failed")
+                        remaining -= written
+                try:
+                    raw = collect_records(records)
+                    observed = len(raw)
+                    if probe == "records-one-over":
+                        raise Failure("record overflow was not detected")
+                    if observed != RECORD_LIMIT:
+                        raise Failure("exact record bound not observed")
+                    bounds_outcome = "accepted"
+                except RecordOverflow as exc:
+                    observed = exc.observed
+                    bounds_outcome = "rejected"
+                    if probe != "records-one-over":
+                        raise
+                if probe == "records-one-over":
+                    if observed != RECORD_LIMIT + 1 or bounds_outcome != "rejected":
+                        raise Failure("record-overflow boundary invalid")
+                    raise Failure("record-overflow")
+                if observed != RECORD_LIMIT or bounds_outcome != "accepted":
+                    raise Failure("exact record bound invalid")
+            except BaseException as exc:
+                original_failure = type(exc).__name__ + ": " + str(exc)
+                if isinstance(exc, RecordOverflow):
+                    observed = exc.observed
+                    bounds_outcome = "rejected"
+                elif observed is None and bounds_outcome == "not-evaluated":
+                    bounds_outcome = "failed"
+                receipt = {"scenario": probe, "observed_bytes": observed, "limit": RECORD_LIMIT,
+                           "bounds_outcome": bounds_outcome, "protocol_evaluated": False,
+                           "original_failure": original_failure, "invocation_lifecycle": state}
+                (output / "record-bound.json").write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+                raise
+            receipt = {"scenario": probe, "observed_bytes": observed, "limit": RECORD_LIMIT,
+                       "bounds_outcome": bounds_outcome, "protocol_evaluated": False,
+                       "original_failure": None, "invocation_lifecycle": state}
+            (output / "record-bound.json").write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+            return 0
+        if args.scenario in ("routing-missing", "routing-duplicate"):
+            probe = args.scenario
+            mode = "missing" if probe == "routing-missing" else "duplicate"
+            config.write_text(json.dumps({"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(),
+                                          "status": 0, "routing_mode": mode}), encoding="utf-8")
+            state = {"scenario": probe}
+            attempt_count = 1
+            actual = {"stdout": None, "stderr": None, "status": None}
+            failure = None
+            try:
+                actual_out, actual_err, actual_status = bounded_run(
+                    ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                    workspace, home, output, records, suite_deadline, state, probe)
+                actual = {"stdout": actual_out[:512].decode("utf-8", "replace"),
+                          "stderr": actual_err[:512].decode("utf-8", "replace"), "status": actual_status}
+            except BaseException as exc:
+                failure = type(exc).__name__ + ": " + str(exc)
+            current = collect_records(records)
+            expected_argv = EXPECTED_ARGV.copy()
+            expected_argv[expected_argv.index("WORKSPACE")] = str(workspace)
+            _, routing = validate_routing_delta(current, b"", 1,
+                {"argv": expected_argv,
+                 "cwd": str(workspace), "stdin": base64.b64encode(b"review fixture\n").decode("ascii")})
+            receipt = {"scenario": probe, "failing_row": CASES[0][0], **routing,
+                       "attempted_invocations": attempt_count, "invocation_lifecycle": state,
+                       "actual_observation": actual, "invocation_failure": failure}
+            (output / "routing.json").write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+            if failure or routing["routing_outcome"] != "mismatch" or state.get("cleanup") != "success":
+                raise Failure("routing control did not produce a clean first-row mismatch")
+            return 1
+        if args.scenario != "matrix":
+            probe = args.scenario
+            response = {"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}
+            if probe == "lifecycle-timeout":
+                response["sleep"] = INVOCATION_TIMEOUT + 1
+            elif probe == "lifecycle-stdout-overflow":
+                response["stdout"] = (b"x" * (LIMIT + 1)).hex()
+            elif probe == "lifecycle-stderr-overflow":
+                response["stderr"] = (b"x" * (LIMIT + 1)).hex()
+            config.write_text(json.dumps(response), encoding="utf-8")
+            state = {"scenario": probe}
+            try:
+                result = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                                    workspace, home, output, records, suite_deadline, state, probe)
+                if result != (CASES[0][1], CASES[0][2], 0) or state["cleanup"] != "success":
+                    raise Failure("lifecycle probe completion invalid")
+            except BaseException as exc:
+                state["scenario"] = probe
+                if state.get("failure") is None:
+                    state["failure"] = type(exc).__name__ + ": " + str(exc)
+                (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+                raise
+            (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+            return 0
+        rows = []
+        snapshot = b""
+        expected_argv = EXPECTED_ARGV.copy()
+        expected_argv[expected_argv.index("WORKSPACE")] = str(workspace)
+        expected_record = {"argv": expected_argv, "cwd": str(workspace),
+                           "stdin": base64.b64encode(b"review fixture\n").decode("ascii")}
+        for name, stdout, stderr, status in CASES:
+            if time.monotonic() - started > SUITE_TIMEOUT:
+                raise Failure("suite timeout")
+            config.write_text(json.dumps({"stdout": stdout.hex(), "stderr": stderr.hex(), "status": status}), encoding="utf-8")
+            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
+            actual_out, actual_err, actual_status = bounded_run(argv, workspace, home, output, records,
+                                                                  suite_deadline)
+            current = collect_records(records)
+            _, routing = validate_routing_delta(current, snapshot, 1, expected_record)
+            rows.append({"case": name, **routing})
+            if routing["routing_outcome"] != "match":
+                raise Failure("routing mismatch for " + name)
+            snapshot = current
+            if (actual_out, actual_err, actual_status) != (stdout, stderr, status):
+                raise Failure("unexpected response for " + name)
+
+        # Four arguments after the role is the valid review interface; exercise it
+        # with real fixture paths. Never invoke the valid code branch.
+        out, err, status = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
+                                       workspace, home, output, records, suite_deadline)
+        current = collect_records(records)
+        _, routing = validate_routing_delta(current, snapshot, 1, expected_record)
+        rows.append({"case": "valid-review", **routing})
+        if routing["routing_outcome"] != "match":
+            raise Failure("routing mismatch for valid-review")
+        snapshot = current
+        if (out, err, status) != (CASES[-1][1], CASES[-1][2], CASES[-1][3]):
+            raise Failure("valid review arity failed")
+        arities = [("review", n) for n in (0, 1, 2, 3, 6)] + [("code", 5), ("unknown", 4), ("unknown", 5)]
+        for role, count in arities:
+            params = [role] + ["unused"] * count
+            out, err, status = bounded_run(["/bin/bash", str(adapter)] + params, workspace, home, output, records,
+                                           suite_deadline)
+            current = collect_records(records)
+            _, routing = validate_routing_delta(current, snapshot, 0)
+            rows.append({"case": role + "/" + str(count), **routing})
+            if routing["routing_outcome"] != "match":
+                raise Failure("routing mismatch for invalid arity")
+            snapshot = current
+            if (out, err, status) != (b"", b"", 64):
+                raise Failure("invalid arity was not rejected")
+        print(json.dumps({"rows": rows, "overall": "pass"}))
+        return 0
+    except Failure as exc:
+        print(str(exc)[:DIAGNOSTIC_LIMIT], file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print((type(exc).__name__ + ": " + str(exc))[:DIAGNOSTIC_LIMIT], file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+ACCUMULATED DIFF
+--- baseline/tests/e2e/test_review_adapter_e2e.py
++++ candidate/tests/e2e/test_review_adapter_e2e.py
+@@ -0,0 +1,615 @@
++#!/usr/bin/python3
++"""Source-only authoring for bounded fake-Codex review routing evidence."""
++
++import argparse
++import base64
++import json
++import os
++import selectors
++import signal
++import stat
++import subprocess
++import sys
++import time
++from pathlib import Path
++
++LIMIT = 4096
++RECORD_LIMIT = 16384
++INVOCATION_TIMEOUT = 10.0
++SUITE_TIMEOUT = 180.0
++DIAGNOSTIC_LIMIT = 4096
++EXPECTED_ARGV = [
++    "exec", "--disable", "apps", "--disable", "plugins", "--disable",
++    "hooks", "--disable", "multi_agent", "--disable", "shell_snapshot",
++    "--disable", "shell_tool", "--ignore-user-config", "--ephemeral",
++    "--skip-git-repo-check", "--model", "gpt-6-astra", "--sandbox",
++    "read-only", "--cd", "WORKSPACE", "--json", "-",
++]
++CASES = [
++    ("success", b"OK\n", b"", 0),
++    ("findings", b'{"findings":["fixture"]}\n', b"", 0),
++    ("availability", b"", b"unavailable\n", 69),
++    ("auth", b"", b"authentication required\n", 77),
++    ("permission", b"", b"permission denied\n", 77),
++    ("malformed", b"{broken\n", b"", 0),
++    ("identity", b"identity mismatch\n", b"", 0),
++    ("context", b"context missing\n", b"", 0),
++    ("cleanup", b"", b"cleanup failed\n", 23),
++]
++
++
++class Failure(Exception):
++    pass
++
++
++class RecordOverflow(Failure):
++    def __init__(self, observed):
++        self.observed = observed
++        super().__init__("record-overflow")
++
++
++def collect_records(path):
++    chunks = []
++    total = 0
++    with open(path, "rb", buffering=0) as stream:
++        while total < RECORD_LIMIT + 1:
++            chunk = stream.read(RECORD_LIMIT + 1 - total)
++            if not chunk:
++                break
++            chunks.append(chunk)
++            total += len(chunk)
++    raw = b"".join(chunks)
++    if len(raw) > RECORD_LIMIT:
++        raise RecordOverflow(len(raw))
++    return raw
++
++
++def validate_routing_delta(current, previous, expected_count, expected_record=None):
++    result = {"expected_delta": expected_count, "observed_delta": 0,
++              "routing_outcome": "match", "mismatch_reason": None,
++              "observation": current[len(previous):][:512].decode("utf-8", "replace")
++              if current.startswith(previous) else current[:512].decode("utf-8", "replace")}
++    if not current.startswith(previous):
++        result.update({"routing_outcome": "mismatch", "mismatch_reason": "snapshot-prefix"})
++        return current, result
++    delta = current[len(previous):]
++    if expected_count == 0:
++        if delta:
++            result.update({"observed_delta": len(delta.split(bytes([10]))) - 1,
++                           "routing_outcome": "mismatch", "mismatch_reason": "unexpected-bytes"})
++        return current, result
++    lines = delta.split(bytes([10]))
++    result["observed_delta"] = len(lines) - 1 if lines[-1] == b"" else len(lines)
++    if not delta.endswith(bytes([10])) or any(line == b"" for line in lines[:-1]) or lines[-1] != b"":
++        result.update({"routing_outcome": "mismatch", "mismatch_reason": "blank-or-incomplete-line"})
++        return current, result
++    records = lines[:-1]
++    if len(records) != expected_count:
++        result.update({"routing_outcome": "mismatch", "mismatch_reason": "record-count"})
++        return current, result
++    try:
++        decoded = [json.loads(line) for line in records]
++    except (json.JSONDecodeError, UnicodeDecodeError):
++        result.update({"routing_outcome": "mismatch", "mismatch_reason": "malformed-json"})
++        return current, result
++    if expected_record is not None and any(record != expected_record for record in decoded):
++        result.update({"routing_outcome": "mismatch", "mismatch_reason": "content-mismatch"})
++    return current, result
++
++
++def absolute_nonsymlink(value, label):
++    if not os.path.isabs(value):
++        raise Failure(label + " must be absolute")
++    path = Path(value)
++    cur = Path(path.anchor)
++    for part in path.parts[1:]:
++        cur = cur / part
++        try:
++            mode = cur.lstat().st_mode
++        except OSError as exc:
++            raise Failure("invalid " + label) from exc
++        if stat.S_ISLNK(mode):
++            raise Failure(label + " has a symlink component")
++    return path
++
++
++def validate(args):
++    adapter = absolute_nonsymlink(args.adapter, "adapter")
++    if not stat.S_ISREG(adapter.lstat().st_mode):
++        raise Failure("adapter must be regular")
++    sibling = adapter.parent / "codex-worker.sh"
++    absolute_nonsymlink(str(sibling), "sibling adapter")
++    if not stat.S_ISREG(sibling.lstat().st_mode):
++        raise Failure("missing regular codex-worker.sh")
++    output = absolute_nonsymlink(args.output_dir, "output directory")
++    info = output.lstat()
++    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
++        raise Failure("output directory must be owned, empty, and mode 0700")
++    if os.listdir(output):
++        raise Failure("output directory must be empty")
++    return adapter, output
++
++
++def write_bytes(path, data, mode=0o600):
++    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
++    with os.fdopen(fd, "wb") as stream:
++        stream.write(data)
++
++
++def make_fixtures(output):
++    workspace = output / "workspace"
++    workspace.mkdir(mode=0o700)
++    prompt = output / "prompt.txt"
++    write_bytes(prompt, b"review fixture\n")
++    home = output / "private-home"
++    home.mkdir(mode=0o700)
++    records = output / "records.jsonl"
++    write_bytes(records, b"")
++    config = workspace / "response.json"
++    fake = output / "fake-codex"
++    interpreter = Path(os.path.realpath(sys.executable))
++    absolute_nonsymlink(str(interpreter), "Python interpreter")
++    if not stat.S_ISREG(interpreter.lstat().st_mode) or not os.access(interpreter, os.X_OK):
++        raise Failure("Python interpreter is not executable")
++    literal = str(interpreter)
++    if any(c.isspace() for c in literal) or "\n" in literal or len(literal.encode()) > 120:
++        raise Failure("Python interpreter path unsuitable for shebang")
++    fake_source = '''#!INTERPRETER
++import base64, json, os, sys
++raw = sys.stdin.buffer.read(4097)
++if len(raw) > 4096:
++    raise SystemExit(125)
++with open(os.path.join(os.getcwd(), "response.json"), "r", encoding="utf-8") as f:
++    response = json.load(f)
++record = {"argv": sys.argv[1:], "cwd": os.getcwd(), "stdin": base64.b64encode(raw).decode("ascii")}
++mode = response.get("routing_mode", "normal")
++if mode not in ("normal", "missing", "duplicate"):
++    raise SystemExit(125)
++if mode != "missing":
++    with open(RECORDS, "a", encoding="utf-8") as f:
++        f.write(json.dumps(record, separators=(",", ":")) + "\\n")
++        if mode == "duplicate":
++            f.write(json.dumps(record, separators=(",", ":")) + "\\n")
++if response.get("sleep"):
++    import time
++    time.sleep(response["sleep"])
++sys.stdout.buffer.write(bytes.fromhex(response["stdout"]))
++sys.stderr.buffer.write(bytes.fromhex(response["stderr"]))
++raise SystemExit(response["status"])
++'''.replace("INTERPRETER", literal).replace("RECORDS", repr(str(records)))
++    write_bytes(fake, fake_source.encode("utf-8"), 0o700)
++    os.chmod(fake, 0o700)
++    escaped = str(output).replace("\\", "\\\\").replace('"', '\\"')
++    profile = output / "profile.sb"
++    text = ('(version 1)\n(allow default)\n(deny network*)\n(deny file-write*)\n'
++            '(allow file-write* (subpath "' + escaped + '"))\n(deny process-fork)\n')
++    write_bytes(profile, text.encode())
++    return workspace, prompt, profile, fake, config, records, home
++
++
++def bounded_run(argv, workspace, home, output, records, suite_deadline, lifecycle=None, scenario="matrix"):
++    state = lifecycle if lifecycle is not None else {}
++    state.update({"spawned_pid": None, "first_signal": None,
++                  "signal_attempt": {"intended": False, "attempted": False, "result": "not-needed", "phase": None},
++                  "leader_reap": "not-reaped", "pipes": {"stdin": "absent", "stdout": "absent", "stderr": "absent"},
++                  "selector": "absent", "cleanup_interrupted": False, "cleanup": "pending",
++                  "cleanup_errors": [], "failure": None})
++    proc = None
++    selector = None
++    streams = {}
++    phase = "not-spawned"
++    handlers = {}
++    received = {"signal": 0, "cleanup": False}
++    finalizing = False
++    primary = None
++    cleanup_deadline = None
++    invocation_deadline = None
++
++    def deferred_handler(signum, frame):
++        if not received["signal"]:
++            received["signal"] = signum
++        if finalizing:
++            received["cleanup"] = True
++
++    def record_error(label, exc):
++        state["cleanup_errors"].append(label + ": " + type(exc).__name__ + ": " + str(exc))
++
++    def close_pipe(name, stream):
++        if state["pipes"][name] in ("closed", "already-closed"):
++            return
++        if stream is None or stream.closed:
++            state["pipes"][name] = "already-closed"
++            return
++        try:
++            stream.close()
++            state["pipes"][name] = "closed"
++        except BaseException as exc:
++            state["pipes"][name] = "failed/uncertain"
++            record_error(name + " close", exc)
++
++    def wait_once():
++        nonlocal phase
++        phase = "reap-uncertain"
++        try:
++            waited, raw = os.waitpid(proc.pid, os.WNOHANG)
++        except BaseException:
++            raise
++        if waited == 0:
++            phase = "owned"
++            return False
++        if waited != proc.pid:
++            raise Failure("unexpected waitpid result")
++        phase = "reaped"
++        state["leader_reap"] = "reaped"
++        proc.returncode = os.waitstatus_to_exitcode(raw)
++        return True
++
++    try:
++        for signum in (signal.SIGINT, signal.SIGTERM):
++            handlers[signum] = signal.signal(signum, deferred_handler)
++        env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "LANG": "C"}
++        observed = time.monotonic()
++        suite_remaining = suite_deadline - observed
++        if suite_remaining <= 0:
++            raise Failure("suite timeout")
++        invocation_deadline = min(observed + INVOCATION_TIMEOUT, suite_deadline)
++        proc = subprocess.Popen(argv, cwd=str(workspace), env=env, stdin=subprocess.PIPE,
++                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
++                               close_fds=True)
++        phase = "owned"
++        state["spawned_pid"] = proc.pid
++        state["pipes"] = {"stdin": "pending", "stdout": "pending", "stderr": "pending"}
++        streams = {proc.stdout: bytearray(), proc.stderr: bytearray()}
++        if received["signal"]:
++            raise Failure("interrupted after child acquisition")
++        if scenario in ("lifecycle-setup-failure", "lifecycle-cleanup-interrupt"):
++            raise Failure("deliberate selector setup failure")
++        selector = selectors.DefaultSelector()
++        state["selector"] = "open"
++        for stream in streams:
++            os.set_blocking(stream.fileno(), False)
++            selector.register(stream, selectors.EVENT_READ)
++        os.set_blocking(proc.stdin.fileno(), False)
++        pending = memoryview(b"review fixture\n")
++        while selector.get_map() or pending:
++            if received["signal"]:
++                raise Failure("interrupted during collection")
++            remaining = invocation_deadline - time.monotonic()
++            if remaining <= 0:
++                raise Failure("invocation timeout")
++            if pending:
++                try:
++                    sent = os.write(proc.stdin.fileno(), pending)
++                    pending = pending[sent:]
++                except BlockingIOError:
++                    pass
++                except BrokenPipeError:
++                    pending = memoryview(b"")
++            if not pending:
++                close_pipe("stdin", proc.stdin)
++            for key, _ in selector.select(min(remaining, 0.1)):
++                chunk = os.read(key.fd, LIMIT + 1 - len(streams[key.fileobj]))
++                if chunk:
++                    streams[key.fileobj].extend(chunk)
++                    if len(streams[key.fileobj]) > LIMIT:
++                        raise Failure("stream overflow")
++                else:
++                    selector.unregister(key.fileobj)
++                    close_pipe("stdout" if key.fileobj is proc.stdout else "stderr", key.fileobj)
++            if received["signal"]:
++                raise Failure("interrupted during collection")
++        while True:
++            if received["signal"]:
++                raise Failure("interrupted during collection")
++            if wait_once():
++                break
++            remaining = invocation_deadline - time.monotonic()
++            if remaining <= 0:
++                raise Failure("invocation timeout")
++            time.sleep(min(0.02, remaining))
++        if scenario == "lifecycle-post-reap-exception":
++            raise Failure("deliberate post-reap exception")
++        if scenario == "lifecycle-post-reap-interrupt":
++            raise KeyboardInterrupt("deliberate post-reap interruption")
++    except BaseException as exc:
++        primary = exc
++        state["failure"] = type(exc).__name__ + ": " + str(exc)
++
++    # One finalizer owns all remaining obligations; signal handlers remain active.
++    finalizing = True
++    cleanup_deadline = time.monotonic() + 2.0
++    if scenario == "lifecycle-cleanup-interrupt" and proc is not None:
++        try:
++            os.kill(os.getpid(), signal.SIGINT)
++        except BaseException as exc:
++            record_error("cleanup probe signal", exc)
++    if primary is not None and proc is not None and phase in ("owned", "not-spawned") and phase != "not-spawned":
++        state["signal_attempt"] = {"intended": True, "attempted": True, "result": "pending", "phase": phase}
++        try:
++            os.killpg(proc.pid, signal.SIGKILL)
++            state["signal_attempt"]["result"] = "sent"
++        except BaseException as exc:
++            state["signal_attempt"]["result"] = "failed"
++            record_error("group signal", exc)
++    elif phase == "reap-uncertain":
++        record_error("leader ownership", Failure("uncertain; refusing group signal"))
++
++    for stream, name in ((proc.stdout, "stdout"), (proc.stderr, "stderr")) if proc is not None else ():
++        if state["pipes"][name] not in ("closed", "already-closed"):
++            try:
++                os.set_blocking(stream.fileno(), False)
++                while time.monotonic() < cleanup_deadline:
++                    try:
++                        if not os.read(stream.fileno(), LIMIT):
++                            break
++                    except BlockingIOError:
++                        break
++            except BaseException as exc:
++                record_error(name + " drain", exc)
++            close_pipe(name, stream)
++    if proc is not None:
++        close_pipe("stdin", proc.stdin)
++        if phase in ("owned", "reap-uncertain") and phase == "owned":
++            try:
++                while True:
++                    if wait_once():
++                        break
++                    remaining = cleanup_deadline - time.monotonic()
++                    if remaining <= 0:
++                        record_error("leader reap", Failure("bounded reap expired"))
++                        break
++                    time.sleep(min(0.01, remaining))
++            except BaseException as exc:
++                record_error("leader reap", exc)
++        elif phase == "reap-uncertain":
++            state["leader_reap"] = "uncertain"
++    if selector is not None and state["selector"] == "open":
++        try:
++            selector.close()
++            state["selector"] = "closed"
++        except BaseException as exc:
++            state["selector"] = "failed/uncertain"
++            record_error("selector close", exc)
++    for signum, previous in handlers.items():
++        try:
++            signal.signal(signum, previous)
++        except BaseException as exc:
++            record_error("signal handler restore", exc)
++    state["cleanup_interrupted"] = bool(received["cleanup"])
++    state["first_signal"] = received["signal"] or None
++    if received["signal"] and not received["cleanup"]:
++        if primary is None:
++            primary = Failure("deferred signal " + str(received["signal"]))
++            state["failure"] = str(primary)
++    if received["cleanup"]:
++        record_error("cleanup interruption", Failure("deferred signal observed"))
++    all_pipes_closed = all(value in ("absent", "closed", "already-closed") for value in state["pipes"].values())
++    reaped_or_absent = proc is None or phase == "reaped"
++    clean = (not state["cleanup_errors"] and not state["cleanup_interrupted"] and all_pipes_closed
++             and reaped_or_absent and state["selector"] in ("closed", "absent"))
++    state["pipe_closure"] = "closed" if all_pipes_closed else "failed"
++    state["cleanup"] = "success" if clean else "failed"
++    if not clean and primary is None:
++        primary = Failure("finalization failed")
++        state["failure"] = str(primary)
++    if primary is not None:
++        if state["cleanup_errors"]:
++            raise Failure(state["failure"] + "; cleanup failed: " + "; ".join(state["cleanup_errors"])) from primary
++        raise primary
++    return bytes(streams[proc.stdout]), bytes(streams[proc.stderr]), proc.returncode
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--adapter", required=True)
++    parser.add_argument("--output-dir", required=True)
++    parser.add_argument("--scenario", choices=("matrix", "lifecycle-normal", "lifecycle-setup-failure",
++                        "lifecycle-post-reap-exception", "lifecycle-post-reap-interrupt", "lifecycle-timeout",
++                        "lifecycle-stdout-overflow", "lifecycle-stderr-overflow", "lifecycle-cleanup-interrupt",
++                        "deadline-suite-before-first", "deadline-suite-before-next",
++                        "records-exact-limit", "records-one-over", "routing-missing",
++                        "routing-duplicate"), default="matrix")
++    args = parser.parse_args()
++    started = time.monotonic()
++    suite_deadline = started + SUITE_TIMEOUT
++    try:
++        adapter, output = validate(args)
++        workspace, prompt, profile, fake, config, records, home = make_fixtures(output)
++        if args.scenario in ("deadline-suite-before-first", "deadline-suite-before-next"):
++            probe = args.scenario
++            states = []
++            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
++            config.write_text(json.dumps({"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}), encoding="utf-8")
++            try:
++                if probe == "deadline-suite-before-next":
++                    first = {"attempt": 1}
++                    states.append(first)
++                    result = bounded_run(argv, workspace, home, output, records, suite_deadline, first, probe)
++                    if result != (CASES[0][1], CASES[0][2], 0) or first["cleanup"] != "success":
++                        raise Failure("deadline control first invocation invalid")
++                exhausted = {"attempt": len(states) + 1}
++                states.append(exhausted)
++                suite_deadline = time.monotonic()
++                bounded_run(argv, workspace, home, output, records, suite_deadline, exhausted, probe)
++                raise Failure("suite timeout was not enforced")
++            except BaseException:
++                (output / "deadline.json").write_text(json.dumps({"scenario": probe, "attempts": states}, sort_keys=True), encoding="utf-8")
++                raise
++            (output / "deadline.json").write_text(json.dumps({"scenario": probe, "attempts": states}, sort_keys=True), encoding="utf-8")
++            return 0
++        if args.scenario in ("records-exact-limit", "records-one-over"):
++            probe = args.scenario
++            state = {"scenario": probe}
++            observed = None
++            bounds_outcome = "not-evaluated"
++            original_failure = None
++            try:
++                config.write_text(json.dumps({"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}), encoding="utf-8")
++                result = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                                    workspace, home, output, records, suite_deadline, state, probe)
++                if result != (CASES[0][1], CASES[0][2], 0) or state["cleanup"] != "success":
++                    raise Failure("record-bound invocation completion invalid")
++                initial = collect_records(records)
++                observed = len(initial)
++                if not initial or not initial.endswith(b"\n") or len(initial) >= RECORD_LIMIT:
++                    raise Failure("unexpected initial record size")
++                target = RECORD_LIMIT if probe == "records-exact-limit" else RECORD_LIMIT + 1
++                padding = target - len(initial)
++                if padding <= 0:
++                    raise Failure("unexpected initial record size")
++                with open(records, "ab", buffering=0) as stream:
++                    remaining = padding
++                    while remaining:
++                        written = stream.write(b"\n" * remaining)
++                        if not written:
++                            raise Failure("record padding write failed")
++                        remaining -= written
++                try:
++                    raw = collect_records(records)
++                    observed = len(raw)
++                    if probe == "records-one-over":
++                        raise Failure("record overflow was not detected")
++                    if observed != RECORD_LIMIT:
++                        raise Failure("exact record bound not observed")
++                    bounds_outcome = "accepted"
++                except RecordOverflow as exc:
++                    observed = exc.observed
++                    bounds_outcome = "rejected"
++                    if probe != "records-one-over":
++                        raise
++                if probe == "records-one-over":
++                    if observed != RECORD_LIMIT + 1 or bounds_outcome != "rejected":
++                        raise Failure("record-overflow boundary invalid")
++                    raise Failure("record-overflow")
++                if observed != RECORD_LIMIT or bounds_outcome != "accepted":
++                    raise Failure("exact record bound invalid")
++            except BaseException as exc:
++                original_failure = type(exc).__name__ + ": " + str(exc)
++                if isinstance(exc, RecordOverflow):
++                    observed = exc.observed
++                    bounds_outcome = "rejected"
++                elif observed is None and bounds_outcome == "not-evaluated":
++                    bounds_outcome = "failed"
++                receipt = {"scenario": probe, "observed_bytes": observed, "limit": RECORD_LIMIT,
++                           "bounds_outcome": bounds_outcome, "protocol_evaluated": False,
++                           "original_failure": original_failure, "invocation_lifecycle": state}
++                (output / "record-bound.json").write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
++                raise
++            receipt = {"scenario": probe, "observed_bytes": observed, "limit": RECORD_LIMIT,
++                       "bounds_outcome": bounds_outcome, "protocol_evaluated": False,
++                       "original_failure": None, "invocation_lifecycle": state}
++            (output / "record-bound.json").write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
++            return 0
++        if args.scenario in ("routing-missing", "routing-duplicate"):
++            probe = args.scenario
++            mode = "missing" if probe == "routing-missing" else "duplicate"
++            config.write_text(json.dumps({"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(),
++                                          "status": 0, "routing_mode": mode}), encoding="utf-8")
++            state = {"scenario": probe}
++            attempt_count = 1
++            actual = {"stdout": None, "stderr": None, "status": None}
++            failure = None
++            try:
++                actual_out, actual_err, actual_status = bounded_run(
++                    ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                    workspace, home, output, records, suite_deadline, state, probe)
++                actual = {"stdout": actual_out[:512].decode("utf-8", "replace"),
++                          "stderr": actual_err[:512].decode("utf-8", "replace"), "status": actual_status}
++            except BaseException as exc:
++                failure = type(exc).__name__ + ": " + str(exc)
++            current = collect_records(records)
++            expected_argv = EXPECTED_ARGV.copy()
++            expected_argv[expected_argv.index("WORKSPACE")] = str(workspace)
++            _, routing = validate_routing_delta(current, b"", 1,
++                {"argv": expected_argv,
++                 "cwd": str(workspace), "stdin": base64.b64encode(b"review fixture\n").decode("ascii")})
++            receipt = {"scenario": probe, "failing_row": CASES[0][0], **routing,
++                       "attempted_invocations": attempt_count, "invocation_lifecycle": state,
++                       "actual_observation": actual, "invocation_failure": failure}
++            (output / "routing.json").write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
++            if failure or routing["routing_outcome"] != "mismatch" or state.get("cleanup") != "success":
++                raise Failure("routing control did not produce a clean first-row mismatch")
++            return 1
++        if args.scenario != "matrix":
++            probe = args.scenario
++            response = {"stdout": CASES[0][1].hex(), "stderr": CASES[0][2].hex(), "status": 0}
++            if probe == "lifecycle-timeout":
++                response["sleep"] = INVOCATION_TIMEOUT + 1
++            elif probe == "lifecycle-stdout-overflow":
++                response["stdout"] = (b"x" * (LIMIT + 1)).hex()
++            elif probe == "lifecycle-stderr-overflow":
++                response["stderr"] = (b"x" * (LIMIT + 1)).hex()
++            config.write_text(json.dumps(response), encoding="utf-8")
++            state = {"scenario": probe}
++            try:
++                result = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                                    workspace, home, output, records, suite_deadline, state, probe)
++                if result != (CASES[0][1], CASES[0][2], 0) or state["cleanup"] != "success":
++                    raise Failure("lifecycle probe completion invalid")
++            except BaseException as exc:
++                state["scenario"] = probe
++                if state.get("failure") is None:
++                    state["failure"] = type(exc).__name__ + ": " + str(exc)
++                (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
++                raise
++            (output / "lifecycle.json").write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
++            return 0
++        rows = []
++        snapshot = b""
++        expected_argv = EXPECTED_ARGV.copy()
++        expected_argv[expected_argv.index("WORKSPACE")] = str(workspace)
++        expected_record = {"argv": expected_argv, "cwd": str(workspace),
++                           "stdin": base64.b64encode(b"review fixture\n").decode("ascii")}
++        for name, stdout, stderr, status in CASES:
++            if time.monotonic() - started > SUITE_TIMEOUT:
++                raise Failure("suite timeout")
++            config.write_text(json.dumps({"stdout": stdout.hex(), "stderr": stderr.hex(), "status": status}), encoding="utf-8")
++            argv = ["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)]
++            actual_out, actual_err, actual_status = bounded_run(argv, workspace, home, output, records,
++                                                                  suite_deadline)
++            current = collect_records(records)
++            _, routing = validate_routing_delta(current, snapshot, 1, expected_record)
++            rows.append({"case": name, **routing})
++            if routing["routing_outcome"] != "match":
++                raise Failure("routing mismatch for " + name)
++            snapshot = current
++            if (actual_out, actual_err, actual_status) != (stdout, stderr, status):
++                raise Failure("unexpected response for " + name)
++
++        # Four arguments after the role is the valid review interface; exercise it
++        # with real fixture paths. Never invoke the valid code branch.
++        out, err, status = bounded_run(["/bin/bash", str(adapter), "review", str(workspace), str(prompt), str(profile), str(fake)],
++                                       workspace, home, output, records, suite_deadline)
++        current = collect_records(records)
++        _, routing = validate_routing_delta(current, snapshot, 1, expected_record)
++        rows.append({"case": "valid-review", **routing})
++        if routing["routing_outcome"] != "match":
++            raise Failure("routing mismatch for valid-review")
++        snapshot = current
++        if (out, err, status) != (CASES[-1][1], CASES[-1][2], CASES[-1][3]):
++            raise Failure("valid review arity failed")
++        arities = [("review", n) for n in (0, 1, 2, 3, 6)] + [("code", 5), ("unknown", 4), ("unknown", 5)]
++        for role, count in arities:
++            params = [role] + ["unused"] * count
++            out, err, status = bounded_run(["/bin/bash", str(adapter)] + params, workspace, home, output, records,
++                                           suite_deadline)
++            current = collect_records(records)
++            _, routing = validate_routing_delta(current, snapshot, 0)
++            rows.append({"case": role + "/" + str(count), **routing})
++            if routing["routing_outcome"] != "match":
++                raise Failure("routing mismatch for invalid arity")
++            snapshot = current
++            if (out, err, status) != (b"", b"", 64):
++                raise Failure("invalid arity was not rejected")
++        print(json.dumps({"rows": rows, "overall": "pass"}))
++        return 0
++    except Failure as exc:
++        print(str(exc)[:DIAGNOSTIC_LIMIT], file=sys.stderr)
++        return 1
++    except Exception as exc:
++        print((type(exc).__name__ + ": " + str(exc))[:DIAGNOSTIC_LIMIT], file=sys.stderr)
++        return 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+
+SOURCE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+case "$#" in
+  4|5) ;;
+  *) exit 64 ;;
+esac
+role=$1
+case "$role" in
+ review)
+  [[ $# -eq 5 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  codex_bin=$5
+  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
+  ;;
+ code)
+  [[ $# -eq 4 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
+  model=$CLAUDE_CODING_MODEL
+  tools="Read,Edit,Write,Glob,Grep"
+  permission=acceptEdits
+  ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+ACCUMULATED DIFF
+--- baseline/scripts/esy-repair/claude-worker.sh
++++ candidate/scripts/esy-repair/claude-worker.sh
+@@ -0,0 +1,32 @@
++#!/bin/bash
++set -euo pipefail
++case "$#" in
++  4|5) ;;
++  *) exit 64 ;;
++esac
++role=$1
++case "$role" in
++ review)
++  [[ $# -eq 5 ]] || exit 64
++  workspace=$2
++  prompt=$3
++  profile=$4
++  codex_bin=$5
++  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
++  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
++  ;;
++ code)
++  [[ $# -eq 4 ]] || exit 64
++  workspace=$2
++  prompt=$3
++  profile=$4
++  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
++  model=$CLAUDE_CODING_MODEL
++  tools="Read,Edit,Write,Glob,Grep"
++  permission=acceptEdits
++  ;;
++ *) exit 64 ;;
++esac
++: "${CLAUDE_BIN:?absolute executable required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+SOURCE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+ACCUMULATED DIFF
+--- baseline/scripts/esy-repair/codex-worker.sh
++++ candidate/scripts/esy-repair/codex-worker.sh
+@@ -0,0 +1,25 @@
++#!/bin/bash
++# Frozen role template. Every argument is supplied by the verified controller;
++# no environment variable can replace the executable, model, sandbox, or prompt.
++set -euo pipefail
++if [[ $# -ne 5 ]]; then
++  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
++  exit 64
++fi
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++codex_bin=$5
++case "$role" in
++  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
++  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
++  *) echo "unsupported role" >&2; exit 64 ;;
++esac
++[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
++[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
++[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
++[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
++
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"

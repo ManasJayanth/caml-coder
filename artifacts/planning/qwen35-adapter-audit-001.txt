@@ -1,0 +1,36 @@
+Qwen3.5-9B adapter target audit (design evidence only)
+
+Identity and evidence
+
+The reviewed model pin is Qwen/Qwen3.5-9B at revision c202236235762e1c871ad0ccb60c8ee5ba337b9a. Its pinned config.json SHA256 is d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05; the safetensors index SHA256 is 26d3539b516be613f39563617cb9d33b3f83d401298125be392c80cefb8f7fe5. The config declares 32 text layers, hidden_size 4096, 16 attention heads, 4 key/value heads, head_dim 256, linear key heads 16 x 128, linear value heads 32 x 128, and full_attention_interval 4. MLX-LM is pinned at 0.32.2, MLX at 0.32.4, and Transformers at 5.20.1.
+
+The inspection used the pinned config, the pinned index and selected safetensors headers, and the installed pinned MLX-LM source. It did not load the 9B model, run a forward pass, run a gradient, train an adapter, or validate adapter reload. This is candidate architecture evidence for T27, not proof that gradients update the intended parameters.
+
+Architecture and weight handling
+
+MLX-LM's `qwen3_5.Model` constructs a text-only `TextModel` from `text_config`. Its sanitizer drops `vision_tower.*` and `model.visual.*` weights, remaps `model.language_model.*` names into `language_model.model.*`, and delegates text weights to `TextModel.sanitize`. The sanitizer also removes `mtp.*` weights. For depthwise `linear_attn.conv1d.weight` tensors whose last dimension is not one, it moves axis 2 to axis 1. When that unsanitized convolution form is present, it offsets one-dimensional RMS norm weights (`input_layernorm`, `post_attention_layernorm`, `model.norm`, `q_norm`, and `k_norm`) by +1 to match MLX's norm parameterization. The pinned header shows a representative convolution shape [8192, 1, 4], a linear attention norm shape [128] in F32, and BF16 projection weights. These are conversion/sanitization rules, not trainable target modules.
+
+`DecoderLayer.is_linear` selects linear attention except where `(layer_index + 1) % 4 == 0`. Thus the last 16 zero-based layer indices are 16–31. Linear-attention indices are 16, 17, 18, 20, 21, 22, 24, 25, 26, 28, 29, and 30. Full-attention indices are 19, 23, 27, and 31.
+
+Candidate T27 target set
+
+Use exact full module paths in the adapter `keys` list, covering the same q/k/v signal in each attention form:
+
+- `language_model.model.layers.{16,17,18,20,21,22,24,25,26,28,29,30}.linear_attn.in_proj_qkv`
+- `language_model.model.layers.{19,23,27,31}.self_attn.q_proj`
+- `language_model.model.layers.{19,23,27,31}.self_attn.k_proj`
+- `language_model.model.layers.{19,23,27,31}.self_attn.v_proj`
+
+Expand each brace expression into one literal key per layer when writing config. There are 12 DeltaNet qkv modules and 12 full-attention q/k/v modules, 24 target modules total. The DeltaNet module is named `in_proj_qkv`; it is one fused linear containing query, key, and value channels, not separate `q_proj`/`v_proj` modules. Full attention really has separate `q_proj`, `k_proj`, and `v_proj`; its `q_proj` output is twice `num_attention_heads * head_dim` because MLX splits it into query and output-gate channels. Therefore the ordinary q/v target convention does not describe the DeltaNet blocks and would omit full-attention keys if blindly applied as global suffixes.
+
+Actual pinned header shapes match the implementation-derived dimensions: DeltaNet `in_proj_qkv` is [8192, 4096]. Full-attention q/k/v are [8192, 4096], [1024, 4096], and [1024, 4096], respectively. The index contains those exact keys in each stated layer. The corresponding MLX module classes are `mlx.nn.Linear`, which the pinned MLX-LM LoRA converter supports.
+
+At planned rank 8, with LoRA A/B and no bias parameters, each target contributes `rank * (input_width + output_width)` trainable scalars. DeltaNet qkv contributes 8 * (4096 + 8192) * 12 = 1,179,648. Full-attention q/k/v contributes 4 * 8 * ((4096 + 8192) + (4096 + 1024) + (4096 + 1024)) = 720,896. The candidate total is 1,900,544 trainable adapter scalars. This is an arithmetic budget from the pinned architecture; the runtime count must be checked against actual instantiated LoRA parameters in T27.
+
+Gates, output projections, convolution, norms, embeddings, MLPs, vision weights, and MTP weights are deliberately not in this initial target set. In particular, DeltaNet also has `in_proj_z`, `in_proj_b`, `in_proj_a`, `out_proj`, depthwise `conv1d`, `norm`, `A_log`, and `dt_bias`; full attention has `o_proj`, `q_norm`, and `k_norm`. A later target change would need its own review and updated parameter budget. Do not interpret the candidate set as selected or gradient-verified.
+
+Required T27 proof
+
+Instantiate the exact Qwen3.5 module tree from the pinned config under the locked runtime, resolve every literal key to the expected module class and weight shape, and assert the resolved set is exactly these 24 modules in layers 16–31. Convert only these modules to LoRA, enumerate trainable parameters and compare their shapes/count to the expected 1,900,544 scalars, run a finite-loss backward/optimizer step, and prove at least one intended adapter tensor changes while every base tensor and every non-target layer stays bit-identical. Save/reload adapters and prove logits match the in-memory updated model within a predeclared tolerance. Until those checks pass, target status and training readiness remain UNVERIFIED.
+
+Source fingerprints: `mlx_lm/models/qwen3_5.py` 851449fd9989d6bf4b3c4fed92ddc3be5f1e781eb2246f89c54d7eff2518d9c6; `mlx_lm/models/qwen3_next.py` 67ca08a4d08cb7be124965e95399735e556f1eaeb21a16bc23cb88d1ac035e11; `mlx_lm/tuner/utils.py` f59f3c027176a3975fe60e7fbd9f3f38723c27c3f888cf9e591c103f93f68588.

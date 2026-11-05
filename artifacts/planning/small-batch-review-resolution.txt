@@ -1,0 +1,21 @@
+Small-model implementation batch — 2026-10-16
+
+Objective: advance the local Qwen/Qwen3-8B pipeline through bounded, reviewable tasks, using E2E tests only, then provide a complete frontier-model handoff. This is a progress checkpoint, not a completed fine-tuned model.
+
+Delegation: three bounded coding/review agents used gpt-6-luna with high reasoning. Their ownership was workflow/E2Es/cards, candidate eligibility/E2Es, and attempt ledger/E2Es. The parent integrated configuration, reviewed implementations, ran the actual source preparation, and ran the final evidence batch. No model weights or training runs were launched.
+
+Previous independent review: artifacts/reviews/independent-progress-002/REPORT.txt returned CHANGES_REQUIRED. R1 retains approval/replan holds across ordinary and historical bypass transitions. R2 rechecks the full canonical evidence digest and invalidates dependents when evidence changes. SQLite event triggers reject normal UPDATE/DELETE; a host owner capable of replacing the database is outside that accidental-rewrite protection.
+
+Small-agent cross-review: artifacts/reviews/small-batch-cross-review.txt is historical, preserved without editing. Its card-scope gaps were repaired for T08/T09/T10/T11. Its ledger boundary finding led to a subprocess test that observes a committed DB record independently, kills the caller before it relays acknowledgment, retries the identical public CLI request, and checks the same record hash. The commit CLI child itself has already exited; no exact-instruction or power-loss simulation is claimed.
+
+Task decomposition: config/cards.json contains explicit R1/R2, tokenizer-only T12A before chunking, candidate T07 versus reviewed/toolchain-proven T07F, an APPROVALS capability, a CATALOGUE-RUNNER prerequisite, and 160 independent task-family children (80 practical, 20 dev, 60 sealed holdout). Full card contracts remain authoritative. Planned suites are not implemented simply because a card names them.
+
+Source triage: config/eligibility.json binds the 170-file snapshot (166 content files plus four license files), four immutable revisions, and evidence hashes. Melange uses the user's existing permission statement with null upstream SPDX. OCaml prose and code license categories remain separate even though their evidence comes from the same LICENSE file. All output rows remain PENDING, version UNVERIFIED, generation_allowed=false. No triage row is an accepted training example.
+
+Handoff regression: the first final handoff E2E failed because repeating 208 full card contracts exceeded the subprocess output cap. Preserve that failed report. The repair keeps full contracts in bundled config/cards.json and uses compact maps in the printed prompt; the prompt must not silently truncate.
+
+Remaining route to a trained model: extraction, grouping/splits, pinned tokenizer and weights, tokenizer-aware chunks, actual model parity, locked offline toolchains and protected grading, source review/finalization, independently reviewed task families, actual isolated Pi execution, bounded generation and pilot, exact-hash user pilot approval, dataset generation/review/export and user dataset approval, training, matched-baseline acceptance, conversion and frontier review. Missing implementation/evidence must remain pending or blocked. No benchmark score or trained model is claimed by this batch.
+
+Final evidence: small-batch-final-{control,fetch,preflight,eligibility,ledger,handoff}-002.json all passed at inventory 0ac7aa18a34d09894c72893fa03fb0f760d082227e541b245c5084752389e9d2. These six suites ran 11 scenarios and 258 assertions. Actual host report: artifacts/doctor/small-batch-host-001/report.json. Actual current source triage: artifacts/prepare/official-candidates-002/manifest.json. The earlier official-candidates-001 run is retained with its older implementation identity.
+
+Ten cards are currently evidenced: T01, R1, R2, T02, T03, T04, T05, T06, T07, T11. The other 198 cards are pending. The next worker packet is artifacts/planning/next-worker-packet.json for T08. This batch stops at a frontier-review checkpoint requested by the user; that checkpoint is not permission to call remaining work complete.

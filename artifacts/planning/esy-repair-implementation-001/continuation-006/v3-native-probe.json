@@ -1,0 +1,7 @@
+{
+  "realpath": true,
+  "original_auth_denied": true,
+  "spawn_denied": true,
+  "exit_code": 0,
+  "mechanism": "Node fs.realpathSync, fs.openSync original credential, child_process.spawnSync /usr/bin/true under exact pi-nofork-v3.sb"
+}

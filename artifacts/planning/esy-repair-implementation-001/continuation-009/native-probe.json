@@ -1,0 +1,13 @@
+{
+  "exit_code": 0,
+  "stdout": "{\"realpath\":true,\"original_denied\":true,\"auth_denied\":true,\"private_write\":true,\"spawn_denied\":true,\"docker_socket_denied\":true}\n",
+  "stderr": "",
+  "argv": [
+    "/usr/bin/sandbox-exec",
+    "-f",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-nofork-v3.sb",
+    "/opt/homebrew/bin/node",
+    "-e",
+    "const fs=require('fs'),cp=require('child_process'),net=require('net');const c={};\nc.realpath=fs.realpathSync(\"/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/workspace\")===\"/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/workspace\";\nfor(const [k,p] of [['original',\"/Users/psac/development/prometheansacrifice/ocaml-rl-sft/pyproject.toml\"],['auth',\"/Users/psac/.codex/auth.json\"]]){try{let fd=fs.openSync(p,'r+');fs.closeSync(fd);c[k+'_denied']=false}catch(e){c[k+'_denied']=['EPERM','EACCES'].includes(e.code)}}\nconst f=\"/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/native-canary\";fs.writeFileSync(f,'probe');c.private_write=fs.readFileSync(f,'utf8')==='probe';\nlet x=cp.spawnSync('/usr/bin/true',[]);c.spawn_denied=!!x.error&&['EPERM','EACCES'].includes(x.error.code);\nconst sock=net.connect(\"/Users/psac/.docker/run/docker.sock\");let done=false;function finish(v){if(done)return;done=true;sock.destroy();c.docker_socket_denied=v;console.log(JSON.stringify(c));process.exit(Object.values(c).every(Boolean)?0:1)}\nsock.on('connect',()=>finish(false));sock.on('error',e=>finish(['EPERM','EACCES'].includes(e.code)));setTimeout(()=>finish(false),2000);\n"
+  ]
+}

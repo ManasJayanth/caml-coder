@@ -1,0 +1,10 @@
+{
+  "status": "TERMINATED",
+  "worker_pid": 38223,
+  "worker_reaped": true,
+  "exit_code": -9,
+  "reason": "launcher-eof",
+  "elapsed_seconds": 0.064,
+  "single_worker_assumption": "requires separately proven native process-fork denial",
+  "credential_removed": true
+}

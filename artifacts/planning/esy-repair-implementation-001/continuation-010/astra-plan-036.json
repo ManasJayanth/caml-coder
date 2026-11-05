@@ -1,0 +1,33 @@
+{
+  "plan_id": "B1a-diagnostic-byte-cap-036",
+  "planner": "gpt-6-astra",
+  "status": "Conditional final source-authoring card; no dispatch/execution approval. Overall INCOMPLETE.",
+  "budget": {"consumed_launches": 35, "maximum_launches": 36, "remaining_launches": 1, "approximate_active_seconds": 24700, "active_limit_seconds": 32400, "refresh_required": true, "authority_after_launch_036": "No further coding launch; no reset or implied extension."},
+  "launch_036": {
+    "card_id": "B1a-Diagnostic-036",
+    "objective": "Bound handled main diagnostics to 4096 emitted stderr bytes, including newline.",
+    "finding_ids": ["B1a-E2E-025-diagnostic-byte-cap"],
+    "parent_revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+    "inputs": [
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-035.json", "sha256": "90a7d2086d0f9ca0f4a3beb392e075f085c31a2c93e1b12195a1055794b067ce"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json", "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Arity-035/result-manifest.json", "sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Arity-035/frozen/tests/e2e/test_review_adapter_e2e.py", "sha256": "af8bd7297c7c97892a502331ad18357ff94415a474f9b8954a9e72650306669a"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Arity-035/independent-validation.json", "sha256": "58c6e49afd9f4da7a00cf44fa4712dd610bff11a312cf06f096072bb727ea459"}
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": ["The bound independent source35 review closes its arity card without findings; execution remains unapproved. Root must reverify that closure, complete frozen inventory, working-parent equality, every input hash, cleanup and cumulative failure/time/launch gates. Changed parent, missing closure or superseding rejection blocks dispatch."],
+    "required_behavior": [
+      "Replace only main's Failure/Exception diagnostic prints: preserve respective message forms str(exc) and type(exc).__name__ + ': ' + str(exc); encode UTF-8 with replacement, slice encoded bytes to DIAGNOSTIC_LIMIT-1, append b'\\n', write via sys.stderr.buffer, return1. Keep DIAGNOSTIC_LIMIT=4096. Never decode/re-encode the sliced bytes; a split multibyte suffix is permitted.",
+      "Add explicit except KeyboardInterrupt to the same guarded main region: write fixed b'KeyboardInterrupt\\n' through stderr.buffer and return130. Never include arbitrary exception text or traceback. Do not add a broad BaseException catch or intercept SystemExit. Preserve argparse parsing/rejection behavior outside this region. Scope is finite diagnostics emitted by these handlers, not parser usage, startup/shutdown failures, stream-write failures, repeated asynchronous interrupts, or universal traceback suppression.",
+      "Add exactly three public scenario choices: diagnostic-ascii, diagnostic-multibyte, diagnostic-interrupt. Immediately after validate(args), before make_fixtures, raise respectively Failure('A'*8192), RuntimeError('é'*4096), KeyboardInterrupt(). Fixed inputs only; no environment injection. These intentionally failing, childless controls test diagnostics only, never provider/native routing evidence.",
+      "Preserve all existing matrix, arity, routing, records, lifecycle, deadline, ownership and cleanup behavior. No receipt framework or unrelated refactoring."
+    ],
+    "forbidden_changes": ["Luna uses read/edit/write only. Each targeted patch under3000 characters; no full-file rewrite, shell, imports for execution, compilation, tests, subprocess execution, providers or delegation. Preserve 2MiB worker output cap.", "No adapters, other files, helper/unit tests, general result.json persistence or outer-wrapper changes."],
+    "e2e_recipe_ids": ["B1a-public-diagnostic-ascii", "B1a-public-diagnostic-multibyte", "B1a-public-diagnostic-interrupt"],
+    "expected_outcomes": ["After separate execution approval, invoke the complete script once per diagnostic scenario using valid absolute adapter and fresh validated output directories. Capture whole-process raw stdout/stderr/status under existing bounds. ASCII and multibyte: status1, empty stdout, exactly4096 stderr bytes matching the specified encode/slice/newline expression. Interrupt: status130, empty stdout, exactly b'KeyboardInterrupt\\n'. No child invocation or fixture records. Compare bytes without Unicode decoding; no helper invocation or monkeypatching."],
+    "evidence_outputs": ["Worker: allowed-file patch only. Root: frozen inventory, parent/result manifests and diff. Reviewer: exact-revision source disposition. Later approved harness: exact argv, raw bounded outputs, byte counts, statuses and childless diagnostic classification."],
+    "stop_conditions": ["Stop on absent source35 closure, any binding/gate failure, scope expansion, extra-path need or execution attempt. After launch36 stop coding regardless of outcome."],
+    "deferred": "Complete result.json receipt, remaining acceptance inventory, independently reviewed outer wrapper and full runtime validation remain INCOMPLETE. Source closure supplies no execution approval, provider identity evidence or overall completion."
+  }
+}

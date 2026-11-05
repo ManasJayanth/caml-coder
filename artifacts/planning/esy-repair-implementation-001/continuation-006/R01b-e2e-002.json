@@ -1,0 +1,83 @@
+{
+  "receipt": {
+    "argv": [
+      "/opt/homebrew/bin/uv",
+      "run",
+      "--project",
+      "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+      "--locked",
+      "--no-sync",
+      "python",
+      "-B",
+      "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/coding-jobs/R01b-020/frozen/artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+      "--scenario",
+      "cleanup-results",
+      "--image",
+      "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "--expectations",
+      "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/intentionally-missing-expectations.json",
+      "--output-dir",
+      "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/r01b-cli-output"
+    ],
+    "exit_code": 1,
+    "failure": null,
+    "elapsed_seconds": 0.074,
+    "owned_group_absent": true,
+    "logs": {
+      "stdout": {
+        "size": 1323,
+        "sha256": "5f733d81385cd99cdb22117c6ed1bd5b7d64935919687a71f22969e4ea510e8d"
+      },
+      "stderr": {
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "source_sha256": "bc3ae477568baeb46be21fd70b253eca4c5dad7388e317ae0e94b6b78e6b9c0d",
+  "source_unchanged": true,
+  "paths_absent": true,
+  "actual": {
+    "failures": [
+      {
+        "suite": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/intentionally-missing-expectations.json'"
+      },
+      {
+        "reason": "Missing reviewed deterministic timing fixture to prove verified cleanup is preserved.",
+        "scenario": "R01-verified-cleanup-preserved"
+      },
+      {
+        "reason": "Missing reviewed forwarding fixture to prove a real bounded cleanup retry.",
+        "scenario": "R01-unverified-cleanup-retried"
+      },
+      {
+        "reason": "Missing reviewed race fixture to prove stop_group deadline-boundary behavior.",
+        "scenario": "R01-stop-group-deadline-crossing"
+      }
+    ],
+    "manifest": null,
+    "scenarios": [
+      {
+        "evidence_status": "MISSING_FAILED",
+        "id": "R01-verified-cleanup-preserved",
+        "passed": false,
+        "reason": "Missing reviewed deterministic timing fixture to prove verified cleanup is preserved."
+      },
+      {
+        "evidence_status": "MISSING_FAILED",
+        "id": "R01-unverified-cleanup-retried",
+        "passed": false,
+        "reason": "Missing reviewed forwarding fixture to prove a real bounded cleanup retry."
+      },
+      {
+        "evidence_status": "MISSING_FAILED",
+        "id": "R01-stop-group-deadline-crossing",
+        "passed": false,
+        "reason": "Missing reviewed race fixture to prove stop_group deadline-boundary behavior."
+      }
+    ],
+    "scope": "cleanup-results",
+    "status": "FAILED"
+  },
+  "scope": "REPORTING_CONTRACT_ONLY_NOT_REAL_RUNNER"
+}

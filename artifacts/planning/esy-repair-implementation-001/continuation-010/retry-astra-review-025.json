@@ -1,0 +1,91 @@
+{
+  "safe_to_execute": false,
+  "scope": "Independent source-only review of frozen B1a-E2E-025. No candidate execution, edits, Docker, provider calls, or delegation performed. Outer execution wrapper is outside this review.",
+  "revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+  "parent_revision_sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+  "source_hashes": {
+    "tests/e2e/test_review_adapter_e2e.py": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "hash_verification": "Computed hashes match the frozen25 manifest and supplied review source hash. Both adapters also match frozen24. The frozen25 parent manifest matches the card's frozen24 revision hash.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/",
+  "findings": [
+    {
+      "id": "B1a-E2E-025-owned-process-lifecycle",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:128-192",
+      "problem": "waitpid(WNOHANG) reaps the leader when it returns its PID. Status conversion, return-value construction, or an interrupt after that point can enter except BaseException, which unconditionally calls killpg using the released PID. The comment claiming retained ownership is incorrect. Additionally, selector construction occurs after Popen but before the cleanup try, so a setup exception can leave a launched process unmanaged.",
+      "required_change": "Make cleanup protection cover every operation after successful spawn. Establish an auditable ownership transition at reap, including interruption handling, so no path can signal after the leader is reaped. Move fallible result construction out of the signal-capable region or perform it before reap. On timeout/overflow, signal only while ownership is established, boundedly drain and reap, close all pipes, and record cleanup success or uncertainty.",
+      "required_e2e": "After separate approval, exercise normal completion, timeout, overflow, setup failure, and an exception/interruption around reap. Confirm bounded cleanup and zero group-signal attempts after reap.",
+      "missing_evidence": "No safe ownership transition or bounded-drain receipt exists in this source."
+    },
+    {
+      "id": "B1a-E2E-025-record-bound",
+      "severity": "medium",
+      "classification": "execution_boundedness_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:215-217,240",
+      "problem": "Both records.read_bytes() calls read the entire file before checking anything. The first cap excludes newline bytes, and the second read has no byte-size check. RECORD_LIMIT therefore does not enforce the promised 16384-byte collection bound.",
+      "required_change": "Read at most RECORD_LIMIT + 1 raw bytes, reject overflow before splitting or parsing, and apply the same bound on every collection. Count all raw bytes, including separators. Check records after each invocation so extra/missing records stop the suite immediately.",
+      "required_e2e": "After approval, confirm exact-limit acceptance and one-byte-over-limit rejection without reading an unbounded file.",
+      "missing_evidence": "No bounded record-read path exists."
+    },
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "severity": "high",
+      "classification": "acceptance_evidence_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:204-249",
+      "problem": "The program never writes result.json. Success prints only nine response-row booleans; arity rows, expected/actual values, exact launch arguments, and cleanup outcomes are absent. Failure paths discard accumulated rows and print only a diagnostic.",
+      "required_change": "Write the required result.json beneath the validated output directory. Include every planned row with pass/fail/not-run status, exact arguments, expected/actual bounded output and status, record checks, and cleanup outcome. Persist failures after output validation, and report overall pass only when every required row passes.",
+      "required_e2e": "After approval, inspect receipts for both a complete successful matrix and an early failure; later cases must be explicitly not-run and overall must fail.",
+      "missing_evidence": "The source cannot produce the card's required execution receipt."
+    },
+    {
+      "id": "B1a-E2E-025-arity-offset",
+      "severity": "medium",
+      "classification": "acceptance_coverage_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:226-239",
+      "problem": "The matrix treats counts as arguments after the role, while the adapter counts all arguments and the card requires review-with-4 to reject. Consequently the suite tests review totals 1,2,3,4,7 instead of the requested 0,1,2,3,6 plus 4; code-with-5 becomes total 6; unknown-with-4/5 becomes totals 5/6. The purported review-with-4 test is actually valid review with total 5.",
+      "required_change": "Define counts explicitly as total adapter arguments. Cover empty argv; review totals 1,2,3,4,6; code total 5; and unknown totals 4,5. Require exit 64, empty streams, and zero new records for each. Do not invoke valid code mode. The nine response cases already exercise valid review total 5.",
+      "required_e2e": "After approval, include explicit argv and total argument count in each arity receipt and verify every requested row.",
+      "missing_evidence": "Zero arguments, review total 6, code total 5, and unknown total 4 are not covered."
+    },
+    {
+      "id": "B1a-E2E-025-per-case-routing",
+      "severity": "medium",
+      "classification": "acceptance_evidence_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:205-225,228-241",
+      "problem": "Records are validated only as an aggregate after nine response cases. All records have identical contents, so an extra invocation in one case and a missing invocation in another can cancel in the final count. The additional valid-review record is counted but never content-validated.",
+      "required_change": "Validate the bounded record delta immediately after every invocation: exactly one matching argv/cwd/stdin record for a response case and zero for an invalid-arity case. Associate that observation with its row and stop on the first mismatch.",
+      "required_e2e": "After approval, demonstrate that duplicate or missing records fail the responsible row immediately; every accepted response row must have exactly one matching record.",
+      "missing_evidence": "Aggregate counts do not establish the required exactly-once behavior per case."
+    },
+    {
+      "id": "B1a-E2E-025-deadline-race",
+      "severity": "medium",
+      "classification": "acceptance_reliability_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:170-172,228-237",
+      "problem": "The deadline can expire between the check and the second monotonic read, producing a negative sleep and ValueError instead of the intended timeout. Later matrix invocations also launch before checking that their supplied remaining suite budget is positive.",
+      "required_change": "Compute one remaining duration per decision, raise the intended timeout when it is nonpositive, and otherwise sleep for its bounded positive value. Reject an exhausted suite budget before spawning each invocation.",
+      "required_e2e": "After approval, verify deadline-boundary behavior produces a timeout receipt and never launches another case once the suite budget is exhausted.",
+      "missing_evidence": "Deadline handling is not deterministic at the expiration boundary."
+    },
+    {
+      "id": "B1a-E2E-025-diagnostic-byte-cap",
+      "severity": "low",
+      "classification": "acceptance_boundedness_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:244-248",
+      "problem": "Diagnostic slicing limits Unicode characters rather than emitted bytes, and print adds a newline. Even ASCII output can exceed the stated 4096-byte diagnostic cap by one byte.",
+      "required_change": "Encode diagnostics, truncate to a byte budget that includes the newline, and write through the binary stderr stream.",
+      "required_e2e": "After approval, verify long ASCII and multibyte diagnostics both remain within 4096 emitted bytes.",
+      "missing_evidence": "No byte-level diagnostic cap is enforced."
+    }
+  ],
+  "missing_evidence": [
+    "No runtime evidence was generated, as required for this source-only review.",
+    "Root must still verify the complete execution binding and separately review the outer execution wrapper.",
+    "Fake-routing results, once available, establish routing and transparency only; they do not establish provider identity or real-provider availability.",
+    "A prior capacity-failed review supplies no approval."
+  ]
+}

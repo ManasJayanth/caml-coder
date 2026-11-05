@@ -1,0 +1,22 @@
+{
+  "name": "esy",
+  "version": "0.9.2",
+  "license": "BSD-2-Clause",
+  "description": "Package builder for esy.",
+  "scripts": {
+    "postinstall": "node ./postinstall.js"
+  },
+  "bin": {
+    "esy": "bin/esy"
+  },
+  "files": [
+    "_export/",
+    "bin/",
+    "postinstall.js",
+    "esyInstallRelease.js",
+    "platform-esy-npm-release-linux-x64-static",
+    "platform-esy-npm-release-darwin-arm64",
+    "platform-esy-npm-release-darwin-x64",
+    "platform-esy-npm-release-win32-x64"
+  ]
+}

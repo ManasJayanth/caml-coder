@@ -1,0 +1,43 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "Astra E2E source review returned explicit capacity failure; user-authorized Fable fallback smoke failed authentication: OAuth session expired and could not be refreshed. Neither route available for required review.",
+  "coding_launches_consumed": 25,
+  "coding_launch_cap": 36,
+  "coding_launches_remaining": 11,
+  "active_seconds_consumed_at_packet": 20518.627,
+  "active_seconds_limit": 32400,
+  "active_seconds_remaining_at_packet": 11881.373,
+  "working_candidate": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate",
+  "working_candidate_sha256": "bdf66f51ff4198934b0db8fb7591486e21cf64cb6f8650090bb0c74c13051b65",
+  "proposal25": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/tests/e2e/test_review_adapter_e2e.py",
+    "bytes": 11561,
+    "sha256": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9"
+  },
+  "proposal25_full_manifest": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/result-manifest.json",
+    "bytes": 14469,
+    "sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd"
+  },
+  "original_entries_verified": 72,
+  "original_mismatches": [],
+  "historical_artifacts_verified": 1634,
+  "imported": false,
+  "containers_created": false,
+  "completed_this_continuation": [
+    "Reconciled prior activity and preserved original72 plus prior1634 indexed files",
+    "Native containment and authenticated high-Luna smoke passed",
+    "B1a primary review-routing adapter authored in coding24 and independently statically approved with no findings",
+    "Public-process E2E draft authored in coding25; not executed",
+    "Explicit Astra availability failure recorded; Fable fallback smoke attempted and rejected on authentication failure",
+    "All recorded process groups absent and temporary credential links removed"
+  ],
+  "not_completed": [
+    "B1a public E2Es and real primary routing smoke",
+    "B1 fallback policy/envelope implementation and successful Fable preflight",
+    "B2/B3 accepted supervision/controller E2Es",
+    "S1/E1/S2/E2/S3/E3 and all H/E/A lifecycle cards",
+    "Full authentic lifecycle suite, full esy matrix, global import gates"
+  ],
+  "next_step": "Restore an available review route (Astra capacity or valid Claude authentication), reconcile idle/active time, then review exact frozen25. Route findings to fresh separate Astra planning before further coding. No new allocation required."
+}

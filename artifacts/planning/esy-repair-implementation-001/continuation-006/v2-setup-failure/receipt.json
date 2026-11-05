@@ -1,0 +1,10 @@
+{
+  "status": "CLEANUP_UNVERIFIED",
+  "worker_pid": null,
+  "worker_reaped": false,
+  "exit_code": null,
+  "reason": "guardian-exception:RuntimeError",
+  "elapsed_seconds": 0.001,
+  "single_worker_assumption": "requires separately proven native process-fork denial",
+  "credential_removed": true
+}

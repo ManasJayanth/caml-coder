@@ -1,0 +1,1 @@
+{"status": "FAILED_BEFORE_PROBE", "exit_code": 1, "reason": "Node .js file loader attempted ancestor package.json read, denied by unchanged native policy; use reviewed code through node -e instead."}

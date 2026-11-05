@@ -1,0 +1,944 @@
+You are the independent frontier reviewer of an INCOMPLETE esy reference-runner repair bootstrap. Review the exact evidence below. No code has been imported and no esy repair has been claimed. Do not infer success from the 12 bootstrap probes.
+
+FINAL STATUS
+{
+  "status": "INCOMPLETE",
+  "reason": "Required sandboxed Claude fable reviewer availability gate did not pass: isolated runtime lacked authentication, then minimal existing-credential retry timed out after 120 seconds without output. Root cause of authenticated timeout is not established.",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "candidate_sha256": "b43a6caa652d8682d34f72e5c672a60cbe85ea4d7a112568c526f3f19245202d",
+  "original_files_verified": 72,
+  "original_files_changed": [],
+  "imported": false,
+  "coding_rounds_consumed": 0,
+  "active_seconds_consumed": 360.929,
+  "limits": {
+    "coding_rounds": 12,
+    "active_seconds": 21600
+  },
+  "completed": [
+    "Frozen 72 relevant current files, including dirty and untracked inputs",
+    "Prepared isolated candidate with three worker adapters",
+    "Passed 12 bootstrap containment probes",
+    "Preserved required reviewer smoke failure evidence",
+    "Removed temporary read-only credential reference",
+    "Post-timeout process inspection found no reviewer process"
+  ],
+  "incomplete": [
+    "C0: full lifecycle, detached-child cleanup and provider gates remain unproven",
+    "C1: controller, strict schemas and full provider parsing not implemented",
+    "C2: derivative cache image not built",
+    "C3-C4: runner unchanged",
+    "C5-C6: full repair/orchestration E2Es not implemented or run",
+    "C7: no acceptance review, import, or final verification"
+  ],
+  "resume": "Diagnose the sandboxed Fable timeout without weakening isolation or substituting models. Repeat a bounded smoke via candidate/scripts/esy-repair/claude-worker.sh review with exact --model fable. Preserve failures under new IDs. Then finish C0 and independently reviewed C1 before unattended work. Retain this baseline, consumed active time, and user work; no budget reset.",
+  "finished_at": "2026-10-22T05:50:20.685797+00:00"
+}
+
+REPOSITORY AND STARTING STATE
+{
+  "status": "BOOTSTRAP",
+  "started_at": "2026-10-22T05:44:19.756553+00:00",
+  "repo": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+  "head": "70de30502cbaf450b2c0621091b82d34583709b2",
+  "git_status": " M README.md\n M config/cards.json\n M config/execution-policy.json\n M config/handoff-progress.json\n M config/sources.json\n M docs/PLAN.md\n M pyproject.toml\n M src/sft/cli.py\n M src/sft/corpus.py\n M src/sft/e2e.py\n M src/sft/handoff.py\n M src/sft/workflow.py\n M tests/e2e/test_control.py\n M tests/e2e/test_handoff.py\n M tests/e2e/test_sources.py\n M uv.lock\n?? config/chunks.json\n?? config/eligibility.json\n?? config/extraction.json\n?? config/model-assets.json\n?? config/models.json\n?? config/split-annotations.json\n?? config/splits.json\n?? scripts/check_ocaml_probe.py\n?? scripts/probe_qwen35.py\n?? scripts/probe_qwen35_adapters.py\n?? src/sft/chunks.py\n?? src/sft/conversion.py\n?? src/sft/eligibility.py\n?? src/sft/extract.py\n?? src/sft/ledger.py\n?? src/sft/model_assets.py\n?? src/sft/models.py\n?? src/sft/splits.py\n?? tests/e2e/test_bonito_conversion.py\n?? tests/e2e/test_chunks.py\n?? tests/e2e/test_eligibility.py\n?? tests/e2e/test_extraction.py\n?? tests/e2e/test_ledger.py\n?? tests/e2e/test_models.py\n?? tests/e2e/test_ocaml_checker.py\n?? tests/e2e/test_qwen35_probe.py\n?? tests/e2e/test_splits.py\n?? tests/e2e/test_tokenizer.py\n",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "max_rounds": 12,
+  "max_active_seconds": 21600,
+  "rounds": 0
+}
+
+SCOPE AND LOCKED DECISIONS
+macOS only. uv package management. Isolated working copies of actual dirty/untracked bytes. No original checkout overwrite, hardlinks, shared writable Git, destructive reset, or credential copying. Codex gpt-6-luna coding; separate Codex gpt-6-astra planning; Claude worker literal --model fable review. 12 coding rounds, six cumulative active hours, explicit incomplete resume without resetting consumption. Three failed coding attempts require frontier replanning. E2E only. No dataset generation, adapter experimentation, training or promotion.
+C0/C1 supervised bootstrap must pass containment and real provider checks and independent review before unattended operation. Model workers have no Docker access. Host-side proposed code requires a Fable diff review before fixed trusted E2E commands execute. This is reviewed local execution, not an adversarial-code sandbox guarantee.
+The derivative image must preserve base sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267; no new image was built. esy0.9.2/npm OCaml5.5.1000/compiler5.5.1 pins remain unchanged. Runtime must seed _esy and node_modules/.cache, remove esy install, retain readonly root/dependencies and network none, user1000, capdropALL/nnp, 2GiB RAM, 120s container deadline, /work128MiB and caches32MiB each. Compiler canonical path/hash and complete package/lock inventories must match before and after. None of these repairs has been implemented yet.
+Required esy E2Es remain outstanding: positive, wrong result, syntax, caches writable/dependencies readonly, missing installation, corrupt/missing seeds, image/package/lock/compiler mismatch, added/missing locks, fresh-repeat, timeout, output overflow, exhaustion, startup failure, run-ID rejection/immutability, concurrency and post-run integrity.
+Required controller E2Es remain outstanding: public-command full loop, frontier replanning, three-attempt escalation, strict malformed/duplicate/truncated/stale/error parsing, model identity/no fallback, output/time caps and detached descendants, lock/concurrency/resume, budgets, scope/symlink/special-file limits, dirty state and guarded import recovery, complete handoff.
+No required provider smoke passed. Pi and Codex were not invoked. The frontier planning subagent was read-only; no smaller coding worker ran because bootstrap remains gated.
+
+
+ARTIFACT INDEX
+{
+  "evidence_sha256": "1d8557ada81bf1447310ab3a667b6613441f20e3e7f2cb42a52a6a888f0b55c6",
+  "files": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap.json",
+      "bytes": 1553,
+      "sha256": "c8fce7af361e82f361157b55b58ba8f5494b681dff6dbfde35036c09a6c5d073"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/baseline-manifest.json",
+      "bytes": 11524,
+      "sha256": "4dcb93a0d9fd247c3e4df3967ff3bbf772127bae7c92e3ce035d5f93908ad6a8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate-manifest.json",
+      "bytes": 14700,
+      "sha256": "fcf7e15a7c7e334cf57f400d5c1b9b737df30b198b385b111745eb6ad9abab47"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/RESULT.json",
+      "bytes": 1922,
+      "sha256": "3bc35d4b4d70c44c807ee8f63e70cec6eb6d017940d4f12a2d4dc784f52f2ecd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/events.jsonl",
+      "bytes": 3418,
+      "sha256": "b58ea6bbb304b0fab44ded06779466c4bf4ebf39c8fd95db03999b800373da36"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/check_containment.py",
+      "bytes": 2504,
+      "sha256": "087d8c8b0348d8b7299a0c839a724f10dd06d3cc87d1b055375e1f8075b66301"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-002.json",
+      "bytes": 991,
+      "sha256": "2ea0c076ec44d962c41f1626769a0948fba3ab685341aac6b62b5d98b67710b3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-002.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-002.stdout",
+      "bytes": 1213,
+      "sha256": "71ca326ab1398ba4dc8809aad57da60db6bdae918589b79c4f62bda6f806f9ee"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-003.json",
+      "bytes": 996,
+      "sha256": "0ae91c96597eb57cfaca6af60ee6ef5e6feaad7b3b78aefa86ed5a342ce665f7"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-003.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-003.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/code.sb",
+      "bytes": 462,
+      "sha256": "9d2e76a47fa0d1abd8b11002d39c21ee835e8e20182a302c4f126011e4d5fd51"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/containment.json",
+      "bytes": 1659,
+      "sha256": "e296d9bd9c3cc4c10991f0cdfd7bf90c3c36e8d7e8e4c7d5aa745268cd0e995f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/prompt.txt",
+      "bytes": 144,
+      "sha256": "e24003f7a5aadb9c805b7a409a8762c32be9a9836ced6958535e57f36ff45266"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/review.sb",
+      "bytes": 309,
+      "sha256": "f40d85be5a3c3e3908f970b7261aba44f73ca17b9b41b5eb800d6898bfbe5fa1"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/smoke-attempt-001-failure.json",
+      "bytes": 224,
+      "sha256": "68dd87d34faa7a3fb6a844abf5cbc0a43e574e31ea01b36ea6d80b7121523dd1"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/smoke_reviewer.py",
+      "bytes": 2501,
+      "sha256": "14d39ae77a83013a053bbcd6ea63dc98404a1810e458e6046636059eba6fcaf7"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/write_handoff.py",
+      "bytes": 8422,
+      "sha256": "18f4860e870604f73699dee2a6fa16a50332cf71e4b0c0d226b89c670162df43"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/claude-worker.sh",
+      "bytes": 650,
+      "sha256": "daa169de39766c0df3b04137a12f471c33981f9b17e8d93ff762625b02a98bc5"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/codex-worker.sh",
+      "bytes": 439,
+      "sha256": "5f445072109ac1acc2bf272d1e1079559a09eb6b0436a167ccbef8d12427134a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/pi-worker.sh",
+      "bytes": 522,
+      "sha256": "bbb9c26e41ea6a7ba6d17558d6dff7f614b75f7ca378084f218e0f5c8bedf794"
+    }
+  ]
+}
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/check_containment.py
+import hashlib,json,os,socket,subprocess,sys,tempfile,time
+from pathlib import Path
+b=Path(__file__).resolve().parent; state=b.parent; repo=state.parents[2]
+work=b/'work'; outside=b/'outside-canary'; outside.write_text('unchanged')
+link=work/'escape'; link.unlink(missing_ok=True); link.symlink_to(outside)
+sockdir=tempfile.TemporaryDirectory(prefix='esy-sock-',dir='/private/tmp'); sockpath=str(Path(sockdir.name)/'s'); server=socket.socket(socket.AF_UNIX); server.bind(sockpath); server.listen(1)
+# An unsandboxed connect proves the target exists and accepts connections.
+probe=socket.socket(socket.AF_UNIX); probe.connect(sockpath); c,_=server.accept(); c.close(); probe.close()
+checks=[]
+def run(name,profile,code,expected):
+ r=subprocess.run(['/usr/bin/sandbox-exec','-f',str(b/profile),sys.executable,'-c',code],capture_output=True,timeout=10)
+ checks.append({'id':name,'exit_code':r.returncode,'stdout':r.stdout.decode(),'stderr':r.stderr.decode(),'passed':r.returncode==expected})
+run('allowed-code-write','code.sb',f'from pathlib import Path; Path({str(work/"allowed")!r}).write_text("ok")',0)
+for name,path in [('outside',outside),('baseline',state/'baseline-manifest.json'),('original',repo/'pyproject.toml'),('symlink',link)]:
+ code=f'''import os
+try:
+ fd=os.open({str(path)!r},os.O_WRONLY)
+except PermissionError: raise SystemExit(0)
+else:
+ os.close(fd); raise SystemExit(3)
+'''
+ run('deny-'+name,'code.sb',code,0)
+ run('deny-child-'+name,'code.sb','import subprocess,sys; raise SystemExit(subprocess.run([sys.executable,"-c",'+repr(code)+']).returncode)',0)
+run('deny-unix-socket','code.sb',f'''import socket
+s=socket.socket(socket.AF_UNIX)
+try: s.connect({sockpath!r})
+except PermissionError: raise SystemExit(0)
+else: raise SystemExit(3)
+''',0)
+run('review-input-readonly','review.sb',f'''import os
+try: fd=os.open({str(work/"allowed")!r},os.O_WRONLY)
+except PermissionError: raise SystemExit(0)
+else: os.close(fd); raise SystemExit(3)
+''',0)
+run('deny-signal-parent','code.sb',f'''import os
+try: os.kill({os.getpid()},0)
+except PermissionError: raise SystemExit(0)
+else: raise SystemExit(3)
+''',0)
+server.close(); Path(sockpath).unlink(); sockdir.cleanup(); link.unlink()
+report={'status':'PASSED' if all(x['passed'] for x in checks) else 'FAILED','checks':checks,'scope':'bootstrap containment probes only; not full C0/C6 acceptance'}
+(b/'containment.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report))
+raise SystemExit(0 if report['status']=='PASSED' else 1)
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-002.json
+{
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/claude-worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/work",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/review.sb"
+  ],
+  "requested_model": "fable",
+  "exit_code": 1,
+  "failure": null,
+  "elapsed_seconds": 0.247,
+  "logs": {
+    "stdout": {
+      "bytes": 1213,
+      "sha256": "71ca326ab1398ba4dc8809aad57da60db6bdae918589b79c4f62bda6f806f9ee"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "status": "FAILED"
+}
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-002.stderr
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-002.stdout
+{"duration_api_ms":0,"stop_reason":"stop_sequence","session_id":"ddbe74d3-7d94-450c-bb2a-618ef7d7b549","total_cost_usd":0,"usage":{"output_tokens_details":{"thinking_tokens":0},"input_tokens":0,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":0,"server_tool_use":{"web_search_requests":0,"web_fetch_requests":0},"service_tier":"standard","cache_creation":{"ephemeral_1h_input_tokens":0,"ephemeral_5m_input_tokens":0},"inference_geo":"","iterations":[],"speed":"standard","fallback_credit":null},"modelUsage":{},"permission_denials":[],"terminal_reason":"api_error","fast_mode_state":"off","fast_mode_disabled_reason":"sdk_opt_in_required","subagent_stats":{"spawned":0,"requested":{"background":0,"foreground":0,"unset":0},"started_in_background":0,"max_depth":0,"spawned_by_subagents":0,"completed":0,"failed":0,"killed":{"parent":0,"user":0,"system":0},"refused":{"depth_limit":0,"concurrency_limit":0,"budget":0},"by_type":{}},"safety_stops":0,"is_error":true,"num_turns":1,"subtype":"success","api_error_status":null,"result":"Not logged in · Please run /login","type":"result","duration_ms":57,"uuid":"6c76c921-8d0c-41c1-bc1f-315def129a59","queued_turn_count":0,"result_index":0}
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-003.json
+{
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/claude-worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/work",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/review.sb"
+  ],
+  "requested_model": "fable",
+  "exit_code": -9,
+  "failure": "timeout",
+  "elapsed_seconds": 120.176,
+  "logs": {
+    "stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "status": "FAILED"
+}
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-003.stderr
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/claude-smoke-003.stdout
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/code.sb
+(version 1)
+(allow default)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/runtime"))
+(deny network-outbound (remote unix-socket))
+(deny signal)
+(allow signal (target self) (target children))
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/work"))
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/containment.json
+{
+  "status": "PASSED",
+  "checks": [
+    {
+      "id": "allowed-code-write",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-outside",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-outside",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-baseline",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-baseline",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-original",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-original",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-symlink",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-child-symlink",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-unix-socket",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "review-input-readonly",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "id": "deny-signal-parent",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "scope": "bootstrap containment probes only; not full C0/C6 acceptance"
+}
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/prompt.txt
+This is an authenticated reviewer availability smoke check. Do not use tools. Reply with exactly the JSON object {"smoke":"ok"}. No other text.
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/review.sb
+(version 1)
+(allow default)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/runtime"))
+(deny network-outbound (remote unix-socket))
+(deny signal)
+(allow signal (target self) (target children))
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/smoke-attempt-001-failure.json
+{"status":"FAILED","reason":"Harness raised PermissionError during killpg after pipes closed; no raw provider result retained. Subsequent elevated ps inspection found no reviewer process. Not a provider acceptance result."}
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/smoke_reviewer.py
+import hashlib,json,os,selectors,signal,subprocess,time
+from pathlib import Path
+b=Path(__file__).resolve().parent; state=b.parent
+runtime=b/'runtime'; (runtime/'tmp').mkdir(exist_ok=True); (runtime/'claude').mkdir(exist_ok=True)
+env={k:os.environ[k] for k in ('PATH','HOME','USER','LOGNAME','LANG','SHELL','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS') if k in os.environ}
+env.update(CLAUDE_BIN='/opt/homebrew/bin/claude',CLAUDE_CONFIG_DIR=str(runtime/'claude'),TMPDIR=str(runtime/'tmp'),DISABLE_AUTOUPDATER='1',CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC='1')
+cmd=['/bin/bash',str(state/'candidate/scripts/esy-repair/claude-worker.sh'),'review',str(b/'work'),str(b/'prompt.txt'),str(b/'review.sb')]
+started=time.monotonic(); p=subprocess.Popen(cmd,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
+sel=selectors.DefaultSelector(); sel.register(p.stdout,selectors.EVENT_READ,'stdout'); sel.register(p.stderr,selectors.EVENT_READ,'stderr'); logs={k:bytearray() for k in ('stdout','stderr')}; reason=None
+try:
+ while sel.get_map():
+  if time.monotonic()-started>120: reason='timeout'; break
+  for key,_ in sel.select(.2):
+   raw=os.read(key.fileobj.fileno(),16384)
+   if not raw: sel.unregister(key.fileobj); continue
+   name=key.data
+   if len(logs[name])+len(raw)>262144: reason='output-cap'; break
+   logs[name].extend(raw)
+  if reason: break
+finally:
+ if p.poll() is None:
+  try: os.killpg(p.pid,signal.SIGKILL)
+  except ProcessLookupError: pass
+  except PermissionError: reason='cleanup-permission-denied'
+ try: p.wait(timeout=5)
+ except subprocess.TimeoutExpired: reason='cleanup-unverified'
+ sel.close()
+for name,raw in logs.items(): (b/('claude-smoke-003.'+name)).write_bytes(raw)
+report={'command':cmd,'requested_model':'fable','exit_code':p.returncode,'failure':reason,'elapsed_seconds':round(time.monotonic()-started,3),'logs':{k:{'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()} for k,v in logs.items()},'status':'UNVALIDATED'}
+try:
+ value=json.loads(logs['stdout']); result=json.loads(value.get('result',''))
+ passed=p.returncode==0 and not reason and not value.get('is_error',False) and result=={'smoke':'ok'}
+except (ValueError,TypeError,AttributeError): passed=False
+report['status']='PASSED' if passed else 'FAILED'
+(b/'claude-smoke-003.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report)); print(logs['stderr'].decode(errors='replace')[:3000]); print(logs['stdout'].decode(errors='replace')[:3000])
+raise SystemExit(0 if passed else 1)
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/write_handoff.py
+from pathlib import Path
+import datetime,difflib,hashlib,json,stat
+s=Path(__file__).resolve().parents[1]; root=s.parents[2]
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+def canonical(v): return json.dumps(v,sort_keys=True,separators=(',',':')).encode()
+baseline=json.loads((s/'baseline-manifest.json').read_text()); start=json.loads((s/'bootstrap.json').read_text())
+changes=[]
+for row in baseline:
+ p=root/row['path']
+ if not p.is_file() or p.is_symlink() or sha(p.read_bytes())!=row['sha256'] or stat.S_IMODE(p.stat().st_mode)!=row['mode']: changes.append(row['path'])
+if changes: raise RuntimeError('Concurrent baseline changes: '+repr(changes))
+manifest=[]
+for p in sorted((s/'candidate').rglob('*')):
+ if p.is_symlink(): raise RuntimeError('Unexpected candidate symlink')
+ if p.is_file(): manifest.append({'path':str(p.relative_to(s/'candidate')),'kind':'file','mode':stat.S_IMODE(p.stat().st_mode),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+(s/'candidate-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+now=datetime.datetime.now(datetime.timezone.utc); elapsed=(now-datetime.datetime.fromisoformat(start['started_at'])).total_seconds()
+result={'status':'INCOMPLETE','reason':'Required sandboxed Claude fable reviewer availability gate did not pass: isolated runtime lacked authentication, then minimal existing-credential retry timed out after 120 seconds without output. Root cause of authenticated timeout is not established.','baseline_sha256':start['baseline_sha256'],'candidate_sha256':sha(canonical(manifest)),'original_files_verified':len(baseline),'original_files_changed':changes,'imported':False,'coding_rounds_consumed':0,'active_seconds_consumed':round(elapsed,3),'limits':{'coding_rounds':12,'active_seconds':21600},'completed':['Frozen 72 relevant current files, including dirty and untracked inputs','Prepared isolated candidate with three worker adapters','Passed 12 bootstrap containment probes','Preserved required reviewer smoke failure evidence','Removed temporary read-only credential reference','Post-timeout process inspection found no reviewer process'],'incomplete':['C0: full lifecycle, detached-child cleanup and provider gates remain unproven','C1: controller, strict schemas and full provider parsing not implemented','C2: derivative cache image not built','C3-C4: runner unchanged','C5-C6: full repair/orchestration E2Es not implemented or run','C7: no acceptance review, import, or final verification'],'resume':'Diagnose the sandboxed Fable timeout without weakening isolation or substituting models. Repeat a bounded smoke via candidate/scripts/esy-repair/claude-worker.sh review with exact --model fable. Preserve failures under new IDs. Then finish C0 and independently reviewed C1 before unattended work. Retain this baseline, consumed active time, and user work; no budget reset.','finished_at':now.isoformat()}
+(s/'RESULT.json').write_text(json.dumps(result,indent=2)+'\n')
+with (s/'events.jsonl').open('a') as f: f.write(json.dumps({'event':'bootstrap-incomplete',**result})+'\n')
+files=[s/'bootstrap.json',s/'baseline-manifest.json',s/'candidate-manifest.json',s/'RESULT.json',s/'events.jsonl']
+files+=sorted(p for p in (s/'bootstrap').iterdir() if p.is_file() and p.suffix in ('.json','.stdout','.stderr','.py','.sb','.txt'))
+files+=sorted((s/'candidate/scripts/esy-repair').glob('*.sh'))
+index=[{'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())} for p in files]
+evidence_sha=sha(canonical(index)); (s/'artifact-index.json').write_text(json.dumps({'evidence_sha256':evidence_sha,'files':index},indent=2)+'\n')
+parts=['You are the independent frontier reviewer of an INCOMPLETE esy reference-runner repair bootstrap. Review the exact evidence below. No code has been imported and no esy repair has been claimed. Do not infer success from the 12 bootstrap probes.', '\nFINAL STATUS\n'+json.dumps(result,indent=2), '\nREPOSITORY AND STARTING STATE\n'+json.dumps(start,indent=2), '''\nSCOPE AND LOCKED DECISIONS
+macOS only. uv package management. Isolated working copies of actual dirty/untracked bytes. No original checkout overwrite, hardlinks, shared writable Git, destructive reset, or credential copying. Codex gpt-6-luna coding; separate Codex gpt-6-astra planning; Claude worker literal --model fable review. 12 coding rounds, six cumulative active hours, explicit incomplete resume without resetting consumption. Three failed coding attempts require frontier replanning. E2E only. No dataset generation, adapter experimentation, training or promotion.
+C0/C1 supervised bootstrap must pass containment and real provider checks and independent review before unattended operation. Model workers have no Docker access. Host-side proposed code requires a Fable diff review before fixed trusted E2E commands execute. This is reviewed local execution, not an adversarial-code sandbox guarantee.
+The derivative image must preserve base sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267; no new image was built. esy0.9.2/npm OCaml5.5.1000/compiler5.5.1 pins remain unchanged. Runtime must seed _esy and node_modules/.cache, remove esy install, retain readonly root/dependencies and network none, user1000, capdropALL/nnp, 2GiB RAM, 120s container deadline, /work128MiB and caches32MiB each. Compiler canonical path/hash and complete package/lock inventories must match before and after. None of these repairs has been implemented yet.
+Required esy E2Es remain outstanding: positive, wrong result, syntax, caches writable/dependencies readonly, missing installation, corrupt/missing seeds, image/package/lock/compiler mismatch, added/missing locks, fresh-repeat, timeout, output overflow, exhaustion, startup failure, run-ID rejection/immutability, concurrency and post-run integrity.
+Required controller E2Es remain outstanding: public-command full loop, frontier replanning, three-attempt escalation, strict malformed/duplicate/truncated/stale/error parsing, model identity/no fallback, output/time caps and detached descendants, lock/concurrency/resume, budgets, scope/symlink/special-file limits, dirty state and guarded import recovery, complete handoff.
+No required provider smoke passed. Pi and Codex were not invoked. The frontier planning subagent was read-only; no smaller coding worker ran because bootstrap remains gated.
+''','\nARTIFACT INDEX\n'+json.dumps({'evidence_sha256':evidence_sha,'files':index},indent=2)]
+for p in files:
+ if p.name in ('baseline-manifest.json','candidate-manifest.json','events.jsonl','bootstrap.json','RESULT.json'): continue
+ parts.append('\nFILE '+str(p)+'\n'+p.read_text(errors='strict'))
+parts.append('\nEXACT CANDIDATE DIFF (only new worker adapters; existing runner unchanged)\n')
+for p in sorted((s/'candidate/scripts/esy-repair').glob('*.sh')):
+ parts.append(''.join(difflib.unified_diff([],p.read_text().splitlines(keepends=True),fromfile='/dev/null',tofile=str(p.relative_to(s/'candidate')))))
+runner=s/'baseline/artifacts/planning/esy-reference-proposal-001/run_esy_reference.py'
+parts.extend(['\nEXISTING UNCHANGED RUNNER\n'+runner.read_text(), '''\nREVIEW REQUEST
+Check the bootstrap evidence and proposed wrappers, diagnose the missing required reviewer gate, and identify the next bounded repair cards. Do not approve unimplemented work. Check preservation, containment scope, provider authentication exposure, cleanup, incomplete lifecycle coverage and honest status.
+Return strict JSON with keys revision_sha256, evidence_sha256, verdict (PASS|CHANGES_REQUIRED|BLOCKED), findings (id,severity,location,problem,required_change,required_e2e), missing_evidence. PASS requires zero findings and zero missing evidence and is unavailable for full repair acceptance on this packet.
+Every finding must be sent to a separate frontier planner and broken into small coding cards. All subsequent acceptance review must run via claude-worker.sh with literal --model fable. Do not replace it with a Codex review, weaken isolation, waive evidence, broaden scope or reset budgets.
+''', '\nREVIEW IDENTITIES\n'+json.dumps({'revision_sha256':result['candidate_sha256'],'evidence_sha256':evidence_sha})])
+(s/'FRONTIER_HANDOFF.txt').write_text('\n'.join(parts))
+print(json.dumps({'status':'INCOMPLETE','handoff':str(s/'FRONTIER_HANDOFF.txt'),'bytes':(s/'FRONTIER_HANDOFF.txt').stat().st_size,'evidence_sha256':evidence_sha,'baseline_files_verified':len(baseline)}))
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+case "$role" in
+ review) model=fable; tools=""; permission=plan ;;
+ code) : "${CLAUDE_CODING_MODEL:?exact coding model required}"; model=$CLAUDE_CODING_MODEL; tools="Read,Edit,Write,Glob,Grep"; permission=acceptEdits ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+case "$role" in
+ code) model=gpt-6-luna; sandbox=workspace-write ;;
+ plan) model=gpt-6-astra; sandbox=read-only ;;
+ *) exit 64 ;;
+esac
+: "${CODEX_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CODEX_BIN" exec --ignore-user-config --ephemeral --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/pi-worker.sh
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+[ "$role" = code ] || exit 64
+: "${PI_BIN:?absolute executable required}"
+: "${PI_PROVIDER:?exact provider required}"
+: "${PI_CODING_MODEL:?exact coding model required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$PI_BIN" --print --mode json --provider "$PI_PROVIDER" --model "$PI_CODING_MODEL" --no-session --no-extensions --no-mcp --no-skills --no-prompt-templates --no-context-files --no-approve --tools read,edit,write < "$prompt"
+
+
+EXACT CANDIDATE DIFF (only new worker adapters; existing runner unchanged)
+
+--- /dev/null
++++ scripts/esy-repair/claude-worker.sh
+@@ -0,0 +1,14 @@
++#!/bin/bash
++set -euo pipefail
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++case "$role" in
++ review) model=fable; tools=""; permission=plan ;;
++ code) : "${CLAUDE_CODING_MODEL:?exact coding model required}"; model=$CLAUDE_CODING_MODEL; tools="Read,Edit,Write,Glob,Grep"; permission=acceptEdits ;;
++ *) exit 64 ;;
++esac
++: "${CLAUDE_BIN:?absolute executable required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+--- /dev/null
++++ scripts/esy-repair/codex-worker.sh
+@@ -0,0 +1,14 @@
++#!/bin/bash
++set -euo pipefail
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++case "$role" in
++ code) model=gpt-6-luna; sandbox=workspace-write ;;
++ plan) model=gpt-6-astra; sandbox=read-only ;;
++ *) exit 64 ;;
++esac
++: "${CODEX_BIN:?absolute executable required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$CODEX_BIN" exec --ignore-user-config --ephemeral --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+--- /dev/null
++++ scripts/esy-repair/pi-worker.sh
+@@ -0,0 +1,12 @@
++#!/bin/bash
++set -euo pipefail
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++[ "$role" = code ] || exit 64
++: "${PI_BIN:?absolute executable required}"
++: "${PI_PROVIDER:?exact provider required}"
++: "${PI_CODING_MODEL:?exact coding model required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$PI_BIN" --print --mode json --provider "$PI_PROVIDER" --model "$PI_CODING_MODEL" --no-session --no-extensions --no-mcp --no-skills --no-prompt-templates --no-context-files --no-approve --tools read,edit,write < "$prompt"
+
+
+EXISTING UNCHANGED RUNNER
+#!/usr/bin/env python3
+"""Probe fixed esy-managed OCaml compiler references in a pinned offline image."""
+
+from __future__ import annotations
+
+import argparse
+import base64
+import hashlib
+import io
+import json
+import os
+from pathlib import Path
+import re
+import secrets
+import subprocess
+import tarfile
+import tempfile
+import time
+
+
+ROOT = Path(__file__).resolve().parents[3]
+PROPOSAL = Path(__file__).resolve().parent
+SOURCE_PATH = PROPOSAL / "main.ml"
+RESULTS = PROPOSAL / "esy-results"
+IMAGE_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+RUN_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
+MAX_INPUT = 128 * 1024
+MAX_SOURCE = 32 * 1024
+MAX_LOG = 8 * 1024
+MAX_EXCERPT = MAX_LOG
+TIMEOUT = 120
+
+
+def sha(raw: bytes) -> str:
+    return hashlib.sha256(raw).hexdigest()
+
+
+def canonical(value) -> bytes:
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode()
+
+
+def source_bundle():
+    if SOURCE_PATH.is_symlink():
+        raise ValueError("main.ml symlink forbidden")
+    main = SOURCE_PATH.read_bytes()
+    if not 0 < len(main) <= MAX_SOURCE:
+        raise ValueError("main.ml is empty or exceeds the size bound")
+    anchor = '  let expected = [ 1; 4; 9; 16 ] in\n  if actual <> expected then failwith "List.map assertion failed";'
+    if anchor not in main.decode("utf-8"):
+        raise ValueError("reviewed main.ml no longer matches the fixed wrong-result derivation")
+    wrong = main.decode("utf-8").replace(anchor,
+        '  let expected = [ 0 ] in\n  assert (actual = expected);').encode("utf-8")
+    invalid_anchor = '  let actual = List.map square [ 1; 2; 3; 4 ] in'
+    if invalid_anchor not in main.decode("utf-8"):
+        raise ValueError("reviewed main.ml no longer matches the fixed malformed-source derivation")
+    malformed = main.decode("utf-8").replace(invalid_anchor,
+        '  let actual = List.map square [ 1; 2; 3; 4 ] in +').encode("utf-8")
+    files = {"main.ml": main, "wrong_result.ml": wrong, "malformed.ml": malformed}
+    archive = io.BytesIO()
+    rows, total = [], 0
+    with tarfile.open(fileobj=archive, mode="w", format=tarfile.USTAR_FORMAT) as tar:
+        for name, raw in files.items():
+            total += len(raw)
+            if len(raw) > MAX_SOURCE or total > MAX_INPUT:
+                raise ValueError("fixed source bundle exceeds size limit")
+            rows.append({"path": name, "bytes": len(raw), "sha256": sha(raw)})
+            info = tarfile.TarInfo(name)
+            info.size, info.mode, info.uid, info.gid = len(raw), 0o644, 1000, 1000
+            info.uname = info.gname = ""
+            tar.addfile(info, io.BytesIO(raw))
+    return archive.getvalue(), rows, total
+
+
+def container_script(nonce: str) -> str:
+    tag = f"ESYREF_{nonce}_"
+    return f'''#!/bin/sh
+set -eu
+umask 077
+export HOME=/home/opam
+export TMPDIR=/work/tmp
+export PATH=/home/opam/esy/bin:/home/opam/node/bin:/home/opam/.opam/5.5/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+mkdir -p /work/tmp/home /work/logs
+tar -xf - --no-same-owner -C /work
+cd /home/opam/esy-reference
+capture() {{
+  name="$1"; shift
+  out="/work/logs/$name.out"; err="/work/logs/$name.err"
+  set +e
+  "$@" >"$out" 2>"$err"
+  rc=$?
+  set -e
+  ob=$(wc -c <"$out" | tr -d ' '); eb=$(wc -c <"$err" | tr -d ' ')
+  oh=$(sha256sum "$out" | awk '{{print $1}}'); eh=$(sha256sum "$err" | awk '{{print $1}}')
+  ot=0; et=0; [ "$ob" -le {MAX_LOG} ] || ot=1; [ "$eb" -le {MAX_LOG} ] || et=1
+  printf '{tag}CMD %s %s %s %s %s %s %s %s ' "$name" "$rc" "$ob" "$oh" "$ot" "$eb" "$eh" "$et"
+  head -c {MAX_LOG} "$out" | base64 | tr -d '\\n'; printf ' '
+  head -c {MAX_LOG} "$err" | base64 | tr -d '\\n'; printf '\\n'
+}}
+
+if [ -f package.json ]; then
+  package_bytes=$(wc -c <package.json | tr -d ' '); package_sha=$(sha256sum package.json | awk '{{print $1}}')
+  printf '{tag}PACKAGE %s %s\\n' "$package_bytes" "$package_sha"
+else
+  printf '{tag}PACKAGE 0 missing\\n'
+fi
+if [ -f esy.lock ]; then
+  lock_bytes=$(wc -c <esy.lock | tr -d ' '); lock_sha=$(sha256sum esy.lock | awk '{{print $1}}')
+  printf '{tag}LOCK esy.lock %s %s\\n' "$lock_bytes" "$lock_sha"
+elif [ -d esy.lock ]; then
+  find esy.lock -type f -print | LC_ALL=C sort | while IFS= read -r f; do
+    lock_bytes=$(wc -c <"$f" | tr -d ' '); lock_sha=$(sha256sum "$f" | awk '{{print $1}}')
+    printf '{tag}LOCK %s %s %s\\n' "$f" "$lock_bytes" "$lock_sha"
+  done
+else
+  printf '{tag}LOCK missing 0 missing\\n'
+fi
+capture project-install esy install
+capture compiler-path esy sh -c 'command -v ocamlopt'
+capture compiler-version esy ocamlopt -version
+capture compile-positive esy ocamlopt -o /work/reference.exe /work/main.ml
+capture run-positive /work/reference.exe
+capture compile-wrong-result esy ocamlopt -o /work/wrong.exe /work/wrong_result.ml
+capture run-wrong-result /work/wrong.exe
+capture compile-malformed esy ocamlopt -o /work/malformed.exe /work/malformed.ml
+printf '{tag}END\\n'
+'''
+
+
+def parse(stdout: bytes, nonce: str):
+    tag, commands, locks, package, ended = f"ESYREF_{nonce}_", {}, [], None, False
+    for line in stdout.decode("utf-8", errors="replace").splitlines():
+        if line.startswith(tag + "CMD "):
+            f = line[len(tag + "CMD "):].split(" ", 9)
+            if len(f) != 10:
+                raise ValueError("malformed esy command record")
+            name, rc, ob, oh, ot, eb, eh, et, out64, err64 = f
+            if name in commands:
+                raise ValueError(f"duplicate command record: {name}")
+            out, err = base64.b64decode(out64, validate=True), base64.b64decode(err64, validate=True)
+            if len(out) != min(int(ob), MAX_LOG) or len(err) != min(int(eb), MAX_LOG):
+                raise ValueError(f"bounded log length mismatch: {name}")
+            if ((ot == "0" and (len(out) != int(ob) or sha(out) != oh)) or
+                    (et == "0" and (len(err) != int(eb) or sha(err) != eh))):
+                raise ValueError(f"command log hash mismatch: {name}")
+            commands[name] = {"exit_code": int(rc), "stdout_bytes": int(ob), "stdout_sha256": oh,
+                              "stdout": out[:MAX_EXCERPT].decode("utf-8", errors="replace"),
+                              "stdout_truncated": int(ob) > MAX_EXCERPT or ot == "1",
+                              "stderr_bytes": int(eb), "stderr_sha256": eh,
+                              "stderr": err[:MAX_EXCERPT].decode("utf-8", errors="replace"),
+                              "stderr_truncated": int(eb) > MAX_EXCERPT or et == "1"}
+        elif line.startswith(tag + "PACKAGE "):
+            if package is not None:
+                raise ValueError("duplicate project package record")
+            _, size, digest = line.split(" ")
+            package = {"bytes": int(size), "sha256": digest if digest != "missing" else None}
+        elif line.startswith(tag + "LOCK "):
+            _, path, size, digest = line.split(" ")
+            locks.append({"path": path, "bytes": int(size), "sha256": digest if digest != "missing" else None})
+        elif line == tag + "END":
+            ended = True
+    if not ended:
+        raise ValueError("container completion marker missing")
+    return commands, package, locks
+
+
+def evaluate(commands, package, locks, expected_package_sha):
+    checks = []
+    def add(name, passed, detail):
+        checks.append({"id": name, "passed": bool(passed), "detail": detail})
+    package_input = json.loads((PROPOSAL / "package.json").read_text(encoding="utf-8"))
+    add("package-identity", package is not None and package.get("sha256") == expected_package_sha and
+        package_input.get("dependencies", {}).get("ocaml") == "5.5.1000",
+        "image project package.json matches the locally hash-bound exact compiler package pin")
+    add("lock-present", bool(locks) and all(row["bytes"] > 0 and re.fullmatch(r"[0-9a-f]{64}", row["sha256"] or "") for row in locks),
+        "image project has nonempty esy.lock file contents with exact SHA256 records")
+    add("project-install", commands.get("project-install", {}).get("exit_code") == 0,
+        "esy install succeeds offline against the pinned image lock in disposable project cache")
+    path = commands.get("compiler-path", {})
+    compiler_path = path.get("stdout", "").strip()
+    add("esy-store-compiler", path.get("exit_code") == 0 and "/.esy/" in compiler_path and "/.opam/" not in compiler_path,
+        "esy resolves ocamlopt from its own store, outside the opam switch")
+    version = commands.get("compiler-version", {})
+    add("compiler-version", version.get("exit_code") == 0 and version.get("stdout", "").strip() == "5.5.1",
+        "esy-managed ocamlopt reports exact expected compiler version 5.5.1")
+    add("compile-positive", commands.get("compile-positive", {}).get("exit_code") == 0,
+        "fixed positive source compiles through esy ocamlopt")
+    positive = commands.get("run-positive", {})
+    add("run-positive", positive.get("exit_code") == 0 and positive.get("stdout") == "esy-ocaml-reference:passed\n",
+        "fixed native reference prints exact success output")
+    add("compile-wrong-result", commands.get("compile-wrong-result", {}).get("exit_code") == 0,
+        "wrong-result control compiles successfully before runtime test")
+    wrong = commands.get("run-wrong-result", {})
+    add("run-wrong-result", wrong.get("exit_code", 0) != 0 and
+        "Assert_failure" in (wrong.get("stderr", "") + wrong.get("stdout", "")),
+        "wrong-result control exits nonzero with OCaml Assert_failure")
+    malformed = commands.get("compile-malformed", {})
+    diagnostic = (malformed.get("stderr", "") + malformed.get("stdout", "")).lower()
+    add("compile-malformed", malformed.get("exit_code", 0) != 0 and "syntax error" in diagnostic,
+        "malformed-source control fails with a syntax diagnostic")
+    add("bounded-logs", all(c.get("stdout_bytes", 0) <= MAX_LOG and c.get("stderr_bytes", 0) <= MAX_LOG and
+                             not c.get("stdout_truncated") and not c.get("stderr_truncated") for c in commands.values()),
+        f"command logs are fully captured within {MAX_LOG} bytes per stream")
+    add("command-completeness", set(commands) == {"project-install", "compiler-path", "compiler-version", "compile-positive", "run-positive",
+                                                  "compile-wrong-result", "run-wrong-result", "compile-malformed"},
+        "all fixed commands returned exactly once")
+    return checks
+
+
+def write_report(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = canonical(value) + b"\n"
+    if path.exists():
+        raise FileExistsError(f"immutable report exists: {path}")
+    fd, tmp = tempfile.mkstemp(prefix=".esy-reference-", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(data); stream.flush(); os.fsync(stream.fileno())
+        os.link(tmp, path)
+        folder = os.open(path.parent, os.O_RDONLY)
+        try: os.fsync(folder)
+        finally: os.close(folder)
+    finally:
+        os.unlink(tmp)
+    return sha(data)
+
+
+def run(image: str, run_id: str):
+    if not IMAGE_RE.fullmatch(image):
+        raise ValueError("--image must be sha256:<64 lowercase hex>")
+    if not RUN_RE.fullmatch(run_id):
+        raise ValueError("invalid run ID")
+    report_path = RESULTS / f"{run_id}.json"
+    if report_path.exists():
+        raise FileExistsError(f"immutable report exists: {report_path}")
+    archive, sources, source_bytes = source_bundle()
+    package_path = PROPOSAL / "package.json"
+    package_sha = sha(package_path.read_bytes())
+    nonce = secrets.token_hex(16)
+    name = f"sft-esyref-{run_id[:18]}-{secrets.token_hex(8)}".lower()[:63]
+    docker = ["docker", "run", "--rm", "-i", "--name", name, "--platform", "linux/amd64",
+              "--network", "none", "--read-only", "--cap-drop", "ALL", "--security-opt",
+              "no-new-privileges:true", "--pids-limit", "128", "--memory", "2g", "--cpus", "2",
+              "--tmpfs", "/work:rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700",
+              "--tmpfs", "/home/opam/esy-reference/_esy:rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700",
+              "--user", "1000:1000", "--workdir", "/work", "--entrypoint", "/bin/sh",
+              image, "-c", container_script(nonce)]
+    source = Path(__file__).resolve()
+    runner_sha = sha(source.read_bytes())
+    report = {"schema_version": 1, "id": run_id, "kind": "esy_managed_ocaml_reference_probe",
+              "status": "FAILED", "scope": "fixed-native-reference-only",
+              "claim_limit": "Does not establish esy project build readiness or validate arbitrary model output.",
+              "image": image, "runner": {"path": str(source.relative_to(ROOT)), "sha256": runner_sha},
+              "project_package": {"path": str(package_path.relative_to(ROOT)), "sha256": package_sha},
+              "source_files": sources, "source_total_bytes": source_bytes,
+              "commands": ["esy install", "esy sh -c 'command -v ocamlopt'", "esy ocamlopt -version",
+                           "esy ocamlopt -o /work/reference.exe /work/main.ml", "/work/reference.exe",
+                           "esy ocamlopt -o /work/wrong.exe /work/wrong_result.ml", "/work/wrong.exe",
+                           "esy ocamlopt -o /work/malformed.exe /work/malformed.ml"],
+              "docker_argv": docker, "timeout_seconds": TIMEOUT, "container_name": name,
+              "results": {}, "esy_lock_files": [], "checks": [], "timed_out": False,
+              "stdout": "", "stderr": "", "started_unix": time.time()}
+    proc = None
+    started = time.monotonic()
+    try:
+        proc = subprocess.Popen(docker, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        try:
+            stdout, stderr = proc.communicate(archive, timeout=TIMEOUT)
+            report["exit_code"] = proc.returncode
+        except subprocess.TimeoutExpired:
+            report["timed_out"] = True
+            try:
+                subprocess.run(["docker", "rm", "-f", name], stdin=subprocess.DEVNULL,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10, check=False)
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+            if proc.poll() is None: proc.kill()
+            stdout, stderr = proc.communicate()
+            report["exit_code"] = proc.returncode
+        report["stdout_bytes"], report["stderr_bytes"] = len(stdout), len(stderr)
+        report["stdout_sha256"], report["stderr_sha256"] = sha(stdout), sha(stderr)
+        report["stdout"] = stdout[:4096].decode("utf-8", errors="replace")
+        report["stderr"] = stderr[:4096].decode("utf-8", errors="replace")
+        if not report["timed_out"] and proc.returncode == 0 and len(stdout) + len(stderr) <= 128 * 1024:
+            commands, package, locks = parse(stdout, nonce)
+            report["results"], report["esy_lock_files"] = commands, locks
+            report["checks"] = evaluate(commands, package, locks, package_sha)
+            if all(row["passed"] for row in report["checks"]): report["status"] = "PASSED"
+        else:
+            report["checks"] = [{"id": "container-run", "passed": False,
+                                 "detail": "timeout, Docker failure, or bounded output limit exceeded"}]
+    except (OSError, ValueError) as error:
+        report["error"] = f"{type(error).__name__}: {error}"
+    finally:
+        if proc is not None and proc.poll() is None: proc.kill(); proc.wait()
+        try:
+            cleanup = subprocess.run(["docker", "rm", "-f", name], stdin=subprocess.DEVNULL,
+                                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10, check=False)
+            report["cleanup_exit_code"] = cleanup.returncode
+        except (OSError, subprocess.TimeoutExpired):
+            report["cleanup_exit_code"] = None
+    report["elapsed_seconds"] = round(time.monotonic() - started, 3)
+    if sha(source.read_bytes()) != runner_sha:
+        report["status"] = "FAILED"
+        report["checks"].append({"id": "runner-integrity", "passed": False, "detail": "runner changed during execution"})
+    report["finished_unix"] = time.time()
+    report_sha = write_report(report_path, report)
+    return report, report_path, report_sha
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--image", required=True, help="exact sha256:<64 lowercase hex> image digest")
+    parser.add_argument("--run-id", required=True)
+    args = parser.parse_args(argv)
+    try:
+        report, path, report_sha = run(args.image, args.run_id)
+        print(json.dumps({"status": report["status"], "report": str(path), "report_sha256": report_sha}, sort_keys=True))
+        return 0 if report["status"] == "PASSED" else 1
+    except Exception as error:
+        print(json.dumps({"status": "FAILED", "error": f"{type(error).__name__}: {error}"}, sort_keys=True))
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+
+REVIEW REQUEST
+Check the bootstrap evidence and proposed wrappers, diagnose the missing required reviewer gate, and identify the next bounded repair cards. Do not approve unimplemented work. Check preservation, containment scope, provider authentication exposure, cleanup, incomplete lifecycle coverage and honest status.
+Return strict JSON with keys revision_sha256, evidence_sha256, verdict (PASS|CHANGES_REQUIRED|BLOCKED), findings (id,severity,location,problem,required_change,required_e2e), missing_evidence. PASS requires zero findings and zero missing evidence and is unavailable for full repair acceptance on this packet.
+Every finding must be sent to a separate frontier planner and broken into small coding cards. All subsequent acceptance review must run via claude-worker.sh with literal --model fable. Do not replace it with a Codex review, weaken isolation, waive evidence, broaden scope or reset budgets.
+
+
+REVIEW IDENTITIES
+{"revision_sha256": "b43a6caa652d8682d34f72e5c672a60cbe85ea4d7a112568c526f3f19245202d", "evidence_sha256": "1d8557ada81bf1447310ab3a667b6613441f20e3e7f2cb42a52a6a888f0b55c6"}

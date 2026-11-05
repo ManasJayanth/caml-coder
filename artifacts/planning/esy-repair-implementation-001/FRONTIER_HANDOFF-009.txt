@@ -1,0 +1,1261 @@
+You are the independent frontier reviewer of this lifecycle repair batch.
+Do not treat previous approval, worker prose, a successful provider call or exit zero as proof.
+
+OBJECTIVE AND SCOPE
+Fix lifecycle executable identity checks, fork-failure classification, cleanup status, public E2E harness, and supervised small-agent workflow. No unit tests, dataset work, training, model promotion or original import. This does not establish full esy or training readiness.
+
+FINAL STATUS AND ACCOUNTING
+{
+  "status": "INCOMPLETE",
+  "reason": "Astra E2E source review returned explicit capacity failure; user-authorized Fable fallback smoke failed authentication: OAuth session expired and could not be refreshed. Neither route available for required review.",
+  "coding_launches_consumed": 25,
+  "coding_launch_cap": 36,
+  "coding_launches_remaining": 11,
+  "active_seconds_consumed_at_packet": 20518.627,
+  "active_seconds_limit": 32400,
+  "active_seconds_remaining_at_packet": 11881.373,
+  "working_candidate": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate",
+  "working_candidate_sha256": "bdf66f51ff4198934b0db8fb7591486e21cf64cb6f8650090bb0c74c13051b65",
+  "proposal25": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/tests/e2e/test_review_adapter_e2e.py",
+    "bytes": 11561,
+    "sha256": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9"
+  },
+  "proposal25_full_manifest": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/result-manifest.json",
+    "bytes": 14469,
+    "sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd"
+  },
+  "original_entries_verified": 72,
+  "original_mismatches": [],
+  "historical_artifacts_verified": 1634,
+  "imported": false,
+  "containers_created": false,
+  "completed_this_continuation": [
+    "Reconciled prior activity and preserved original72 plus prior1634 indexed files",
+    "Native containment and authenticated high-Luna smoke passed",
+    "B1a primary review-routing adapter authored in coding24 and independently statically approved with no findings",
+    "Public-process E2E draft authored in coding25; not executed",
+    "Explicit Astra availability failure recorded; Fable fallback smoke attempted and rejected on authentication failure",
+    "All recorded process groups absent and temporary credential links removed"
+  ],
+  "not_completed": [
+    "B1a public E2Es and real primary routing smoke",
+    "B1 fallback policy/envelope implementation and successful Fable preflight",
+    "B2/B3 accepted supervision/controller E2Es",
+    "S1/E1/S2/E2/S3/E3 and all H/E/A lifecycle cards",
+    "Full authentic lifecycle suite, full esy matrix, global import gates"
+  ],
+  "next_step": "Restore an available review route (Astra capacity or valid Claude authentication), reconcile idle/active time, then review exact frozen25. Route findings to fresh separate Astra planning before further coding. No new allocation required."
+}
+REPOSITORY /Users/psac/development/prometheansacrifice/ocaml-rl-sft
+BASELINE {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/baseline-manifest.json", "bytes": 11524, "sha256": "4dcb93a0d9fd247c3e4df3967ff3bbf772127bae7c92e3ce035d5f93908ad6a8"}
+REVISION SHA256 bdf66f51ff4198934b0db8fb7591486e21cf64cb6f8650090bb0c74c13051b65
+EVIDENCE SHA256 f55bf684678550b46f21828518bbcd7be2fc9cf9cc9818434818131f22fe9079
+ARTIFACT INDEX /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/artifact-index-009.json
+STARTING GIT CONTEXT
+{
+  "status": "BOOTSTRAP",
+  "started_at": "2026-10-22T05:44:19.756553+00:00",
+  "repo": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+  "head": "70de30502cbaf450b2c0621091b82d34583709b2",
+  "git_status": " M README.md\n M config/cards.json\n M config/execution-policy.json\n M config/handoff-progress.json\n M config/sources.json\n M docs/PLAN.md\n M pyproject.toml\n M src/sft/cli.py\n M src/sft/corpus.py\n M src/sft/e2e.py\n M src/sft/handoff.py\n M src/sft/workflow.py\n M tests/e2e/test_control.py\n M tests/e2e/test_handoff.py\n M tests/e2e/test_sources.py\n M uv.lock\n?? config/chunks.json\n?? config/eligibility.json\n?? config/extraction.json\n?? config/model-assets.json\n?? config/models.json\n?? config/split-annotations.json\n?? config/splits.json\n?? scripts/check_ocaml_probe.py\n?? scripts/probe_qwen35.py\n?? scripts/probe_qwen35_adapters.py\n?? src/sft/chunks.py\n?? src/sft/conversion.py\n?? src/sft/eligibility.py\n?? src/sft/extract.py\n?? src/sft/ledger.py\n?? src/sft/model_assets.py\n?? src/sft/models.py\n?? src/sft/splits.py\n?? tests/e2e/test_bonito_conversion.py\n?? tests/e2e/test_chunks.py\n?? tests/e2e/test_eligibility.py\n?? tests/e2e/test_extraction.py\n?? tests/e2e/test_ledger.py\n?? tests/e2e/test_models.py\n?? tests/e2e/test_ocaml_checker.py\n?? tests/e2e/test_qwen35_probe.py\n?? tests/e2e/test_splits.py\n?? tests/e2e/test_tokenizer.py\n",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "max_rounds": 12,
+  "max_active_seconds": 21600,
+  "rounds": 0
+}
+
+LATEST AUTHORITY AND PROVIDER POLICY
+User authorized implementation of the complete plan included below. Review entrypoint is claude-worker.sh: Codex gpt-6-astra first, Claude literal fable only after proven availability failure. Never fall back for substantive findings, malformed output, identity/context/auth/permission/safety failures, or cleanup uncertainty. The fallback's authentication failure stops the loop; do not evade it. Planner remains a separate fresh Astra process without fallback. Coding is exact gpt-6-luna high via isolated Pi openai-codex; alternatives need independent preflight. No budget reset; exclude user idle intervals and include planning/review active time.
+
+IMPLEMENTED AND STILL UNACCEPTED
+Isolated working candidate starts with candidate22 plus frozen23 supervisor. Coding24 changed only claude-worker.sh: its review route now forwards to the sibling five-argument Codex adapter before requiring Claude variables. Independent Astra static review returned no findings. This is not full B1, not fallback-policy activation, and not a successful public E2E.
+Coding25 authored only tests/e2e/test_review_adapter_e2e.py. It is preserved separately as proposal25, not merged into the working candidate or original. Complete Pi envelope, exact model, single-file scope and cleanup were verified. AST parsing is not testing. Root noticed potential missing result-file publication, unbounded record reads, arity coverage errors, negative sleep and post-reap signal risks; these are UNREVIEWED OBSERVATIONS requiring independent review and separate planning, not accepted fixes.
+The E2E source reviewer failed with explicit Astra capacity. Fable was attempted through a separate tools-disabled read-only Claude worker with only a temporary link to the existing credential file. It returned is_error=true and OAuth session expired/could not refresh; no model identity was established and no review ran. Temporary links were removed. Do not count subtype success in that envelope as provider success.
+Earlier E2E planning attempt timed out at180seconds and remains FAILED. A fresh narrower planner completed. All failed receipts are preserved. New bootstrap routing scripts and draft outer-test wrapper are not an accepted unattended supervisor; the outer-test wrapper has not been reviewed or executed.
+
+RUNTIME INVARIANTS AND PROVENANCE
+Base sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267.
+Derivative sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459.
+Read-only root; network none; user1000:1000; cap-drop ALL; no-new-privileges; PID128; CPU2; memory2GiB; independent container deadline<=120sec. /work executable128MiB; both project cache mounts32MiB; TMPDIR=/work. Never writable /home/opam/.esy or runtime esy install.
+Compiler /home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt; SHA256 361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24; version5.5.1, package5.5.1000, esy0.9.2. Complete historical build and seed/package/lock inventories are indexed. Diagnostic compilation does not satisfy public runner acceptance. Executable-binding snapshots detect observed changes, not arbitrary transient TOCTOU swaps.
+
+EXACT AUTHORIZED PLAN, SMALL CARDS, INLINE TARGET SCRIPTS AND LOOP
+PLEASE IMPLEMENT THIS PLAN:
+# Small-agent repair plan with E2E verification and a mandatory frontier review loop
+
+## 1. Objective, current state, and locked decisions
+
+Fix the lifecycle supervisor and its public E2E harness, then independently verify the exact resulting revision.
+
+**“Zero gaps” is the review standard.** Missing evidence, uncovered source, unresolved findings, unavailable required providers, unsafe cleanup, or exhausted budgets mean **INCOMPLETE**.
+
+Current starting point:
+
+- Candidate22 and frozen supervisor23 are distinct, unaccepted revisions.
+- Three supervisor defects remain: executable identity checking, fork-failure classification, and cleanup-status consistency.
+- Five harness defects remain.
+- No authentic five-scenario lifecycle acceptance run has passed.
+- The wider esy runner, controller, and import gates remain open.
+- Last recorded coding consumption: **23 of 36 launches**.
+- Last active-time checkpoint: **17,870.209 of 32,400 seconds**, before subsequent review and planning. Reconcile those intervals before dispatch.
+
+### Roles
+
+| Role | Decision |
+|---|---|
+| Default coding model | Luna, `gpt-6-luna`, explicit high reasoning |
+| Current coding transport | Pi `openai-codex`, using the proven isolated configuration |
+| Separate frontier planner | Fresh Codex `gpt-6-astra` |
+| Primary reviewer | Fresh Codex `gpt-6-astra`, invoked through `claude-worker.sh review` |
+| Reviewer fallback | Fresh Claude with literal `--model fable` |
+| Alternative coding transports | Codex or Claude only after their own successful smoke and containment checks |
+| Tests | Public-process E2E only |
+| Package management | `uv`, existing lockfile |
+| Platform | Supported macOS configuration only |
+
+Fallback is permitted **only for a recorded Astra availability failure**. It cannot bypass findings, incomplete context, invalid model identity, authentication/permission failures, or an unfavorable verdict.
+
+Planner fallback is not authorized. If separate Astra planning is unavailable, stop incomplete.
+
+No training, dataset generation, model promotion, or original-source import is part of this correction batch.
+
+## 2. Execution contract and small implementation cards
+
+### Every card has the same mandatory contract
+
+Before dispatch, the separate frontier planner fills:
+
+```json
+{
+  "card_id": "stable ID",
+  "finding_ids": [],
+  "parent_revision_sha256": "actual hash",
+  "inputs": [{"path": "absolute path", "sha256": "actual hash"}],
+  "allowed_paths": [],
+  "prerequisites": [],
+  "required_behavior": [],
+  "forbidden_changes": [],
+  "e2e_recipe_ids": [],
+  "expected_outcomes": [],
+  "evidence_outputs": [],
+  "stop_conditions": []
+}
+```
+
+Rules:
+
+- One concern per coding invocation.
+- One fresh isolated workspace per attempt.
+- Include complete relevant source, accumulated diff, findings, and dependency contracts.
+- Workers cannot execute code, run tests, access Docker, edit acceptance rules, or expand their allowed paths.
+- A worker reports a precise blocker if another path or decision is required.
+- Source-only completion is recorded as **IMPLEMENTED_UNACCEPTED**.
+- Failed attempts consume launches.
+- After three failed attempts on the same objective, require fresh frontier replanning.
+- Never merge unrelated cards to fit the remaining allocation.
+
+The queue intentionally exceeds the nominal 13 remaining launches. Dispatch only within reconciled limits; stop incomplete when necessary. This plan does not authorize another allocation.
+
+### Bootstrap prerequisite cards
+
+These are control-machinery changes, separate from runner repair cards.
+
+| Card | Change | Required E2E |
+|---|---|---|
+| B1 | Implement explicit Astra/Fable review routing through `claude-worker.sh`; preserve every provider receipt | Primary success, availability fallback, Fable unavailable, wrong model, and forbidden fallback after findings |
+| B2 | Enforce bounded single-job supervision and strict provider-envelope validation for all adapters | Timeout, overflow, interruption, descendant cleanup, duplicate/truncated JSON, unsuccessful envelopes |
+| B3 | Implement/reconcile one-job-at-a-time state transitions, accounting, immutable jobs, and blocked handoff output | Concurrent launch, stale job, explicit resume, preserved consumption, budget exhaustion, and handoff in blocked states |
+
+**Do not activate the loop merely because these files exist.** Freeze and independently review the bootstrap implementation and its public CLI E2Es first. The existing rejected controller cannot approve its replacement.
+
+### Supervisor cards
+
+Allowed source: `artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py`.
+
+| Card | Single concern | Observable acceptance |
+|---|---|---|
+| S1 | Consistent executable-binding snapshots | Both lexical path and resolved target are compared at initial, prelaunch, and final stages |
+| E1 | Owned executable-binding diagnostics | Stable passes; prelaunch alias change prevents launch; postlaunch target change fails integrity |
+| S2 | Independent fork-outcome classification | Exact failure marker produces explicit containment failure, independently of child exit and first cause |
+| E2 | Policy-record diagnostics | Failure classification works without weakening native fork denial; diagnostic records cannot count as native evidence |
+| S3 | Final cleanup-status calculation | Status depends only on child launch, actual reap, and both actual EOF observations |
+| E3 | Deterministic lifecycle-order diagnostics | Three real-process observation orderings retain caller-EOF failure and correctly report verified cleanup |
+
+### Harness cards
+
+Allowed source: `tests/e2e/test_esy_lifecycle.py`.
+
+Supervisor changes in E4/E5/E6 are restricted to the explicitly enumerated diagnostic cases; production behavior cannot be weakened.
+
+| Card | Single concern | Dependency |
+|---|---|---|
+| H1 | Nonblocking output collection; ordinary caller stdin stays open | Frozen supervisor interface |
+| H2 | Complete readiness validation before deliberate caller EOF | H1 |
+| H3 | Absolute deadlines, byte caps, and bounded ownership cleanup | H1 |
+| E4 | Public collector timeout, overflow, and exception controls | H3 |
+| H4 | Independent executable/profile/socket/launch identity checks | S1, H2 |
+| H5 | Strict artifact, stream, and actual wait-receipt validation | S3, H3 |
+| H6 | Exact predicates for all five native scenarios | S2, H4, H5 |
+| H7 | Central stop conditions preventing later launches | H6 |
+| E5 | Public stop-propagation controls | H7 |
+| H8 | Five precreated rows and publication after cleanup | H3, H7 |
+| E6 | Public publication and canary-cleanup controls | H8 |
+| A1 | Complete diagnostic driver and paired native acceptance | All preceding cards |
+
+### Finding-to-card mapping
+
+| Finding | Cards |
+|---|---|
+| `L1a-023-01` executable binding | S1, E1, H4 |
+| `L1a-023-02` fork classification | S2, E2, H6, H7 |
+| `L1a-023-03` cleanup status | S3, E3, H5 |
+| `L1-022-03` liveness/readiness | H1, H2 |
+| `L1-022-09` unbounded collection/cleanup | H3, E4, E6 |
+| `L1-022-10` stop propagation | H7, E5 |
+| `L1-022-11` evidence validation | H4, H5, H6 |
+| `L1-022-12` incomplete result publication | H8, E6 |
+| `L1-022-14` missing acceptance | A1 and independent execution/evidence review |
+
+## 3. Exact behavior, interfaces, and E2E controls
+
+### Executable identity
+
+For sandbox-exec and the command executable, capture:
+
+- Fixed lexical path.
+- Symlink chain, link text, and `lstat` identities.
+- Resolved target.
+- Target device, inode, mode, size, modification/change times.
+- SHA-256 from an opened descriptor, with matching `fstat` identities before and after hashing.
+- Resolution-chain consistency around hashing.
+
+Take snapshots initially, immediately before launch, and after execution. Reject incomplete snapshots or prelaunch differences before creating a child. Attempt both final checks independently.
+
+Keep the approved production Docker argv unchanged.
+
+**Explicit limitation:** snapshot checks detect observed changes. They do not atomically bind execution to a pathname or prove the absence of arbitrary transient host swaps.
+
+### Fork classification
+
+Keep the native fixture and sandbox unchanged.
+
+- Denial requires exact permitted `FORK_DENIED:<errno>\n`, empty stderr, complete streams, and exit zero.
+- Exact `FORK_POLICY_FAILURE\n` sets an independent containment-failure outcome.
+- Exit 71 and receipt consistency are separate predicates.
+- Earlier caller EOF, timeout, or overflow remains the first cause.
+- Invalid or incomplete native denial evidence blocks further launches.
+
+### Cleanup status
+
+Calculate once after lifecycle handling:
+
+```text
+No child launched                       → not-required
+Owned child reaped + both EOFs observed  → verified
+Otherwise                               → cleanup-unverified
+```
+
+Use actual wait and EOF observations. Never infer EOF from reap or cleanup from parent exit.
+
+### Public interfaces
+
+Preserve:
+
+```text
+esy_lifecycle.py probe
+  --scenario docker-metadata|fork-denial|timeout|caller-eof|output-overflow
+  --state-directory ABS
+```
+
+Add:
+
+```text
+esy_lifecycle.py diagnose
+  --case FIXED_ENUM
+  --state-directory ABS
+```
+
+Harness:
+
+```text
+test_esy_lifecycle.py
+  --supervisor ABS
+  --output-dir ABS
+  --scenario client-primitive|client-primitive-diagnostics|client-primitive-control
+  [--control FIXED_ENUM]
+```
+
+`--control` is mandatory only in control mode and forbidden otherwise. Controls cannot recursively dispatch controls.
+
+No arbitrary executable, command, source, environment, socket, or timing arguments.
+
+### Evidence schema
+
+Use version 2:
+
+```text
+schema_version
+evidence_kind: native-probe | diagnostic
+diagnostic_case
+policy_evidence_source: native-fork | diagnostic-record | not-applicable
+policy_outcome: denied | unexpected-fork-success | invalid-evidence | not-applicable
+containment_failed
+containment_reasons
+first_terminal_cause
+executable_bindings
+integrity_predicates
+ready
+wait_receipt
+cleanup_status
+cleanup_missing
+streams
+probe_exit
+timings
+```
+
+The actual card must supply complete field types and required/null rules. Reject duplicate JSON keys, unknown control fields, boolean integers, missing streams, and inconsistent identities.
+
+Native acceptance rejects all diagnostic evidence.
+
+### Fixed diagnostic scenarios
+
+| Cases | Mechanism and expected result |
+|---|---|
+| `binding-stable` | Private executable aliases remain unchanged; passes binding checks |
+| `binding-alias-change-prelaunch` | Harness changes only an owned alias to another alias resolving to identical bytes; launch prevented |
+| `binding-target-change-postlaunch` | Harness changes only the owned entry after validated readiness; integrity fails, child cleanup remains evidenced |
+| `policy-record-failure` | Fixed child emits failure marker/71 without calling fork; explicitly diagnostic containment failure |
+| `policy-record-failure-after-caller-eof` | Buffer complete record before permitting caller EOF; retain caller EOF and independent policy failure |
+| `cleanup-caller-eof-eofs-reap` | Real child; actual observations occur in named order |
+| `cleanup-eofs-caller-eof-reap` | Same |
+| `cleanup-reap-caller-eof-eofs` | Same |
+| `collector-timeout` | Fixed childless supervisor diagnostic exceeds collection deadline |
+| `collector-output-overflow` | Emits exactly 65,537 bytes; bounded failure |
+| `collector-exception-target` | Fixed harness exception after validated diagnostic readiness |
+
+Binding barriers use a fresh private directory, fixed filenames, validated case/PID/phase identity, and an absolute three-second allowance. A prelaunch phase is never child readiness. Continue files must be regular, nonsymlink, zero-length files. Barriers cannot renew execution or cleanup deadlines.
+
+Cleanup diagnostics may defer observation within their fixed deadline but cannot fabricate receipts or permit unbounded waits.
+
+### Exact stop-propagation controls
+
+Each runs through the public harness and must produce five unique rows, an unsuccessful nested result, and suppression of subsequent launches.
+
+| Control | Fixed defect |
+|---|---|
+| Missing report | Omit terminal report |
+| Invalid schema | Set `schema_version` to an unsupported value |
+| Unsupported configuration | Explicit diagnostic configuration-failure outcome |
+| Policy failure | Set diagnostic unexpected-fork outcome and containment failure |
+| Hash unavailable | Null one required executable digest |
+| Hash mismatch | Set one final digest unequal to its initial digest |
+| Identity mismatch | Change the report launch identity while readiness retains the original |
+| Cleanup unverified | Omit the child wait receipt and mark cleanup unverified |
+| Canary death | Terminate only the harness-owned canary |
+| Collector timeout | Use the fixed timeout diagnostic |
+| Collector overflow | Use the fixed overflow diagnostic |
+| Collector exception | Raise the fixed exception after validated readiness |
+
+Diagnostic records test validation and stop behavior. They never replace real Docker metadata or native fork-denial evidence.
+
+### Bounds and final acceptance
+
+- Readiness: five seconds.
+- Supervisor completion: ten seconds from launch.
+- Terminate and kill/reap fallback: at most two seconds each.
+- Supervisor streams: retain ≤65,536 bytes; observe ≤65,537 bytes.
+- Artifact reads: check allowed size before bounded reading.
+- Native probe execution and cleanup limits remain three and five seconds.
+- Every child is owned through its process handle; no signaling report-supplied PIDs.
+- Forced supervisor termination is containment failure, not proof of descendant cleanup.
+- Publish final results only after active-process and canary cleanup.
+
+After source approval, run fixed argv through `uv run --locked`:
+
+1. Diagnostic suite.
+2. Five authentic native scenarios.
+3. CLI/path rejection scenarios.
+4. Fresh review of source plus complete resulting evidence.
+
+No unit tests, helper imports, or monkeypatch-based substitutes.
+
+## 4. Portable orchestration and mandatory review loop
+
+### Controller/supervisor contract
+
+The following scripts target an **independently accepted supervisor implementation**. They do not make the current rejected controller runnable.
+
+Its public commands remain:
+
+```text
+init | resume | advance | launch | collect | print-handoff
+```
+
+Required semantics:
+
+- `init` refuses existing state.
+- `resume` reconciles processes, locks, source identities, and consumed budgets.
+- `advance` creates one immutable, allowlisted job.
+- `launch` executes argv arrays with capped streaming output and deadlines.
+- `collect` validates the complete provider envelope, actual model evidence, source/evidence hashes, scope, cleanup, and outcome.
+- `print-handoff` works even when dispatch is blocked.
+- Return `10` only for verified batch completion; `20` for incomplete.
+- Model-generated files cannot grant authorization or increase limits.
+- No old-lock stealing, silent fallback, automatic import, or budget reset.
+
+Job sequence:
+
+```text
+Separate frontier card
+→ bounded coding launch
+→ scope validation and frozen revision
+→ fresh pre-execution review
+→ fixed E2E execution when dependencies are ready
+→ fresh evidence review
+   ├─ findings → separate fresh frontier plan → corrective card
+   ├─ missing evidence → explicit evidence card
+   ├─ infrastructure/context/budget blocker → INCOMPLETE
+   └─ no findings and complete evidence → next card or batch acceptance
+```
+
+### Review fallback
+
+The supervisor—not worker prose—classifies availability.
+
+Permitted fallback triggers:
+
+- Explicit model/service unavailability.
+- Explicit capacity rejection.
+- A bounded availability timeout approved by the bootstrap policy.
+
+Not fallback triggers:
+
+- `CHANGES_REQUIRED`.
+- Missing review context.
+- Malformed responses.
+- Wrong/unverified model identity.
+- Authentication or permission errors.
+- Safety rejection.
+- Cleanup uncertainty.
+
+After Astra availability failure, preserve its receipt, smoke-check Fable, verify identity, and provide **the identical frozen packet**, including the failed Astra attempt.
+
+A substantive review cannot be discarded because another reviewer is more favorable.
+
+### `codex-worker.sh`
+
+```bash
+#!/bin/bash
+set -euo pipefail
+# ROLE WORKSPACE PROMPT PROFILE
+[[ $# -eq 4 ]] || exit 64
+role=$1; workspace=$2; prompt=$3; profile=$4
+[[ "$(uname -s)" = Darwin ]] || exit 69
+: "${CODEX_BIN:?verified absolute executable required}"
+[[ "$CODEX_BIN" = /* && -x "$CODEX_BIN" ]] || exit 64
+
+case "$role" in
+  plan|review)
+    model=gpt-6-astra
+    sandbox=read-only
+    shell_switch=--disable
+    ;;
+  code)
+    model=gpt-6-luna
+    sandbox=danger-full-access
+    shell_switch=--enable
+    ;;
+  *) exit 64 ;;
+esac
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" \
+  "$CODEX_BIN" exec \
+  -c 'model_reasoning_effort="high"' \
+  --disable apps --disable plugins --disable hooks \
+  --disable multi_agent --disable shell_snapshot \
+  "$shell_switch" shell_tool \
+  --ignore-user-config --ephemeral --skip-git-repo-check \
+  --model "$model" --sandbox "$sandbox" \
+  --cd "$workspace" --json - < "$prompt"
+```
+
+Codex coding cannot activate until its own containment smoke passes. The outer sandbox is mandatory.
+
+### `claude-worker.sh`
+
+This is the mandatory review entry point. The supervisor supplies the chosen review provider after applying the fallback policy.
+
+```bash
+#!/bin/bash
+set -euo pipefail
+# ROLE WORKSPACE PROMPT PROFILE
+[[ $# -eq 4 ]] || exit 64
+role=$1; workspace=$2; prompt=$3; profile=$4
+[[ "$(uname -s)" = Darwin ]] || exit 69
+
+case "$role" in
+  review)
+    : "${REVIEW_PROVIDER:?supervisor must select codex or claude}"
+    case "$REVIEW_PROVIDER" in
+      codex)
+        : "${CODEX_WORKER:?verified absolute adapter required}"
+        [[ "$CODEX_WORKER" = /* && -x "$CODEX_WORKER" ]] || exit 64
+        exec "$CODEX_WORKER" review "$workspace" "$prompt" "$profile"
+        ;;
+      claude)
+        model=fable
+        toolset=""
+        permission=plan
+        ;;
+      *) exit 64 ;;
+    esac
+    ;;
+  code)
+    : "${CLAUDE_CODING_MODEL:?exact preflighted model required}"
+    model=$CLAUDE_CODING_MODEL
+    toolset="Read,Edit,Write,Glob,Grep"
+    permission=acceptEdits
+    ;;
+  *) exit 64 ;;
+esac
+
+: "${CLAUDE_BIN:?verified absolute executable required}"
+[[ "$CLAUDE_BIN" = /* && -x "$CLAUDE_BIN" ]] || exit 64
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" \
+  "$CLAUDE_BIN" --print --model "$model" \
+  --output-format json --no-session-persistence \
+  --restricted --setting-sources "" \
+  --strict-mcp-config --mcp-config '{"mcpServers":{}}' \
+  --permission-mode "$permission" --tools "$toolset" \
+  < "$prompt"
+```
+
+No fallback-model CLI flag is permitted. The supervisor records each separate invocation and validates its result.
+
+### `pi-worker.sh`
+
+```bash
+#!/bin/bash
+set -euo pipefail
+# ROLE WORKSPACE PROMPT PROFILE
+[[ $# -eq 4 ]] || exit 64
+role=$1; workspace=$2; prompt=$3; profile=$4
+[[ "$role" = code && "$(uname -s)" = Darwin ]] || exit 69
+: "${PI_BIN:?verified absolute executable required}"
+: "${PI_CODING_AGENT_DIR:?private runtime required}"
+: "${PI_CODING_AGENT_SESSION_DIR:?private sessions required}"
+[[ "$PI_BIN" = /* && -x "$PI_BIN" ]] || exit 64
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" \
+  "$PI_BIN" --print --mode json \
+  --provider openai-codex --model gpt-6-luna --thinking high \
+  --no-session --no-extensions --no-mcp --no-skills \
+  --no-prompt-templates --no-context-files --no-themes \
+  --no-approve --offline --tools read,edit,write \
+  "@$prompt"
+```
+
+### `run-repair-loop.sh`
+
+```bash
+#!/bin/bash
+set -euo pipefail
+# REPOSITORY STATE init|resume ALLOCATION codex|claude|pi
+[[ $# -eq 5 ]] || exit 64
+repo=$1; state=$2; mode=$3; allocation=$4; backend=$5
+
+: "${UV_BIN:?verified absolute uv required}"
+: "${SUPERVISOR:?independently accepted absolute supervisor required}"
+
+[[ "$UV_BIN" = /* && -x "$UV_BIN" ]] || exit 64
+[[ "$SUPERVISOR" = /* && -f "$SUPERVISOR" ]] || exit 64
+[[ "$repo" = /* && -d "$repo" ]] || exit 64
+[[ "$state" = /* && "$allocation" = /* ]] || exit 64
+case "$mode" in init|resume) ;; *) exit 64 ;; esac
+case "$backend" in codex|claude|pi) ;; *) exit 64 ;; esac
+
+control() {
+  "$UV_BIN" run --project "$repo" --locked \
+    python "$SUPERVISOR" "$@"
+}
+
+control "$mode" \
+  --repo "$repo" --state "$state" \
+  --allocation "$allocation" --coding-backend "$backend"
+
+while true; do
+  set +e
+  control advance --state "$state"
+  rc=$?
+  set -e
+
+  case "$rc" in
+    0)
+      control launch --state "$state"
+      control collect --state "$state"
+      ;;
+    10)
+      control print-handoff --state "$state"
+      exit 0
+      ;;
+    20)
+      control print-handoff --state "$state"
+      exit 2
+      ;;
+    *)
+      control print-handoff --state "$state" || true
+      echo "Supervisor failure; explicit reconciliation required." >&2
+      exit "$rc"
+      ;;
+  esac
+done
+```
+
+These are complete launch scripts, not the supervisor implementation. B1–B3 must implement and verify their dependency before activation. Until then, only separately reviewed, individually supervised jobs are allowed.
+
+## 5. Final handoff and continued review
+
+Every review finding must receive a separate frontier planning disposition. A single fresh planner may address multiple findings, but its output must map each finding to explicit cards and E2E evidence.
+
+Review packets must be small enough for complete coverage:
+
+1. Supervisor source and diff.
+2. Harness source and diff.
+3. Diagnostic implementation and controls.
+4. Execution evidence.
+5. Orchestration, accounting, and provider routing.
+6. Final synthesis with all findings and resolutions.
+
+Hash verification is not semantic review. Record uncovered sections explicitly. No final PASS until every required batch section is covered.
+
+The final operation prints the following prompt with all fields populated from validated evidence:
+
+```text
+You are the independent frontier reviewer of this lifecycle repair batch.
+
+Do not treat previous approval, worker prose, a successful provider call,
+or exit zero as proof of correctness.
+
+OBJECTIVE
+Review executable identity checks, fork-failure classification,
+cleanup-status correctness, the public E2E harness, and the supervised
+coding/planning/review loop.
+
+This batch does not establish full esy or model-training readiness.
+
+FINAL STATUS
+State COMPLETE or INCOMPLETE, with exact reasons and remaining gates.
+
+AUTHORITY AND ACCOUNTING
+Include authorized scope, caps, consumed launches, active intervals,
+excluded idle intervals, unresolved accounting, and remaining budget.
+Include reviewer routing and every fallback decision with its evidence.
+
+EXACT REVISIONS
+Include original, candidate and proposed revision paths and hashes.
+Include complete relevant source and accumulated diffs.
+Include adapter, sandbox, supervisor and acceptance-policy hashes.
+State explicitly whether anything was imported.
+
+IMPLEMENTATION
+Include every original and corrective card, dependencies, finding IDs,
+allowed paths, expected behavior and evidence outputs.
+
+VERIFICATION
+Include exact executed argv.
+For every required E2E, include expected outcome, actual outcome,
+revision identity, evidence path/hash and cleanup result.
+Distinguish diagnostic controls from authentic native acceptance.
+Include provider smoke checks, actual model evidence, failed attempts,
+timeouts, fallback attempts and containment evidence.
+State the executable-snapshot TOCTOU limitation.
+
+REVIEW COVERAGE
+Include the indexed source/evidence parts, their hashes, coverage receipts,
+all findings, separate frontier plans, and resolution evidence.
+Identify every unread or missing part.
+Do not silently truncate context.
+
+REVIEW INSTRUCTIONS
+Check all batch requirements against source and actual evidence.
+Look for unsafe cleanup, stale identities, false positives, weakened
+defaults, diagnostic/native confusion, missing scenarios and budget resets.
+Return PASS only with zero findings and zero missing batch evidence.
+Keep broader esy/controller/import gates explicitly separate.
+
+RETURN STRICT JSON
+{
+  "revision_sha256": "actual revision hash",
+  "evidence_sha256": "actual evidence manifest hash",
+  "verdict": "PASS | CHANGES_REQUIRED | BLOCKED",
+  "findings": [
+    {
+      "id": "stable identifier",
+      "severity": "severity",
+      "location": "file or scenario",
+      "problem": "concrete defect",
+      "required_change": "required behavior",
+      "required_e2e": "observable end-to-end acceptance"
+    }
+  ],
+  "missing_evidence": []
+}
+
+MANDATORY FOLLOW-UP
+Every finding goes to a fresh separate Codex Astra planner.
+That planner produces bounded cards for smaller coding workers.
+After implementation and fixed E2Es, invoke a fresh review through
+claude-worker.sh: Codex Astra first, Claude Fable only after an allowed,
+recorded availability failure and successful independent Fable preflight.
+
+Do not use fallback to evade findings or incomplete context.
+Repeat until no findings and no missing evidence remain.
+Stop INCOMPLETE for provider, containment, cleanup, context or budget gates.
+Never reset budgets, weaken requirements, or import unaccepted changes.
+```
+
+The returned review is a required workflow input. It cannot be saved as an appendix and ignored.
+
+CURRENT SEPARATE FRONTIER CARDS
+{
+  "card_id": "B1a-review-adapter-routing",
+  "finding_ids": ["B1-review-entrypoint-rejects-primary"],
+  "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+  "inputs": {
+    "root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate",
+    "files": {
+      "scripts/esy-repair/claude-worker.sh": "9c774c821615dc604eaea1fdcaed8bf38b67909288e309d9913bf028dae5c63c",
+      "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2",
+      "scripts/esy-repair/pi-worker.sh": "bbb9c26e41ea6a7ba6d17558d6dff7f614b75f7ca378084f218e0f5c8bedf794"
+    },
+    "finding_namespace": "Descriptive local identifiers; no external finding registry was supplied."
+  },
+  "allowed_paths": ["scripts/esy-repair/claude-worker.sh"],
+  "prerequisites": [
+    "Independently verify the supplied binding and three file hashes without executing repository code.",
+    "Individually supervise one no-fork Pi author using the exact Luna model; planner and independent reviewer remain Astra.",
+    "The supervisor must support absolute adapter invocation with a fifth positional argument containing the verified absolute Codex executable. This extends the shell-adapter contract, not provider CLI flags.",
+    "Independent review must use a separately trusted invocation; neither the rejected controller nor the proposed adapter may bootstrap its own approval."
+  ],
+  "required_behavior": [
+    "Validate arity before positional dereferences: code accepts four arguments, review accepts five; malformed or unsupported invocations exit 64.",
+    "For review, replace the rejection with exec of the bound sibling codex-worker.sh, forwarding ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE unchanged.",
+    "Resolve the sibling from the adapter location before workspace changes; do not search PATH or the workspace for another adapter.",
+    "Route before requiring CLAUDE_BIN or CLAUDE_CODING_MODEL.",
+    "Preserve the existing four-argument Claude code branch and every provider CLI flag.",
+    "Inherit Codex review's fixed gpt-6-astra model, read-only sandbox, disabled shell and multi_agent settings.",
+    "Preserve streams and process outcome. Add no retry, classification, or fallback."
+  ],
+  "forbidden_changes": [
+    "Controller execution or repair; original checkout access/import; changes to Codex or Pi adapters.",
+    "Policy manifests, provider envelopes, fallback implementation, test-runner implementation, unrelated hardening, or provider CLI changes.",
+    "Execution of the authored candidate before independent static approval."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-fake-routing",
+    "B1a-public-real-astra-smoke"
+  ],
+  "expected_outcomes": [
+    "After static approval, a trusted supervisor invokes the approved absolute claude-worker.sh review entrypoint as a public process, through the unchanged Codex adapter and real sandbox-exec.",
+    "A non-symlink absolute fake Codex executable records argv and stdin and emits controlled stdout, stderr and exit status. Verify exact forwarding, Astra/read-only flags, prompt delivery and successful routing with Claude variables absent.",
+    "Allowed fake scenarios: success, findings-like output, availability-like output, authentication-like output, permission-like output, malformed output, identity/context/cleanup-like output, and controlled nonzero exits. These test transparent routing only; every case must produce zero alternate-provider invocations.",
+    "Malformed argument counts and unsupported roles exit 64 without launching a provider.",
+    "Then invoke a verified real Codex executable with a harmless read-only review prompt through the same public entrypoint. Record available identity evidence; absence or mismatch blocks activation. Any failure stops the smoke without fallback.",
+    "This turn produces a card only; authoring, approval and execution occur in separately supervised steps."
+  ],
+  "evidence_outputs": [
+    "Bound input manifest, minimal diff, candidate hash, unchanged-file hashes.",
+    "Independent Astra static decision bound to candidate bytes.",
+    "After approval: public-process commands, sanitized argv/stdin assertions, stream/status records, provider-invocation ledger and real-smoke result."
+  ],
+  "stop_conditions": [
+    "Binding mismatch, scope expansion, unsupported prerequisite or missing independent approval.",
+    "Review findings require revision and renewed static approval; they never authorize fallback.",
+    "Any tested-byte mismatch invalidates approval; any smoke failure blocks activation."
+  ],
+  "following_cards": [
+    {
+      "card_id": "B1b-review-policy",
+      "finding_ids": ["B1-review-fallback-policy"],
+      "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+      "inputs": ["Supplied baseline and independently approved B1a evidence"],
+      "allowed_paths": ["scripts/esy-repair/review-routing-policy.json"],
+      "prerequisites": [
+        "Separate explicit authorization; verify this new path does not overwrite existing content.",
+        "Bind the approved predecessor bytes before authoring."
+      ],
+      "required_behavior": [
+        "Declare Luna as default coder, Astra-only planner, and primary review through claude-worker.sh to Codex Astra.",
+        "Permit Fable only after positively established provider availability failure.",
+        "Findings, authentication, permission, malformed output, identity, context and cleanup failures prohibit fallback; ambiguity stops."
+      ],
+      "forbidden_changes": ["Adapter, controller or executable classifier changes"],
+      "e2e_recipe_ids": ["B1b-public-policy-matrix", "B1b-public-real-primary"],
+      "expected_outcomes": [
+        "Static approval precedes use. An independently approved external public-process harness validates policy decisions against fake availability, forbidden and ambiguous cases.",
+        "A subsequent real primary smoke confirms the declared route; policy alone enables no fallback."
+      ],
+      "evidence_outputs": ["Policy hash, Astra decision, matrix transcript, real-smoke record"],
+      "stop_conditions": ["Unclassified failure, findings-triggered fallback, unapproved harness"]
+    },
+    {
+      "card_id": "B1c-provider-envelope",
+      "finding_ids": ["B1-provider-result-classification"],
+      "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+      "inputs": ["Approved B1a and B1b manifests", "Verified installed provider interface evidence"],
+      "allowed_paths": ["scripts/esy-repair/review-provider-envelope.py"],
+      "prerequisites": [
+        "Separate explicit authorization and path-collision check.",
+        "Verify actual provider output contracts; independently approve implementation before execution."
+      ],
+      "required_behavior": [
+        "Normalize provider results and distinguish availability from every prohibited fallback category.",
+        "Unknown, incomplete or conflicting evidence stops; nonzero exit alone cannot establish availability failure."
+      ],
+      "forbidden_changes": ["Fallback execution, controller changes, speculative CLI flags"],
+      "e2e_recipe_ids": ["B1c-public-envelope-fixtures", "B1c-public-real-envelope"],
+      "expected_outcomes": [
+        "Approved public executable accepts captured fixtures and routing-only fake executable results covering success, availability, prohibited categories and ambiguity.",
+        "Subsequent real Astra smoke validates parsing and identity evidence against actual output."
+      ],
+      "evidence_outputs": ["Contract evidence, approved hash, fixture outcomes, real transcript"],
+      "stop_conditions": ["Unsupported contract, identity uncertainty, misclassification"]
+    },
+    {
+      "card_id": "B1d-independent-public-e2es",
+      "finding_ids": ["B1-routing-public-process-evidence"],
+      "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+      "inputs": ["Approved predecessor manifests and evidence"],
+      "allowed_paths": ["scripts/esy-repair/test-review-routing.py"],
+      "prerequisites": ["Separate authorization; static approval of harness and tested artifacts"],
+      "required_behavior": [
+        "Exercise actual public adapter processes with isolated fixtures and invocation ledgers.",
+        "Assert zero fallback for findings and every prohibited category."
+      ],
+      "forbidden_changes": ["Rejected-controller execution", "Production fallback activation"],
+      "e2e_recipe_ids": ["B1d-public-fake-matrix", "B1d-public-real-smokes"],
+      "expected_outcomes": [
+        "Routing-only fake cases cover the full approved matrix.",
+        "Subsequent real primary smoke uses Astra; real Fable fallback requires a separately approved dispatcher and independently established availability failure."
+      ],
+      "evidence_outputs": ["Approved harness hash, process transcripts, invocation ledger, smoke results"],
+      "stop_conditions": ["Unapproved dependency, prohibited fallback, unresolved failure"]
+    }
+  ],
+  "safe_bootstrap_notes": [
+    "No tools, workers or candidate code are executed by this plan.",
+    "Static independent approval is tested through a decision bound to exact candidate bytes before behavioral execution; changed bytes require renewed review.",
+    "Adapter authoring does not depend on repairing the rejected controller. Activation requires approved-byte public-process evidence.",
+    "Preserve budget accounting: 23/36 and 19122.94 active/32400 before this turn; no reset or invented remaining balance."
+  ]
+}
+{
+  "card": "B1a public E2E authoring: review routing and transparent responses",
+  "status": "Authoring authorized; execution blocked pending B1a static review and root approval. Preserve earlier planning artifacts.",
+  "budget": "24/36 as supplied; stop at the hard budget.",
+  "binding": {
+    "parent_manifest": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json",
+    "sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+    "verification": "Root independently verifies the full manifest and both supplied adapter sources before execution."
+  },
+  "deliverable": {
+    "write_only": "tests/e2e/test_review_adapter_e2e.py",
+    "location": "Isolated candidate",
+    "restrictions": "Author only. No execution, other edits, project-helper imports, adapter copies, sandbox substitutes, or external Claude invocation.",
+    "interface": "--adapter ABS --output-dir ABS",
+    "validation": "Reject relative paths, symlink components, nonregular adapters, missing sibling codex-worker.sh, and output directories not owned by the current user, empty, and mode 0700. Accept no arbitrary command option."
+  },
+  "fixtures": {
+    "layout": "Create all fixtures and records beneath output-dir: workspace, prompt, fixed profile, per-case configuration, and fake Codex executable. Use absolute paths throughout. Executable must be regular, executable, and nonsymlink.",
+    "interpreter": "Resolve the running Python interpreter once to its absolute nonsymlink executable; embed that literal path in the fake's shebang, never /usr/bin/env. Reject paths unsuitable for a shebang.",
+    "profile": "Use real /usr/bin/sandbox-exec with a fixed native profile: (version 1), (allow default), (deny network*), (deny file-write*), (allow file-write* (subpath OUTPUT_DIR)), (deny process-fork). Escape OUTPUT_DIR as a profile string; permit writes only beneath it.",
+    "fake": "Standard-library Python only. Append one JSON record containing argv excluding executable, cwd, and base64 stdin. Read at most 4097 stdin bytes and reject overflow. Emit the configured literal stdout/stderr bytes and exit status. Never spawn processes.",
+    "prompt": "Exact UTF-8 bytes: review fixture\\n",
+    "responses": [
+      ["success", "OK\\n", "", 0],
+      ["findings", "{\"findings\":[\"fixture\"]}\\n", "", 0],
+      ["availability", "", "unavailable\\n", 69],
+      ["auth", "", "authentication required\\n", 77],
+      ["permission", "", "permission denied\\n", 77],
+      ["malformed", "{broken\\n", "", 0],
+      ["identity", "identity mismatch\\n", "", 0],
+      ["context", "context missing\\n", "", 0],
+      ["cleanup", "", "cleanup failed\\n", 23]
+    ],
+    "interpretation": "Response strings encode literal newline bytes. These are protocol fixtures, not provider acceptance evidence."
+  },
+  "assertions": {
+    "routing": "Launch /bin/bash ADAPTER review WORKSPACE PROMPT PROFILE FAKE. Keep the actual sibling adapter intact. Each response must produce exactly one fake record, exact stdin/cwd, and byte-identical stdout, stderr, and exit status. No automatic fallback or retry.",
+    "argv": [
+      "exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks",
+      "--disable", "multi_agent", "--disable", "shell_snapshot", "--disable", "shell_tool",
+      "--ignore-user-config", "--ephemeral", "--skip-git-repo-check",
+      "--model", "gpt-6-astra", "--sandbox", "read-only", "--cd", "WORKSPACE", "--json", "-"
+    ],
+    "arity": "Test review-prefixed argument counts 0,1,2,3,6; review with 4; code with 5; and unknown role with 4 and 5. Require exit 64, empty stdout/stderr, and no provider record. Do not invoke valid code mode; preserve its branch."
+  },
+  "collection": "Use selector-driven bounded pipe reads, never unbounded communicate. Limit each stream to 4096 bytes, records to 16384 bytes, each invocation to 10 seconds, and suite to 180 seconds. On overflow or timeout kill the owned process group, boundedly drain and reap, then fail. Bound diagnostics to 4096 bytes.",
+  "recipe": "After review approval and root hash verification, root manually runs the fixed Python interpreter with the absolute new test-file path, --adapter pointing to the verified claude-worker.sh, and --output-dir pointing to a fresh private directory. No model-generated command executes automatically.",
+  "stop_conditions": "Stop on unavailable native sandbox/interpreter, binding mismatch, invalid fixtures, unexpected output/status, extra or missing records, timeout, or overflow. Do not substitute runners or weaken policy.",
+  "deferred": "Larger matrix, additional sandbox-denial tests, and real-provider smoke. Root performs separately approved real-CLI smoke later."
+}
+PRIOR INDEPENDENT REVIEW / OPEN FINDINGS
+{
+  "revision_sha256": "c46ac9c731ffddb32351d815ad4e05304f92fd8a517adffdf376eb464ef50d16",
+  "evidence_sha256": "e77817bda71ec87dee6d173550bc5b911012a3f2acd14a2ae03e8fa9526f1dc1",
+  "verdict": "BLOCKED",
+  "findings": [
+    {
+      "id": "L1a-023-01",
+      "severity": "high",
+      "location": "continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py:144-152,201-206",
+      "problem": "Docker executable integrity checks use different path bindings. Launch and the initial hash follow /usr/local/bin/docker, but the final hash reads the previously resolved command target. If the Docker symlink changes after the initial hash, the final comparison can still report true by hashing the old target. A change before Popen can also make the launched executable differ from the recorded resolved executable.",
+      "required_change": "Have the separate planner specify consistent executable identity binding across resolution, hashing, launch and final verification. Detect changes to the fixed lexical executable path as well as its resolved target; do not silently change the approved fixed command contract.",
+      "required_e2e": "Approved public runs must independently substantiate both executable path bindings and matching before/after integrity. Provide a safely owned negative control for changed bindings without modifying the shared Docker installation."
+    },
+    {
+      "id": "L1a-023-02",
+      "severity": "medium",
+      "location": "continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py:226-233",
+      "problem": "The repaired fork fixture emits FORK_POLICY_FAILURE and exits 71 when fork unexpectedly succeeds, but policy validation runs only for decoded exit zero. This outcome is therefore reported as generic child-failure, contrary to the separate L1a requirement to classify policy failure explicitly.",
+      "required_change": "Recognize the exact unexpected-fork-success evidence independently of the zero-exit denial predicate, preserve the first terminal cause, and expose containment failure explicitly for L1b stop evaluation.",
+      "required_e2e": "Authentic native denial must pass only on the exact allowed record. Any observed successful fork must fail containment and stop later launches. Never weaken policy to manufacture successful fork."
+    },
+    {
+      "id": "L1a-023-03",
+      "severity": "medium",
+      "location": "continuation-008/coding-jobs/L1a-023/frozen/artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py:173-198,245-248",
+      "problem": "Cleanup status can remain not-required for a launched child whose reap and EOFs were verified. If one normal-loop drain observes caller EOF and the last stream EOFs, followed by successful reap_once, the terminal-is-None assignment is skipped and the finally cleanup block is also skipped. The report then contains a wait receipt and no missing cleanup observations but cleanup_status not-required.",
+      "required_change": "Derive final cleanup status from child ownership, reap and stream completion independently of the first terminal cause. Reserve not-required for outcomes with no launched child.",
+      "required_e2e": "Approved public caller-liveness controls must preserve the caller-eof failure while reporting verified cleanup whenever the owned wait receipt and both EOFs are present."
+    },
+    {
+      "id": "L1-022-03",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: readiness and communicate handling",
+      "problem": "The unchanged candidate22 harness calls communicate in ordinary scenarios, closing caller liveness. Its caller-eof branch closes stdin before communicate and accepts any truthy readiness object after polling, even when validation did not succeed.",
+      "required_change": "Implement the existing L1b nonblocking collection and explicit readiness_valid requirements, keeping ordinary caller stdin open until supervisor termination.",
+      "required_e2e": "All five live rows must reach their intended outcomes; only caller-eof may deliberately close liveness while the supervisor runs, after fully validated readiness."
+    },
+    {
+      "id": "L1-022-09",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: collection, timeout fallback and finally",
+      "problem": "Supervisor output remains unbounded in communicate; the timeout fallback and canary kill fallback contain unbounded waits. Exceptions can abandon the active supervisor, and supervisor termination does not establish its child's cleanup.",
+      "required_change": "Implement L1b bounded observation, retention, deadlines, active-handle ownership and separate bounded canary cleanup. Forced supervisor termination must fail containment.",
+      "required_e2e": "Provide public timeout, output and exception evidence with bounded collection and cleanup. An outer timeout or supervisor reap cannot substitute for the child's actual cleanup receipt."
+    },
+    {
+      "id": "L1-022-10",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: blocked assignment",
+      "problem": "The unchanged harness stops later launches for only two reason strings. Proposal23 reports cleanup and integrity through independent fields, so these checks also fail to consume its new evidence contract.",
+      "required_change": "Implement the existing L1b central stop predicates across report availability, containment, configuration, integrity, identity, cleanup and canary state.",
+      "required_e2e": "Every blocking condition must prevent subsequent launches while preserving exactly five explicit result rows."
+    },
+    {
+      "id": "L1-022-11",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: report and scenario predicates",
+      "problem": "The harness still omits required typed evidence, identity, executable/profile, artifact and cleanup checks; it uses substring fork-denial matching and potentially vacuous stream predicates. It expects top-level wait_status, whereas frozen23 supplies wait_receipt.raw_status and decoded_child_exit.",
+      "required_change": "Author L1b against an explicitly frozen proposal23 evidence contract, validating complete common predicates and scenario-specific evidence independently.",
+      "required_e2e": "All five live scenarios must pass every common predicate and their exact scenario predicates, including independently decoded actual wait receipts and integrity checks."
+    },
+    {
+      "id": "L1-022-12",
+      "severity": "high",
+      "location": "candidate/tests/e2e/test_esy_lifecycle.py: row creation and result publication",
+      "problem": "Rows are created during execution, exceptions can prevent final publication, executed means truthy readiness rather than successful launch, and result publication occurs before canary cleanup.",
+      "required_change": "Precreate five rows, distinguish launch from valid readiness, convert exceptions into failures, and publish after bounded cleanup with cleanup results included.",
+      "required_e2e": "Success and failure paths must produce exactly five unique rows; overall success requires all five executed and passed plus verified canary cleanup."
+    },
+    {
+      "id": "L1-022-14",
+      "severity": "high",
+      "location": "candidate22, frozen proposal23 and lifecycle-client-primitive acceptance",
+      "problem": "Candidate22 remains the rejected revision. Proposal23 is a separate supervisor-only draft and has not replaced candidate22. Neither provider success nor this partial source review establishes execution approval or lifecycle acceptance. Failed cleanup-denied and capacity receipts remain failures.",
+      "required_change": "Preserve revision separation and failed receipts. Route findings through separate fresh Astra planning, finish L1b, freeze both sources, and obtain the required independent execution review before running either script.",
+      "required_e2e": "Require the approved paired public five-scenario lifecycle E2E with authentic Docker metadata, exact native denial, bounded streams, verified ownership and cleanup, and complete evidence. Full esy acceptance remains separate and open."
+    }
+  ],
+  "missing_evidence": [
+    "Incomplete required semantic coverage: frontier-packet-008/source-002.txt lines 1-1611; source-003.txt lines 1-1115; source-006.txt lines 1-2487; source-009.txt lines 311-821; inline-orchestration.txt lines 1-1309, although equivalent worker-wrapper text was read in other required parts; FRONTIER_HANDOFF-007.txt lines 1-521. These files were hash-verified, which does not constitute source review. BLOCKED is required for this uncovered context.",
+    "Reviewed fully: proposal-023.txt including its diff, review-history.txt, source-000/001/004/005/007/008, and handoff008 with its initially truncated section recovered by a targeted read. Reviewed source-009 lines 1-310 and inline-orchestration lines 1310-1517. Also inspected packet-generation, allocation, ledger, proposal result and final-cleanup records.",
+    "Hash verification passed for all 13 required packet parts, candidate22 revision c46ac9c731ffddb32351d815ad4e05304f92fd8a517adffdf376eb464ef50d16 and its 81 files, frozen23 result manifest fe9e1aaa2bcf8dbd208bb643003036d764fb41f34036e16b6a7000c5c35d6258 and its 81 files, and the original 72 baseline entries. Frozen23 supervisor bytes match fc1e58bfe7134fb129c3478f0da888a05f1f221028bac116c018874237f0f93d. The canonical artifact-index digest matches the requested evidence digest. Of 1634 indexed files, 1633 hashes were checked without mismatch; continuation-006/tests/fixture-auth.json was deliberately not read under the authentication-file restriction.",
+    "No five-row public lifecycle acceptance evidence was supplied or generated. Native policy, actual Docker metadata, negative lifecycle cleanup, strict CLI/path rejection, readiness ordering, complete streams, integrity failures, exception handling and stop propagation remain observable acceptance requirements.",
+    "All 17 required public esy scenarios remain unaccepted, together with the separately listed missing fault and filesystem controls in required-esy-scenario-status-008.json. Diagnostic seed compilation and provider containment/smoke results do not close these gaps. Missing implementations are not proof that safe tests are impossible.",
+    "The controller, import gates, C17/N6 issues, ownership/create/query/deadline integration, seed comparisons, allocation/OOM evidence and post-import verification remain open. Their complete source/history basis was not reviewed here.",
+    "Historical final-cleanup-check.json records absent matching workers and temporary authentication links, and the ledger records 23 of 36 launches. This review did not independently establish current process state, reconcile subsequent active intervals or authorize another launch. The successful dispatch approval was limited to coding23 and cannot authorize coding24.",
+    "HARNESS-ONLY AUTHORING ASSESSMENT: The existing separate L1b plan remains a reasonable next task for isolated source authoring against frozen23, with edits restricted to tests/e2e/test_esy_lifecycle.py and all supervisor findings retained. Its own terms keep the acceptance unit open when supervisor defects remain. This does not require pretending the five E2Es passed. However, this incomplete review does not certify the dispatcher, satisfy the exhausted launch-specific authorization, approve execution, approve import or declare L1a accepted. Any authoring dispatch still requires the prescribed current parent binding, reconciled accounting/cleanup and fresh one-launch gate."
+  ]
+}
+FULL REQUIRED RUNNER SCENARIO STATUS
+{
+  "status": "INCOMPLETE",
+  "real_esy_acceptance_executed": false,
+  "required_scenarios": [
+    {
+      "scenario": "valid-source",
+      "expected": "compile and execution succeed with exact stdout",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-result",
+      "expected": "compiles then expected assertion failure",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "syntax-error",
+      "expected": "normal compiler failure with exact syntax diagnostic",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "writable-caches",
+      "expected": "both disposable cache writes succeed",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "readonly-dependencies",
+      "expected": "existing package/lock/compiler writes denied",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "missing-installation",
+      "expected": "explicit failure before candidate; no install",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "corrupt-missing-seed",
+      "expected": "explicit seed integrity gate",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-image-package-lock-compiler",
+      "expected": "identity failure before candidate",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "added-missing-lockfile",
+      "expected": "complete inventory mismatch",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "two-independent-runs",
+      "expected": "fresh containers/state both succeed",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "timeout",
+      "expected": "failure, deadline measured, owned container removed",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "output-overflow",
+      "expected": "bounded explicit overflow failure",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "resource-exhaustion",
+      "expected": "allocation/OOM evidence and cleanup",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "startup-failure",
+      "expected": "infrastructure failure not fixture success",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "invalid-duplicate-run-id",
+      "expected": "reject without report overwrite",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "concurrent-runs",
+      "expected": "unique owned containers and receipts",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "post-execution-integrity",
+      "expected": "immutable inventories unchanged",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    }
+  ],
+  "additional_explicit_missing_test_implementations": {
+    "R2-inspect-failure": "No safe daemon fault injector is available for a real inspect failure.",
+    "R2-daemon-query-failure": "No safe daemon fault injector is available for a real daemon-query failure.",
+    "R2-ownership-mismatch": "A foreign-container ownership mismatch cannot be induced without risking unrelated daemon state.",
+    "R4-filesystem-variants": "Owned installation, seed, lock, and declared-volume variants are not safely constructible in this fixed runner-only E2E.",
+    "R8-oversized-image-metadata": "A safely owned oversized image-metadata fixture is not available.",
+    "R8-filesystem-mutation-matrix": "Added/missing locks, changed seed metadata, missing probes, and writable protected targets are not safely generated as owned image variants.",
+    "R10-oversized-expectations-and-payloads": "Oversized manifest/payload rejection is bounded in code but has no separately owned real-Docker evidence case.",
+    "R11-source-mutation": "Concurrent source mutation cannot be induced safely while preserving the reviewed input snapshot.",
+    "E2E-08-fifo-and-escaping-paths": "FIFO reports, symlink escapes, and external report destinations are not safely fault-induced by this runner interface.",
+    "E2E-11-unrelated-syntax-diagnostic": "The exact syntax control is checked, but an unrelated compiler error mentioning syntax.ml is not independently induced.",
+    "E2E-12-independent-container-lifetime": "The runner enforces a deadline, but this harness has no independent daemon-side container lifetime observer.",
+    "E2E-05-retained-pipe-and-interruption": "The runner supervisor cannot be independently interrupted without an external owned-process harness.",
+    "E2E-07-build-cancellation": "This E2E does not build images; daemon-side build cancellation cannot be proven here.",
+    "E2E-13-integrity-canaries": "The runner does not expose fixed execution canaries for every integrity gate.",
+    "E2E-14-startup-failure": "No owned missing-entrypoint image variant is supplied by the fixed three-argument interface.",
+    "E2E-16-concurrent-same-id": "Concurrent same-ID reservation is not exercised by this bounded serial driver.",
+    "E2E-17-report-namespace": "Invalid-ID and complete namespace preservation controls are not exposed by the runner contract.",
+    "E2E-18-daemon-log-retention": "Build, remove, and absence-query daemon logs are not persisted as separate evidence artifacts by the runner.",
+    "E2E-19-full-input-snapshot": "Reviewed runner, Dockerfile, fixture, and E2E hashes are checked; a full original/candidate tree snapshot is not part of this fixed harness.",
+    "E2E-20-complete-fault-matrix": "The unavailable daemon faults and filesystem variants listed above have explicit missing rows, but full twenty-finding coverage is not evidenced."
+  },
+  "missing_case_reason_qualification": "Reasons were statically extracted from worker code. They identify unimplemented coverage; they are not proof that safe tests are impossible.",
+  "separate_diagnostics": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-001/receipt.json",
+      "bytes": 523,
+      "sha256": "9d501b1a47edfe84b6547cf7e159911aae1198b2b47692405fbb63e97aa49054"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-002/receipt.json",
+      "bytes": 556,
+      "sha256": "7b6b71e36d022c586538de6d50cb266a2b556ab869a4470f657fb5a4a284c135"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-003/receipt.json",
+      "bytes": 556,
+      "sha256": "ebb7050c9190a86f24ff0515ec7682e7ff08c2c3e62d15b520475dd59bb52c4f"
+    }
+  ],
+  "reporting_contract_only": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/R01b-assertions-002.json",
+    "bytes": 754,
+    "sha256": "e20e6aefb859b0268f6e6d9b1b93dd718c263e7cd7823df1b1161cdede28869a"
+  },
+  "historical_test_source_sha256": "08f55a4acdeba1a15024d358ac3fcc7c43a119f3afefe8346b96d7e22c931327",
+  "test_source_sha256": "1765a2eca5f9dea8b2a5eea5d4a59310cb364ac165669393f4d67370f18563f9",
+  "continuation008": "No public runner or lifecycle scenario executed; source drafts and provider smoke checks cannot close any row.",
+  "continuation009": "No public adapter test or lifecycle/runner scenario executed. Adapter static approval and provider smoke are not E2E acceptance."
+}
+REQUIRED SOURCE, DIFF, SCRIPT AND HISTORY PARTS
+[
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-000.txt",
+    "bytes": 1609,
+    "sha256": "b5ce905673579ce4930c3920e59e7af910d69cf0c80f928655e890680189adb5"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-001.txt",
+    "bytes": 26559,
+    "sha256": "3b5f1587f55df88184d6c4af601d3bd92fdf6880d042c0a4205a69a5c82159fc"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-002.txt",
+    "bytes": 115341,
+    "sha256": "82b4f6c1bc08b4bc0987c22e773ee256a5ebf865152746c9788e0ac8b2a93068"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-003.txt",
+    "bytes": 70810,
+    "sha256": "416020c42903174c206e72244a26e1fda09bdd9a5ed21c7c3e58d6d76a936cf9"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-004.txt",
+    "bytes": 2121,
+    "sha256": "3aaea83857531882964e567a6d3c854d3b41727061b564df0cacd17725879aed"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-005.txt",
+    "bytes": 3069,
+    "sha256": "def987e5b6459bf3f53b916264b4052d9bdbea742c6f6a0888bb679d8666f0ec"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-006.txt",
+    "bytes": 170982,
+    "sha256": "baab6d91288fc8d4bfbadb0a2ad7280fcd9a359aa66f73bc3f9c45571617d756"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-007.txt",
+    "bytes": 1241,
+    "sha256": "77af5161ddbb575061fc360eac6ca43cae102c6cd52a98ddd260d74e63224fa9"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-008.txt",
+    "bytes": 12560,
+    "sha256": "89778e118cc01eb16cd4eb54af07de77f3c82d58440c35e09be9ef5261eddd7b"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/source-009.txt",
+    "bytes": 47237,
+    "sha256": "350e3a38431fb0b0f4415d84aa12655fdd252c4775ec92b82e3b968eb488a03a"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/proposal-025.txt",
+    "bytes": 23867,
+    "sha256": "a429529ad1712cfacc6653a337694619a1b833b1e6bee6ce54e8e47c73f77149"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/review-history.txt",
+    "bytes": 23809,
+    "sha256": "27edd0d6271ccf40fb0965d1a1f2d277bf5f168daeec9ba6d5b6a35667f88040"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-009/inline-orchestration.txt",
+    "bytes": 120446,
+    "sha256": "cd101607f0c3025f038b45e62c5d91dd6bb55f9b0b91d3e4263f3c86ef7ba7a9"
+  }
+]
+REVIEW INSTRUCTIONS
+Read every required part and relevant indexed receipts. Prior unread broader-controller/runner sections remain gaps. Partition review with exact coverage receipts if necessary; no silent truncation or claims from hashes alone. Verify source/evidence identity, expected/actual E2E coverage, bootstrap authority, provider failure classification, accounting, cleanup and scope. Native containment/smoke are not native lifecycle acceptance. All original72 files are unchanged and no import/post-import verification occurred. Missing tests are not proof they are impossible. Return PASS only with zero findings and missing evidence for the clearly stated batch; never clear wider gates implicitly.
+RETURN STRICT JSON
+{
+  "revision_sha256": "bdf66f51ff4198934b0db8fb7591486e21cf64cb6f8650090bb0c74c13051b65",
+  "evidence_sha256": "f55bf684678550b46f21828518bbcd7be2fc9cf9cc9818434818131f22fe9079",
+  "verdict": "PASS | CHANGES_REQUIRED | BLOCKED",
+  "findings": [
+    {
+      "id": "stable identifier",
+      "severity": "severity",
+      "location": "file or scenario",
+      "problem": "concrete defect",
+      "required_change": "required behavior",
+      "required_e2e": "observable E2E acceptance"
+    }
+  ],
+  "missing_evidence": []
+}
+MANDATORY FOLLOW-UP
+Every finding goes to a fresh separate Astra planner for bounded cards. Small workers author, root freezes and validates scope, fresh review precedes fixed E2Es, then fresh review covers actual evidence. Route through claude-worker.sh with the explicit availability-only fallback policy. Do not ignore returned reviews, substitute planners, reset budgets, weaken restrictions, or import unaccepted changes. Stop INCOMPLETE for provider/containment/cleanup/context/budget gates. Resume only after reconciling this checkpoint and later active intervals; do not charge idle user waits.
+This handoff is supervisor-generated because the rejected controller cannot supply an accepted print-handoff command. It does not clear that missing gate.

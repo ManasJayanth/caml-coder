@@ -1,0 +1,10 @@
+[
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+    "sha256": "a8a1ff57ad24003c4f3e9eb0df0cd7c5fdf6fb75fd9460db1e29a2effd8392ed"
+  },
+  {
+    "path": "tests/e2e/test_esy_lifecycle.py",
+    "sha256": "4ccbf9db13f17bf6197046f61b834fd3af9abed31020b8dec4950b7abb2906b7"
+  }
+]

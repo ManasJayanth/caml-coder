@@ -1,0 +1,348 @@
+Independent Astra dispatchreview. Return strictJSON safe_for_one_authoring_25:boolean,findings. Authoringonly new tests/e2e/test_review_adapter_e2e.py per separateAstra plan below. No candidateexecution. Sameprofile,guardian,smokeproofs as successful24, samecap36 and32400, currently24used. Dispatcherchangedonlyallowedpath. Rootvalidatesscope,envelopes,cleanup,bindings. Exactcard includes safeowned-group restriction, scrubbedenv andresultpublication. Source24 passedstaticreview. This is one job25 only, nofurtherautorun.
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/B1a-E2E-025-card.txt
+Implement this bounded card. Read/edit/write tools only; no execution. The plan text says authoring authorized but authority comes from supervising root/user; it does not grant execution. Use plain auditable standard-library code. Scrub subprocess env to fixed PATH=/usr/bin:/bin, HOME privateoutput, LANG=C; no ambient BASH_ENV, ENV, Claude vars. Keep genuineprocess ownership through timeoutcleanup: never signal a processgroup after its leader has been reaped; if cleanupcannotbeproven fail and stop, no success. Use actual sourceadapter and sibling, notcopies. Output directory is precreated empty0700 byroot. CardE2E observations are routingonly, no provideridentityclaim.
+{
+  "card_id": "B1a-E2E-025",
+  "finding_ids": [
+    "B1-review-entrypoint-public-evidence"
+  ],
+  "parent_revision_sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+  "inputs": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json",
+      "sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88"
+    }
+  ],
+  "allowed_paths": [
+    "tests/e2e/test_review_adapter_e2e.py"
+  ],
+  "prerequisites": [
+    "B1a source review passed; E2E source-only authoring; execution requires independent review."
+  ],
+  "required_behavior": [
+    {
+      "card": "B1a public E2E authoring: review routing and transparent responses",
+      "status": "Authoring authorized; execution blocked pending B1a static review and root approval. Preserve earlier planning artifacts.",
+      "budget": "24/36 as supplied; stop at the hard budget.",
+      "binding": {
+        "parent_manifest": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json",
+        "sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+        "verification": "Root independently verifies the full manifest and both supplied adapter sources before execution."
+      },
+      "deliverable": {
+        "write_only": "tests/e2e/test_review_adapter_e2e.py",
+        "location": "Isolated candidate",
+        "restrictions": "Author only. No execution, other edits, project-helper imports, adapter copies, sandbox substitutes, or external Claude invocation.",
+        "interface": "--adapter ABS --output-dir ABS",
+        "validation": "Reject relative paths, symlink components, nonregular adapters, missing sibling codex-worker.sh, and output directories not owned by the current user, empty, and mode 0700. Accept no arbitrary command option."
+      },
+      "fixtures": {
+        "layout": "Create all fixtures and records beneath output-dir: workspace, prompt, fixed profile, per-case configuration, and fake Codex executable. Use absolute paths throughout. Executable must be regular, executable, and nonsymlink.",
+        "interpreter": "Resolve the running Python interpreter once to its absolute nonsymlink executable; embed that literal path in the fake's shebang, never /usr/bin/env. Reject paths unsuitable for a shebang.",
+        "profile": "Use real /usr/bin/sandbox-exec with a fixed native profile: (version 1), (allow default), (deny network*), (deny file-write*), (allow file-write* (subpath OUTPUT_DIR)), (deny process-fork). Escape OUTPUT_DIR as a profile string; permit writes only beneath it.",
+        "fake": "Standard-library Python only. Append one JSON record containing argv excluding executable, cwd, and base64 stdin. Read at most 4097 stdin bytes and reject overflow. Emit the configured literal stdout/stderr bytes and exit status. Never spawn processes.",
+        "prompt": "Exact UTF-8 bytes: review fixture\\n",
+        "responses": [
+          [
+            "success",
+            "OK\\n",
+            "",
+            0
+          ],
+          [
+            "findings",
+            "{\"findings\":[\"fixture\"]}\\n",
+            "",
+            0
+          ],
+          [
+            "availability",
+            "",
+            "unavailable\\n",
+            69
+          ],
+          [
+            "auth",
+            "",
+            "authentication required\\n",
+            77
+          ],
+          [
+            "permission",
+            "",
+            "permission denied\\n",
+            77
+          ],
+          [
+            "malformed",
+            "{broken\\n",
+            "",
+            0
+          ],
+          [
+            "identity",
+            "identity mismatch\\n",
+            "",
+            0
+          ],
+          [
+            "context",
+            "context missing\\n",
+            "",
+            0
+          ],
+          [
+            "cleanup",
+            "",
+            "cleanup failed\\n",
+            23
+          ]
+        ],
+        "interpretation": "Response strings encode literal newline bytes. These are protocol fixtures, not provider acceptance evidence."
+      },
+      "assertions": {
+        "routing": "Launch /bin/bash ADAPTER review WORKSPACE PROMPT PROFILE FAKE. Keep the actual sibling adapter intact. Each response must produce exactly one fake record, exact stdin/cwd, and byte-identical stdout, stderr, and exit status. No automatic fallback or retry.",
+        "argv": [
+          "exec",
+          "--disable",
+          "apps",
+          "--disable",
+          "plugins",
+          "--disable",
+          "hooks",
+          "--disable",
+          "multi_agent",
+          "--disable",
+          "shell_snapshot",
+          "--disable",
+          "shell_tool",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--model",
+          "gpt-6-astra",
+          "--sandbox",
+          "read-only",
+          "--cd",
+          "WORKSPACE",
+          "--json",
+          "-"
+        ],
+        "arity": "Test review-prefixed argument counts 0,1,2,3,6; review with 4; code with 5; and unknown role with 4 and 5. Require exit 64, empty stdout/stderr, and no provider record. Do not invoke valid code mode; preserve its branch."
+      },
+      "collection": "Use selector-driven bounded pipe reads, never unbounded communicate. Limit each stream to 4096 bytes, records to 16384 bytes, each invocation to 10 seconds, and suite to 180 seconds. On overflow or timeout kill the owned process group, boundedly drain and reap, then fail. Bound diagnostics to 4096 bytes.",
+      "recipe": "After review approval and root hash verification, root manually runs the fixed Python interpreter with the absolute new test-file path, --adapter pointing to the verified claude-worker.sh, and --output-dir pointing to a fresh private directory. No model-generated command executes automatically.",
+      "stop_conditions": "Stop on unavailable native sandbox/interpreter, binding mismatch, invalid fixtures, unexpected output/status, extra or missing records, timeout, or overflow. Do not substitute runners or weaken policy.",
+      "deferred": "Larger matrix, additional sandbox-denial tests, and real-provider smoke. Root performs separately approved real-CLI smoke later."
+    }
+  ],
+  "forbidden_changes": [
+    "No existing source edits, tests execution, subprocess execution, imports of project helpers, provider/Docker access."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-fake-routing"
+  ],
+  "expected_outcomes": [
+    "Public fake-routing matrix forwards bytes/status/argv exactly once; invalid arity rejected withoutprovider; result manifest listsallrows and overallpass iff allpass."
+  ],
+  "evidence_outputs": [
+    "New E2E file only; on later approved execution result.json with explicitrows, exactargv, expectedactual, cappedlogs, cleanup."
+  ],
+  "stop_conditions": [
+    "Implementation requires changing any other file; unclear safe ownedprocess cleanup."
+  ]
+}
+FILE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+case "$#" in
+  4|5) ;;
+  *) exit 64 ;;
+esac
+role=$1
+case "$role" in
+ review)
+  [[ $# -eq 5 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  codex_bin=$5
+  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
+  ;;
+ code)
+  [[ $# -eq 4 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
+  model=$CLAUDE_CODING_MODEL
+  tools="Read,Edit,Write,Glob,Grep"
+  permission=acceptEdits
+  ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+FILE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/launch-B1a-e2e.py
+"""Supervised single-card dispatch only; no test execution or import."""
+import hashlib,json,os,shutil,stat,subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent;S=D.parent;R=S/'continuation-008/pi-runtime-v2';job=sys.argv[1];card=Path(sys.argv[2]);round_number=int(sys.argv[3]);assert job.replace('-','').isalnum();assert 24<=round_number<=36
+lock=D/'coding-dispatch.lock';fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600);os.close(fd)
+jobdir=D/'coding-jobs'/job;jobdir.mkdir(parents=True,exist_ok=False);workspace=R/('workspace-'+job);guardian_reaped=False
+try:
+ allocation=json.loads((D/'allocation.json').read_text());remaining=32400-allocation['prior_active_seconds']-(time.time()-allocation['current_turn_started_epoch']);assert remaining>=660,'active budget insufficient'
+ ledger=D/'coding-ledger.json';used=json.loads(ledger.read_text())['coding_launches_consumed'] if ledger.exists() else 23;assert round_number==used+1
+ source=D/'candidate'
+ for p in source.rglob('*'):
+  if p.is_symlink() or not(p.is_dir() or p.is_file()):raise RuntimeError('unsupported source entry')
+ shutil.copytree(source,workspace,copy_function=shutil.copy2)
+ def manifest(root):
+  rows=[]
+  for p in sorted(root.rglob('*')):
+   if p.is_symlink() or not(p.is_dir() or p.is_file()):raise RuntimeError('unsupported entry')
+   if p.is_file():rows.append({'path':str(p.relative_to(root)),'mode':stat.S_IMODE(p.stat().st_mode),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'size':p.stat().st_size})
+  return rows
+ parent=manifest(source);assert parent==manifest(workspace);(jobdir/'parent-manifest.json').write_text(json.dumps(parent,indent=2));(jobdir/'prompt.txt').write_bytes(card.read_bytes());prompt=R/(job+'-prompt.txt');prompt.write_bytes(card.read_bytes())
+ env={k:os.environ[k] for k in ['PATH','LANG','SSL_CERT_FILE','NODE_EXTRA_CA_CERTS'] if k in os.environ};env.update(HOME=str(R/'home'),PI_CODING_AGENT_DIR=str(R/'private-pi'),PI_CODING_AGENT_SESSION_DIR=str(R/'sessions'),PI_TELEMETRY='0',TMPDIR=str(R))
+ argv=['/usr/bin/sandbox-exec','-f',str(S/'continuation-008/pi-nofork-v3.sb'),'/opt/homebrew/bin/pi','--print','--mode','json','--provider','openai-codex','--model','gpt-6-luna','--thinking','high','--no-session','--no-extensions','--no-mcp','--no-skills','--no-prompt-templates','--no-context-files','--no-themes','--no-approve','--offline','--tools','read,edit,write','@'+str(prompt)]
+ spec={'argv':argv,'env':env,'cwd':str(workspace),'output':str(jobdir/'guardian'),'timeout':600,'cap':2097152,'auth_source':'real'};sp=jobdir/'spec.json';sp.write_text(json.dumps(spec,indent=2))
+ with ledger.open('w') as f:json.dump({'coding_launches_consumed':round_number,'coding_launch_cap':36,'reserved_job':job,'epoch':time.time()},f);f.flush();os.fsync(f.fileno())
+ p=subprocess.Popen([sys._base_executable,'-B',str(S/'continuation-008/guardian-v2.py'),str(sp)],stdin=subprocess.PIPE,start_new_session=True)
+ try:p.wait(timeout=615)
+ except subprocess.TimeoutExpired:p.stdin.close();p.wait(timeout=10)
+ receipt=json.loads((jobdir/'guardian/receipt.json').read_text());guardian_reaped=receipt['worker_reaped'];assert guardian_reaped and receipt['credential_removed'],'cleanup unverified'
+ current=manifest(workspace);(jobdir/'result-manifest.json').write_text(json.dumps(current,indent=2));assert manifest(source)==parent,'candidate changed concurrently'
+ before={x['path']:x for x in parent};after={x['path']:x for x in current};changed=[k for k in sorted(set(before)|set(after)) if before.get(k)!=after.get(k)];allow={'tests/e2e/test_review_adapter_e2e.py'}
+ result={'status':'UNACCEPTED','coding_round':round_number,'changed_paths':changed,'scope_valid':set(changed)<=allow,'receipt':receipt,'workspace':str(workspace),'imported':False}
+ shutil.copytree(workspace,jobdir/'frozen',copy_function=shutil.copy2);(jobdir/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+finally:
+ if guardian_reaped:lock.unlink()
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/pi-smoke-high-result.json
+{
+  "status": "PASSED",
+  "checks": {
+    "exact_fixture": true,
+    "reaped": true,
+    "exit0": true,
+    "no_failure": true,
+    "credential_removed": true,
+    "model_identity": true,
+    "complete_json": true
+  },
+  "reported_identity": [
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "toolUse"
+    },
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "toolUse"
+    },
+    {
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "stopReason": "stop"
+    }
+  ],
+  "guardian": {
+    "status": "TERMINATED",
+    "worker_pid": 43957,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 10.769,
+    "single_worker_assumption": "requires separately proven native process-fork denial",
+    "credential_removed": true
+  },
+  "profile_sha256": "6f5bd2ea5f14e95d4583167d7362a4a136655c1195b62b3d09448eb2c1b089c7",
+  "scope": "isolated provider smoke only"
+}
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/smoke-independent-check.json
+{"worker_absent": true, "auth_absent": true, "complete_envelope": true, "count_before_dispatch": 23}
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-source-review-001/final.txt
+{"safe_for_public_routing_tests":true,"findings":[]}
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result.json
+{
+  "status": "UNACCEPTED",
+  "coding_round": 24,
+  "changed_paths": [
+    "scripts/esy-repair/claude-worker.sh"
+  ],
+  "scope_valid": true,
+  "receipt": {
+    "status": "TERMINATED",
+    "worker_pid": 44185,
+    "worker_reaped": true,
+    "exit_code": 0,
+    "reason": null,
+    "elapsed_seconds": 23.426,
+    "single_worker_assumption": "requires separately proven native process-fork denial",
+    "credential_removed": true
+  },
+  "workspace": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/workspace-B1a-024",
+  "imported": false
+}
+
+FILE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-dispatch-review-001/final.txt
+{
+  "safe_for_smoke_and_one_B1a_authoring": true,
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approval covers only the isolated refreshed high-Luna smoke, followed on success by one coding24 B1a authoring launch limited to scripts/esy-repair/claude-worker.sh. The supplied dispatcher retains the R008 sandbox and guardian."
+    },
+    {
+      "severity": "warning",
+      "message": "The dispatcher records scope_valid but does not enforce it or validate provider completion. Approval relies on the stated independent root checks, including card/input bindings, complete provider validation, single-file scope, no prior writers, and credential absence."
+    },
+    {
+      "severity": "warning",
+      "message": "The dispatch lock can be released after worker reaping even when credential cleanup verification fails. Lock absence is not cleanup evidence or permission for another launch."
+    },
+    {
+      "severity": "info",
+      "message": "Preserve the 32400-second active limit and 36-launch cap; this authoring launch consumes slot 24. No additional launch, import, authored-code execution, or test execution is approved. Authored bytes require new independent source review."
+    },
+    {
+      "severity": "info",
+      "message": "The temporary review wrapper delegates only to the supplied trusted read-only Codex route. This approval does not accept it as a portable review implementation, authorize fallback, or activate an unattended controller. Assessment is static against the supplied contents; on-disk hashes and live state were not independently verified."
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+Implement ONLY the revised separate Astra authoring card below. The initial proposed_card was rejected; ALL required adjustments are incorporated in this revised card. Use read/edit/write only, do not run commands/imports/tests. Write exactly the two allowed new files; preserve all existing files. The trusted supervisor verified parenthash, refreshed nativecontainment, realPiLuna smoke, and /var/run/docker.sock resolves to the active local Unix socket. Execution/review is performed later by root.
+{
+  "card_id": "L1-022",
+  "finding_ids": [
+    "C17-03-prerequisite"
+  ],
+  "parent_revision_sha256": "239261f300fc01bac4144a0ef5df186a54561e1bad0909e11d1aa0807ba59097",
+  "input_artifacts": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/parent-manifest.json",
+      "sha256": "239261f300fc01bac4144a0ef5df186a54561e1bad0909e11d1aa0807ba59097"
+    }
+  ],
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+    "tests/e2e/test_esy_lifecycle.py"
+  ],
+  "scope": "Author exactly two new standalone Python source files. Root performs independent execution review and subsequent execution. No production integration.",
+  "prerequisites": [
+    "Both allowed paths must be absent. Preserve every pre-existing candidate file.",
+    "Preserve the prior timed-out attempt and its failure evidence; do not replace or relabel it.",
+    "Coding worker performs no code execution, imports, tests, containers, or environment probes.",
+    "Before launching either authored script, root independently verifies the parent artifact hash, successful native worker containment refresh, successful real Pi smoke, and execution-review approval.",
+    "Execution requires macOS native sandbox-exec, the fixed Docker executable, and the supported local Unix socket configuration."
+  ],
+  "required_behavior": [
+    "Supervisor CLI is exactly: probe --scenario docker-metadata|fork-denial|timeout|caller-eof|output-overflow --state-directory ABS. Reject unknown arguments, relative paths, existing state directories, and arbitrary command or endpoint input. No serve/capture/run interface.",
+    "The supervisor creates its state directory with mode 0700 beneath an existing parent. It creates private HOME and DOCKER_CONFIG directories before launching the child. Reports and retained streams remain inside this state directory.",
+    "Launch exactly one direct child through /usr/bin/sandbox-exec. Use a fixed profile containing allow default, deny process-fork, and deny file-write*. Supply the profile by literal argument. Do not weaken policy when a scenario fails. Child stdin is DEVNULL and close_fds=True; the caller-liveness pipe must not reach the child.",
+    "For docker-metadata, resolve /var/run/docker.sock once to an absolute existing Unix socket and pin that resolved path. The command following sandbox-exec is /usr/local/bin/docker --host unix://RESOLVED_SOCKET version --format '{{json .Server}}'. RESOLVED_SOCKET denotes only the validated runtime realpath, not caller input. Do not start containers or contact registries.",
+    "Construct the child environment explicitly: HOME and DOCKER_CONFIG name the private directories, PATH is /usr/bin:/bin, and LANG is C. Inherit no other environment variables. Supply the same environment policy to Python fixtures.",
+    "Docker success requires exit zero and complete stdout parsing as one JSON object with nonempty string Version and ApiVersion fields. Null, client-only output, malformed JSON, nonzero exit, truncation, or failed cleanup cannot succeed. Record the pinned socket path.",
+    "Process-only scenarios use the resolved interpreter running the supervisor and fixed inline Python -c literals under the identical sandbox profile. No fixture text, executable, arguments, or expected marker may come from the request.",
+    "The fork-denial fixture calls os.fork exactly once. Success requires OSError with EPERM or EACCES and an exact fixture-generated denial record. Any other exception fails. If fork unexpectedly succeeds, its child exits immediately, its parent reaps it and emits an explicit policy-failure record, and root must halt subsequent execution for containment review.",
+    "Timeout and caller-eof fixtures sleep for 30 seconds without producing output. The overflow fixture writes exactly 65537 bytes to stdout and then exits. These are fixed literals, not configurable workloads.",
+    "The caller owns the only write end of the supervisor stdin-liveness pipe. Keep it open throughout every scenario except caller-eof. EOF before successful completion is a failed probe outcome. Do not use a subprocess API pattern that closes stdin automatically in the other scenarios.",
+    "After successful direct-child creation, publish ready.json containing scenario, supervisor PID, child PID, and launch identity. The E2E script waits for valid readiness before deliberately closing the caller-eof pipe.",
+    "Use one monotonic deadline of 3 seconds beginning immediately before child launch. Multiplex stdout, stderr, liveness, and waitpid WNOHANG without allowing any stream to block another. Retain at most 65536 raw bytes independently per stream. Overflow means observed bytes exceed that limit.",
+    "On timeout, caller EOF, overflow, or another fatal supervisor error, latch the first terminal reason, kill the owned direct child while it remains unreaped, and perform cleanup within a separate 5-second allowance. Use a single reaper; never signal after successful reap. An expected failure remains failure even if the child subsequently exits zero.",
+    "Continue bounded draining during cleanup. Track bytes actually observed, bytes retained, and SHA-256 of retained raw bytes separately for stdout and stderr. Never describe observed counts as complete production totals when EOF was not reached. Record whether each stream reached EOF.",
+    "Reap with waitpid and record its actual result. If cleanup cannot be verified within the allowance, report cleanup-unverified, exit nonzero, and have the E2E script stop launching additional children. Do not block indefinitely to manufacture a reaped receipt.",
+    "Publish report.json once after finalization, without overwriting any existing report, and make it read-only. Record scenario, exact argv and environment, resolved executable paths, SHA-256 hashes of sandbox-exec and the selected command executable, SHA-256 of exact profile bytes, before/after executable-hash comparison, child PID, wait status, reason, probe exit, reaped status, stream counts/hashes/EOF flags, and timing. Hash mismatch fails the probe. Read-only publication is a protocol guarantee, not a claim of tamper resistance against the directory owner.",
+    "Public E2E CLI is exactly: --supervisor ABS --output-dir ABS --scenario client-primitive. Require a fresh private output directory. Standard-library imports are permitted; importing the supervisor, project helpers, or unit-test modules is forbidden.",
+    "E2E invokes the supervisor as a subprocess for each of the five scenarios, using distinct fresh state directories. The sole additional subprocess exception is one fixed sleeping Python canary owned directly by the E2E script, outside every supervisor's ownership.",
+    "Check that the canary remains alive after each row using the still-owned process handle. Clean it up separately in an E2E finally block. Verify each probe child through the supervisor's successful waitpid receipt and consistency with ready.json, and verify supervisor termination. Do not use a bare PID-existence test as proof or signal any PID taken from a report.",
+    "Write one E2E result row per required scenario, exactly once, with explicit predicates and failure details. No skipped rows: if containment failure prevents a later launch, record that row as failed/not-run with the blocking reason. Overall E2E success requires all five rows to have executed and passed."
+  ],
+  "forbidden_changes": [
+    "No containers, existing runner/harness edits, dependencies, lockfiles, workflow controller, public registry edits, or arbitrary command framework.",
+    "No code execution by the coding worker.",
+    "No changes to prior failure evidence."
+  ],
+  "e2e_recipe_ids": [
+    "lifecycle-client-primitive"
+  ],
+  "expected_outcomes": [
+    "docker-metadata: successful authentic server metadata, matching executable hashes, complete bounded streams, and verified reap.",
+    "fork-denial: successful explicit EPERM/EACCES denial record, matching executable hashes, complete bounded streams, and verified reap.",
+    "timeout: nonzero probe exit, timeout reason, bounded logs, and verified reap.",
+    "caller-eof: nonzero probe exit, caller-eof reason after readiness, bounded logs, and verified reap.",
+    "output-overflow: nonzero probe exit, output-overflow reason, stdout observed count greater than 65536, retained count at most 65536, and verified reap.",
+    "Expected negative probe outcomes pass their E2E rows only when every containment and evidence predicate matches."
+  ],
+  "evidence_outputs": [
+    "Only the two new source files are authored in this card.",
+    "Root freezes and reviews the source diff before execution.",
+    "Root-run execution produces readiness, bounded retained streams, terminal reports, and the five-row E2E result in fresh private output directories.",
+    "Prior timeout evidence remains a recorded failure."
+  ],
+  "stop_conditions": [
+    "Either allowed source path already exists, or implementation requires another source path or an unbounded framework.",
+    "Unsupported native policy, unexpected successful fork, unsupported Docker metadata configuration, executable-hash mismatch, or unverified cleanup.",
+    "Missing or failed prerequisite evidence prevents launch; it does not prevent authoring the two source files."
+  ]
+}

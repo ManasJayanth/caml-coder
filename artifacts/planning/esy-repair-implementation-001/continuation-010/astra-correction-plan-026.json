@@ -1,0 +1,169 @@
+{
+  "plan_id": "B1a-E2E-025-corrections-026-through-032",
+  "status": "Source-authoring plan only; no execution approval",
+  "reviewer": "gpt-6-astra only; Claude review is unavailable and disabled",
+  "budget": {
+    "consumed_coding_launches": 25,
+    "maximum_coding_launches": 36,
+    "planned_launches": 7,
+    "remaining_after_plan": 4,
+    "active_checkpoint_seconds": 20518.627,
+    "active_hard_limit_seconds": 32400,
+    "rule": "Root reconciles active time before launch26 and every subsequent launch. The supplied checkpoint is not a fresh clock reading. Stop at either hard limit; do not spend remaining slots on unrelated expansion."
+  },
+  "bindings": {
+    "parent_manifest": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/result-manifest.json",
+    "parent_manifest_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+    "test_sha256": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+    "claude_adapter_sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex_adapter_sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2",
+    "review_sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+  },
+  "launch_026": {
+    "card_id": "B1a-E2E-026-owned-process-lifecycle",
+    "finding_ids": ["B1a-E2E-025-owned-process-lifecycle"],
+    "parent_revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+    "inputs": [
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/result-manifest.json",
+        "sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/tests/e2e/test_review_adapter_e2e.py",
+        "sha256": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/scripts/esy-repair/claude-worker.sh",
+        "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-E2E-025/frozen/scripts/esy-repair/codex-worker.sh",
+        "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/B1a-E2E-025-card.txt",
+        "sha256": "c1a7d55fb1f75acf4b954516e8afb2c1dec638a1c26c83fa23f1a5bbd2c509c5"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json",
+        "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+      }
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": [
+      "Root verifies the complete parent manifest, the supplied hashes, the exact candidate copy, and reconciled launch/time budgets before dispatch.",
+      "Authoring uses the authorized coding worker with read/edit/write tools only. Do not execute Python, shell, tests, compilers, subprocesses, Docker, provider CLIs, or project helpers as a coding-worker action.",
+      "B1a-E2E-025 remains unsafe to execute. This card grants source authoring only. Independent Astra source review and separate outer execution-wrapper review precede any later root-run public E2E."
+    ],
+    "required_behavior": [
+      "Repair only owned-process lifecycle in bounded_run and the minimum public probe plumbing needed to exercise it. Retain original response fixtures, arity matrix, record collection, receipt behavior and diagnostic policy for their separately assigned cards; do not claim those findings resolved.",
+      "Initialize cleanup state before spawning. From the instant Popen succeeds, every selector construction, pipe setup, registration, collection, and finalization operation must belong to an auditable cleanup policy. Selector creation must no longer sit outside that policy. A spawn failure must not signal a nonexistent child.",
+      "Create each invocation in its own session, keep the actual child ownership, and never signal a process group after its leader might have been reaped. waitpid(WNOHANG) returning the PID reaps it. Remove the incorrect ownership comment. Cover interruption during the ownership transition: setting a boolean only after waitpid returns is insufficient. Enter a no-signal region before a potentially reaping operation, or use another explicitly justified platform-supported mechanism that closes that interruption gap. Restore signal eligibility only upon a definite non-reaping observation. Unknown state is failure, not permission to signal.",
+      "Prepare fallible output/result material before reaping where practical. Status conversion, output construction, receipt writes, closing operations and deliberate post-reap faults must never flow back into a signal-capable exception handler. Do not install a generic handler that uses the original PID after ownership is released.",
+      "On setup failure, timeout, stream overflow, or an exception while ownership is established, signal only the owned group, boundedly drain both stdout and stderr without retaining beyond the existing caps, close stdin and all other pipe/selector resources, and boundedly reap. Cleanup has a fixed deadline, including drain and reap; do not use an unbounded wait or communicate. Preserve original failure reason alongside cleanup outcome. Failed or uncertain cleanup is a terminal failure and stops the suite.",
+      "Maintain concise lifecycle state for a public invocation: spawned PID, whether group signaling was attempted and the ownership phase of each attempt, leader-reap outcome, pipe closure outcome, cleanup status, and failure reason. Bound this to a fixed small set of transitions; it is not a general tracing system. For single lifecycle probes, persist this small object as lifecycle.json under the validated output directory even on failure when persistence is possible. Full matrix result.json remains the separate receipt card.",
+      "Preserve --adapter ABS and --output-dir ABS. Add only optional --scenario with a closed enum: matrix (default), lifecycle-normal, lifecycle-setup-failure, lifecycle-post-reap-exception, lifecycle-post-reap-interrupt, lifecycle-timeout, lifecycle-stdout-overflow, lifecycle-stderr-overflow. Reject unknown values before spawning. Each non-matrix scenario runs at most one real adapter invocation. No arbitrary command, Python expression, shell fragment, timeout, path-to-runner, dynamic plugin, or user-supplied fake program control.",
+      "The normal probe uses the existing success response. Setup failure raises a fixed deliberate exception after successful spawn and before selector setup. Post-reap exception and interruption probes deliberately raise a fixed ordinary exception or KeyboardInterrupt at the first designated post-reap finalization point. These are narrowly located public test controls, not monkeypatches or helper-call tests. Timeout and overflow probes change only the generated fake's fixed response behavior: finite sleep past the existing invocation deadline, or exactly 4097 literal bytes on the selected stream. The fake still cannot fork or use network.",
+      "The injected failure probes must exit nonzero and must not masquerade as matrix success. Their lifecycle object identifies the requested probe, observed failure, cleanup outcome, and signal attempts. A normal probe exits zero only after exact existing response validation and successful lifecycle completion. Do not claim a fixture's literal cleanup response is evidence of actual process cleanup.",
+      "Preserve fixed environment PATH=/usr/bin:/bin, private HOME, LANG=C; actual source adapter and sibling; absolute validated interpreter shebang; real /usr/bin/sandbox-exec and the original no-network/no-fork/write-only-output profile. No adapter copies or sandbox substitutes. Keep current 4096-byte stream caps, 16384-byte record cap, 10-second invocation and 180-second suite limits. Deadline-race repair is intentionally separate at launch27."
+    ],
+    "forbidden_changes": [
+      "No edits outside tests/e2e/test_review_adapter_e2e.py in the isolated candidate, including no adapter, controller, dispatcher, policy, dependency, or historical artifact edits.",
+      "No code/test execution by the coding worker; no Docker, real provider, Claude, network, imported project helper, or replacement runner.",
+      "No fixes for the other six findings in this launch, no broad refactoring, and no general fault-injection or supervision framework.",
+      "No signal based on a PID after a possible reap, no success with uncertain cleanup, and no claim that source review alone is runtime evidence."
+    ],
+    "e2e_recipe_ids": [
+      "B1a-public-lifecycle-normal",
+      "B1a-public-lifecycle-setup-failure",
+      "B1a-public-lifecycle-post-reap-exception",
+      "B1a-public-lifecycle-post-reap-interrupt",
+      "B1a-public-lifecycle-timeout",
+      "B1a-public-lifecycle-stdout-overflow",
+      "B1a-public-lifecycle-stderr-overflow"
+    ],
+    "public_e2e_recipe": {
+      "executor": "Root only, after independent approvals and exact source/adapter hash verification; never the coding worker.",
+      "invocation": ["VERIFIED_ABSOLUTE_PYTHON", "VERIFIED_ABSOLUTE_TEST", "--adapter", "VERIFIED_ACTUAL_CLAUDE_ADAPTER", "--output-dir", "FRESH_OWNED_EMPTY_0700_DIRECTORY", "--scenario", "ONE_FIXED_ENUM_VALUE"],
+      "mechanism": "Launch the complete test executable as a process; it invokes /bin/bash and the actual sibling adapters under native sandbox. Do not import bounded_run, mock Popen, call internal helpers, replace adapters, or synthesize lifecycle success outside the process.",
+      "observations": "Collect bounded exit/stdout/stderr and lifecycle.json for every probe. Normal succeeds; injected faults, timeout and overflows fail. Setup/timeout/overflow clean owned child and pipes within the fixed cleanup allowance. Post-reap faults have zero signal attempts after a reap, preserve nonzero failure, and report the leader already reaped. Unknown cleanup fails and stops. Review event order and independently bounded outer process completion together.",
+      "proof_limit": "Public probes exercise the real path but cannot prove absence of a PID-reuse race by waiting for reuse. Astra must also inspect the no-signal region around every reap and interruption point. An outer wrapper must not inspect or kill a reused PID merely to test this property."
+    },
+    "expected_outcomes": [
+      "The source closes both ownership findings: post-spawn selector setup is protected, and no reap/finalization failure can signal a released group ID.",
+      "Public lifecycle probes exist for later approved execution, with bounded and honest cleanup observations.",
+      "The other six review findings remain explicitly open; launch26 alone cannot establish complete-suite acceptance."
+    ],
+    "evidence_outputs": [
+      "Coding output: changed tests/e2e/test_review_adapter_e2e.py only, plus supervising root's normal frozen manifest/diff artifacts outside coding scope.",
+      "Later root-run evidence: bounded process exit/streams and lifecycle.json per lifecycle probe. No runtime evidence is generated by this card's authoring step.",
+      "Independent Astra source review of the exact frozen revision, identifying any unresolved ownership or platform-support issue."
+    ],
+    "stop_conditions": [
+      "Any binding mismatch, exhausted reconciled launch/time budget, required edit outside the single allowed file, or need for worker execution.",
+      "Cannot express a justified ownership transition that handles interruption without signaling after a possible reap; do not replace this with a timing assumption or a post-wait boolean.",
+      "Native support required by the selected ownership mechanism is unavailable or uncertain. Fail closed and report the concrete platform limitation; no Linux-only assumption or sandbox substitute.",
+      "Outer execution wrapper remains unreviewed, independent Astra approval is absent, or any source execution-safety blocker remains: source authoring may proceed within scope, execution may not."
+    ]
+  },
+  "remaining_cards": [
+    {
+      "launch": 27,
+      "card_id": "B1a-E2E-027-deadline-race",
+      "finding_ids": ["B1a-E2E-025-deadline-race"],
+      "change": "Use absolute suite/invocation deadlines and one remaining-time calculation per decision. Reject nonpositive suite budget immediately before every Popen, including arity/probe invocations. Sleep only for a positive bounded value from that same calculation. Preserve launch26 ownership semantics and fixed limits; no arbitrary timeout CLI.",
+      "public_e2e": "Add fixed deadline-boundary and suite-exhausted enum scenarios. Drive the complete executable with actual adapters/fake. Boundary reports intended timeout rather than ValueError; exhausted-before-spawn reports zero launches/records, later rows not run once receipts exist. A fixed scenario can deliberately consume the fixed budget or place the internal absolute deadline at the boundary; no fake clock or helper call. Check bounded process completion and lifecycle evidence.",
+      "reason_separate": "Deadline arithmetic is independent of the ownership proof. Keeping it separate avoids inflating launch26."
+    },
+    {
+      "launch": 28,
+      "card_id": "B1a-E2E-028-record-bound",
+      "finding_ids": ["B1a-E2E-025-record-bound"],
+      "change": "Replace every records.read_bytes path with reads capped at RECORD_LIMIT+1 raw bytes. Reject overflow before split/JSON parse and count separators. Perform bounded collection after every invocation; preserve evidence of the raw byte count. Do not yet redesign row association: launch29 owns the exact-one/zero delta assertion.",
+      "public_e2e": "Fixed record-limit and record-overflow fake modes write one valid routing JSON line padded with JSON whitespace to exactly16384 or16385 raw bytes including newline. Run actual public adapter route; exact limit passes this collection check and one over fails immediately. The scenario stops after that invocation so a later cumulative append does not confuse the boundary. Source review verifies the read length because process exit alone cannot establish memory boundedness."
+    },
+    {
+      "launch": 29,
+      "card_id": "B1a-E2E-029-per-case-routing",
+      "finding_ids": ["B1a-E2E-025-per-case-routing"],
+      "change": "Immediately associate each bounded before/after record observation with its invocation. Require exactly one new matching argv/cwd/base64-stdin record for every response invocation and zero for every rejection. Stop at first mismatch. Check the existing extra valid review invocation until launch30 removes it. Preserve the raw cumulative cap from28.",
+      "public_e2e": "Fixed duplicate-record and missing-record modes alter only the first response fake's record count. Public process must fail that first row, launch no later case, and identify the exact mismatch. Normal response cases each show one matching record. Do not claim fake record counts prove absence of arbitrary hidden provider side effects."
+    },
+    {
+      "launch": 30,
+      "card_id": "B1a-E2E-030-arity-offset",
+      "finding_ids": ["B1a-E2E-025-arity-offset"],
+      "change": "Define total adapter argument count excluding /bin/bash and adapter pathname, including role when present. Required9 rejection rows: empty argv; review totals1,2,3,4,6; code total5; unknown totals4,5. Use count-1 filler arguments after each nonempty role. Every row expects64, empty streams and zero record delta. Remove redundant valid-review arity invocation: the original9 response cases already cover review total5. Never invoke valid code total4.",
+      "public_e2e": "Run complete matrix through public CLI. Capture exact launch argv and adapter argument total for each of the18 mandatory rows (9 response plus9 rejection). Inspect evidence to confirm every specified total and zero records on each rejection. No private helper tests."
+    },
+    {
+      "launch": 31,
+      "card_id": "B1a-E2E-031-diagnostic-byte-cap",
+      "finding_ids": ["B1a-E2E-025-diagnostic-byte-cap"],
+      "change": "Encode diagnostics and enforce4096 emitted bytes including any final newline. Write binary stderr. Apply the same byte policy to caught ordinary failures and deliberately handled lifecycle interruption diagnostics; preserve original failure status. Do not cap expected provider stdout/stderr by character count.",
+      "public_e2e": "Fixed diagnostic-ascii and diagnostic-unicode enum scenarios produce long literal messages through the real top-level failure path after normal validation. Launch entire executable, capture raw stderr bytes, require nonzero exit and <=4096 total bytes including newline for both. No arbitrary message input or helper invocation."
+    },
+    {
+      "launch": 32,
+      "card_id": "B1a-E2E-032-result-receipt",
+      "finding_ids": ["B1a-E2E-025-result-receipt"],
+      "change": "Persist result.json beneath the validated private output directory on success and every later failure when the directory remains writable. Predeclare all required rows for the selected closed-enum scenario; matrix has exactly18 required rows. Each has pass/fail/not-run, exact process argv and adapter-argument count, expected/actual byte-safe bounded streams/status, per-case record checks and cleanup outcome. Include bounded failure diagnostic and overall pass iff every required row passes with proven cleanup. Preserve early failure rows and explicit later not-run rows. Prevalidation failures must not write to an unvalidated directory; receipt-write failure is itself nonzero and must never claim success. Incorporate lifecycle observations without creating a second supervision framework.",
+      "public_e2e": "Run complete successful matrix and at least duplicate-record early failure, timeout, exhausted-budget and post-reap fault scenarios through CLI. Inspect result.json plus process status: full matrix18 pass; early failure one responsible fail and later not-run; lifecycle/boundary failures honest and overall fail. Confirm exact argv/bytes/status and cleanup outcomes survive failure. No import-based receipt tests."
+    }
+  ],
+  "remaining_card_contract": {
+    "status": "Ordered templates, not dispatch-ready cards until root binds each to the preceding frozen revision",
+    "parent_rule": "Each later launch uses the immediately preceding accepted frozen result-manifest SHA256 and exact current test SHA256. Root must materialize full inputs with absolute paths and hashes, allowed_paths, prerequisites, required_behavior, forbidden_changes, e2e_recipe_ids, expected_outcomes, evidence_outputs, and stop_conditions before dispatch. Never reuse launch25 hashes for a modified parent or invent future hashes.",
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "inherit": "All launch26 author-only restrictions, fixed sandbox/environment/real-adapter requirements, budget gates, Astra-only review and separate root-execution approval apply. Each launch repairs only its listed finding; fixed scenario controls are minimum evidence plumbing for that finding.",
+    "review_policy": "Independent Astra reviews each frozen correction for its assigned concern and preservation of prior repairs. A concern-level approval does not mark the whole file safe while blockers remain. Full frozen-file and outer-wrapper approval is required before runtime evidence."
+  },
+  "scope_blockers_and_limits": [
+    "No authoring scope blocker identified: all seven repairs fit the one allowed test file. Deterministic public fault enums are a narrowly necessary interface extension for the requested public-process evidence.",
+    "Immediate execution remains blocked by the unsafe frozen25 source and unreviewed outer execution wrapper. No plan text grants execution authority.",
+    "Lifecycle cannot be accepted merely because a post-wait flag looks correct or because PID reuse did not happen during a probe; interruption-safe source reasoning is required alongside process evidence.",
+    "If an interruption leaves reap status genuinely unknowable, report cleanup uncertainty and terminate the suite without signaling the possibly released PID; the independently approved outer containment policy must handle that failure safely. Do not manufacture a cleanup-success receipt.",
+    "Exact-limit record evidence uses valid JSON whitespace padding so parsing and routing checks do not falsely turn a byte-boundary acceptance case into malformed-record rejection.",
+    "These are adapter-routing and harness-safety fixtures, not evidence of provider identity, availability, authentication, or acceptance. Real-provider smoke remains separate."
+  ]
+}

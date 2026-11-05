@@ -1,0 +1,75 @@
+{
+  "required_parts": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-000.txt",
+      "bytes": 1613,
+      "sha256": "515071abcfb653ad01bf41cb4d43cebc06f1bd641e959df58230d345615c6738"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-001.txt",
+      "bytes": 15848,
+      "sha256": "778bce1ac5a57e82bba646b153d5a77b2ccf37a3b075613072fb0431881f5dc6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-002.txt",
+      "bytes": 115345,
+      "sha256": "27f59bfefe5685b1acfccd1e113532b8a80de4031656d49aa65d1800a7a57cdb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-003.txt",
+      "bytes": 70814,
+      "sha256": "796e3e05baeeacb22f606cfa83bdfebcca7278cfa48f28ecb99040a0de882ead"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-004.txt",
+      "bytes": 1581,
+      "sha256": "f5f6c2fcb39cea8afd1168c768fac6d4cef152f46e7790a0908995f97513955e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-005.txt",
+      "bytes": 3073,
+      "sha256": "18fb3f3c80c6875d42b043ef5ffef4cbcf3c545f68e914d4789635bb88598dcb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-006.txt",
+      "bytes": 170986,
+      "sha256": "e61f5fc55db7b7231a3f1b55dc13ba299184282a0304713596cdfd3526edcd62"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-007.txt",
+      "bytes": 1245,
+      "sha256": "b79d981214658dd281b356c6f463b0cd1ca0a16cfc05ea6ad3c2b32965ae49fe"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-008.txt",
+      "bytes": 12564,
+      "sha256": "a69049853e13207a5601b9e080e9e4415f7bd5cf881d312e2c1254e9d1acc51b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/source-009.txt",
+      "bytes": 47241,
+      "sha256": "2bb3193fc390f2f39038ff4c67e3fd37cabe37d0fdafc2960da107933433950e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/proposal-023.txt",
+      "bytes": 32883,
+      "sha256": "a76114012b7a56aaed437e21118ded6650df10e4518fd881ba7d9a7e941a9215"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/review-history.txt",
+      "bytes": 59846,
+      "sha256": "e0c701d2ce62c6cfdf2defe6a338257649726112fc9acb98efa3bd436be5165a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-008/inline-orchestration.txt",
+      "bytes": 105598,
+      "sha256": "cf4321d3a376fc001f5ab52a361b40867b02f24ee90a0b5b5ccbe4b99f0d748c"
+    }
+  ],
+  "historical_context": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/FRONTIER_HANDOFF-007.txt",
+    "bytes": 42239,
+    "sha256": "66f391d4913d7ee1feb6db0c6a65c5a3e5a6e48b689ee5287fdc4c8467efc571"
+  },
+  "rule": "Reviewer must read every source/diff/scripts/history part and relevant indexed evidence. Missing context is BLOCKED, never implicit approval."
+}

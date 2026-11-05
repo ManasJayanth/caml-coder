@@ -1,0 +1,426 @@
+#!/usr/bin/env python3
+"""Real Docker E2E checks for the captured esy reference image.
+
+Public interface is deliberately limited to --image, --expectations and
+--output-dir. Fixed scenarios and predicates live here. Docker or compiler
+unavailability is a failure; no mocked result or skipped scenario is accepted.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import selectors
+import signal
+import subprocess
+import sys
+import time
+
+IMAGE_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+SHA_RE = re.compile(r"^[0-9a-f]{64}$")
+MAX_EXPECTATIONS = 1024 * 1024
+MAX_REPORT = 256 * 1024
+MAX_LOG = 64 * 1024
+MAX_RUN_SECONDS = 120
+
+# Required cases this harness cannot safely induce against an ordinary local
+# daemon. They remain explicit failed evidence rows until a reviewed, owned
+# daemon-fault/variant fixture exists; they are never converted into skips.
+MISSING_REAL_CASES = {
+    "R2-inspect-failure": "No safe daemon fault injector is available for a real inspect failure.",
+    "R2-daemon-query-failure": "No safe daemon fault injector is available for a real daemon-query failure.",
+    "R2-ownership-mismatch": "A foreign-container ownership mismatch cannot be induced without risking unrelated daemon state.",
+    "R4-filesystem-variants": "Owned installation, seed, lock, and declared-volume variants are not safely constructible in this fixed runner-only E2E.",
+    "R8-oversized-image-metadata": "A safely owned oversized image-metadata fixture is not available.",
+    "R8-filesystem-mutation-matrix": "Added/missing locks, changed seed metadata, missing probes, and writable protected targets are not safely generated as owned image variants.",
+    "R10-oversized-expectations-and-payloads": "Oversized manifest/payload rejection is bounded in code but has no separately owned real-Docker evidence case.",
+    "R11-source-mutation": "Concurrent source mutation cannot be induced safely while preserving the reviewed input snapshot.",
+    "E2E-08-fifo-and-escaping-paths": "FIFO reports, symlink escapes, and external report destinations are not safely fault-induced by this runner interface.",
+    "E2E-11-unrelated-syntax-diagnostic": "The exact syntax control is checked, but an unrelated compiler error mentioning syntax.ml is not independently induced.",
+    "E2E-12-independent-container-lifetime": "The runner enforces a deadline, but this harness has no independent daemon-side container lifetime observer.",
+    "E2E-05-retained-pipe-and-interruption": "The runner supervisor cannot be independently interrupted without an external owned-process harness.",
+    "E2E-07-build-cancellation": "This E2E does not build images; daemon-side build cancellation cannot be proven here.",
+    "E2E-13-integrity-canaries": "The runner does not expose fixed execution canaries for every integrity gate.",
+    "E2E-14-startup-failure": "No owned missing-entrypoint image variant is supplied by the fixed three-argument interface.",
+    "E2E-16-concurrent-same-id": "Concurrent same-ID reservation is not exercised by this bounded serial driver.",
+    "E2E-17-report-namespace": "Invalid-ID and complete namespace preservation controls are not exposed by the runner contract.",
+    "E2E-18-daemon-log-retention": "Build, remove, and absence-query daemon logs are not persisted as separate evidence artifacts by the runner.",
+    "E2E-19-full-input-snapshot": "Reviewed runner, Dockerfile, fixture, and E2E hashes are checked; a full original/candidate tree snapshot is not part of this fixed harness.",
+    "E2E-20-complete-fault-matrix": "The unavailable daemon faults and filesystem variants listed above have explicit missing rows, but full twenty-finding coverage is not evidenced.",
+}
+
+REQUIRED_RUNS = (
+    ("positive", "positive", 120, True),
+    ("suite", "suite", 120, True),
+    ("wrong-result", "wrong-result", 120, False),
+    ("syntax", "syntax", 120, False),
+    ("timeout", "timeout", 20, False),
+    ("output", "output", 20, False),
+    ("resource", "resource", 20, False),
+)
+
+
+class E2EFailure(Exception):
+    pass
+
+
+def require(ok: bool, message: str) -> None:
+    if not ok:
+        raise E2EFailure(message)
+
+
+def canonical(obj: object) -> bytes:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+                      allow_nan=False).encode("utf-8")
+
+
+def bounded_read(path: Path, limit: int) -> bytes:
+    st = path.lstat()
+    require(path.is_file() and not path.is_symlink(), f"{path} must be a regular non-symlink file")
+    require(st.st_size <= limit, f"{path} exceeds {limit} bytes")
+    with path.open("rb") as stream:
+        raw = stream.read(limit + 1)
+    require(len(raw) <= limit, f"{path} grew beyond {limit} bytes while reading")
+    return raw
+
+
+def digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def immutable_write(path: Path, data: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(data); stream.flush(); os.fsync(stream.fileno())
+    directory = os.open(path.parent, os.O_RDONLY)
+    try: os.fsync(directory)
+    finally: os.close(directory)
+    return digest(data)
+
+
+def supervisor(argv: list[str], cwd: Path, timeout: int, stdout_path: Path,
+               stderr_path: Path) -> dict:
+    if os.name != "posix":
+        raise E2EFailure("POSIX process-group containment is required")
+    start = time.monotonic()
+    proc = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, start_new_session=True, close_fds=True)
+    captures = {"stdout": {"kept": bytearray(), "hash": hashlib.sha256(), "size": 0},
+                "stderr": {"kept": bytearray(), "hash": hashlib.sha256(), "size": 0}}
+    deadline = start + timeout
+    timed_out = False
+    interrupted = False
+    cleanup_uncertain = False
+    selector = None
+    needs_group_cleanup = True
+
+    def signal_group(sig: int) -> None:
+        nonlocal cleanup_uncertain
+        try: os.killpg(proc.pid, sig)
+        except ProcessLookupError: pass
+        except OSError: cleanup_uncertain = True
+
+    def stop_group() -> None:
+        nonlocal cleanup_uncertain
+        signal_group(signal.SIGTERM)
+        try: proc.wait(timeout=1)
+        except subprocess.TimeoutExpired: pass
+        signal_group(signal.SIGKILL)
+        try: proc.wait(timeout=2)
+        except subprocess.TimeoutExpired: cleanup_uncertain = True
+        group_deadline = time.monotonic() + 1
+        while time.monotonic() < group_deadline:
+            try: os.killpg(proc.pid, 0)
+            except ProcessLookupError: return
+            except OSError:
+                cleanup_uncertain = True
+                return
+            time.sleep(.05)
+        try: os.killpg(proc.pid, 0)
+        except ProcessLookupError: pass
+        except OSError: cleanup_uncertain = True
+        else: cleanup_uncertain = True
+
+    try:
+        selector = selectors.DefaultSelector()
+        for label, pipe in (("stdout", proc.stdout), ("stderr", proc.stderr)):
+            os.set_blocking(pipe.fileno(), False)
+            selector.register(pipe, selectors.EVENT_READ, label)
+        while selector.get_map():
+            left = deadline - time.monotonic()
+            if left <= 0:
+                timed_out = True
+                break
+            for key, _ in selector.select(min(left, .1)):
+                block = os.read(key.fd, 8192)
+                if not block:
+                    selector.unregister(key.fileobj)
+                    continue
+                row = captures[key.data]
+                row["hash"].update(block); row["size"] += len(block)
+                room = MAX_LOG - len(row["kept"])
+                if room > 0: row["kept"].extend(block[:room])
+        if timed_out:
+            stop_group()
+            needs_group_cleanup = False
+        else:
+            try:
+                proc.wait(timeout=max(0, deadline - time.monotonic()))
+                needs_group_cleanup = False
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                stop_group()
+                needs_group_cleanup = False
+        drain_deadline = time.monotonic() + 2
+        while selector.get_map() and time.monotonic() < drain_deadline:
+            for key, _ in selector.select(.1):
+                block = os.read(key.fd, 8192)
+                if not block:
+                    selector.unregister(key.fileobj); continue
+                row = captures[key.data]
+                row["hash"].update(block); row["size"] += len(block)
+                room = MAX_LOG - len(row["kept"])
+                if room > 0: row["kept"].extend(block[:room])
+        if selector.get_map():
+            signal_group(signal.SIGKILL)
+            final_deadline = time.monotonic() + 1
+            while selector.get_map() and time.monotonic() < final_deadline:
+                for key, _ in selector.select(.1):
+                    block = os.read(key.fd, 8192)
+                    if not block:
+                        selector.unregister(key.fileobj); continue
+                    row = captures[key.data]
+                    row["hash"].update(block); row["size"] += len(block)
+                    room = MAX_LOG - len(row["kept"])
+                    if room > 0: row["kept"].extend(block[:room])
+            if selector.get_map(): cleanup_uncertain = True
+    except KeyboardInterrupt:
+        interrupted = True
+        stop_group()
+        needs_group_cleanup = False
+    finally:
+        if needs_group_cleanup:
+            stop_group()
+        if selector is not None: selector.close()
+        for pipe in (proc.stdout, proc.stderr):
+            try: pipe.close()
+            except OSError: pass
+    out, err = bytes(captures["stdout"]["kept"]), bytes(captures["stderr"]["kept"])
+    stdout_path.write_bytes(out); stderr_path.write_bytes(err)
+    return {"argv": argv, "exit_code": proc.returncode, "timed_out": timed_out,
+            "interrupted": interrupted, "process_group_cleanup_uncertain": cleanup_uncertain,
+            "elapsed_seconds": round(time.monotonic() - start, 3),
+            "stdout_total_bytes": captures["stdout"]["size"], "stdout_retained_bytes": len(out),
+            "stdout_full_sha256": captures["stdout"]["hash"].hexdigest(), "stdout_retained_sha256": digest(out),
+            "stdout_path": str(stdout_path), "stderr_total_bytes": captures["stderr"]["size"],
+            "stderr_retained_bytes": len(err), "stderr_full_sha256": captures["stderr"]["hash"].hexdigest(),
+            "stderr_retained_sha256": digest(err), "stderr_path": str(stderr_path)}
+
+
+def docker_inspect(image: str, cwd: Path, evidence: Path) -> dict:
+    argv = ["docker", "image", "inspect", image]
+    row = supervisor(argv, cwd, 20, evidence / "image-inspect.stdout", evidence / "image-inspect.stderr")
+    require(row["exit_code"] == 0 and not row["timed_out"], "real Docker image inspection failed")
+    require(row["stdout_total_bytes"] <= MAX_LOG and row["stderr_total_bytes"] <= MAX_LOG,
+            "Docker image metadata or diagnostics exceeded bounded capture")
+    raw = bounded_read(Path(row["stdout_path"]), MAX_LOG)
+    # The retained log is intentionally bounded; metadata beyond the cap fails.
+    rows = json.loads(raw)
+    require(isinstance(rows, list) and len(rows) == 1, "Docker did not return exactly one image")
+    obj = rows[0]
+    require(obj.get("Id") == image, "Docker image ID differs from --image")
+    require(not obj.get("Config", {}).get("Volumes"), "Docker image declares unexpected volumes")
+    layers = obj.get("RootFS", {}).get("Layers")
+    require(isinstance(layers, list) and layers, "Docker image has no layer inventory")
+    return {"id": obj["Id"], "layers": layers, "config": obj.get("Config", {}),
+            "architecture": obj.get("Architecture"), "os": obj.get("Os"), "inspection": row}
+
+
+def check_expectations(raw: bytes, image: str, runner: Path, dockerfile: Path,
+                       fixture: Path) -> dict:
+    value = json.loads(raw)
+    require(isinstance(value, dict) and value.get("schema_version") == 1,
+            "expectations must use captured schema_version 1")
+    require(value.get("image") == image, "expectation image must equal --image")
+    require(value.get("base_image") == "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+            "expectations do not pin the required base image")
+    require(isinstance(value.get("base_layers"), list) and value["base_layers"], "base layers missing")
+    require(isinstance(value.get("image_layers"), list) and value["image_layers"], "image layers missing")
+    require(value["image_layers"][:len(value["base_layers"])] == value["base_layers"],
+            "captured derivative does not retain base layer prefix")
+    src = value.get("source_sha256")
+    required = {"run_esy_reference.py": runner, "Dockerfile.esy-runtime": dockerfile, "main.ml": fixture}
+    require(isinstance(src, dict), "captured source hash inventory missing")
+    for name, path in required.items():
+        expected = src.get(name)
+        require(isinstance(expected, str) and SHA_RE.fullmatch(expected), f"captured hash missing: {name}")
+        require(digest(bounded_read(path, 1024 * 1024)) == expected, f"reviewed source hash mismatch: {name}")
+    return value
+
+
+def run_case(name: str, case: str, timeout: int, expect_pass: bool, runner: Path,
+             image: str, expectations: Path, output: Path, cwd: Path) -> dict:
+    case_dir = output / "real-runs" / name
+    case_dir.mkdir(parents=True, exist_ok=False)
+    run_id = "e2e-" + name
+    argv = [sys.executable, "-B", str(runner), "--image", image, "--run-id", run_id,
+            "--expectations", str(expectations), "--output-dir", str(output / "runner-reports"),
+            "--case", case, "--timeout", str(timeout)]
+    proc = supervisor(argv, cwd, timeout + 30, case_dir / "runner.stdout", case_dir / "runner.stderr")
+    raw = bounded_read(Path(proc["stdout_path"]), MAX_LOG)
+    try: cli = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc: raise E2EFailure(f"{name}: malformed runner CLI output") from exc
+    report = None
+    failures = []
+    if not isinstance(cli, dict) or not isinstance(cli.get("report"), str):
+        failures.append("runner did not return a report path")
+    else:
+        report_path = Path(cli["report"])
+        require(report_path.resolve().parent == (output / "runner-reports").resolve(),
+                "runner report escaped its owned report directory")
+        report_raw = bounded_read(report_path, MAX_REPORT)
+        report = json.loads(report_raw)
+        immutable_write(case_dir / "runner-report.json", report_raw)
+        require(report.get("id") == run_id, "runner report ID mismatch")
+        require(report.get("cleanup", {}).get("verified_absent") is True,
+                "runner lacks daemon-confirmed container cleanup")
+    require(not proc["timed_out"], f"host runner exceeded its bounded deadline for {name}")
+    if expect_pass:
+        require(proc["exit_code"] == 0 and report and report.get("status") == "PASSED",
+                f"{name}: positive invocation did not exit zero with PASSED report")
+        if case in ("positive", "suite"):
+            require(report.get("fixture_hashes", {}).get("main.ml") == digest(bounded_read(runner.parent / "main.ml", 64*1024)),
+                    "reference main.ml bytes changed in runner payload")
+    else:
+        require(proc["exit_code"] != 0 and report and report.get("status") == "FAILED",
+                f"{name}: negative control did not return nonzero with FAILED report")
+        reason = report.get("reason")
+        required_reason = {"wrong-result":"wrong-result-observed","syntax":"syntax-failure-observed",
+                           "timeout":"timeout-observed","output":"output-observed",
+                           "resource":"resource-allocation-failure-observed"}.get(case)
+        if required_reason:
+            allowed = ("resource-allocation-failure-observed", "resource-oom-observed") if case == "resource" else (required_reason,)
+            require(reason in allowed, f"{name}: wrong observed reason {reason!r}")
+            if case == "resource" and reason == "resource-allocation-failure-observed":
+                evidence = report.get("results", {}).get("commands", {}).get("run-resource", {})
+                require(evidence.get("reason") == "allocation-failure" and "Out of memory" in evidence.get("stderr", ""),
+                        "resource failure lacks an OCaml allocation diagnostic")
+            if case == "resource" and reason == "resource-oom-observed":
+                require(report.get("oom_killed") is True, "resource failure lacks Docker OOM confirmation")
+        results = report.get("results", {}).get("commands", {})
+        if case == "wrong-result":
+            require(results.get("compile-wrong-result", {}).get("exit_code") == 0,
+                    "wrong assertion fixture did not compile")
+            require(isinstance(results.get("run-wrong-result", {}).get("exit_code"), int) and
+                    results.get("run-wrong-result", {}).get("exit_code") != 0 and
+                    results.get("run-wrong-result", {}).get("signal") is None and
+                    not results.get("run-wrong-result", {}).get("timed_out") and
+                    "Assert_failure" in results.get("run-wrong-result", {}).get("stderr", ""),
+                    "compiled wrong assertion did not produce its expected OCaml exception")
+        if case == "syntax":
+            require(report.get("fixture_hashes", {}).get("syntax.ml") == digest(b"let broken =\n"),
+                    "syntax fixture bytes differ from the exact required source")
+            diag = results.get("compile-syntax", {}).get("stderr", "")
+            require(re.search(r"(?m)^Error: Syntax error", diag) is not None,
+                    "syntax control lacks the specific OCaml syntax diagnostic")
+        if case in ("timeout", "output", "resource"):
+            control = results.get("run-" + case, {})
+            require(results.get("compile-" + case, {}).get("exit_code") == 0,
+                    f"{case} OCaml control did not compile through esy")
+            if case == "timeout": require(control.get("reason") == "command-timeout", "compiled loop did not hit its deadline")
+            if case == "output": require(control.get("reason") == "command-output-overflow", "compiled output did not overflow the command buffer")
+            if case == "resource" and reason == "resource-allocation-failure-observed":
+                require(control.get("reason") == "allocation-failure", "compiled allocation control lacks allocation failure evidence")
+    return {"id": name, "case": case, "timeout_seconds": timeout,
+            "expected_runner_status": "PASSED" if expect_pass else "FAILED",
+            "actual": {"process": proc, "cli": cli, "report": report}, "passed": True}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--image", required=True)
+    parser.add_argument("--expectations", required=True, type=Path)
+    parser.add_argument("--output-dir", required=True, type=Path)
+    args = parser.parse_args(argv)
+    test_path = Path(__file__).resolve()
+    proposal = test_path.parents[1]
+    runner, dockerfile, fixture = proposal / "run_esy_reference.py", proposal / "Dockerfile.esy-runtime", proposal / "main.ml"
+    candidate = test_path.parents[4]
+    output = args.output_dir.resolve()
+    manifest = {"schema_version": 1, "suite": "ESY_REFERENCE_REAL_DOCKER_E2E", "status": "FAILED",
+                "image": args.image, "started_unix": time.time(), "scenarios": [], "failures": []}
+    manifest_path = None
+    try:
+        require(IMAGE_RE.fullmatch(args.image) is not None, "--image must be immutable sha256 ID")
+        require(not args.expectations.is_symlink(), "expectations cannot be a symlink")
+        expectation_path = args.expectations.resolve(strict=True)
+        require(expectation_path != candidate and candidate not in expectation_path.parents,
+                "expectations must be outside the candidate tree")
+        raw = bounded_read(expectation_path, MAX_EXPECTATIONS)
+        expectation = check_expectations(raw, args.image, runner, dockerfile, fixture)
+        require(output != candidate and candidate not in output.parents, "output directory must be outside candidate")
+        require(not args.output_dir.is_symlink(), "output directory cannot be a symlink")
+        require(not output.exists() or output.is_dir(), "output path must be a directory")
+        output.mkdir(parents=True, exist_ok=True)
+        require(not any(output.iterdir()), "output directory must be empty")
+        manifest_path = output / "scenario-manifest.json"
+        manifest.update({"expectations_path": str(expectation_path), "expectations_sha256": digest(raw),
+                         "runner_sha256": digest(bounded_read(runner, 1024*1024)),
+                         "test_sha256": digest(bounded_read(test_path, 1024*1024)),
+                         "source_hashes": expectation["source_sha256"], "output_dir": str(output)})
+        image_record = docker_inspect(args.image, proposal, output)
+        require(image_record["layers"] == expectation["image_layers"], "actual image layers differ from captured expectations")
+        manifest["image_evidence"] = image_record
+        for name, case, timeout, expect_pass in REQUIRED_RUNS:
+            try:
+                manifest["scenarios"].append(run_case(name, case, timeout, expect_pass, runner,
+                                                       args.image, expectation_path, output, proposal))
+            except BaseException as exc:
+                row={"id":name,"case":case,"expected_runner_status":"PASSED" if expect_pass else "FAILED",
+                     "passed":False,"failure":f"{type(exc).__name__}: {exc}"}
+                manifest["scenarios"].append(row); manifest["failures"].append({"scenario":name,"reason":row["failure"]})
+        for scenario, reason in MISSING_REAL_CASES.items():
+            row={"id":scenario,"passed":False,"evidence_status":"MISSING_FAILED","reason":reason}
+            manifest["scenarios"].append(row); manifest["failures"].append({"scenario":scenario,"reason":reason})
+        require(digest(bounded_read(runner,1024*1024)) == manifest["runner_sha256"], "runner source changed during suite")
+        require(digest(bounded_read(test_path,1024*1024)) == manifest["test_sha256"], "E2E source changed during suite")
+        require(digest(bounded_read(dockerfile,1024*1024)) == expectation["source_sha256"]["Dockerfile.esy-runtime"], "Dockerfile source changed during suite")
+        require(digest(bounded_read(fixture,1024*1024)) == expectation["source_sha256"]["main.ml"], "fixture source changed during suite")
+        if not manifest["failures"] and all(x.get("passed") is True for x in manifest["scenarios"]): manifest["status"]="PASSED"
+    except BaseException as exc:
+        manifest["failures"].append({"suite":f"{type(exc).__name__}: {exc}"})
+    present = {row.get("id") for row in manifest["scenarios"]}
+    for name, case, timeout, expect_pass in REQUIRED_RUNS:
+        if name not in present:
+            failure = "scenario setup failed before invocation"
+            manifest["scenarios"].append({"id":name,"case":case,"timeout_seconds":timeout,
+                "expected_runner_status":"PASSED" if expect_pass else "FAILED","passed":False,
+                "evidence_status":"MISSING_FAILED","reason":failure})
+            manifest["failures"].append({"scenario":name,"reason":failure})
+    present = {row.get("id") for row in manifest["scenarios"]}
+    for scenario, reason in MISSING_REAL_CASES.items():
+        if scenario not in present:
+            manifest["scenarios"].append({"id":scenario,"passed":False,"evidence_status":"MISSING_FAILED","reason":reason})
+            manifest["failures"].append({"scenario":scenario,"reason":reason})
+    manifest["finished_unix"] = time.time()
+    if manifest_path is None:
+        # Validation failures before output ownership cannot safely publish there.
+        sys.stdout.write(json.dumps({"status":"FAILED","manifest":None,"failures":manifest["failures"]},sort_keys=True)+"\n")
+        return 1
+    try:
+        data=canonical(manifest)+b"\n"
+        require(len(data)<=MAX_REPORT*8,"suite manifest exceeds evidence bound")
+        h=immutable_write(manifest_path,data)
+        sys.stdout.write(json.dumps({"status":manifest["status"],"manifest":str(manifest_path),"manifest_sha256":h,"failures":len(manifest["failures"])},sort_keys=True)+"\n")
+    except BaseException as exc:
+        sys.stdout.write(json.dumps({"status":"FAILED","manifest":str(manifest_path),"manifest_write_error":str(exc)},sort_keys=True)+"\n")
+        return 1
+    return 0 if manifest["status"]=="PASSED" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

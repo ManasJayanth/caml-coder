@@ -1,0 +1,32 @@
+{
+  "plan_id": "B1a-arity-correction-035",
+  "planner": "gpt-6-astra",
+  "status": "Conditional source-authoring card; no dispatch or execution approval. Overall INCOMPLETE.",
+  "budget": {"consumed_launches": 34, "maximum_launches": 36, "remaining_launches": 2, "active_checkpoint_seconds": 24249.851, "active_limit_seconds": 32400, "checkpoint_source": "Root-reconciled cumulative ledger; refresh before dispatch, no reset."},
+  "launch_035": {
+    "card_id": "B1a-Arity-035",
+    "objective": "Correct invalid-arity coverage using total adapter arguments and explicit per-row argv/count.",
+    "finding_ids": ["B1a-E2E-025-arity-offset"],
+    "parent_revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+    "inputs": [
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-034.json", "sha256": "8da761046c12199c72f7477814094150cc9da0fc45becdeb5ed81233dad95386"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json", "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-034/result-manifest.json", "sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-034/frozen/tests/e2e/test_review_adapter_e2e.py", "sha256": "a38c78d34350178809f5135555d59dc5b53d0d7e5fded8be92af1d822f6a2565"}
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": ["Review34 closes its source card with no findings and matches this revision/source hash. Root must verify complete frozen inventory, working-parent equality, all input hashes, prior cleanup and cumulative failure/time/launch gates before dispatch. Any changed parent or superseding rejection requires suspension/rebinding."],
+    "required_behavior": [
+      "Remove only the redundant valid-review invocation/check block. The unchanged nine CASES already exercise valid review total5. Replace arities with exactly nine rows: empty argv []; review totals1,2,3,4,6; code total5; unknown totals4,5. For nonempty rows construct [role] plus count-1 literal unused arguments. Counts exclude /bin/bash and adapter path and include role. Never invoke valid code mode.",
+      "Keep the existing bounded_run call to the actual unchanged claude-worker adapter, immediate bounded collect_records and validate_routing_delta(expected0), first-mismatch failure, and snapshot advancement only after successful routing validation. Every rejection must require status64, empty stdout, empty stderr and zero new record bytes.",
+      "Add exact adapter_argv, total_argument_count=len(params), and full launch argv to each existing arity rows entry, including empty argv/count0. Use unambiguous case names. Preserve routing fields. Do not implement general receipt persistence.",
+      "Preserve response matrix, routing controls, lifecycle controls, ownership, deadlines, cleanup, record bounds, diagnostics and all safeguards. No broader refactoring."
+    ],
+    "forbidden_changes": ["Worker uses read/edit/write tools only: no shell, imports, compilation, tests, subprocess execution, providers or delegation. Each targeted patch under3000 characters; no full-file rewrite; unchanged 2MiB output cap.", "No adapter changes, other paths, new framework, additional controls, diagnostic correction, result.json implementation or outer-wrapper work."],
+    "e2e_recipe_ids": ["B1a-public-matrix"],
+    "expected_outcomes": ["After separate execution approval, public matrix uses the actual unchanged adapter: nine response rows retain exact original status/streams and exactly one matching record each; nine invalid-arity rows have explicit argv/count, exit64, empty streams and zero record delta. No redundant valid-review row. Fresh exact-revision source review may close only the arity finding; no runtime acceptance claim."],
+    "evidence_outputs": ["Worker: changed test only. Root: frozen revision, parent/result manifests and diff. Independent reviewer: exact-revision source disposition. Later approved execution: bounded public rows and actual records; complete result.json remains deferred."],
+    "stop_conditions": ["Stop for absent source34 closure, hash/parent mismatch, failed budget/failure/cleanup gate, execution attempt, scope expansion or extra-path need. Execution remains blocked."],
+    "deferred": "Slot36 is reserved conditionally for diagnostic-byte-cap correction. Complete result receipt/inventory and independently reviewed outer wrapper remain blocked; no cap reset, merged scope, automatic dispatch or completion promise."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "artifact_hash",
+    "reviewer",
+    "rubric",
+    "verdict",
+    "reasons",
+    "approved_targets"
+  ],
+  "optional": [],
+  "enums": {
+    "verdict": [
+      "accepted",
+      "rejected",
+      "needs_changes"
+    ]
+  },
+  "hashes": [
+    "artifact_hash"
+  ],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "artifact_hash": "string",
+    "reviewer": "string",
+    "rubric": "string",
+    "verdict": "string",
+    "reasons": "array",
+    "approved_targets": "array"
+  }
+}

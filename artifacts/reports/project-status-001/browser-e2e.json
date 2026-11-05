@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "Report browser E2E only; no repair E2Es run",
+  "browser": "151.0.7922.34",
+  "checks": [
+    "Offline file load; zero network requests and console errors",
+    "All three views and all 5 stages, 7 findings, 11 attempts via pointer and keyboard",
+    "18 public scenarios and 18 matrix rows counted separately",
+    "Attempt32 failed output cap remains visible",
+    "320/390/1280 layouts have no horizontal overflow",
+    "Light desktop and dark mobile screenshots",
+    "Malformed and missing JSON fail closed"
+  ],
+  "errors": [],
+  "requests": []
+}

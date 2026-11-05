@@ -1,0 +1,38 @@
+{
+ "active_seconds_at_init": 26112.284,
+ "ceiling": 32400,
+ "checkpoint_seconds": 24923.746,
+ "intervals": [
+  {
+   "allowance": 300,
+   "basis": "first orch file mtime -> last round-1 file mtime; +300 s for E2E run/mutation check/report not captured by mtimes",
+   "end_wall": 1792741556,
+   "measured": 261,
+   "name": "round1-root-authoring",
+   "start_wall": 1792741295
+  },
+  {
+   "allowance": 360,
+   "anchor_wall": 1792749450,
+   "basis": "plan file mtime 15:27:30; read-only checks before it not file-anchored -> 300 s allowance + 60 s write",
+   "measured": 0,
+   "name": "round2-planning"
+  },
+  {
+   "basis": "no file writes between plan write and env.sh write; user approval gap; documented, not counted",
+   "counted": 0,
+   "end_wall": 1792763505,
+   "name": "idle-awaiting-approval",
+   "start_wall": 1792749450
+  },
+  {
+   "allowance": 0,
+   "end_wall": 1792763772.537569,
+   "measured": 267.538,
+   "name": "round2-execution-to-init",
+   "start_wall": 1792763505
+  }
+ ],
+ "note": "After init, every launch is ledgered by loop.py; root-authored intervals after init are appended as root_interval entries.",
+ "remaining_at_init": 6287.716
+}

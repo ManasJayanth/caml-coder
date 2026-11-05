@@ -1,0 +1,382 @@
+JOB A9-B1a-dispatch-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 35.118,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-dispatch-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-dispatch-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-dispatch-review-001/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "safe_for_smoke_and_one_B1a_authoring": true,
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approval covers only the isolated refreshed high-Luna smoke, followed on success by one coding24 B1a authoring launch limited to scripts/esy-repair/claude-worker.sh. The supplied dispatcher retains the R008 sandbox and guardian."
+    },
+    {
+      "severity": "warning",
+      "message": "The dispatcher records scope_valid but does not enforce it or validate provider completion. Approval relies on the stated independent root checks, including card/input bindings, complete provider validation, single-file scope, no prior writers, and credential absence."
+    },
+    {
+      "severity": "warning",
+      "message": "The dispatch lock can be released after worker reaping even when credential cleanup verification fails. Lock absence is not cleanup evidence or permission for another launch."
+    },
+    {
+      "severity": "info",
+      "message": "Preserve the 32400-second active limit and 36-launch cap; this authoring launch consumes slot 24. No additional launch, import, authored-code execution, or test execution is approved. Authored bytes require new independent source review."
+    },
+    {
+      "severity": "info",
+      "message": "The temporary review wrapper delegates only to the supplied trusted read-only Codex route. This approval does not accept it as a portable review implementation, authorize fallback, or activate an unattended controller. Assessment is static against the supplied contents; on-disk hashes and live state were not independently verified."
+    }
+  ]
+}
+
+JOB A9-B1a-e2e-dispatch-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 21.448,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-dispatch-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-dispatch-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-dispatch-review-001/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "safe_for_one_authoring_25": true,
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approval covers only job25 authoring of tests/e2e/test_review_adapter_e2e.py under the supplied unchanged sandbox, guardian, and smoke proofs. Preserve the 36-launch cap and 32400-second active limit. No candidate execution, import, or subsequent automatic launch is approved."
+    },
+    {
+      "severity": "warning",
+      "message": "The dispatcher records scope_valid without enforcing it and does not validate provider completion or card/input bindings. Approval relies on the stated independent root validation of scope, complete envelopes, bindings, absence of concurrent writers, and cleanup before acceptance."
+    },
+    {
+      "severity": "warning",
+      "message": "The dispatch lock can be removed after worker reaping even if credential cleanup verification fails. Lock absence is not cleanup evidence or authorization for another launch."
+    },
+    {
+      "severity": "info",
+      "message": "The card explicitly requires scrubbed subprocess environments, bounded collection, safe owned-group cleanup, and result publication. The authored implementation requires independent static review and root hash verification before any execution; routing observations provide no provider identity evidence."
+    },
+    {
+      "severity": "info",
+      "message": "Assessment is static against the supplied contents. On-disk hashes, current budget, and live cleanup state were not independently verified."
+    }
+  ]
+}
+
+JOB A9-B1a-e2e-plan-001
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": -9,
+  "failure": "timeout",
+  "elapsed_seconds": 180.099,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-plan-001/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-plan-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-plan-001/sandbox.sb"
+  ],
+  "status": "FAILED"
+}
+
+FINAL
+The card will use the supplied adapter text; I can’t verify the on-disk manifest with the available tools. It will require that binding check before execution and define exact fixture outputs, invocation counts, and sandbox-denial checks.
+
+
+JOB A9-B1a-e2e-plan-002
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 87.994,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-plan-002/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-plan-002/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-plan-002/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "card": "B1a public E2E authoring: review routing and transparent responses",
+  "status": "Authoring authorized; execution blocked pending B1a static review and root approval. Preserve earlier planning artifacts.",
+  "budget": "24/36 as supplied; stop at the hard budget.",
+  "binding": {
+    "parent_manifest": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json",
+    "sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+    "verification": "Root independently verifies the full manifest and both supplied adapter sources before execution."
+  },
+  "deliverable": {
+    "write_only": "tests/e2e/test_review_adapter_e2e.py",
+    "location": "Isolated candidate",
+    "restrictions": "Author only. No execution, other edits, project-helper imports, adapter copies, sandbox substitutes, or external Claude invocation.",
+    "interface": "--adapter ABS --output-dir ABS",
+    "validation": "Reject relative paths, symlink components, nonregular adapters, missing sibling codex-worker.sh, and output directories not owned by the current user, empty, and mode 0700. Accept no arbitrary command option."
+  },
+  "fixtures": {
+    "layout": "Create all fixtures and records beneath output-dir: workspace, prompt, fixed profile, per-case configuration, and fake Codex executable. Use absolute paths throughout. Executable must be regular, executable, and nonsymlink.",
+    "interpreter": "Resolve the running Python interpreter once to its absolute nonsymlink executable; embed that literal path in the fake's shebang, never /usr/bin/env. Reject paths unsuitable for a shebang.",
+    "profile": "Use real /usr/bin/sandbox-exec with a fixed native profile: (version 1), (allow default), (deny network*), (deny file-write*), (allow file-write* (subpath OUTPUT_DIR)), (deny process-fork). Escape OUTPUT_DIR as a profile string; permit writes only beneath it.",
+    "fake": "Standard-library Python only. Append one JSON record containing argv excluding executable, cwd, and base64 stdin. Read at most 4097 stdin bytes and reject overflow. Emit the configured literal stdout/stderr bytes and exit status. Never spawn processes.",
+    "prompt": "Exact UTF-8 bytes: review fixture\\n",
+    "responses": [
+      ["success", "OK\\n", "", 0],
+      ["findings", "{\"findings\":[\"fixture\"]}\\n", "", 0],
+      ["availability", "", "unavailable\\n", 69],
+      ["auth", "", "authentication required\\n", 77],
+      ["permission", "", "permission denied\\n", 77],
+      ["malformed", "{broken\\n", "", 0],
+      ["identity", "identity mismatch\\n", "", 0],
+      ["context", "context missing\\n", "", 0],
+      ["cleanup", "", "cleanup failed\\n", 23]
+    ],
+    "interpretation": "Response strings encode literal newline bytes. These are protocol fixtures, not provider acceptance evidence."
+  },
+  "assertions": {
+    "routing": "Launch /bin/bash ADAPTER review WORKSPACE PROMPT PROFILE FAKE. Keep the actual sibling adapter intact. Each response must produce exactly one fake record, exact stdin/cwd, and byte-identical stdout, stderr, and exit status. No automatic fallback or retry.",
+    "argv": [
+      "exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks",
+      "--disable", "multi_agent", "--disable", "shell_snapshot", "--disable", "shell_tool",
+      "--ignore-user-config", "--ephemeral", "--skip-git-repo-check",
+      "--model", "gpt-6-astra", "--sandbox", "read-only", "--cd", "WORKSPACE", "--json", "-"
+    ],
+    "arity": "Test review-prefixed argument counts 0,1,2,3,6; review with 4; code with 5; and unknown role with 4 and 5. Require exit 64, empty stdout/stderr, and no provider record. Do not invoke valid code mode; preserve its branch."
+  },
+  "collection": "Use selector-driven bounded pipe reads, never unbounded communicate. Limit each stream to 4096 bytes, records to 16384 bytes, each invocation to 10 seconds, and suite to 180 seconds. On overflow or timeout kill the owned process group, boundedly drain and reap, then fail. Bound diagnostics to 4096 bytes.",
+  "recipe": "After review approval and root hash verification, root manually runs the fixed Python interpreter with the absolute new test-file path, --adapter pointing to the verified claude-worker.sh, and --output-dir pointing to a fresh private directory. No model-generated command executes automatically.",
+  "stop_conditions": "Stop on unavailable native sandbox/interpreter, binding mismatch, invalid fixtures, unexpected output/status, extra or missing records, timeout, or overflow. Do not substitute runners or weaken policy.",
+  "deferred": "Larger matrix, additional sandbox-denial tests, and real-provider smoke. Root performs separately approved real-CLI smoke later."
+}
+
+JOB A9-B1a-e2e-source-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 1,
+  "failure": null,
+  "elapsed_seconds": 4.873,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-source-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-source-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-e2e-source-review-001/sandbox.sb"
+  ],
+  "status": "FAILED"
+}
+
+FINAL
+
+
+JOB A9-B1a-plan-001
+RECEIPT
+{
+  "role": "plan",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 93.752,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-plan-001/worker.sh",
+    "plan",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-plan-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-plan-001/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{
+  "card_id": "B1a-review-adapter-routing",
+  "finding_ids": ["B1-review-entrypoint-rejects-primary"],
+  "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+  "inputs": {
+    "root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/candidate",
+    "files": {
+      "scripts/esy-repair/claude-worker.sh": "9c774c821615dc604eaea1fdcaed8bf38b67909288e309d9913bf028dae5c63c",
+      "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2",
+      "scripts/esy-repair/pi-worker.sh": "bbb9c26e41ea6a7ba6d17558d6dff7f614b75f7ca378084f218e0f5c8bedf794"
+    },
+    "finding_namespace": "Descriptive local identifiers; no external finding registry was supplied."
+  },
+  "allowed_paths": ["scripts/esy-repair/claude-worker.sh"],
+  "prerequisites": [
+    "Independently verify the supplied binding and three file hashes without executing repository code.",
+    "Individually supervise one no-fork Pi author using the exact Luna model; planner and independent reviewer remain Astra.",
+    "The supervisor must support absolute adapter invocation with a fifth positional argument containing the verified absolute Codex executable. This extends the shell-adapter contract, not provider CLI flags.",
+    "Independent review must use a separately trusted invocation; neither the rejected controller nor the proposed adapter may bootstrap its own approval."
+  ],
+  "required_behavior": [
+    "Validate arity before positional dereferences: code accepts four arguments, review accepts five; malformed or unsupported invocations exit 64.",
+    "For review, replace the rejection with exec of the bound sibling codex-worker.sh, forwarding ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE unchanged.",
+    "Resolve the sibling from the adapter location before workspace changes; do not search PATH or the workspace for another adapter.",
+    "Route before requiring CLAUDE_BIN or CLAUDE_CODING_MODEL.",
+    "Preserve the existing four-argument Claude code branch and every provider CLI flag.",
+    "Inherit Codex review's fixed gpt-6-astra model, read-only sandbox, disabled shell and multi_agent settings.",
+    "Preserve streams and process outcome. Add no retry, classification, or fallback."
+  ],
+  "forbidden_changes": [
+    "Controller execution or repair; original checkout access/import; changes to Codex or Pi adapters.",
+    "Policy manifests, provider envelopes, fallback implementation, test-runner implementation, unrelated hardening, or provider CLI changes.",
+    "Execution of the authored candidate before independent static approval."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-fake-routing",
+    "B1a-public-real-astra-smoke"
+  ],
+  "expected_outcomes": [
+    "After static approval, a trusted supervisor invokes the approved absolute claude-worker.sh review entrypoint as a public process, through the unchanged Codex adapter and real sandbox-exec.",
+    "A non-symlink absolute fake Codex executable records argv and stdin and emits controlled stdout, stderr and exit status. Verify exact forwarding, Astra/read-only flags, prompt delivery and successful routing with Claude variables absent.",
+    "Allowed fake scenarios: success, findings-like output, availability-like output, authentication-like output, permission-like output, malformed output, identity/context/cleanup-like output, and controlled nonzero exits. These test transparent routing only; every case must produce zero alternate-provider invocations.",
+    "Malformed argument counts and unsupported roles exit 64 without launching a provider.",
+    "Then invoke a verified real Codex executable with a harmless read-only review prompt through the same public entrypoint. Record available identity evidence; absence or mismatch blocks activation. Any failure stops the smoke without fallback.",
+    "This turn produces a card only; authoring, approval and execution occur in separately supervised steps."
+  ],
+  "evidence_outputs": [
+    "Bound input manifest, minimal diff, candidate hash, unchanged-file hashes.",
+    "Independent Astra static decision bound to candidate bytes.",
+    "After approval: public-process commands, sanitized argv/stdin assertions, stream/status records, provider-invocation ledger and real-smoke result."
+  ],
+  "stop_conditions": [
+    "Binding mismatch, scope expansion, unsupported prerequisite or missing independent approval.",
+    "Review findings require revision and renewed static approval; they never authorize fallback.",
+    "Any tested-byte mismatch invalidates approval; any smoke failure blocks activation."
+  ],
+  "following_cards": [
+    {
+      "card_id": "B1b-review-policy",
+      "finding_ids": ["B1-review-fallback-policy"],
+      "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+      "inputs": ["Supplied baseline and independently approved B1a evidence"],
+      "allowed_paths": ["scripts/esy-repair/review-routing-policy.json"],
+      "prerequisites": [
+        "Separate explicit authorization; verify this new path does not overwrite existing content.",
+        "Bind the approved predecessor bytes before authoring."
+      ],
+      "required_behavior": [
+        "Declare Luna as default coder, Astra-only planner, and primary review through claude-worker.sh to Codex Astra.",
+        "Permit Fable only after positively established provider availability failure.",
+        "Findings, authentication, permission, malformed output, identity, context and cleanup failures prohibit fallback; ambiguity stops."
+      ],
+      "forbidden_changes": ["Adapter, controller or executable classifier changes"],
+      "e2e_recipe_ids": ["B1b-public-policy-matrix", "B1b-public-real-primary"],
+      "expected_outcomes": [
+        "Static approval precedes use. An independently approved external public-process harness validates policy decisions against fake availability, forbidden and ambiguous cases.",
+        "A subsequent real primary smoke confirms the declared route; policy alone enables no fallback."
+      ],
+      "evidence_outputs": ["Policy hash, Astra decision, matrix transcript, real-smoke record"],
+      "stop_conditions": ["Unclassified failure, findings-triggered fallback, unapproved harness"]
+    },
+    {
+      "card_id": "B1c-provider-envelope",
+      "finding_ids": ["B1-provider-result-classification"],
+      "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+      "inputs": ["Approved B1a and B1b manifests", "Verified installed provider interface evidence"],
+      "allowed_paths": ["scripts/esy-repair/review-provider-envelope.py"],
+      "prerequisites": [
+        "Separate explicit authorization and path-collision check.",
+        "Verify actual provider output contracts; independently approve implementation before execution."
+      ],
+      "required_behavior": [
+        "Normalize provider results and distinguish availability from every prohibited fallback category.",
+        "Unknown, incomplete or conflicting evidence stops; nonzero exit alone cannot establish availability failure."
+      ],
+      "forbidden_changes": ["Fallback execution, controller changes, speculative CLI flags"],
+      "e2e_recipe_ids": ["B1c-public-envelope-fixtures", "B1c-public-real-envelope"],
+      "expected_outcomes": [
+        "Approved public executable accepts captured fixtures and routing-only fake executable results covering success, availability, prohibited categories and ambiguity.",
+        "Subsequent real Astra smoke validates parsing and identity evidence against actual output."
+      ],
+      "evidence_outputs": ["Contract evidence, approved hash, fixture outcomes, real transcript"],
+      "stop_conditions": ["Unsupported contract, identity uncertainty, misclassification"]
+    },
+    {
+      "card_id": "B1d-independent-public-e2es",
+      "finding_ids": ["B1-routing-public-process-evidence"],
+      "parent_revision_sha256": "6414352d97c81ec483c1f44f06f663e2b937b4bb91ba53030c19f2767875e836",
+      "inputs": ["Approved predecessor manifests and evidence"],
+      "allowed_paths": ["scripts/esy-repair/test-review-routing.py"],
+      "prerequisites": ["Separate authorization; static approval of harness and tested artifacts"],
+      "required_behavior": [
+        "Exercise actual public adapter processes with isolated fixtures and invocation ledgers.",
+        "Assert zero fallback for findings and every prohibited category."
+      ],
+      "forbidden_changes": ["Rejected-controller execution", "Production fallback activation"],
+      "e2e_recipe_ids": ["B1d-public-fake-matrix", "B1d-public-real-smokes"],
+      "expected_outcomes": [
+        "Routing-only fake cases cover the full approved matrix.",
+        "Subsequent real primary smoke uses Astra; real Fable fallback requires a separately approved dispatcher and independently established availability failure."
+      ],
+      "evidence_outputs": ["Approved harness hash, process transcripts, invocation ledger, smoke results"],
+      "stop_conditions": ["Unapproved dependency, prohibited fallback, unresolved failure"]
+    }
+  ],
+  "safe_bootstrap_notes": [
+    "No tools, workers or candidate code are executed by this plan.",
+    "Static independent approval is tested through a decision bound to exact candidate bytes before behavioral execution; changed bytes require renewed review.",
+    "Adapter authoring does not depend on repairing the rejected controller. Activation requires approved-byte public-process evidence.",
+    "Preserve budget accounting: 23/36 and 19122.94 active/32400 before this turn; no reset or invented remaining balance."
+  ]
+}
+
+JOB A9-B1a-source-review-001
+RECEIPT
+{
+  "role": "review",
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 14.716,
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-source-review-001/worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-source-review-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-source-review-001/sandbox.sb"
+  ],
+  "status": "PROVIDER_COMPLETED"
+}
+
+FINAL
+{"safe_for_public_routing_tests":true,"findings":[]}

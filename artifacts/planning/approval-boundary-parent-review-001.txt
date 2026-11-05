@@ -1,0 +1,9 @@
+APPROVALS design parent review
+
+Decision: CHANGES_REQUIRED; the proposed hardware signer is not adopted.
+
+The approval-boundary-design-001 audit correctly identifies that same-user host filesystem state cannot establish human identity. Its statement that a hardware/user-presence signer is the required dependency overstates the existing contract. The contract requires trusted user authorization, not a particular cryptographic device. The existing Codex conversation already distinguishes direct human input from worker messages and automatic goal continuations at the orchestrator boundary. Do not add a new hardware purchase, service, key setup, or approval ceremony without need.
+
+A practical implementation should define its threat model explicitly: untrusted generated workers operate in isolated containers and cannot create authoritative approval events; the trusted orchestrator accepts only direct human messages from the platform, binding that message reference and exact approved scope to the held event and reviewed artifact identities. It must reject ordinary worker JSON and automatic continuations. If a standalone CLI cannot access a trustworthy platform authorization channel, it must remain fail-closed or support a separately configured verifier; it cannot assert that a self-supplied message ID proves authorization.
+
+This is a design review, not a verified integration, implementation, or user approval. No holds were resolved. A concrete supported platform channel and E2E boundary evidence remain required before shipping APPROVALS. Signed receipts remain an optional deployment design rather than a newly imposed user prerequisite.

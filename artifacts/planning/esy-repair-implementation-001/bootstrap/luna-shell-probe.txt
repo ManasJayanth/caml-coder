@@ -1,0 +1,1 @@
+Run exactly one shell command to diagnose the execution environment: pwd; /bin/echo luna-ready > scripts/esy-repair/coding-smoke.txt; /bin/cat scripts/esy-repair/coding-smoke.txt . Do not use apply_patch. Report the shell tool's actual outcome and error. Change no other files. No further commands.

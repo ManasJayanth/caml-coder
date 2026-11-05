@@ -1,0 +1,32 @@
+FILE scripts/esy-repair/pi-worker.sh
+MANIFEST {"path": "scripts/esy-repair/pi-worker.sh", "mode": 493, "bytes": 522, "sha256": "bbb9c26e41ea6a7ba6d17558d6dff7f614b75f7ca378084f218e0f5c8bedf794"}
+COMPLETE FINAL SOURCE
+#!/bin/bash
+set -euo pipefail
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+[ "$role" = code ] || exit 64
+: "${PI_BIN:?absolute executable required}"
+: "${PI_PROVIDER:?exact provider required}"
+: "${PI_CODING_MODEL:?exact coding model required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$PI_BIN" --print --mode json --provider "$PI_PROVIDER" --model "$PI_CODING_MODEL" --no-session --no-extensions --no-mcp --no-skills --no-prompt-templates --no-context-files --no-approve --tools read,edit,write < "$prompt"
+
+EXACT DIFF
+--- baseline/scripts/esy-repair/pi-worker.sh
++++ candidate/scripts/esy-repair/pi-worker.sh
+@@ -0,0 +1,12 @@
++#!/bin/bash
++set -euo pipefail
++role=$1
++workspace=$2
++prompt=$3
++profile=$4
++[ "$role" = code ] || exit 64
++: "${PI_BIN:?absolute executable required}"
++: "${PI_PROVIDER:?exact provider required}"
++: "${PI_CODING_MODEL:?exact coding model required}"
++cd "$workspace"
++exec /usr/bin/sandbox-exec -f "$profile" "$PI_BIN" --print --mode json --provider "$PI_PROVIDER" --model "$PI_CODING_MODEL" --no-session --no-extensions --no-mcp --no-skills --no-prompt-templates --no-context-files --no-approve --tools read,edit,write < "$prompt"

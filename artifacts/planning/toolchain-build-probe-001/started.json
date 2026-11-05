@@ -1,0 +1,15 @@
+{
+  "scope": "exploratory toolchain build only; no acceptance",
+  "status": "STARTED",
+  "session_id": 46851,
+  "model_acquisition_session_id": 41457,
+  "dockerfile_sha256": "4e15ea5c7f24bfc49374e78f542581eb220489c32a475e7d5ad3c25412f91a02",
+  "image_tag": "ocaml-sft-toolchain-probe:001",
+  "direct_packages": [
+    "dune.3.24.2",
+    "reason.3.18.0",
+    "melange.7.0.1-55"
+  ],
+  "started_recorded_unix": 1792186794.0591,
+  "approval_holds_resolved": false
+}

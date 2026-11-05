@@ -1,0 +1,22 @@
+{
+  "requested_model": "fable",
+  "argv": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/fable-smoke-001/claude-worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/fable-smoke-001",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/fable-smoke-001/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/fable-smoke-001/sandbox.sb"
+  ],
+  "process_exit": 1,
+  "failure": null,
+  "leader_reaped": true,
+  "credential_link_removed": true,
+  "parse_error": null,
+  "semantic_smoke": false,
+  "reported_model_usage_keys": [],
+  "identity_verified": false,
+  "elapsed_seconds": 1.759337458992377,
+  "status": "FAILED_OR_UNVERIFIED",
+  "activation": false
+}

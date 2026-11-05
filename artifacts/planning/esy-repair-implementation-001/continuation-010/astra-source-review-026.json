@@ -1,0 +1,133 @@
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+  "parent_revision_sha256": "0236df643408890ff7bae898ea74227cdda90b6d82464bd0eda532a4e4e472bd",
+  "safe_for_execution": false,
+  "ownership_card_closed": false,
+  "scope": "Read launch_026, retry-astra-review-025.json, frozen26 source and manifests, actual frozen adapters, and the candidate parent. Compared sources using read-only utilities. No candidate execution, imports, compilation, tests, Docker, provider invocation, or delegation. The only file written is this review. This review supplies no runtime claim or outer-wrapper approval.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/frozen/",
+  "source_hashes": {
+    "tests/e2e/test_review_adapter_e2e.py": "e27c301dbcffa733ce5aa6f95207399ee0f4eb717f76f4b68a5799addc81ed43",
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "binding_checks": {
+    "result_manifest_hash_computed": true,
+    "parent_manifest_hash_matches_launch_026": true,
+    "candidate_test_hash": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+    "prior_review_hash": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825",
+    "manifest_diff": "Only tests/e2e/test_review_adapter_e2e.py changes hash and size; mode remains 420.",
+    "recursive_candidate_comparison": "Only tests/e2e/test_review_adapter_e2e.py differs between candidate and frozen26.",
+    "limit": "Computed reviewed source, adapter, parent/result manifest and prior-review hashes; did not independently recompute every unchanged manifest member's metadata. Root retains the complete execution-binding verification obligation."
+  },
+  "positive_source_observations": [
+    "DefaultSelector construction, stream setup and registration now occur within the main try. Ordinary selector setup failure after phase becomes owned reaches group cleanup.",
+    "Every explicit waitpid is preceded by phase=reap-uncertain. The only killpg is guarded by phase==owned. Returning the leader PID changes phase to reaped before unmasking. Thus an exception between a possible reap and phase update does not authorize signaling; this closes the particular post-wait boolean/stale-group signaling path in the previous source.",
+    "The deliberate post-reap exception and KeyboardInterrupt occur after phase is reaped; their cleanup path has no group-signal permission. Status conversion and byte construction remain in the generic handler's region but its phase guard prevents post-reap signaling.",
+    "The public CLI has precisely the requested closed scenario enum, defaults to matrix, and parses before spawn. Each lifecycle branch contains one actual adapter invocation, fixed setup/post-reap faults, a fixed 11-second fake sleep, or 4097 fixed x bytes on the selected stream. It does not import the helper, replace adapters, or accept arbitrary commands/timeouts.",
+    "Fixed PATH/private HOME/LANG, separate session, validated absolute interpreter, real sandbox-exec through unchanged adapters, no-network/no-fork/write-only-output profile, response CASES and matrix collection/arity structure remain present.",
+    "Cleanup uses nonblocking reads with discarded data and WNOHANG under a shared nominal two-second deadline; it has no unbounded wait or communicate. These source properties do not establish successful cleanup at runtime."
+  ],
+  "finding_disposition": [
+    {
+      "id": "B1a-E2E-025-owned-process-lifecycle",
+      "status": "open-partially-addressed",
+      "reason": "The original stale-group reap path and ordinary selector-construction gap are addressed, but the post-spawn handoff, interruption of cleanup, and truthful finalization requirements below prevent card closure."
+    },
+    {
+      "id": "B1a-E2E-025-record-bound",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:327-328,352",
+      "reason": "Both unbounded records.read_bytes calls remain; raw separators are still excluded from the first cap."
+    },
+    {
+      "id": "B1a-E2E-025-result-receipt",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:316-361",
+      "reason": "No full matrix result.json, failure-preserved row evidence, or not-run rows exist. lifecycle.json does not close the separate receipt card."
+    },
+    {
+      "id": "B1a-E2E-025-arity-offset",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:338-352",
+      "reason": "Counts remain arguments after the role and the redundant valid-review call remains. Required total-argument rejection coverage is still absent."
+    },
+    {
+      "id": "B1a-E2E-025-per-case-routing",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:317-337,340-353",
+      "reason": "Records remain aggregate-validated rather than checked immediately for an exact per-invocation delta."
+    },
+    {
+      "id": "B1a-E2E-025-deadline-race",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:137-142,193-196,318-323,340-349",
+      "reason": "The wait-loop negative-sleep subproblem was changed out of the launch26 scope, but exhausted suite budget is still not rejected immediately before every spawn. No deadline-boundary or exhausted-suite evidence exists. This finding is not fixed."
+    },
+    {
+      "id": "B1a-E2E-025-diagnostic-byte-cap",
+      "status": "open",
+      "location": "tests/e2e/test_review_adapter_e2e.py:356-365",
+      "reason": "Character slicing plus print remains. The deliberately raised KeyboardInterrupt also escapes the ordinary top-level handlers and can produce an interpreter traceback; lifecycle persistence alone does not establish bounded diagnostics."
+    }
+  ],
+  "findings": [
+    {
+      "id": "B1a-E2E-026-spawn-handoff",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:140-145,208-217,232-271",
+      "problem": "After Popen has returned into proc, state['spawned_pid']=proc.pid executes before phase becomes owned. A KeyboardInterrupt at that assignment or immediately before phase assignment leaves a real proc with phase not-spawned. The handler then skips both group signaling and reaping, closes its pipes, and sets cleanup=success if those closes succeed. A live child can therefore be left unmanaged with an affirmative cleanup receipt. Moving the try earlier did not close this ownership-registration gap.",
+      "required_change": "Make the spawn-to-owned handoff interruption-safe, or let cleanup derive unreaped ownership from an acquired proc until a no-signal reap transition begins. Do not classify a non-null proc in an unresolved phase as successful cleanup. Audit the Popen return/assignment boundary as well as the following bookkeeping.",
+      "missing_evidence": "The fixed setup probe raises only after phase=owned and cannot exercise this handoff. Source proof of the complete handoff is missing."
+    },
+    {
+      "id": "B1a-E2E-026-interrupted-cleanup",
+      "severity": "high",
+      "classification": "execution_safety_blocker",
+      "location": "tests/e2e/test_review_adapter_e2e.py:204-279",
+      "problem": "The cleanup body is not protected against a further KeyboardInterrupt. For example, an interrupt after signal_attempts.append but before killpg skips signaling, all pipe closes and reap. An interrupt while draining or while the bounded reap sleeps similarly aborts the remaining cleanup. The local catches handle OSError or Exception, not BaseException; the outer except cannot catch exceptions raised by its own body. finally only closes the selector and can then label pending pipes closed without closing them. The suite fails, but owned-process cleanup and receipt accuracy are not established. Blocking signals only around waitpid does not protect the rest of cleanup.",
+      "required_change": "Use a bounded, interruption-resilient cleanup policy that defers or records interruptions while completing each independent pipe/selector/reap obligation. Preserve the triggering failure and mark interrupted/uncertain cleanup terminally failed. Do not infer closed pipes from reaching finally. Keep the no-signal-before-reap invariant intact.",
+      "missing_evidence": "The fixed post-reap interrupt is raised before entering cleanup, with pipes already closed by normal collection; it does not test interruption during cleanup. No source proof or runtime observation covers interrupted cleanup."
+    },
+    {
+      "id": "B1a-E2E-026-finalization-receipt",
+      "severity": "medium",
+      "classification": "lifecycle_acceptance_gap",
+      "location": "tests/e2e/test_review_adapter_e2e.py:197-205,219-231,265-279,305-314",
+      "problem": "Normal completion sets cleanup=success before the final selector.close. If that close raises, the main cleanup handler has already been left, so lifecycle.json can contain failure=null and cleanup=success for an actual failed invocation. Failure cleanup also closes the selector once in its guarded block and again unguarded in finally, allowing a second failure to replace the original diagnostic. A failure during set_blocking/read skips that stream's close because draining and closing share one try. The final pending-to-closed assignment records no observed close operations.",
+      "required_change": "Finalize each resource once through a guarded path; attempt close even if its drain/setup failed. Derive pipe/selector closure and overall cleanup from observed outcomes, and update the lifecycle failure for finalization or probe-validation errors before persistence. Preserve the original failure alongside cleanup errors.",
+      "missing_evidence": "No truthful source path covers selector-close or partial pipe-cleanup failure. Later approved public evidence must include lifecycle state and independently bounded outer completion, rather than accepting a literal success field as proof."
+    }
+  ],
+  "scope_assessment": {
+    "allowed_file_boundary": "satisfied by manifest and recursive content comparison",
+    "behavioral_scope": "not fully satisfied",
+    "violations": [
+      {
+        "location": "tests/e2e/test_review_adapter_e2e.py:153",
+        "change": "The fixed parent stdin payload was changed from a newline-terminated byte string to a literal backslash followed by n. Restore the original payload; lifecycle ownership does not require changing it. The current real adapter redirects from prompt.txt, so this observation is not a claim that current fake routing records necessarily fail."
+      },
+      {
+        "location": "tests/e2e/test_review_adapter_e2e.py:193-196",
+        "change": "The original second monotonic read in sleep was replaced with a saved remaining duration, partially implementing the deadline-race card expressly reserved for launch27. Keep the overall finding open and reconcile this scope departure before accepting launch26; it does not justify calling the deadline finding fixed."
+      }
+    ],
+    "not_claimed_as_new_safety_defect": "Cleanup waitpid does not set proc.returncode, unlike the normal path. This leaves Popen bookkeeping stale, but no source path shown here turns that omission into a post-reap group signal. It should be reconciled with the lifecycle implementation without overstating its demonstrated impact."
+  },
+  "public_probe_assessment": {
+    "present": ["lifecycle-normal", "lifecycle-setup-failure", "lifecycle-post-reap-exception", "lifecycle-post-reap-interrupt", "lifecycle-timeout", "lifecycle-stdout-overflow", "lifecycle-stderr-overflow"],
+    "real_public_path": "Source invokes /bin/bash with the actual provided adapter and sibling; native sandbox execution is in the unchanged sibling. No runtime success is inferred.",
+    "expected_source_behavior": "Normal checks the original success response and cleanup field. Fixed injected faults, timeout and overflow propagate nonzero. lifecycle.json is attempted for failures inside the single-invocation try; pre-invocation fixture/config failures occur before this persistence scope.",
+    "limitations": "The normal probe validates response bytes/status, not per-case routing; that remains the separate routing card. The post-reap fault controls demonstrate only their fixed points, not every asynchronous ownership/cleanup boundary. Cleanup receipts currently have the gaps above. SIGTERM remains default process termination after unmasking; masking it around waitpid alone is not a guarantee of a persisted receipt or completed cleanup. No claim of comprehensive signal handling is accepted."
+  },
+  "missing_evidence": [
+    "No runtime evidence was generated, as required for source-only review.",
+    "The ownership card needs correction and independent source re-review before any execution approval.",
+    "All six non-ownership findings explicitly remain open; launch26 cannot establish complete-suite acceptance.",
+    "The outer execution wrapper requires its own review and complete exact source/adapter/environment binding verification. This report does not approve that wrapper.",
+    "After all execution blockers and approval prerequisites are resolved, collect bounded process exit/stdout/stderr and lifecycle.json for each of the seven real public probes. Independently establish bounded outer completion and inspect ordering/cleanup outcomes. A cleanup response fixture is not process-cleanup evidence.",
+    "Native platform support and behavior of the chosen signal-masking implementation have not been exercised here. No substitute sandbox, helper-only test, or PID-reuse experiment is authorized by this review."
+  ]
+}

@@ -1,0 +1,164 @@
+Implement this one bounded prerequisite card using only read/edit/write. No commands, tests, Docker, new files or other edits. Stop on scope conflict. Preserve existing acceptance.
+{
+  "card_id": "R02a-021",
+  "finding_ids": [
+    "C17-02"
+  ],
+  "parent_file_sha256": "bc3ae477568baeb46be21fd70b253eca4c5dad7388e317ae0e94b6b78e6b9c0d",
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "input_artifacts": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A6-prerequisite-plan-001/final.txt",
+      "sha256": "578606ca8b31379e81c28b33c5cb0117b4f5bb4fb07c3fb92a5854d619c83848"
+    }
+  ],
+  "prerequisites": [
+    "Candidate includes launch19 and20. Authoring only; no commands or Docker."
+  ],
+  "e2e_recipe_ids": [
+    "cleanup-finally-log-write"
+  ],
+  "evidence_outputs": [
+    "Only bounded source edit; supervisor freezes diff. Real E2E blocked pending separate safety gates."
+  ],
+  "required_behavior": [
+    "Initialize separate supervision-result, supervision-error, independent-cleanup-result and independent-cleanup-error fields before invoking supervisor.",
+    "Wrap the supervisor invocation in try/finally so suite_cleanup_owned is attempted whether supervision returns or raises. Keep report parsing and acceptance checks after that cleanup attempt.",
+    "Preserve the original supervision failure when cleanup also fails. Carry both outcomes into the failed scenario row through a small structured failure payload; main must not reduce that payload to an exception string.",
+    "Add one fixed public scenario, cleanup-finally-log-write, selecting one real positive runner invocation with timeout 120.",
+    "For that scenario only, create a directory at its owned case_dir/runner.stdout immediately before supervisor launches the runner. The existing final stdout_path.write_bytes call must then fail through the real filesystem. Do not patch supervisor, substitute an exception, or alter runner behavior.",
+    "Keep this injected failure visible: the harness exits nonzero and reports FAILED even when independent cleanup succeeds.",
+    "Preserve the default seven runs, cleanup-results selection, R01b reporting behavior, and all existing missing-evidence requirements."
+  ],
+  "forbidden_changes": [
+    "No runner changes, tracer, forwarding proxy, guardian, image builder, controller, or additional source files.",
+    "No unit tests or mocked subprocess/Docker results.",
+    "No claim to solve repeated interruption, forced parent death, escaped Docker-client groups, hard container lifetime enforcement, cleanup-query truncation, image identity checks, or seed validity.",
+    "No R01 timing acceptance and no complete C17-02 closure."
+  ],
+  "expected_outcomes": [
+    "Every exception leaving the protected supervisor call reaches the independent-cleanup finally path.",
+    "Supervision failure and cleanup failure are separately representable and retained together.",
+    "Ordinary successful supervision still reaches the existing acceptance checks.",
+    "The proposed real E2E meets every declared observation after separate authorization; otherwise runtime evidence remains missing.",
+    "No existing acceptance predicate or missing-evidence row is weakened, removed, or credited by this prerequisite."
+  ],
+  "stop_conditions": [
+    "If implementation requires a general fault framework, process-containment redesign, or another source path, stop and report the exact scope conflict.",
+    "If the real invocation, injected write failure, or subsequent independent queries are not evidenced, record an incomplete failed test.",
+    "Unverified ownership, cleanup, or client containment stops further execution through the dispatcher."
+  ]
+}
+COMPLETE SEPARATE FRONTIER PLAN
+{
+  "card_id": "launch21",
+  "title": "Run and retain independent cleanup when runner supervision raises",
+  "status": "READY_FOR_IMPLEMENTATION_ONLY",
+  "priority": "Safety prerequisite for later real R01 fixtures",
+  "finding_scope": "C17-02, limited to exception-safe cleanup invocation and outcome retention.",
+  "objective": "Ensure a supervisor exception cannot bypass run_case's independent cleanup or erase its outcome. Prove the narrow regression through a real public runner process whose harness log publication fails.",
+  "basis": [
+    "Reviewed both supplied files, the prior plan, and all supplied findings.",
+    "run_case currently calls suite_cleanup_owned only after supervisor returns successfully.",
+    "supervisor writes runner.stdout after supervising and stopping its child group. A real filesystem write failure there skips independent cleanup.",
+    "The supplied runner already contains both R01 production fixes. Their real timing evidence remains missing.",
+    "The supplied harness already contains the R01b early-failure reporting correction; do not repeat that work.",
+    "No local hashes were independently verified. No execution, edits, Docker operations, or delegation were performed."
+  ],
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "implementation": [
+    "Initialize separate supervision-result, supervision-error, independent-cleanup-result and independent-cleanup-error fields before invoking supervisor.",
+    "Wrap the supervisor invocation in try/finally so suite_cleanup_owned is attempted whether supervision returns or raises. Keep report parsing and acceptance checks after that cleanup attempt.",
+    "Preserve the original supervision failure when cleanup also fails. Carry both outcomes into the failed scenario row through a small structured failure payload; main must not reduce that payload to an exception string.",
+    "Add one fixed public scenario, cleanup-finally-log-write, selecting one real positive runner invocation with timeout 120.",
+    "For that scenario only, create a directory at its owned case_dir/runner.stdout immediately before supervisor launches the runner. The existing final stdout_path.write_bytes call must then fail through the real filesystem. Do not patch supervisor, substitute an exception, or alter runner behavior.",
+    "Keep this injected failure visible: the harness exits nonzero and reports FAILED even when independent cleanup succeeds.",
+    "Preserve the default seven runs, cleanup-results selection, R01b reporting behavior, and all existing missing-evidence requirements."
+  ],
+  "non_goals": [
+    "No runner changes, tracer, forwarding proxy, guardian, image builder, controller, or additional source files.",
+    "No unit tests or mocked subprocess/Docker results.",
+    "No claim to solve repeated interruption, forced parent death, escaped Docker-client groups, hard container lifetime enforcement, cleanup-query truncation, image identity checks, or seed validity.",
+    "No R01 timing acceptance and no complete C17-02 closure."
+  ],
+  "proposed_public_process_e2e": {
+    "authorization": "PROPOSAL ONLY; NOT AUTHORIZED FOR EXECUTION",
+    "entrypoint_argv": [
+      "<reviewed-python>",
+      "-B",
+      "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+      "--image",
+      "<approved-immutable-image-id>",
+      "--expectations",
+      "<approved-matching-expectations-outside-candidate>",
+      "--output-dir",
+      "<fresh-approved-empty-directory-outside-candidate>",
+      "--scenario",
+      "cleanup-finally-log-write"
+    ],
+    "runner_argv": [
+      "<reviewed-python>",
+      "-B",
+      "<absolute-existing-runner-path>",
+      "--image",
+      "<same-approved-immutable-image-id>",
+      "--run-id",
+      "e2e-cleanup-finally-log-write",
+      "--expectations",
+      "<same-approved-expectations-path>",
+      "--output-dir",
+      "<output-dir>/runner-reports",
+      "--case",
+      "positive",
+      "--timeout",
+      "120"
+    ],
+    "fault": "An actual directory occupies the harness-owned runner.stdout destination. The public runner executes normally; subsequent harness log writing raises IsADirectoryError.",
+    "required_observations": [
+      "The bounded, authentic runner report and ownership record establish the intended real invocation reached container execution. A preflight rejection does not satisfy the test.",
+      "The runner report contains the positive compile/run evidence, expected output, matching identities and source hashes, and runner cleanup evidence.",
+      "The failed harness scenario retains the actual log-write exception separately from independent cleanup.",
+      "Independent cleanup produces authentic bounded inspect/list evidence for the persisted exact invocation after the supervision exception, and its result is retained in the scenario manifest.",
+      "Harness exit is nonzero and manifest status remains FAILED. Successful cleanup must not erase the supervision failure.",
+      "Do not invent a runner exit code if supervisor raised before returning it; explicitly mark unavailable process-result fields."
+    ],
+    "claim_limit": "Proves independent cleanup is reached and recorded after a real post-supervision log-write exception. Because the runner may already have removed its container, this does not prove removal of a surviving container or recovery during active-client cancellation.",
+    "regression_oracle": "In the supplied implementation, the same filesystem failure bypasses suite_cleanup_owned and the failed row retains neither independent cleanup evidence nor its outcome."
+  },
+  "acceptance_criteria": [
+    "Every exception leaving the protected supervisor call reaches the independent-cleanup finally path.",
+    "Supervision failure and cleanup failure are separately representable and retained together.",
+    "Ordinary successful supervision still reaches the existing acceptance checks.",
+    "The proposed real E2E meets every declared observation after separate authorization; otherwise runtime evidence remains missing.",
+    "No existing acceptance predicate or missing-evidence row is weakened, removed, or credited by this prerequisite."
+  ],
+  "safety_review_gates": [
+    "Freeze and review the exact harness diff, source hashes, interpreter, scenario argv, output paths, fault location, and proposed execution envelope before execution.",
+    "Only the supervised dispatcher may execute an independently approved envelope. The rejected controller remains excluded. Existing missing-input CLI approval does not cover this test.",
+    "Before a real run, independently resolve or explicitly disposition the applicable C17-01, C17-03, C17-05 and C17-06 lifecycle risks, including Docker clients outside the runner group. This card does not supply those protections.",
+    "Independent removal must be reviewed for exact name, owner label, immutable image identity and full CID, complete query output, bounded recovery, and preservation of uncertainty. The current cleanup implementation does not satisfy every requirement.",
+    "Establish approved immutable seed inputs and valid matching expectations, explicitly addressing N6-01/N6-02. Do not hand-edit expectation hashes or assume a current capture receipt proves seed validity.",
+    "Approve container lifetime enforcement independently of the harness timeout. A proposed 210-second outer test envelope is only an overall supervision bound, not a container-lifetime guarantee.",
+    "Any code correction affecting reviewed execution requires renewed review. No automatic retries."
+  ],
+  "deliverables": [
+    "One bounded harness diff.",
+    "A frozen review receipt identifying the exact change and proposed public-process test.",
+    "Explicit implementation-versus-runtime status, with all unproved acceptance gates retained."
+  ],
+  "budget": {
+    "coding_launches": 1,
+    "implementation_and_static_review_target_seconds": 1200,
+    "remaining_launches_reserved": 3,
+    "execution": "Deferred until independently approved; not included as authorized launch21 work."
+  },
+  "stop_conditions": [
+    "If implementation requires a general fault framework, process-containment redesign, or another source path, stop and report the exact scope conflict.",
+    "If the real invocation, injected write failure, or subsequent independent queries are not evidenced, record an incomplete failed test.",
+    "Unverified ownership, cleanup, or client containment stops further execution through the dispatcher."
+  ]
+}

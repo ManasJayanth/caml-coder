@@ -1,0 +1,15 @@
+Repair checkpoint for independent progress-004 review (2026-10-17)
+
+Scope: the user requested fixes for both confirmed P2 findings. R3-SNAPSHOT-REUSE hardens source snapshot reuse; R4-CARD-INTERFACES repairs bounded task ownership and the catalogue runner bootstrap. The previous report and counterexamples remain unchanged under artifacts/reviews/independent-progress-004.
+
+The existing official-stable-sources-002 snapshot is historical and must not be rewritten. Its independently verified manifest SHA256 is 34f156d8f5f60a42f4cc8a41184576eae10fe763c2b4735d433f1c03a7825c17. config/sources.json supplies that identity explicitly when reusing the legacy snapshot. A caller-controlled pin is an explicit trust input, not authentication of a hostile host. New snapshots retain a separate manifest commitment to detect accidental record/file removal on reuse; full metadata and disk inventory validation is also required.
+
+The task registry remains a plan for downstream stages, not a claim that their suites or model workflows are implemented. Interface scope authorizes only integration needed by each named card. The catalogue runner has a dedicated bootstrap suite; real task-family commands continue to contain concrete family IDs and depend on runner implementation.
+
+No source fetch from the network, model acquisition, generation, training, dataset approval or promotion is required to repair these two defects. Old evidence will become stale because implementation/config changed; fresh reports and handoff identity must supersede it without overwriting history.
+
+Final verification: all six review-fixes-*-002 E2E reports passed with one inventory hash, 72364c1d0d923df5f6b7da6e92d42372438b72bc85c346b50427dd8d8ae88cd3 (13 scenarios, 1097 assertions). Host preflight used approved host access without altering requirements. The reproduced official-snapshot mutations are recorded in r3-official-reproduction.json. The original official snapshot remains unchanged. Candidate triage was regenerated at artifacts/prepare/official-candidates-004 with this inventory; it still authorizes no generation.
+
+Cross-review edge cases were also repaired: every nonempty output lacking manifest/receipt is rejected, including matching partial bytes; the catalogue runner audit now checks its exact required scenario and, if registered in future, the actual scenario implementation. New public subprocess tests cover the matching-partial case and concrete runner/T12/family work-next packets. Historical interim reports are retained as stale evidence.
+
+Twelve cards have current passing evidence, including R3-SNAPSHOT-REUSE and R4-CARD-INTERFACES. The 198 remaining cards are pending; T08 is next. See review-fixes-work-state.json and review-fixes-next-packet.json. No trained model or complete experiment is claimed.

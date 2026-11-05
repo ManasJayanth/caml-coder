@@ -1,0 +1,23 @@
+{
+  "prior_active_seconds": 19122.937587,
+  "current_turn_started_epoch": 1792724000.184,
+  "active_limit_seconds": 32400,
+  "coding_launch_cap": 36,
+  "coding_consumed_at_start": 23,
+  "reconciled_intervals": [
+    [
+      "2026-10-23T02:13:56.833+00:00",
+      "2026-10-23T02:20:39.876+00:00"
+    ],
+    [
+      "2026-10-23T02:34:48.044+00:00",
+      "2026-10-23T02:42:56.810+00:00"
+    ],
+    [
+      "2026-10-23T02:45:35.653+00:00",
+      "2026-10-23T02:51:20.011+00:00"
+    ]
+  ],
+  "packet008_to_turn_end_seconds": 16.56158685684204,
+  "authority": "Latest user implementation request; no increase in allocation; Astra then availability-only Fable reviewer fallback; planner Astra only."
+}

@@ -1,0 +1,6 @@
+{
+  "job": "C01-public-cli-e2e-001",
+  "claim": "Astra approved reviewed artifacts before execution",
+  "accepted": false,
+  "reason": "No supervisor-owned Astra review approved those test hashes. Worker event stream contains empty collaboration wait calls, not a reviewer result. Worker test attempt exited2 due nested sandbox and is not supervisor E2E acceptance. Source changes remain isolated."
+}

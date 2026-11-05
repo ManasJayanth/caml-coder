@@ -1,0 +1,1 @@
+{"argv_len": 6, "elapsed": 3.167, "exit": 1, "overflow": {"err": false, "out": false}, "ownership_uncertain": false, "pid": 60968, "reaped": true, "schema": 1, "signal": null, "start_wall": 1792764086.386179, "status": "child-failed", "timed_out": false}

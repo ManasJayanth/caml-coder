@@ -1,0 +1,1 @@
+{"path": "artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/direct-write-probe.txt", "content": "direct-probe\n", "sha256": "a9939f8435b22d74daa9136f6e8ef183396fa31004b9d07d18545c05c4c58002", "result": "outer native sandbox allowed intended candidate write; nested Codex sandbox denied execution"}

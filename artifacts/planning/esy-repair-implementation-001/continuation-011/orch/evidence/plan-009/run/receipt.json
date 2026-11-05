@@ -1,0 +1,1 @@
+{"argv_len": 6, "elapsed": 0.006, "exit": 64, "overflow": {"err": false, "out": false}, "ownership_uncertain": false, "pid": 88724, "reaped": true, "schema": 1, "signal": null, "start_wall": 1792767602.776062, "status": "child-failed", "stdin_mode": "devnull", "timed_out": false}

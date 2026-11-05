@@ -1,0 +1,29 @@
+[project]
+name = "ocaml-rl-sft"
+version = "0.1.0"
+description = "Evidence-gated local Qwen3-8B SFT experiment"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "mlx==0.32.4",
+    "mlx-lm==0.32.2",
+    "safetensors==0.8.0",
+    "tokenizers==0.23.3",
+    "torch==2.14.1",
+    "transformers==5.20.1",
+]
+
+[project.scripts]
+sft = "sft.cli:main"
+
+[build-system]
+requires = ["hatchling==1.27.0", "packaging==26.3", "pathspec==1.1.1", "pluggy==1.7.0", "trove-classifiers==2026.9.21.13", "editables==0.6"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sft"]
+
+[dependency-groups]
+build = ["hatchling==1.27.0", "packaging==26.3", "pathspec==1.1.1", "pluggy==1.7.0", "trove-classifiers==2026.9.21.13", "editables==0.6"]
+
+[tool.uv]
+default-groups = ["build"]

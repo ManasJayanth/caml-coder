@@ -1,0 +1,53 @@
+{
+  "reviewer": "gpt-6-astra",
+  "review_type": "independent source-only review",
+  "revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+  "parent_revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+  "source_sha256": "dd9c4f8fbfab2657582ad36c204d5c8781ce990188b184100b476d5adc406689",
+  "ownership_card_closed": false,
+  "safe_for_execution": false,
+  "execution_safety_verdict": "No new concrete process-safety defect established within the finite cooperative SIGINT/SIGTERM and fixed-fault contract. This limited review is not execution approval or acceptance; lifecycle receipt gaps remain.",
+  "scope": "Read launch_027, review026, frozen27 source, manifests, diff and independent-validation.json; independently computed source, parent/result manifest and adapter hashes. No candidate execution, imports, compilation, tests, providers, Docker or delegation. Wrote only this review. Root reports full-manifest/provider/cleanup verification passed; that is not runtime lifecycle evidence.",
+  "location_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-027/frozen/tests/e2e/test_review_adapter_e2e.py",
+  "adapter_hashes": {
+    "scripts/esy-repair/claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "scripts/esy-repair/codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_dispositions": {
+    "B1a-E2E-025-owned-process-lifecycle": "Open pending the receipt corrections below and later approved public evidence.",
+    "B1a-E2E-026-spawn-handoff": "Source concern addressed for the finite contract: handlers only record intent before Popen; no signal mask crosses spawn; phase becomes owned immediately after acquisition and before bookkeeping. The redundant finalizer exclusion of not-spawned lacks the planned fallback, but no cooperative-signal or designated-fault path reaches a non-null proc in that phase; no arbitrary-exception defect is claimed.",
+    "B1a-E2E-026-interrupted-cleanup": "Core source concern addressed: handlers remain non-raising through resource obligations, repeated cleanup signals set a separate fixed flag, drain and close are separate, and cleanup uses one deadline. The fixed cleanup-interrupt control sends one self-SIGINT after a setup failure. Observation completeness remains deficient below.",
+    "B1a-E2E-026-finalization-receipt": "Partially addressed: one guarded selector close, observed pipe outcomes, independent drain/close, first-failure preservation, return after finalization, and probe-validation failure persistence. Aggregate cleanup truth and required signal observations remain open."
+  },
+  "positive_source_observations": [
+    "Every waitpid first sets reap-uncertain; only waited==0 restores owned. Known reap sets reaped before returncode conversion on both normal and cleanup paths. The sole killpg is before cleanup reap and requires owned; uncertain/reaped paths cannot signal.",
+    "The original newline stdin payload is restored; saved-duration normal waiting is retained as expressly authorized. Only the allowed test source changes according to the manifest/diff and root validation.",
+    "Eight fixed lifecycle scenarios plus matrix form a closed CLI enum parsed before spawn. Each lifecycle branch invokes the actual adapter once; no arbitrary command, timeout, signal or runner input is introduced. Fixed environment, native sandbox profile, stream caps and original matrix behavior remain."
+  ],
+  "findings": [
+    {
+      "id": "B1a-E2E-027-cleanup-outcome-conflation",
+      "severity": "medium",
+      "classification": "lifecycle_acceptance_gap",
+      "location": "319-328",
+      "problem": "The clean predicate requires primary is None. Therefore a deliberate setup failure, timeout, overflow or ordinary post-reap exception necessarily persists cleanup=failed even when every close, handler restoration and leader reap succeeded with no cleanup interruption or errors. The receipt cannot distinguish failed work with successful cleanup from failed cleanup, contrary to the required separation of primary failure and cleanup outcomes.",
+      "required_change": "Derive aggregate cleanup solely from observed cleanup/reap/close/restoration outcomes and cleanup interruption. Preserve and re-raise primary independently; successful cleanup must never turn an injected failure into exit zero.",
+      "required_e2e": "After separate execution approval, use the existing setup-failure, timeout, overflow and post-reap-exception public controls. Where observed cleanup obligations succeed, require nonzero exit plus original failure and cleanup=success. Keep cleanup-interrupt nonzero with cleanup=failed even when its resource obligations complete."
+    },
+    {
+      "id": "B1a-E2E-027-signal-observation-receipt",
+      "severity": "medium",
+      "classification": "lifecycle_acceptance_gap",
+      "location": "140-150,259-266,310-316",
+      "problem": "The handler records received.signal locally but never persists it. Cleanup interruption records only a boolean and a generic message; collection interruption also loses the signal identity. signal_attempt omits the ownership phase. Thus lifecycle.json cannot show the required observed SIGINT in the fixed cleanup-interrupt probe or the phase at the actual group-signal attempt; scenario name alone is not an observation.",
+      "required_change": "Persist a fixed scalar first-signal observation and the phase captured at the sole group-signal attempt, retaining the existing intended/attempted/result fields and separate cleanup-interrupted flag. Do not add a signal log or new fault matrix.",
+      "required_e2e": "Use existing cleanup-interrupt to require original setup failure, observed SIGINT, cleanup_interrupted=true, cleanup=failed and independent resource/reap outcomes. Existing owned-failure controls must expose phase=owned for an attempted group signal; post-reap controls must show no attempt."
+    }
+  ],
+  "other_findings": "All six non-ownership review025 findings remain open: record-bound, result-receipt, arity-offset, per-case-routing, deadline-race and diagnostic-byte-cap. This review does not repeat or close them.",
+  "missing_evidence": [
+    "No runtime evidence was generated. Source correction and exact-revision re-review remain necessary for ownership-card closure.",
+    "Complete source/environment execution approval and separate outer-wrapper approval are still required before runtime work; this review grants neither.",
+    "Later approved evidence must collect bounded public-process exit/stdout/stderr and lifecycle.json for all eight fixed lifecycle scenarios, with independently bounded outer completion. Provider authoring validation and a cleanup success literal do not establish process cleanup."
+  ]
+}

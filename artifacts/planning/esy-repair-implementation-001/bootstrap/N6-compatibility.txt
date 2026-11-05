@@ -1,0 +1,242 @@
+Execute final card18 pinned-base compatibility ONLY. Allowed ONLY artifacts/planning/esy-reference-proposal-001/run_esy_reference.py. No execution,tests,Docker,compilers,delegation. No whole-file rewrite. Preserve lifecycle work; N5 review7 findings remain unaccepted and must NOT be claimed fixed. Implement localized documented changes:
+1 correct actual Mounts=[] semantics while enforcing exact HostConfig.Tmpfs map, reject bind/volume/unknown/duplicate/conflictingmounts; explicitR3-13 checks Privilegedfalse CapAddempty devicesrequestsnone safe PID/IPC modes exact securityopts entrypointcommand; no weakersecurity.
+2 installed-only compilerdiscovery fixed depth .esy/<store>/i/ocaml-5.5.1000-*/bin/ocamlopt, canonicalize runtime esylookup, exclude /b buildtree, no countedunderscores. Canonical executable is /i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt SHA256361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24 observed from pinnedbase. Capture/trust pinnedbase hash; verify derivative/runtime beforeexecutingcompiler. Reject pathsescapinginstalledstore, ambiguity,wrongpkg/hash.
+3 omit ONLY top-level cache/seed-root directory mtime from semantic comparisons where comparing copied seeds/original/initializedcaches. Retain rootmtime in diagnosticinventory. Preserve descendanttimestamps and everyotherrequiredfield. Apply consistently Python capture comparison AND JSruntime cache comparisons. Do not omit rootmtime forpackage/locks or broadlystripmetadata.
+4 docker_create explicit --env TMPDIR=/work and validate exactlyoneactualConfig.Env TMPDIRentry equals /work. No new mounts. Real approvedfixeddiagnostic twice compiledandranOCaml withthischange, correctstdoutcleanup.
+Fixedrootplanneraddenda and probes below. Finalreport include exactremainingissues, noacceptanceclaims. This consumes launch18/18; no extra coding.
+
+PLAN N-compat-plan-001
+{
+  "kind": "separate_frontier_planning_addendum",
+  "card": 18,
+  "title": "Minimal pinned-base compatibility fixes",
+  "status": "planning_only",
+  "allocation": {
+    "13_capture": "implemented",
+    "14_semantic_inventory": "implemented",
+    "15_immutable_dockerfile": "executing",
+    "16_deadline_process_groups": "planned",
+    "17_ownership_cleanup": "planned",
+    "18": "Replace broad proof-driver authoring with bounded compatibility fixes."
+  },
+  "scope": {
+    "file": "run_esy_reference.py",
+    "excluded": [
+      "New test or proof driver",
+      "Dockerfile changes",
+      "Reimplementation of cards 16 or 17",
+      "Runtime authorization"
+    ]
+  },
+  "evidence": {
+    "base_image": "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+    "mounts": "The supplied create-only probe reports Mounts=[] and the exact requested HostConfig.Tmpfs map. Requiring tmpfs destinations in Mounts rejects this valid configuration.",
+    "compiler": "The supplied store probe finds both a build-tree ocamlopt and an installed ocamlopt. Global recursive uniqueness therefore fails on this base.",
+    "reference_environment": "The supplied environment identifies installed ocaml@5.5.1000 and its PATH entry. Its actual file location remains unverified."
+  },
+  "bounded_behavior": {
+    "container_validation": [
+      "Validate HostConfig.Tmpfs independently of Mounts, requiring exact destination-to-options equality with the runner's intended map.",
+      "Accept Mounts=[] when the expected Tmpfs map matches; do not require tmpfs entries in Mounts.",
+      "Reject every bind, volume, unknown mount type, unexpected destination, duplicate destination, or contradictory mount entry. Any accepted tmpfs entry in Mounts must correspond to the expected configuration.",
+      "Add the applicable R3-13 confinement checks as direct comparisons against the runner's intended configuration. Verify the exact R3-13 list before implementation; the supplied probes alone do not establish that list.",
+      "Keep checks aligned with actual runner settings, including immutable image identity, network isolation, read-only root filesystem, user, capability removal, no-new-privileges, and resource limits. Do not copy probe-specific entrypoints or resource values into runner policy."
+    ],
+    "compiler_selection": [
+      "Replace global recursive discovery with a fixed-depth installed-store traversal rooted at /home/opam/.esy, restricted to canonical /i/<package>/bin/ocamlopt candidates.",
+      "Derive store directory names from traversal results; never construct padded paths by counting underscores.",
+      "Require the expected ocaml package identity and package version 5.5.1000, canonical installed path, and trusted expected compiler hash. The package-directory suffix is not a compiler-content hash.",
+      "Reject candidates resolving outside the allowed installed store, missing or mismatched identity evidence, and ambiguity among qualifying installed candidates. Build-tree matches do not participate.",
+      "Alternatively, use the verified reference-command-env file's fixed PATH data after discovering its actual location and provenance. Parse the necessary data without sourcing or executing the file; apply the same canonical-path, package, and hash checks.",
+      "Implement one selection approach, without a permissive fallback to global discovery."
+    ]
+  },
+  "prerequisites": [
+    "Read the current run_esy_reference.py and R3-13 findings to establish the exact bounded edits and existing public CLI syntax.",
+    "Obtain the trusted expected compiler-content hash and package-identity evidence; neither is supplied here.",
+    "If choosing environment-based selection, discover the actual reference-command-env location. Do not assume _esy/default/cache/command-env.",
+    "Complete and review cards 15, 16, and 17 before the real E2E run.",
+    "Obtain the separate safety review for runtime execution."
+  ],
+  "required_real_e2e_command": {
+    "executor": "root, following separate safety review",
+    "entrypoint": "Existing run_esy_reference.py public CLI",
+    "required_sequence": [
+      "Run the current public capture invocation against the pinned base.",
+      "Run the current public positive invocation using that capture and the existing intended fixture."
+    ],
+    "exact_argv": null,
+    "reason": "The current CLI definitions, fixture paths, and output arguments were not supplied. Record their exact existing invocations before runtime review; inventing flags would not produce a real command.",
+    "acceptance": [
+      "The real runner passes configuration validation and selects the verified installed compiler.",
+      "Capture and positive execution complete with their existing semantic acceptance checks.",
+      "Deadline, process-group, ownership, and cleanup requirements remain enforced and produce the required evidence."
+    ]
+  },
+  "remaining_findings": [
+    "R3-13 requirements remain open until checked individually; these probes establish only the two compatibility failures.",
+    "Cards 16 and 17 remain required.",
+    "The provided package.json and lockfile hashes do not establish the compiler executable hash.",
+    "Successful probe cleanup does not prove runner cleanup correctness.",
+    "No existing finding is waived, and no runtime execution is authorized by this addendum."
+  ]
+}
+PLAN N5-replan-001
+{
+  "mode": "planning-only",
+  "launches": [17, 18],
+  "controller": "deferred",
+  "execution": false,
+  "delegation": false,
+  "acceptance": "not granted; final recorded proof remains runtime-review gated",
+  "budget_increase": false,
+  "card17": {
+    "scope": "Ownership/lifecycle repair, including all six coupled N4 corrections.",
+    "edit_policy": "Small, localized patches; no whole-file rewrites.",
+    "steps": [
+      {
+        "step": 1,
+        "targets": ["runner bounded_process/run/capture/cleanup", "test supervisor/run_case finally"],
+        "change": "Establish one absolute monotonic deadline per supervised lifetime. Allocate execution, result emission, process-group shutdown, removal, and verification within its remaining budget. Cap every nested timeout and wait by the remaining allocation; never reset independent cleanup timeouts. Give independent suite cleanup its own bounded deadline without treating it as proof of runner lifetime compliance.",
+        "addresses": ["N4-R3-05-02"]
+      },
+      {
+        "step": 2,
+        "targets": ["NODE.run", "runner deadline allocation"],
+        "change": "Test unrounded remaining milliseconds for expiry before spawning; expired budgets launch nothing. For a positive remainder, pass Math.ceil(remaining_ms), never zero. Allocate an earlier inner command deadline with explicit allowance for startup/transport, result emission, host shutdown, and removal before the host lifetime deadline. Preserve compiled-loop command-timeout evidence.",
+        "addresses": ["N4-R3-05-01", "N4-R3-05-04"]
+      },
+      {
+        "step": 3,
+        "targets": ["runner create/start/cleanup"],
+        "change": "Corroborate and retain exact container ID plus owner before starting. On termination paths, invoke bounded docker rm -f directly on that verified ID before inspection or diagnostics. Retain uncertain-create recovery by recorded name plus owner, then exact ID. Require a successful daemon query establishing absence; query failure or budget exhaustion means cleanup remains uncertain.",
+        "addresses": ["N4-R3-05-03"]
+      },
+      {
+        "step": 4,
+        "targets": ["runner bounded_process", "test supervisor", "run_case finally"],
+        "change": "After leader exit, including normal exit with EOF, check and terminate remaining members of the owned process group using the remaining shutdown budget. Keep cleanup obligations active until resolved; unresolved group termination fails the result. Preserve independent suite cleanup in finally.",
+        "addresses": ["N4-R3-06-01"]
+      },
+      {
+        "step": 5,
+        "targets": ["all runner helper success checks", "all E2E success consumers"],
+        "change": "Propagate interruption and cleanup-uncertainty through inspection, creation, capture, run, removal, verification, and E2E result evaluation. Exit zero or valid JSON cannot override either flag. Cancellation stops ordinary work while required bounded cleanup continues.",
+        "addresses": ["N4-R3-06-02"]
+      },
+      {
+        "step": 6,
+        "change": "Review localized diffs and enumerate outstanding evidence: pinned-Node rounding/expiry, inner command-timeout ordering, independent lifetime measurements including timeout=1, delayed removal and inspection failure, descendant/pipe lifecycle cases, interruption, and cleanup failures. Phase17 may explicitly leave unsafe fault scenarios unexecuted; do not execute unsafe runner code or claim runtime approval."
+      }
+    ]
+  },
+  "card18_addendum": {
+    "decision": "Omit only top-level seed-root directory mtime from semantic inventory comparison; retain it as diagnostic metadata. Docker COPY destination creation explains this difference without violating the stated inventory requirement.",
+    "steps": [
+      {
+        "step": 1,
+        "change": "Record the supplied successful legacy-amd64 build from the fixed full base ID and verified source layers for immutable derivative sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459. Treat this as supplied evidence, not independently verified proof or acceptance; preserve the existing fixed full base ID."
+      },
+      {
+        "step": 2,
+        "change": "Patch only the seed inventory comparator/reporting boundary to exclude root-directory mtime from semantic equality. Preserve descendant timestamps and all existing integrity checks, including required path/type/mode/size/hash/symlinktarget and uid/gid checks. Report root mtime differences diagnostically; retain failure on any required-field mismatch."
+      },
+      {
+        "step": 3,
+        "change": "Retain installed-only compiler selection through canonical lookup. Verify the selected canonical compiler against the observed suffix and digest; do not hardcode store-padding length.",
+        "canonical_suffix": "/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt",
+        "sha256": "361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24"
+      },
+      {
+        "step": 4,
+        "change": "Retain correct HostConfig.Tmpfs validation with Mounts=[], all existing R3-13 checks, and runtime-review gating of final recorded proof. Add focused comparator checks for the permitted root-mtime difference and rejected descendant-timestamp or required-integrity-field differences."
+      }
+    ]
+  }
+}
+PLAN N6-tmp-plan-001
+{
+  "card18_addendum": {
+    "scope": "Planning only; bounded one-line environment compatibility amendment to existing finalcard18 fixes.",
+    "exactbehavior": {
+      "change": "Add TMPDIR=/work to docker_create explicit environment, preserving other environment entries.",
+      "supporting_inspection": "Check actualConfig.Env contains TMPDIR=/work with no conflicting TMPDIR value."
+    },
+    "evidence": {
+      "reported_observation": "The root fixed compileprobe on the immutable seedimage reached the actual compiler, then failed with Error: I/O error for /tmp/camlasm...s on the read-only filesystem.",
+      "reported_configuration": "readonlyroot; work 128 MiB; cache tmpfs 32 MiB; network none.",
+      "cleanup": "Reported verified.",
+      "expected_effect": "Direct compiler temporary files to the existing writable /work.",
+      "validation_status": "The environment amendment has not been executed or validated."
+    },
+    "unchanged": [
+      "Other finalcard18 compatibility fixes",
+      "Installed compiler canonical hash",
+      "Existing mounts and limits",
+      "Root mtime",
+      "Read-only root, network isolation, and security settings"
+    ],
+    "bounds": "No new writable mounts, relaxed security, coding budget, execution, or delegation."
+  }
+}
+COMPILERPROBE
+{
+  "container_id": "6005cef525dcd30e7db8bbe64cb6a808b358526d3676790cd2c27cacba8ffc74",
+  "image": "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+  "command": [
+    "docker",
+    "create",
+    "--name",
+    "esy-hash-probe-6dc36ef88ba236fc422d1a21",
+    "--label",
+    "esy-reference.owner=6dc36ef88ba236fc422d1a21",
+    "--platform",
+    "linux/amd64",
+    "--pull=never",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--pids-limit",
+    "32",
+    "--memory",
+    "256m",
+    "--cpus",
+    "1",
+    "--user",
+    "1000:1000",
+    "--entrypoint",
+    "/home/opam/node/bin/node",
+    "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+    "-e",
+    "const fs=require('fs'),c=require('crypto');const p=fs.realpathSync(process.argv[1]),s=fs.statSync(p);console.log(JSON.stringify({path:p,bytes:s.size,mode:s.mode&511,sha256:c.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}))",
+    "/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"path\":\"/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt\",\"bytes\":22451920,\"mode\":493,\"sha256\":\"361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24\"}\n",
+  "stderr": "",
+  "compiler": {
+    "path": "/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt",
+    "bytes": 22451920,
+    "mode": 493,
+    "sha256": "361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24"
+  },
+  "cleanup_verified": true
+}
+CACHEPROBE SUMMARY
+{
+  "status": "SEMANTIC_SEED_CONTENTS_MATCH",
+  "checks": {
+    "seed_project": true,
+    "seed_cache": true
+  },
+  "excluded_identity_field": "mtime_ms only for top-level seed-root directories; retained in full diagnostics",
+  "full_inventory_artifact": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/seed-inventory-probe-004.json",
+  "full_inventory_sha256": "d0a8c6e8f555af97f41c98ae2c65a38db1c51b1d0e481e9c672d2328cc4f41bb",
+  "planner_decision": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/N5-replan-001/final.txt",
+  "runtime_acceptance": false,
+  "original_inputs_unchanged": true
+}

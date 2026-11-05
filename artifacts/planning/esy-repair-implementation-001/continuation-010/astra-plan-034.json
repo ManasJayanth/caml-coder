@@ -1,0 +1,32 @@
+{
+  "plan_id": "B1a-routing-matrix-correction-034",
+  "planner": "gpt-6-astra",
+  "status": "Conditional source-authoring plan; no automatic dispatch or execution approval. Overall INCOMPLETE.",
+  "budget": {"consumed_launches": 33, "maximum_launches": 36, "remaining_launches": 3, "active_checkpoint_seconds_approximate": 26800, "active_limit_seconds": 32400},
+  "launch_034": {
+    "card_id": "B1a-Routing-034",
+    "objective": "Make both fixed routing controls exercise the actual matrix loop and its first-mismatch stop.",
+    "finding_ids": ["B1a-Routing-033-controls-bypass-matrix", "B1a-E2E-025-per-case-routing"],
+    "parent_revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+    "inputs": [
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-033.json", "sha256": "457d873b4c291167fbc7d3340fc1cfd92a83d69e82da891279e23b99ad79eccb"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/retry-astra-review-025.json", "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-033/result-manifest.json", "sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0"},
+      {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-033/frozen/tests/e2e/test_review_adapter_e2e.py", "sha256": "d7c94d0f322ff870bcaaa8e7f85f9d043aba6e3de2587ee3b7c7bd2aed1d2fd2"}
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": ["Review33 binding is verified. Root must verify full frozen33 inventory, working-parent equality, all input hashes, proven prior cleanup, cumulative failure/time/launch gates before dispatch. Source33 is the correction parent, not accepted execution source."],
+    "required_behavior": [
+      "Delete the separate one-shot routing branch at frozen33 lines 503-532. Exclude both routing scenarios from the lifecycle branch so they enter the existing CASES loop at 563. Do not duplicate the loop or create another control-only invocation path.",
+      "Only the first success row selects existing literal missing/duplicate fake mode. Preserve the normal response bytes/status and unchanged fixed fake selector. Use the shared matrix bounded_run callsite, collect_records and validate_routing_delta with expected1 and exact argv/cwd/stdin. Preserve snapshot advancement only after successful validation and abort on the first mismatch before any subsequent invocation.",
+      "Move existing tiny routing.json evidence into that shared path: scenario, failing row, expected/observed delta, mismatch reason, bounded observation, invocation failure and lifecycle. Initialize attempted_invocations to 0 and increment at the actual shared callsite; pass the lifecycle dict into unchanged bounded_run. Persist the receipt before propagating the first-row mismatch. Receipt-write failure fails. Missing/duplicate must show observed 0/2, expected 1, attempted 1 and nonzero exit. Unexpected control completion must fail, never claim success.",
+      "Preserve normal matrix checks, valid-review and existing arity rows, newline handling, collector, bounds, ownership, deadlines, cleanup, adapters, other controls and all safeguards. No broader refactoring."
+    ],
+    "forbidden_changes": ["Worker uses read/edit/write tools only: no shell, imports, compilation, tests, subprocess execution, providers or delegation. Each targeted patch under3000 characters; no full-file rewrite; unchanged 2MiB output cap.", "No other paths, new framework, arbitrary controls, arity correction, diagnostic correction, general result receipt/inventory or outer-wrapper implementation."],
+    "e2e_recipe_ids": ["B1a-public-matrix", "B1a-public-routing-missing", "B1a-public-routing-duplicate"],
+    "expected_outcomes": ["Fresh exact-revision review can close only the routing-control source defect. Future separately approved public controls must fail at the first actual matrix row, attempted1, with no later launches. Normal matrix behavior is preserved. No runtime acceptance or provider-identity/availability claim."],
+    "evidence_outputs": ["Worker: changed test only. Root: frozen revision, parent/result manifests and diff. Independent reviewer: exact-revision source dispositions. Later approved root execution: bounded public outputs, routing.json, actual records and independent cleanup evidence."],
+    "stop_conditions": ["Stop for unresolved review binding, hash/parent mismatch, failed budget/failure/cleanup gate, execution attempt, scope expansion or extra-path need. Outer execution remains blocked."],
+    "deferred": "Arity, diagnostic-byte-cap, complete result receipt/inventory and independently reviewed outer wrapper remain open beyond this correction. Two slots would remain after34; no merging, cap reset, automatic dispatch or completion promise."
+  }
+}

@@ -1,0 +1,75 @@
+{
+ "frozen_wall": 1792767586.0866401,
+ "inventory": [
+  [
+   "e2e/fake_engine.py",
+   "0o755",
+   6327,
+   "d121e4cfe4247bd115f3bf3db650364c97caf7b62f82aab38c166a576a358fe2"
+  ],
+  [
+   "e2e/fake_guardian.py",
+   "0o755",
+   5568,
+   "0edefe538df56c008b33fa90564840b583e3dac9b8fd60e7daf1dec825f971e4"
+  ],
+  [
+   "e2e/run_e2e.py",
+   "0o755",
+   41090,
+   "267274ad1e3cb25696034216b9392d4a9a6dc75d4a292beb74fcf24d622a3ca0"
+  ],
+  [
+   "env.sh.example",
+   "0o644",
+   723,
+   "9e62f5745c02c242b4d0c2d81782be4e5e2a85268d7d338c0865b785e7bd7bf2"
+  ],
+  [
+   "loop.py",
+   "0o644",
+   52982,
+   "4986bb614b6e2ecea01659eaa035056fa4ffa68d1bfef6b6d684f5b955fb405b"
+  ],
+  [
+   "review-readonly.sb",
+   "0o644",
+   661,
+   "5de083549af36aa541d86c9d9aef82600dc93df1c0b3ee0e23f40e59905bb861"
+  ],
+  [
+   "run_bounded.py",
+   "0o755",
+   6034,
+   "30996abb900fcc59e0902c653042680d7b60449339e78a20dd6d47017dd7ad61"
+  ],
+  [
+   "worker-claude.sh",
+   "0o755",
+   1507,
+   "38ef74e29ebef801152c47bff28bf35810bf994b0b6645ba50e6919a590ea35c"
+  ],
+  [
+   "worker-codex.sh",
+   "0o755",
+   359,
+   "95d84e148bf07d7388fa68845d32c4f75b1a235c9d20e903fc124cf0ec0c7142"
+  ],
+  [
+   "worker-common.sh",
+   "0o755",
+   363,
+   "eaeb222c7222de1948386864f2e6e5b2c1017c442f2fcf33904b79be4274250c"
+  ],
+  [
+   "worker-pi.sh",
+   "0o755",
+   726,
+   "2b6b3a65582bce07667e679a7a6ebe16105adc1d724cb40a9635bf6146f1ebc3"
+  ]
+ ],
+ "inventory_hash": "2bd29524d256ca74e185665d82c02d1c6ffa595f994e468482ef4f9553382656",
+ "note": "B1 guardian route (run_bounded --stdin-pipe + stdin_mode receipt key; loop.py guardian_bindings/worker_env/coding_spec exactly mirroring the worker-pi.sh vector; job trees under PI_RUNTIME/jobs; TERMINATED+reaped+credential_removed+exit0 gate -> uncertain_stop otherwise; ledger guardian_spec/guardian_receipt). B2 retire-card + planner EXISTING_E2E_IDS (O54). F7: wrong CLAUDE_REAL_CONFIG comment in run_model corrected - the strict profile was authoritative and never widened. Root fix: e2e run_e2e.py ORCH_SRC falls back to the tree root when ../orch is absent so card e2e.argv can run inside a flat frozen tree (latent C1-C4 defect, same class as the O46/O47 collision). PI_BIN rebound Cellar 1.3.0 -> 1.4.0 (1.3.0 removed by brew 2026-10-23 20:06). Suite 52/52 (45 + O48-O54).",
+ "snapshot": "orch-008",
+ "supersedes": "orch-007"
+}

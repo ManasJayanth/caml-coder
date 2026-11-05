@@ -1,0 +1,99 @@
+Independent Astra pre-execution safety review, no tools/edits. Return concise JSON safe_to_execute_trusted_guardian_e2es boolean, findings, missing_acceptance_evidence. Scope only executing these trusted OS fixtures via guardian-e2e.py under root supervision, not coding approval/full guardian acceptance. All child code is literal supplied code, no Docker, no user file mutation. Judge PID safety: guardian owns child, no poll/wait elsewhere, waitpid WNOHANG marks reaped then never signals afterreap. Worker sandbox denies process-fork. No copied credentials. E2Es write only continuation006. Kill-on-launcher-death full tests still pending; these are preliminary trusted fixtures. If safe for these bounded tests say so separately from full approval.
+
+FILE guardian.py
+"""Trusted single-child supervisor; experimental, not accepted workflow control."""
+import json,os,selectors,signal,subprocess,sys,time
+from pathlib import Path
+spec_path=Path(sys.argv[1]); spec=json.loads(spec_path.read_text()); out=Path(spec['output']);out.mkdir(exist_ok=False)
+signal.signal(signal.SIGCHLD,signal.SIG_DFL)
+p=None;sel=selectors.DefaultSelector();logs={'stdout':bytearray(),'stderr':bytearray()};reason=None;reaped=False;status=None;started=time.monotonic();deadline=started+spec['timeout'];exit_deadline=None
+try:
+ p=subprocess.Popen(spec['argv'],cwd=spec['cwd'],env=spec['env'],stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True)
+ (out/'ready.json').write_text(json.dumps({'guardian_pid':os.getpid(),'worker_pid':p.pid,'started_epoch':time.time()}))
+ sel.register(sys.stdin.buffer,selectors.EVENT_READ,'parent')
+ for pipe,name in [(p.stdout,'stdout'),(p.stderr,'stderr')]:os.set_blocking(pipe.fileno(),False);sel.register(pipe,selectors.EVENT_READ,name)
+ while True:
+  if not reaped:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:
+    reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status
+  if reaped and not any(k.data!='parent' for k in sel.get_map().values()):break
+  if time.monotonic()>=deadline and reason is None:reason='timeout'
+  if reason and not reaped:
+   # This direct child has not been reaped. Its PID cannot be reused.
+   try:os.kill(p.pid,signal.SIGKILL)
+   except ProcessLookupError:pass
+   if exit_deadline is None:exit_deadline=time.monotonic()+5
+  if exit_deadline and time.monotonic()>=exit_deadline:break
+  for key,_ in sel.select(.02):
+   data=os.read(key.fileobj.fileno(),16384)
+   if key.data=='parent':
+    if not data:
+     sel.unregister(key.fileobj)
+     if not reaped:reason=reason or 'launcher-eof'
+    continue
+   if not data:sel.unregister(key.fileobj);continue
+   buf=logs[key.data];left=spec['cap']-len(buf);buf.extend(data[:max(0,left)])
+   if len(data)>left:reason=reason or 'output-cap'
+except BaseException as e:reason='guardian-exception:'+type(e).__name__
+finally:
+ if p is not None and not reaped:
+  try:os.kill(p.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+  until=time.monotonic()+5
+  while time.monotonic()<until:
+   pid,st=os.waitpid(p.pid,os.WNOHANG)
+   if pid:reaped=True;status=os.waitstatus_to_exitcode(st);p.returncode=status;break
+   time.sleep(.01)
+ sel.close()
+ for k,v in logs.items():(out/k).write_bytes(v)
+ result={'status':'TERMINATED' if reaped else 'CLEANUP_UNVERIFIED','worker_pid':p.pid if p else None,'worker_reaped':reaped,'exit_code':status,'reason':reason,'elapsed_seconds':round(time.monotonic()-started,3),'single_worker_assumption':'requires separately proven native process-fork denial'}
+ (out/'receipt.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps(result),flush=True)
+
+FILE guardian-e2e.py
+"""Public guardian process E2Es using trusted bounded OS fixtures."""
+import json,os,signal,subprocess,sys,time
+from pathlib import Path
+D=Path(__file__).resolve().parent;env={k:os.environ[k] for k in ['PATH','HOME','USER','LANG'] if k in os.environ};rows=[]
+for name,code,timeout,cap,expected in [
+ ('normal','print("ok")',2,1024,None),
+ ('timeout','import time;time.sleep(30)',.2,1024,'timeout'),
+ ('overflow','print("x"*10000)',2,100,'output-cap'),
+ ('detached-single','import os,time;os.setsid();os.close(1);os.close(2);time.sleep(30)',.2,1024,'timeout'),
+ ('parent-eof','import time;time.sleep(30)',10,1024,'launcher-eof')]:
+ out=D/('guardian-test-'+name);spec={'argv':['/usr/bin/sandbox-exec','-f',str(D/'nofork.sb'),sys.executable,'-B','-c',code],'env':env,'cwd':str(D),'output':str(out),'timeout':timeout,'cap':cap};path=D/(name+'.spec.json');path.write_text(json.dumps(spec))
+ p=subprocess.Popen([sys.executable,'-B',str(D/'guardian.py'),str(path)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True)
+ try:
+  if name=='parent-eof':
+   until=time.monotonic()+3
+   while not (out/'ready.json').exists() and time.monotonic()<until:time.sleep(.01)
+   p.stdin.close()
+  p.wait(timeout=12);r=json.loads((out/'receipt.json').read_text());rows.append({'scenario':name,'passed':r['worker_reaped'] and r['reason']==expected,'receipt':r})
+ finally:
+  if p.poll() is None:p.stdin.close();p.wait(timeout=10)
+(D/'guardian-e2e.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(rows));raise SystemExit(0 if all(x['passed'] for x in rows) else 1)
+
+FILE nofork.sb
+(version 1)
+(allow default)
+(deny process-fork)
+(deny file-write*)
+(allow file-write* (subpath "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/nofork-runtime"))
+(deny network-outbound (remote unix-socket))
+(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))
+(allow network-outbound (remote unix-socket (path-literal "/var/run/mDNSResponder")))
+(deny signal)
+(allow signal (target self) (target children))
+
+FILE nofork-probe-result.json
+{
+  "test": "native-no-fork",
+  "fork_denied": true,
+  "posix_spawn_denied": true,
+  "thread_works": true,
+  "exit_code": 0,
+  "profile_sha256": "446562ceacc57219ec3b59ed6374b2bb65dc7cfb4a667e067730d5c35d8a4bf6",
+  "probe_sha256": "93dbfadd877eb065694238b770301e19470274ed989cd0e32772f4711e339fed",
+  "scope": "OS feasibility probe only, not worker acceptance"
+}

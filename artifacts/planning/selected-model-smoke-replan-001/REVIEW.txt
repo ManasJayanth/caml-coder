@@ -1,0 +1,43 @@
+Selected-model OCaml smoke checker review
+
+Scope and status
+
+This note records synthetic-only attempts against scripts/check_ocaml_probe.py. No actual model candidate was run. The requested reference fixture never passed, the malicious early-exit fixture was not reached, and the final soft-ulimit adjustment was not rerun. Do not treat these attempts as checker acceptance evidence.
+
+Exact attempts and outcomes
+
+1. The initial fixture harness invocation used `python - <<'PY' ...`; the shell returned `zsh:1: command not found: python` (exit 127). The checker did not run.
+
+2. The harness was retried with `python3` in the sandbox. Its reference candidate invocation was equivalent to:
+
+   `python3 scripts/check_ocaml_probe.py --result <temporary-reference>/manifest.json --run-id fixture-reference`
+
+   It returned FAILED because Docker could not connect to `/Users/psac/.docker/run/docker.sock` (`permission denied while trying to connect to the docker API`). This was a sandbox startup denial, not a candidate or checker result. The report was `/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/ocaml-probe-fixture-n317hk5n/reference/ocaml-checks/fixture-reference.json`.
+
+3. The same reference fixture was invoked with Docker access approved. The container exited 2 with empty stdout and stderr, and the report was `/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/ocaml-probe-fixture-3ul1p_rm/reference/ocaml-checks/fixture-reference.json`. A direct diagnostic showed the in-memory tar transport worked. The checker had hidden compiler diagnostics because `set -e` exited before collecting them. The script was changed to preserve compiler status and include diagnostics.
+
+4. After that change, the next Docker-backed reference fixture exited 2. The report was `/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/ocaml-probe-fixture-2syxq_c9/reference/ocaml-checks/fixture2-reference.json`. Its stdout showed compiler status 2 and `Error: I/O error: /tmp/caml_bin_shfbd772: Read-only file system`. The script was changed to set `TMPDIR=/work`.
+
+5. After the TMPDIR change, the next Docker-backed reference fixture exited 2. Its report was `/private/var/folders/my/stynlddj1vvfvqlk34__f4wh0000gn/T/ocaml-probe-fixture-b6u4nyts/reference/ocaml-checks/fixture3-reference.json`. Compiler status was 0, but stderr was `/bin/sh: 15: ulimit: error setting limit (Invalid argument)`. The script was changed from setting the hard and soft file-size limits to `ulimit -f 128`. That adjustment has not been rerun.
+
+There were three actual Docker-backed failed fixture iterations (items 3–5), in addition to one CLI attempt blocked at Docker startup by the sandbox (item 2). The initial `python` command-not-found (item 1) did not invoke the checker. Thus the three-failure limit was reached by actual Docker-backed attempts; the sandbox denial is not counted among those three. The paired harness stopped at the failing reference case each time, so its incorrect candidate case did not run.
+
+Current defects found in review
+
+- `_container_script` still prints the same randomized completion marker after `./probe` returns. The checker also prints that marker only after assertions, but the shell copy makes the completion check unsound: a candidate can execute `exit 0` during module initialization, skip the checker, then let the shell print the marker and exit successfully. A specific negative fixture is `let sum_squares _ = 0\nlet () = exit 0`.
+- Container names append a random suffix and then truncate the complete string to 63 characters. A sufficiently long valid `--run-id` consumes the suffix, allowing concurrent invocations to collide. Bound or validate the run ID length so the random suffix remains intact, or truncate the run-ID portion before appending the suffix.
+- The latest `ulimit -f 128` adjustment is unverified. The reference fixture has not passed, and no negative fixture has run.
+
+Proposed bounded patch and evidence
+
+1. Remove the shell's marker `printf`; retain the marker only in `checker.ml` after all fixed assertions. Continue requiring the exact marker as the last stdout line and a zero container exit code.
+2. Reserve room for the random container-name suffix by limiting the run-ID portion before composing the name, or reject overly long run IDs while preserving the suffix.
+3. After the checker is frozen, run one synthetic reference candidate and the early-exit negative candidate in the pinned isolated container. The reference must pass; the negative must fail because the checker-only marker is absent. Record both immutable reports. Do not run the actual model artifact as part of this synthetic review.
+
+This checker is a compile-and-fixed-example smoke test only. It is not benchmark evidence, robustness evidence, or model acceptance.
+
+Parent integration review (progress007-control-001)
+
+The fresh control E2E failed in card-interfaces because this card puts its standalone probe command first. The catalogue interface requires commands[0] to be the registered E2E command containing --suite. Reorder the first two commands; do not weaken the interface test. A later pre-existing T12C scenario-name mismatch remains covered by its separate held repair.
+
+The card exclusion also incorrectly says the MLX model itself runs inside the Linux container. Actual MLX inference runs on the macOS Metal host with pinned local weights and trust_remote_code=False; generated OCaml executes only in the isolated container. Correct the exclusion to this distinction. This changes documentation to match the intended supported architecture; it does not authorize generated host code execution.

@@ -1,0 +1,31 @@
+{
+ "acceptance_rows": [
+  "R1 cmd_review computes sha(pf) of evidence/<label>/packet.txt immediately after writing it and before run_model; the ledger review_packet entry and st['reviews'][...]['packet_sha'] record that pre-run value",
+  "R2 After run_model returns, cmd_review re-hashes packet.txt; if it differs from the pre-run sha it records packet_tampered=true in the review entry and ledger and treats the result as REVIEW_MALFORMED (no acceptance, no parent_hash change)",
+  "R3 e2e/run_e2e.py gains scenario O56: the fake reviewer rewrites packet.txt during its run; the stored packet_sha equals the pre-run hash, packet_tampered is true, and the card is not accepted",
+  "R4 Existing scenario functions and ids are unchanged; fake_engine.py changes are limited to an opt-in env-driven packet-rewrite behavior used only by O56"
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py",
+  "e2e/fake_engine.py"
+ ],
+ "base": "C7",
+ "depends_on": [
+  "C7"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O56"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C8",
+ "objective": "Fix F3: hash the reviewer packet before run_model and detect post-run packet rewrites",
+ "stop_condition": "print CARD_BLOCKED C8 if the packet sha is not currently computed after run_model as the review describes, if O56 already exists, or if the fake reviewer cannot be made to rewrite packet.txt without touching files outside allowed_paths",
+ "timeout": 300
+}

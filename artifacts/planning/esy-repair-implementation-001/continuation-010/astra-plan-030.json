@@ -1,0 +1,106 @@
+{
+  "plan_id": "B1a-record-bound-correction-030",
+  "planner": "gpt-6-astra",
+  "status": "Source-authoring card; review29 source closure verified for the bound parent. Root must recheck dispatch gates. No execution approval.",
+  "scope": "Read frozen29 and planning inputs; verified all 82 manifest entries including modes/sizes/hashes. Only this plan is written; no candidate execution, imports, compilation, tests, providers, source edits or dispatch.",
+  "budget": {
+    "consumed_launches": 29,
+    "maximum_launches": 36,
+    "active_checkpoint_seconds_approximate": 23500,
+    "active_limit_seconds": 32400,
+    "allocation": "Card30 plus four later cards leaves two launch slots if successful. Root reconciles actual budgets and cumulative three-failure replanning gates before dispatch."
+  },
+  "launch_030": {
+    "card_id": "B1a-RecordBound-030",
+    "objective": "Bound every records.jsonl collection to 16385 raw bytes and reject greater than 16384 before parsing.",
+    "finding_ids": [
+      "B1a-E2E-025-record-bound"
+    ],
+    "parent_revision_sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc",
+    "input_path_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/",
+    "inputs": [
+      {
+        "path": "retry-astra-review-025.json",
+        "sha256": "a0b9d11060ddb90fd66b725da4367f084ecd96e3c8062b1aa37519e4a731f825"
+      },
+      {
+        "path": "astra-plan-028.json",
+        "sha256": "cf5d932a5eeeace5365eb503a0cac9f6cf9ad910fb048b2765f02a1698c944ef"
+      },
+      {
+        "path": "astra-plan-029.json",
+        "sha256": "6b48f9ec60ff66dc112ce85a625c82d5f185ea179dbc12566fd4c1e8800c183f"
+      },
+      {
+        "path": "coding-jobs/B1a-Deadline-029/result-manifest.json",
+        "sha256": "da9e8e8d671466a25a2201e42a26f74617131665785fbbd98bfb5993809b96cc"
+      },
+      {
+        "path": "coding-jobs/B1a-Deadline-029/frozen/tests/e2e/test_review_adapter_e2e.py",
+        "sha256": "407d80771a820d8b91a8a52edb3694af4889c648dfaa1a290607739359fe85c1"
+      },
+      {
+        "path": "coding-jobs/B1a-Deadline-029/frozen/scripts/esy-repair/claude-worker.sh",
+        "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+      },
+      {
+        "path": "coding-jobs/B1a-Deadline-029/frozen/scripts/esy-repair/codex-worker.sh",
+        "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+      },
+      {
+        "path": "astra-source-review-029.json",
+        "sha256": "19f9d4fa59f9073b38d13ad97e828d153b899f27d60ce2dca763fb4aba5856ab"
+      }
+    ],
+    "allowed_paths": [
+      "tests/e2e/test_review_adapter_e2e.py"
+    ],
+    "prerequisites": [
+      "Independently hashed review29 closes the deadline source concern against this exact parent and preserves ownership/receipt28 source closure. Root rechecks that binding before dispatch; withdrawn or mismatched closure blocks dispatch. Any changed parent requires rebinding. Runtime acceptance remains open.",
+      "Root rechecks listed hashes, complete frozen29 manifest, exact working copy, unchanged adapter identities and budgets. Start from frozen29.",
+      "Luna uses read/edit/write only: no shell, execution, imports, compilation, tests, subprocess, helper or provider invocation. Root freezes output and obtains independent Astra exact-revision source review. Execution later requires complete source/environment approval and separate outer-wrapper approval. Claude remains unavailable/disabled."
+    ],
+    "required_behavior": [
+      "Introduce one small raw-record collector in the allowed file. Open records in binary unbuffered mode, request at most RECORD_LIMIT+1 (16385) bytes total per collection, close on every path, and reject len(raw)>RECORD_LIMIT with a specific record-overflow failure before decoding, splitlines, JSON parsing or routing checks. Count every raw byte, including newlines. Do not read to EOF, iterate lines, retry beyond the cap, or rely on stat-size checks.",
+      "Replace both current records.read_bytes() sites with this collector. Split/parse only returned in-bound bytes; remove the misleading sum-of-line-lengths size test. Retain existing record counts/content checks. Every newly added record read must also use the collector; centralization makes every read path auditable.",
+      "Add only closed --scenario values records-exact-limit and records-one-over. Each uses existing fixtures, actual adapter, native sandbox and shared bounded_run for one normal success invocation; verify unchanged output/status and cleanup first. Bound-read the produced record file, then append only enough newline bytes to reach 16384 or 16385 respectively. Reject unexpected initial size; never truncate records or accept user-selected sizes/content. Exercise the same raw collector again on the resulting file.",
+      "For these controls only, persist a small record-bound.json beneath validated output on success/failure: scenario, observed byte count from the actual capped read, limit, bounds outcome, protocol_evaluated=false, original failure and existing invocation lifecycle state. Capture overflow observation before raising; never infer it from the scenario. Exact-limit returns zero only for bounds acceptance at 16384; one-over returns nonzero with record-overflow at 16385. Padding is boundary-test data: do not parse it or require it to satisfy record count/routing rules. This receipt is not result.json or routing acceptance.",
+      "Preserve deadlines, ownership transitions, signal observations, first-failure handling, cleanup obligations, fixed environment, newline stdin, constants and existing lifecycle/deadline controls. Keep changes small and local."
+    ],
+    "forbidden_changes": [
+      "No edits outside the allowed test file; no adapters, controller, policy, dependencies or historical artifacts. No framework, unit/helper-import tests, monkeypatches, fake-process replacement, sandbox replacement or arbitrary controls.",
+      "Per-invocation exactly-one/zero record deltas and immediate mismatch stopping belong to card31. Do not fix arity32, diagnostic33 or result-receipt34. No worker execution."
+    ],
+    "e2e_recipe_ids": [
+      "B1a-public-records-exact-limit",
+      "B1a-public-records-one-over",
+      "B1a-public-lifecycle-normal"
+    ],
+    "public_e2e_recipe": {
+      "executor": "Root after both approvals; run complete public executable, never import helpers.",
+      "invocation": [
+        "VERIFIED_ABSOLUTE_PYTHON",
+        "VERIFIED_ABSOLUTE_TEST",
+        "--adapter",
+        "VERIFIED_ACTUAL_CLAUDE_ADAPTER",
+        "--output-dir",
+        "FRESH_OWNED_EMPTY_0700_DIRECTORY",
+        "--scenario",
+        "FIXED_ENUM_SCENARIO"
+      ],
+      "evidence": "Collect bounded status/stdout/stderr, record-bound.json or lifecycle.json, and independent outer completion. Outer record collection also caps reads at 16385 raw bytes.",
+      "assertions": "Exact control: observed 16384 including padding newlines, bounds accepted, exit zero, protocol not evaluated. One-over: observed 16385, record-overflow, nonzero, no parsing. Both retain successful actual invocation cleanup. Lifecycle-normal preserves existing behavior. Static review checks both matrix sites and all new reads share the capped collector; controls do not prove routing or whole-matrix acceptance."
+    },
+    "expected_outcomes": [
+      "Raw-byte portion of record-bound finding corrected in source; per-case requirement remains assigned31. No runtime acceptance claim."
+    ],
+    "evidence_outputs": [
+      "Luna: changed test only. Root: frozen candidate, manifests and diff. Astra: exact-revision source dispositions. Later approved root: bounded public-control receipts."
+    ],
+    "stop_conditions": [
+      "Absent source29 closure, hash mismatch, exhausted budget, expanded scope, extra-path need or worker execution: stop and report.",
+      "Unresolved execution blocker or missing approval forbids execution. No source or control receipt establishes provider identity or real-provider availability."
+    ]
+  },
+  "later_cards": "Keep per-case-routing31, arity-offset32, diagnostic-byte-cap33 and result-receipt34 open; individually bind to immediately preceding accepted frozen revision."
+}

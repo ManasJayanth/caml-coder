@@ -1,0 +1,30 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 36,
+  "approved_card_id": "B1a-Diagnostic-036",
+  "reviewed_plan_sha256": "7b6c0fb15753c0366712dbfd97b750d71d181f2e85815f8f4f89db5d94b81c13",
+  "reviewed_plan_section": "launch_036",
+  "parent_revision_sha256": "c1d8cb6e448b767b568f3fc8ebfb7658d4c4c6d7186d97233b7cc271fee514aa",
+  "final_authorized_coding_slot": true,
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one final diagnostic-only authoring attempt. The complete card bounds handled stderr by encoding before slicing and includes the trailing LF in 4096 bytes. It explicitly handles KeyboardInterrupt with fixed bytes/status130, preserves SystemExit/parser behavior, and adds exactly three fixed childless diagnostic controls after validation and before fixture creation. No fixture execution or additional routing controls are authorized."
+    },
+    {
+      "severity": "info",
+      "message": "All five input hashes match. Current candidate test matches frozen35; bound review35 closes arity source work while withholding execution approval. Dispatcher/guardian/profile hashes remain unchanged. Ledger records 35/36 and coding35 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "This consumes the final authorized coding slot regardless of result. There is no launch37 authority. Complete result receipts/inventory, the independently reviewed outer wrapper and runtime acceptance remain INCOMPLETE even if this source correction passes review."
+    }
+  ],
+  "conditions": [
+    "Dispatch the complete hash-bound launch_036 contract exactly once from the full verified frozen35 parent, using a fresh isolated job and durable slot36 reservation from ledger35. Only tests/e2e/test_review_adapter_e2e.py may change.",
+    "Preserve existing supervision, runtime exclusivity, worker/credential-absence, full parent binding and valid smoke gates. Refresh root's reconciled active time against 32400 seconds and retain the 660-second reserve; preserve the hard 36-launch cap and cumulative attempt rules.",
+    "Targeted patches remain under 3000 characters with no whole-file rewrite and unchanged 2 MiB output cap. Read/edit/write source authoring only: no candidate execution, imports, tests, fixture runs, subprocess tools, Docker, Claude, provider calls or delegation.",
+    "Keep this correction limited to the finite handled-diagnostic contract and three fixed childless scenarios. No receipt framework, wrapper, arbitrary input/control or unrelated source work.",
+    "Independently validate complete provider/tool/scope/binding/cleanup evidence and freeze the output UNACCEPTED for exact-revision Astra source review. Stop coding after36 regardless of outcome. No import, execution, retries beyond the cap, unallocated wrapper work or overall completion claim is approved."
+  ]
+}

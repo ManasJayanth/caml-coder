@@ -1,0 +1,21 @@
+{
+  "scope": "image-bound restoration inputs; standalone/offline restoration remains unverified",
+  "image": "sha256:f2d1ebf6c7772332639421090bfe83c848d028ccff688e6fed0a336a1ef68719",
+  "base_image": "sha256:52ae74f2f384d509b9c001aaec682ad390202836b5c655358290f49d97934a9a",
+  "package_count": 30,
+  "export_package_records": 29,
+  "supplemental_package_record": "ocaml-base-compiler.5.5.1.opam",
+  "files": {
+    "toolchain.export": "3e85204b693169154210581e41e39cfd15a577d9d097730e3e367dbe7663f34b",
+    "ocaml-base-compiler.5.5.1.opam": "328ab00e42419d9896e54ea980daeeb5c10ba0f08216b67e64f206a641a4c02f",
+    "installed-packages.json": "507a8a75716dbd6a0b7a59618bcfb429aaf9016e5c9f4716dba377c687984e11",
+    "compiler-metadata-observation.json": "6d85f2d7b8877ce9969bb5594ea0dd45fc847ea6336d83d40e154a295bf8145e",
+    "completed.json": "cdc8f48138feb340180eef2c0198390b36d94224979420375f8cb177ac99fa8e",
+    "Dockerfile": "4e15ea5c7f24bfc49374e78f542581eb220489c32a475e7d5ad3c25412f91a02"
+  },
+  "limitations": [
+    "The raw opam --full --freeze export lists all 30 installed IDs but omits the pinned ocaml-base-compiler package record. The supplemental file is copied verbatim from the installed pinned image metadata, not reconstructed.",
+    "Use the exact base-image digest as compiler provenance. No successful standalone export import or full offline dependency-cache restoration has been demonstrated.",
+    "The successful fixed-reference probe is separate from restoration proof; no T15 or T07F pass is authorized."
+  ]
+}

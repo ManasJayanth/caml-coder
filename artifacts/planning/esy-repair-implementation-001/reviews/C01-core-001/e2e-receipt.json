@@ -1,0 +1,41 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "-B",
+    "artifacts/planning/esy-repair-implementation-001/candidate/tests/e2e/test_esy_repair_controller.py"
+  ],
+  "exit_code": 0,
+  "result": "EXISTING_SUITE_PASSED",
+  "acceptance": "NOT_ACCEPTED",
+  "reason": "Independent review identified eight required changes, including missing useful supervised flow and insufficient public-command E2Es.",
+  "files": [
+    {
+      "path": "reviews/C01-core-001/e2e.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reviews/C01-core-001/e2e.stdout",
+      "sha256": "961f28ff341a4a39024cc85e140217549830e767eab88ebb0c72ca0818f4163b"
+    },
+    {
+      "path": "reviews/C01-core-001/manifest.json",
+      "sha256": "3d8d25b2b05ad08273f13a827932283a8e094a4aab8a6e96ccc23c4cf3d0b46a"
+    },
+    {
+      "path": "reviews/C01-core-001/prompt.txt",
+      "sha256": "5df898fd81596a1cd34391c8186abe23fb3bfc0c253b094a7401813243f7f2dd"
+    },
+    {
+      "path": "reviews/C01-core-001/scripts/esy-repair/codex-worker.sh",
+      "sha256": "d3c690f9771725d14bc07ccc7af12803563026641ae50c0b8d5d4883e8a584da"
+    },
+    {
+      "path": "reviews/C01-core-001/scripts/esy-repair/controller.py",
+      "sha256": "c3173994deb44fa48a8181b82c19b51286e41242fcd5fefd9b5655f51acb653a"
+    },
+    {
+      "path": "reviews/C01-core-001/tests/e2e/test_esy_repair_controller.py",
+      "sha256": "22b54ef3f2281dd4510786a4eec6c64b76ca5085d972d96e701e4074c3d3022e"
+    }
+  ]
+}

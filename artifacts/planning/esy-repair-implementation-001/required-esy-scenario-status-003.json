@@ -1,0 +1,149 @@
+{
+  "status": "INCOMPLETE",
+  "real_esy_acceptance_executed": false,
+  "required_scenarios": [
+    {
+      "scenario": "valid-source",
+      "expected": "compile and execution succeed with exact stdout",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-result",
+      "expected": "compiles then expected assertion failure",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "syntax-error",
+      "expected": "normal compiler failure with exact syntax diagnostic",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "writable-caches",
+      "expected": "both disposable cache writes succeed",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "readonly-dependencies",
+      "expected": "existing package/lock/compiler writes denied",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "missing-installation",
+      "expected": "explicit failure before candidate; no install",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "corrupt-missing-seed",
+      "expected": "explicit seed integrity gate",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-image-package-lock-compiler",
+      "expected": "identity failure before candidate",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "added-missing-lockfile",
+      "expected": "complete inventory mismatch",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "two-independent-runs",
+      "expected": "fresh containers/state both succeed",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "timeout",
+      "expected": "failure, deadline measured, owned container removed",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "output-overflow",
+      "expected": "bounded explicit overflow failure",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "resource-exhaustion",
+      "expected": "allocation/OOM evidence and cleanup",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "startup-failure",
+      "expected": "infrastructure failure not fixture success",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "invalid-duplicate-run-id",
+      "expected": "reject without report overwrite",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "concurrent-runs",
+      "expected": "unique owned containers and receipts",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    },
+    {
+      "scenario": "post-execution-integrity",
+      "expected": "immutable inventories unchanged",
+      "actual": "NOT_RUN",
+      "reason": "No safety-approved derivative build or esy runtime execution occurred",
+      "report_sha256": null
+    }
+  ],
+  "additional_explicit_missing_test_implementations": {
+    "R2-inspect-failure": "No safe daemon fault injector is available for a real inspect failure.",
+    "R2-daemon-query-failure": "No safe daemon fault injector is available for a real daemon-query failure.",
+    "R2-ownership-mismatch": "A foreign-container ownership mismatch cannot be induced without risking unrelated daemon state.",
+    "R4-filesystem-variants": "Owned installation, seed, lock, and declared-volume variants are not safely constructible in this fixed runner-only E2E.",
+    "R8-oversized-image-metadata": "A safely owned oversized image-metadata fixture is not available.",
+    "R8-filesystem-mutation-matrix": "Added/missing locks, changed seed metadata, missing probes, and writable protected targets are not safely generated as owned image variants.",
+    "R10-oversized-expectations-and-payloads": "Oversized manifest/payload rejection is bounded in code but has no separately owned real-Docker evidence case.",
+    "R11-source-mutation": "Concurrent source mutation cannot be induced safely while preserving the reviewed input snapshot.",
+    "E2E-08-fifo-and-escaping-paths": "FIFO reports, symlink escapes, and external report destinations are not safely fault-induced by this runner interface.",
+    "E2E-11-unrelated-syntax-diagnostic": "The exact syntax control is checked, but an unrelated compiler error mentioning syntax.ml is not independently induced.",
+    "E2E-12-independent-container-lifetime": "The runner enforces a deadline, but this harness has no independent daemon-side container lifetime observer.",
+    "E2E-05-retained-pipe-and-interruption": "The runner supervisor cannot be independently interrupted without an external owned-process harness.",
+    "E2E-07-build-cancellation": "This E2E does not build images; daemon-side build cancellation cannot be proven here.",
+    "E2E-13-integrity-canaries": "The runner does not expose fixed execution canaries for every integrity gate.",
+    "E2E-14-startup-failure": "No owned missing-entrypoint image variant is supplied by the fixed three-argument interface.",
+    "E2E-16-concurrent-same-id": "Concurrent same-ID reservation is not exercised by this bounded serial driver.",
+    "E2E-17-report-namespace": "Invalid-ID and complete namespace preservation controls are not exposed by the runner contract.",
+    "E2E-18-daemon-log-retention": "Build, remove, and absence-query daemon logs are not persisted as separate evidence artifacts by the runner.",
+    "E2E-19-full-input-snapshot": "Reviewed runner, Dockerfile, fixture, and E2E hashes are checked; a full original/candidate tree snapshot is not part of this fixed harness.",
+    "E2E-20-complete-fault-matrix": "The unavailable daemon faults and filesystem variants listed above have explicit missing rows, but full twenty-finding coverage is not evidenced."
+  },
+  "test_source_sha256": "601338dcae650c87eced4ccbb2d8be98b130475edd7c416869c1454e01c48f21",
+  "missing_case_reason_qualification": "Reasons were statically extracted from worker code. They identify unimplemented coverage; they are not proof that safe tests are impossible."
+}

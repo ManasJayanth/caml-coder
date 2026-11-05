@@ -1,0 +1,10 @@
+{
+  "status": "UNACCEPTED_WORKING_CANDIDATE",
+  "source": "artifacts/planning/esy-repair-implementation-001/continuation-006/coding-jobs/R01-019/frozen",
+  "changed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "original_checkout_imported": false,
+  "reason": "Preserve accumulated R01 changes as the parent for review-directed correction; full source remains frozen in job19."
+}

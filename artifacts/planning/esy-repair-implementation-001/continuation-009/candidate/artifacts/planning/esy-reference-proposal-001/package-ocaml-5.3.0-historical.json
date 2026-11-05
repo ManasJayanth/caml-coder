@@ -1,0 +1,8 @@
+{
+  "name": "esy-ocaml-reference-probe",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "ocaml": "5.3.0"
+  }
+}

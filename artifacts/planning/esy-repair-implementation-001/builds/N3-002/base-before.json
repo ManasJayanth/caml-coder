@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "docker",
+    "image",
+    "inspect",
+    "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "logs": {
+    "stdout": {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-002/base-before.stdout",
+      "sha256": "18f36b202d2cc75de44783f119f6bd3da6d82821a2f1045f6988c74a6b58930c"
+    },
+    "stderr": {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-002/base-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

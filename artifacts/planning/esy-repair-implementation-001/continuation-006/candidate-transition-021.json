@@ -1,0 +1,11 @@
+{
+  "status": "UNACCEPTED_WORKING_CANDIDATE",
+  "source": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/coding-jobs/R02a-021/frozen",
+  "changed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "original_checkout_imported": false,
+  "parent_file_hashes_and_modes_verified": true,
+  "review": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A6-R02a-source-review-001/final.txt",
+  "real_execution": "BLOCKED_BY_REVIEW"
+}

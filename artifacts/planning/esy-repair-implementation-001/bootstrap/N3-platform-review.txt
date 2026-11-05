@@ -1,0 +1,23 @@
+Independent Astra review of one fixed build-command correction, no execution/delegation. Previous safe legacy immutable build failed at FROM before COPY: no match for platform, because host is arm64 and pinned base is linux/amd64. Same exact reviewed Dockerfile hash f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f and same immutable base. Propose same bounded procedure in fresh exclusive context/output, add ONLY --platform=linux/amd64 to docker build argv; keep DOCKER_BUILDKIT=0 --pull=false --network=none --no-cache --rm=true --force-rm=true --iidfile PATH --file FILE CONTEXT. No alternatebase, builder, pulls, tags or mutableprovenance. Fresh base OnBuild/Volumes checks/layerprefix verification unchanged. Prior CLI returned error atstage1, no timeout or outputoverflow. Return JSON safe_to_attempt_build, findings,limitations.
+PREVIOUS LOG
+Sending build context to Docker daemon   2.56kB
+
+Step 1/7 : FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267 AS installed
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            BuildKit is currently disabled; enable it by removing the DOCKER_BUILDKIT=0
+            environment-variable.
+
+no match for platform in manifest sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267: not found
+
+DOCKERFILE
+FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267 AS installed
+
+FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267
+USER 1000:1000
+ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
+WORKDIR /home/opam/esy-reference
+
+# Preserve the already installed esy state and Node cache as immutable seed
+# payloads. The runner copies these into bounded writable tmpfs mounts at start.
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache

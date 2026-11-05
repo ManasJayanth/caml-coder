@@ -1,0 +1,67 @@
+96	_esy
+24	node_modules/.cache
+# Command environment
+# package:            esy-ocaml-reference-probe@link-dev:./package.json
+# depspec:            dependencies(self)+devDependencies(self)
+# mode:               buildDev
+# envspec:            dependencies(self)+devDependencies(self)
+# buildIsInProgress:  false
+# includeBuildEnv:    true
+# includeCurrentEnv:  true
+# includeNpmBin:      true
+
+
+#
+# Built-in
+#
+export ESY__ROOT_PACKAGE_CONFIG_PATH="/home/opam/esy-reference/package.json"
+export HOME='/home/opam'
+export OPAMCONFIRMLEVEL='unsafe-yes'
+export OPAMYES='1'
+export PATH='/home/opam/node/bin:/home/opam/esy/bin:/home/opam/.opam/5.5/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+export OPAMERRLOGLEN='0'
+export ESY__FETCH_CONCURRENCY='2'
+export OPAMPRECISETRACKING='1'
+export ESY__BUILD_CONCURRENCY='2'
+export PWD='/home/opam/esy-reference'
+export OPAMJOBS='2'
+export PATH="/home/opam/esy-reference/_esy/default/bin:$PATH"
+export cur__jobs="4"
+export cur__etc="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/etc"
+export cur__share="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/share"
+export cur__toplevel="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/toplevel"
+export cur__stublibs="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/stublibs"
+export cur__doc="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/doc"
+export cur__man="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/man"
+export cur__lib="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/lib"
+export cur__sbin="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/sbin"
+export cur__bin="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/bin"
+export cur__install="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1"
+export cur__target_dir="/home/opam/esy-reference/_esy/default/store/b/esy_ocaml_reference_probe-500774a1"
+export cur__original_root="/home/opam/esy-reference"
+export cur__root="/home/opam/esy-reference"
+export cur__dev="true"
+export cur__version="link-dev:./package.json"
+export cur__name="esy-ocaml-reference-probe"
+
+#
+# ocaml@5.5.1000@d41d8cd9
+#
+export CAML_LD_LIBRARY_PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml/stublibs:/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml:$CAML_LD_LIBRARY_PATH"
+export OCAMLLIB="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml"
+export OCAMLPATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml:$OCAMLPATH"
+export OCAML_TOPLEVEL_PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml"
+export OCAMLPATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib:$OCAMLPATH"
+export MAN_PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/man:$MAN_PATH"
+export PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin:$PATH"
+
+#
+# Built-in
+#
+export OCAMLFIND_LDCONF="ignore"
+export OCAMLFIND_DESTDIR="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/lib"
+export DUNE_BUILD_DIR="/home/opam/esy-reference/_esy/default/store/b/esy_ocaml_reference_probe-500774a1"
+export DUNE_STORE_ORIG_SOURCE_DIR="true"
+export SHELL="env -i /bin/bash --norc --noprofile"
+export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"db35d242767029ee595cbf23760fb3a902c72ad8c363108554b67e0289a6b44d  package.json
+e47b63f0a6caa6957d87c2f5e97d643b55e99ae933c249bc271fc808cda412b6  esy.lock/index.json

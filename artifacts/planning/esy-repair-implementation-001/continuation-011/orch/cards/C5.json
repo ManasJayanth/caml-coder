@@ -1,0 +1,31 @@
+{
+ "acceptance_rows": [
+  "R1 In loop.py cmd_run_card, the job.mkdir, shutil.copytree and assemble_prompt steps that follow reserve_slot()/cs['status']='RESERVED' are wrapped so that FileExistsError, OSError and the sys.exit paths of assemble_prompt (INPUT_INVALID, INPUTS_TOO_LARGE) all result in cs['status']='FAILED', cs['fail_reason'] set to the error code string, card state persisted, and the process exiting non-zero with the original code; the slot stays consumed (no refund) and the ledger gets an event 'run_card_prelaunch_failed' with card id, attempt number and reason.",
+  "R2 In loop.py validate_card, inputs_inline must be a dict whose keys and values are all strings (or absent); any other shape is rejected with CARD_INVALID at init and in cmd_replan so planner-authored bad inputs never reach the RESERVED window.",
+  "R3 e2e/run_e2e.py gains scenario O55: pre-create jobs/<cid>-1 under the orch root before the first run-card of a PENDING card, run run-card, assert exit non-zero, assert cards/<cid>.json status == 'FAILED' and fail_reason non-empty, assert launches_used increased by exactly 1, then run run-card again and assert it is accepted as runnable (no CARD_NOT_RUNNABLE in output); O55 is registered in the scenario table so `/usr/bin/python3 -B e2e/run_e2e.py O55` runs only it and exits 0 on pass.",
+  "R4 No existing scenario id in run_e2e.py is renamed or removed; no file other than loop.py and e2e/run_e2e.py is touched."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [
+  "C1",
+  "C2"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O55"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C5",
+ "objective": "Make the RESERVED window in cmd_run_card recoverable: any failure between slot reservation and launch sets the card to FAILED with a recorded reason instead of leaving it stuck in RESERVED",
+ "replaces": "C3",
+ "stop_condition": "print CARD_BLOCKED C5 if cmd_run_card does not contain the sequence reserve_slot()/cs['status']='RESERVED' followed by job.mkdir, shutil.copytree and assemble_prompt before launch(), if validate_card does not exist, or if scenario id O55 is already present in e2e/run_e2e.py",
+ "timeout": 600
+}

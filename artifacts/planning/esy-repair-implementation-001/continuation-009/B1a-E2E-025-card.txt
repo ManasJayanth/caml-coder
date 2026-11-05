@@ -1,0 +1,212 @@
+Implement this bounded card. Read/edit/write tools only; no execution. The plan text says authoring authorized but authority comes from supervising root/user; it does not grant execution. Use plain auditable standard-library code. Scrub subprocess env to fixed PATH=/usr/bin:/bin, HOME privateoutput, LANG=C; no ambient BASH_ENV, ENV, Claude vars. Keep genuineprocess ownership through timeoutcleanup: never signal a processgroup after its leader has been reaped; if cleanupcannotbeproven fail and stop, no success. Use actual sourceadapter and sibling, notcopies. Output directory is precreated empty0700 byroot. CardE2E observations are routingonly, no provideridentityclaim.
+{
+  "card_id": "B1a-E2E-025",
+  "finding_ids": [
+    "B1-review-entrypoint-public-evidence"
+  ],
+  "parent_revision_sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+  "inputs": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json",
+      "sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88"
+    }
+  ],
+  "allowed_paths": [
+    "tests/e2e/test_review_adapter_e2e.py"
+  ],
+  "prerequisites": [
+    "B1a source review passed; E2E source-only authoring; execution requires independent review."
+  ],
+  "required_behavior": [
+    {
+      "card": "B1a public E2E authoring: review routing and transparent responses",
+      "status": "Authoring authorized; execution blocked pending B1a static review and root approval. Preserve earlier planning artifacts.",
+      "budget": "24/36 as supplied; stop at the hard budget.",
+      "binding": {
+        "parent_manifest": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json",
+        "sha256": "269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88",
+        "verification": "Root independently verifies the full manifest and both supplied adapter sources before execution."
+      },
+      "deliverable": {
+        "write_only": "tests/e2e/test_review_adapter_e2e.py",
+        "location": "Isolated candidate",
+        "restrictions": "Author only. No execution, other edits, project-helper imports, adapter copies, sandbox substitutes, or external Claude invocation.",
+        "interface": "--adapter ABS --output-dir ABS",
+        "validation": "Reject relative paths, symlink components, nonregular adapters, missing sibling codex-worker.sh, and output directories not owned by the current user, empty, and mode 0700. Accept no arbitrary command option."
+      },
+      "fixtures": {
+        "layout": "Create all fixtures and records beneath output-dir: workspace, prompt, fixed profile, per-case configuration, and fake Codex executable. Use absolute paths throughout. Executable must be regular, executable, and nonsymlink.",
+        "interpreter": "Resolve the running Python interpreter once to its absolute nonsymlink executable; embed that literal path in the fake's shebang, never /usr/bin/env. Reject paths unsuitable for a shebang.",
+        "profile": "Use real /usr/bin/sandbox-exec with a fixed native profile: (version 1), (allow default), (deny network*), (deny file-write*), (allow file-write* (subpath OUTPUT_DIR)), (deny process-fork). Escape OUTPUT_DIR as a profile string; permit writes only beneath it.",
+        "fake": "Standard-library Python only. Append one JSON record containing argv excluding executable, cwd, and base64 stdin. Read at most 4097 stdin bytes and reject overflow. Emit the configured literal stdout/stderr bytes and exit status. Never spawn processes.",
+        "prompt": "Exact UTF-8 bytes: review fixture\\n",
+        "responses": [
+          [
+            "success",
+            "OK\\n",
+            "",
+            0
+          ],
+          [
+            "findings",
+            "{\"findings\":[\"fixture\"]}\\n",
+            "",
+            0
+          ],
+          [
+            "availability",
+            "",
+            "unavailable\\n",
+            69
+          ],
+          [
+            "auth",
+            "",
+            "authentication required\\n",
+            77
+          ],
+          [
+            "permission",
+            "",
+            "permission denied\\n",
+            77
+          ],
+          [
+            "malformed",
+            "{broken\\n",
+            "",
+            0
+          ],
+          [
+            "identity",
+            "identity mismatch\\n",
+            "",
+            0
+          ],
+          [
+            "context",
+            "context missing\\n",
+            "",
+            0
+          ],
+          [
+            "cleanup",
+            "",
+            "cleanup failed\\n",
+            23
+          ]
+        ],
+        "interpretation": "Response strings encode literal newline bytes. These are protocol fixtures, not provider acceptance evidence."
+      },
+      "assertions": {
+        "routing": "Launch /bin/bash ADAPTER review WORKSPACE PROMPT PROFILE FAKE. Keep the actual sibling adapter intact. Each response must produce exactly one fake record, exact stdin/cwd, and byte-identical stdout, stderr, and exit status. No automatic fallback or retry.",
+        "argv": [
+          "exec",
+          "--disable",
+          "apps",
+          "--disable",
+          "plugins",
+          "--disable",
+          "hooks",
+          "--disable",
+          "multi_agent",
+          "--disable",
+          "shell_snapshot",
+          "--disable",
+          "shell_tool",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--model",
+          "gpt-6-astra",
+          "--sandbox",
+          "read-only",
+          "--cd",
+          "WORKSPACE",
+          "--json",
+          "-"
+        ],
+        "arity": "Test review-prefixed argument counts 0,1,2,3,6; review with 4; code with 5; and unknown role with 4 and 5. Require exit 64, empty stdout/stderr, and no provider record. Do not invoke valid code mode; preserve its branch."
+      },
+      "collection": "Use selector-driven bounded pipe reads, never unbounded communicate. Limit each stream to 4096 bytes, records to 16384 bytes, each invocation to 10 seconds, and suite to 180 seconds. On overflow or timeout kill the owned process group, boundedly drain and reap, then fail. Bound diagnostics to 4096 bytes.",
+      "recipe": "After review approval and root hash verification, root manually runs the fixed Python interpreter with the absolute new test-file path, --adapter pointing to the verified claude-worker.sh, and --output-dir pointing to a fresh private directory. No model-generated command executes automatically.",
+      "stop_conditions": "Stop on unavailable native sandbox/interpreter, binding mismatch, invalid fixtures, unexpected output/status, extra or missing records, timeout, or overflow. Do not substitute runners or weaken policy.",
+      "deferred": "Larger matrix, additional sandbox-denial tests, and real-provider smoke. Root performs separately approved real-CLI smoke later."
+    }
+  ],
+  "forbidden_changes": [
+    "No existing source edits, tests execution, subprocess execution, imports of project helpers, provider/Docker access."
+  ],
+  "e2e_recipe_ids": [
+    "B1a-public-fake-routing"
+  ],
+  "expected_outcomes": [
+    "Public fake-routing matrix forwards bytes/status/argv exactly once; invalid arity rejected withoutprovider; result manifest listsallrows and overallpass iff allpass."
+  ],
+  "evidence_outputs": [
+    "New E2E file only; on later approved execution result.json with explicitrows, exactargv, expectedactual, cappedlogs, cleanup."
+  ],
+  "stop_conditions": [
+    "Implementation requires changing any other file; unclear safe ownedprocess cleanup."
+  ]
+}
+FILE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+case "$#" in
+  4|5) ;;
+  *) exit 64 ;;
+esac
+role=$1
+case "$role" in
+ review)
+  [[ $# -eq 5 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  codex_bin=$5
+  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
+  ;;
+ code)
+  [[ $# -eq 4 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
+  model=$CLAUDE_CODING_MODEL
+  tools="Read,Edit,Write,Glob,Grep"
+  permission=acceptEdits
+  ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+
+FILE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"

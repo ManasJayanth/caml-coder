@@ -1,0 +1,21 @@
+{
+  "epoch": 1792725259.714761,
+  "recorded_pids": [
+    44665,
+    40826,
+    46145,
+    43428,
+    46840,
+    47531,
+    44607,
+    44185,
+    47102,
+    43957,
+    48432
+  ],
+  "query_complete": true,
+  "matching_processes": [],
+  "remaining_auth_links": [],
+  "coding_lock_absent": true,
+  "containers_created": false
+}

@@ -1,0 +1,24 @@
+{
+  "apps": "./.app.json",
+  "author": {
+    "name": "OpenAI"
+  },
+  "description": "Inspect this task's managed cloud environment and use its configured credentials.",
+  "interface": {
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "category": "Developer Tools",
+    "defaultPrompt": null,
+    "developerName": "OpenAI",
+    "displayName": "Cloud Environment",
+    "logo": "./assets/logo.png",
+    "longDescription": "Read the managed cloud environment's network policy, credential bindings, and readiness, and use its configured CLI profiles without exposing secrets.",
+    "shortDescription": "Understand your cloud runtime and configured credentials"
+  },
+  "name": "cloud-environment",
+  "publicationPolicy": "INTERNAL_ONLY",
+  "skills": "./skills/",
+  "version": "0.1.2"
+}

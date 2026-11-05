@@ -1,0 +1,61 @@
+Fresh separate Astra planner. Return ONE small card for PUBLIC E2E authoring of the attached B1a adapter. Codeworker onlywrites new tests/e2e/test_review_adapter_e2e.py in isolatedcandidate, noexecution. B1a staticreview pending; authoringpossible executionblocked. Narrow scope routeonly, no realproviderrequests byE2E firstcard (separate realCLI smoke root afterapproval). Use actual adapter and sibling Codex adapter aspublicprocess through real native sandbox-exec; fake Codex only routingprotocol, not runneracceptance. Need deterministic fake executable captureargv/stdin and exactstdout/stderr/exit via ownedfixtures. Pathsabsolute noexecsymlink, fixedprofile 0700out, boundedcollection no unboundedcommunicate. CLI --adapter ABS --output-dir ABS; no arbitrarycmd, tests neverimportprojecthelpers. Cover success, findings-like, availability-like, auth-like, permission-like, malformed, identity/context/cleanup-like results and nonzero: each mustrouteexactlyonce, noautomaticfallback. Explicit count/roles invalid arity exit64 no provider. PreserveClaude codebranch do not needexternalClaude invocation. Exactflagsverifygpt6astra/read-only/shelloff etc. No globalDocker/network access required; real sandboxmust deny network for fake. E2Etest fixture canPython viafixedinterpreter andrecord underprivateout policy allowwrites onlythere denyfork; nootherfiles. Budget24/36. Return complete boundedcard plus exacttestrecipe and stopconditions. Noholes unknownoutputs. Actualsource/fullmanifest binding supplied.
+PARENT_MANIFEST /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-009/coding-jobs/B1a-024/result-manifest.json SHA256 269743e191e18b98f797eedb17d69b8be1b0a63caa540390434f01fdf28caf88
+FILE scripts/esy-repair/claude-worker.sh
+#!/bin/bash
+set -euo pipefail
+case "$#" in
+  4|5) ;;
+  *) exit 64 ;;
+esac
+role=$1
+case "$role" in
+ review)
+  [[ $# -eq 5 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  codex_bin=$5
+  script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  exec "$script_dir/codex-worker.sh" "$role" "$workspace" "$prompt" "$profile" "$codex_bin"
+  ;;
+ code)
+  [[ $# -eq 4 ]] || exit 64
+  workspace=$2
+  prompt=$3
+  profile=$4
+  : "${CLAUDE_CODING_MODEL:?exact coding model required}"
+  model=$CLAUDE_CODING_MODEL
+  tools="Read,Edit,Write,Glob,Grep"
+  permission=acceptEdits
+  ;;
+ *) exit 64 ;;
+esac
+: "${CLAUDE_BIN:?absolute executable required}"
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$CLAUDE_BIN" --print --model "$model" --output-format json --no-session-persistence --restricted --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' --permission-mode "$permission" --tools "$tools" < "$prompt"
+FILE scripts/esy-repair/codex-worker.sh
+#!/bin/bash
+# Frozen role template. Every argument is supplied by the verified controller;
+# no environment variable can replace the executable, model, sandbox, or prompt.
+set -euo pipefail
+if [[ $# -ne 5 ]]; then
+  echo "usage: codex-worker.sh ROLE WORKSPACE PROMPT PROFILE CODEX_EXECUTABLE" >&2
+  exit 64
+fi
+role=$1
+workspace=$2
+prompt=$3
+profile=$4
+codex_bin=$5
+case "$role" in
+  code) model=gpt-6-luna; sandbox=danger-full-access; shell_flag=--enable ;;
+  plan|review) model=gpt-6-astra; sandbox=read-only; shell_flag=--disable ;;
+  *) echo "unsupported role" >&2; exit 64 ;;
+esac
+[[ "$workspace" = /* && -d "$workspace" && ! -L "$workspace" ]] || { echo "verified absolute workspace required" >&2; exit 64; }
+[[ "$prompt" = /* && -f "$prompt" && ! -L "$prompt" ]] || { echo "verified absolute prompt required" >&2; exit 64; }
+[[ "$profile" = /* && -f "$profile" && ! -L "$profile" ]] || { echo "verified absolute sandbox profile required" >&2; exit 64; }
+[[ "$codex_bin" = /* && -x "$codex_bin" && ! -L "$codex_bin" ]] || { echo "verified absolute Codex executable required" >&2; exit 64; }
+
+cd "$workspace"
+exec /usr/bin/sandbox-exec -f "$profile" "$codex_bin" exec --disable apps --disable plugins --disable hooks --disable multi_agent --disable shell_snapshot "$shell_flag" shell_tool --ignore-user-config --ephemeral --skip-git-repo-check --model "$model" --sandbox "$sandbox" --cd "$workspace" --json - < "$prompt"

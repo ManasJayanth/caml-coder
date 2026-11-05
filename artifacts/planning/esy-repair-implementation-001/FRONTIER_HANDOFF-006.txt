@@ -1,0 +1,520 @@
+You are the independent frontier reviewer of an esy reference-runner repair.
+Review exact source and evidence; worker prose, prior approval and zero exit codes are not proof.
+
+OBJECTIVE AND SCOPE
+Offline esy execution with disposable writable caches, read-only compiler/dependencies, exact identities, bounded execution and reliable cleanup. No datasets, training, experiments or promotion. macOS only. uv and existing lockfile. Original source is not imported.
+
+AUTHORITY
+Latest human instruction replaces Fable with Codex Astra. Fresh Codex gpt-6-astra reviews; a separate fresh Astra process plans; smaller gpt-6-luna implements. Preserve historical reviewer records. Six additional coding launches were authorized after18; total cap24. No budget reset, no unattended controller. Read allocation.json for reconciled intervals and coding-ledger.json for consumption. Runtimes are deliberately excluded to protect credentials.
+
+FINAL STATUS AND ACCOUNTING
+{
+  "status": "INCOMPLETE",
+  "reason": "Astra rejected real-container execution pending lifecycle, query, deadline and seed prerequisites. Controller and global acceptance remain rejected/incomplete. No original-source import.",
+  "reviewer": "fresh Codex gpt-6-astra",
+  "planner": "separate fresh Codex gpt-6-astra",
+  "coding_model": "gpt-6-luna",
+  "coding_backend": "Pi openai-codex, individually reviewed no-fork supervised launches only",
+  "coding_launches_consumed": 21,
+  "coding_launch_cap": 24,
+  "coding_launches_remaining": 3,
+  "active_seconds_consumed_at_packet": 15631.276,
+  "active_seconds_limit": 21600,
+  "candidate_sha256": "c1a147a5d06e07eecca3ca3b06809b2a57d6d5b6e7264b613702d906bdf2f296",
+  "imported": false,
+  "original_entries_checked": 72,
+  "original_mismatches": [],
+  "implemented_unaccepted": [
+    "R01: retain verified cleanup; compute sleep remainder once",
+    "R01b: complete missing-evidence rows in early CLI failure",
+    "R02a: finally cleanup with separate supervision and cleanup outcomes; fixed log-write-fault scenario"
+  ],
+  "tested": [
+    "R01b public CLI expected-failure reporting contract, not real runner acceptance",
+    "native no-fork containment and guardian lifecycle cases",
+    "real Pi Luna authenticated edit smoke"
+  ],
+  "real_runner_e2es": "NOT_RUN; explicitly blocked by independent review",
+  "current_review": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A6-R02a-source-review-001/final.txt",
+  "followup_plan": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A6-resumption-plan-001/final.txt",
+  "created_utc": "2026-10-22T15:29:00.719296+00:00"
+}
+REPOSITORY /Users/psac/development/prometheansacrifice/ocaml-rl-sft
+ISOLATED CANDIDATE /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate
+BASELINE {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/baseline-manifest.json", "bytes": 11524, "sha256": "4dcb93a0d9fd247c3e4df3967ff3bbf772127bae7c92e3ce035d5f93908ad6a8"}
+REVISION SHA256 c1a147a5d06e07eecca3ca3b06809b2a57d6d5b6e7264b613702d906bdf2f296
+EVIDENCE SHA256 9af90a216a0b86ff7f0a0cdc41147db7f9de5099df76a7ad485888f0567db844
+ARTIFACT INDEX /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/artifact-index-006.json
+STARTING GIT AND DIRTY/UNTRACKED CONTEXT
+{
+  "status": "BOOTSTRAP",
+  "started_at": "2026-10-22T05:44:19.756553+00:00",
+  "repo": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+  "head": "70de30502cbaf450b2c0621091b82d34583709b2",
+  "git_status": " M README.md\n M config/cards.json\n M config/execution-policy.json\n M config/handoff-progress.json\n M config/sources.json\n M docs/PLAN.md\n M pyproject.toml\n M src/sft/cli.py\n M src/sft/corpus.py\n M src/sft/e2e.py\n M src/sft/handoff.py\n M src/sft/workflow.py\n M tests/e2e/test_control.py\n M tests/e2e/test_handoff.py\n M tests/e2e/test_sources.py\n M uv.lock\n?? config/chunks.json\n?? config/eligibility.json\n?? config/extraction.json\n?? config/model-assets.json\n?? config/models.json\n?? config/split-annotations.json\n?? config/splits.json\n?? scripts/check_ocaml_probe.py\n?? scripts/probe_qwen35.py\n?? scripts/probe_qwen35_adapters.py\n?? src/sft/chunks.py\n?? src/sft/conversion.py\n?? src/sft/eligibility.py\n?? src/sft/extract.py\n?? src/sft/ledger.py\n?? src/sft/model_assets.py\n?? src/sft/models.py\n?? src/sft/splits.py\n?? tests/e2e/test_bonito_conversion.py\n?? tests/e2e/test_chunks.py\n?? tests/e2e/test_eligibility.py\n?? tests/e2e/test_extraction.py\n?? tests/e2e/test_ledger.py\n?? tests/e2e/test_models.py\n?? tests/e2e/test_ocaml_checker.py\n?? tests/e2e/test_qwen35_probe.py\n?? tests/e2e/test_splits.py\n?? tests/e2e/test_tokenizer.py\n",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "max_rounds": 12,
+  "max_active_seconds": 21600,
+  "rounds": 0
+}
+
+RUNTIME INVARIANTS
+Base sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267.
+Derivative sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459.
+Read-only root, network none, user1000:1000, cap-drop ALL, no-new-privileges, PID128, CPU2, memory2GiB, independently enforced container deadline<=120sec required.
+/work executable128MiB; project _esy and node_modules/.cache tmpfs32MiB each; TMPDIR=/work. Never writable /home/opam/.esy or runtime esy install.
+Canonical compiler /home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt; hash361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24; version5.5.1, package5.5.1000, esy0.9.2.
+Image build, base layers, full seed/package/lock inventories and two fixed diagnostic compile runs are indexed historical evidence. Diagnostics are not public runner E2Es. Original inventory comparisons must be exact; root-mtime exception only for copied/restored roots.
+
+IMPLEMENTATION AND VERIFICATION
+Read complete source and accumulated diffs in every source part. Read full raw coding/review envelopes, receipts and exact argv in indexed jobs. Launch19 implemented cleanup guard and captured sleep remainder;20 fixed reporting;21 added finally cleanup outcome retention. No new real Docker test was run in continuation006.
+R01b CLI expected failure: exit1, complete three MISSING_FAILED rows, no output/expectation path creation; see R01b-e2e-002.json and assertions. Attempt001 was blocked by uv cache access and preserved. The positive reporting contract is not a positive esy result.
+Codex no-fork edit smoke failed because code-mode requires child spawn. Pi with the SAME Luna model passed authenticated edit smoke under proven native no-fork profile. Credential handling/guardian changes and rejected earlier variants are indexed. Scope is individual supervised coding, not controller acceptance. Guardian host-death/SIGKILL and broad controller lifecycle guarantees remain limited.
+Independent Astra source review rejects real runtime execution for open C17-01/03/05/06 and N6-01/02 gates. C17-04/07 have source fixes but missing runtime evidence. C17-02 is partial; N6-03 remains unchanged. Do not promote any source-only result to a closed E2E finding.
+No import or post-import tests occurred. Original72-file verification is recorded; full controller/import E2Es remain outstanding. No overall acceptance or training readiness is established. The broad post-R02a planner timed out at240seconds; its partial prose is not a plan. A narrower resumption planner follows; inspect its receipt before relying on it.
+
+FULL REQUIRED RUNNER SCENARIOS
+{
+  "status": "INCOMPLETE",
+  "real_esy_acceptance_executed": false,
+  "required_scenarios": [
+    {
+      "scenario": "valid-source",
+      "expected": "compile and execution succeed with exact stdout",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-result",
+      "expected": "compiles then expected assertion failure",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "syntax-error",
+      "expected": "normal compiler failure with exact syntax diagnostic",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "writable-caches",
+      "expected": "both disposable cache writes succeed",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "readonly-dependencies",
+      "expected": "existing package/lock/compiler writes denied",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "missing-installation",
+      "expected": "explicit failure before candidate; no install",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "corrupt-missing-seed",
+      "expected": "explicit seed integrity gate",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-image-package-lock-compiler",
+      "expected": "identity failure before candidate",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "added-missing-lockfile",
+      "expected": "complete inventory mismatch",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "two-independent-runs",
+      "expected": "fresh containers/state both succeed",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "timeout",
+      "expected": "failure, deadline measured, owned container removed",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "output-overflow",
+      "expected": "bounded explicit overflow failure",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "resource-exhaustion",
+      "expected": "allocation/OOM evidence and cleanup",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "startup-failure",
+      "expected": "infrastructure failure not fixture success",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "invalid-duplicate-run-id",
+      "expected": "reject without report overwrite",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "concurrent-runs",
+      "expected": "unique owned containers and receipts",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "post-execution-integrity",
+      "expected": "immutable inventories unchanged",
+      "actual": "NOT_ACCEPTED_THROUGH_PUBLIC_RUNNER",
+      "reason": "Real execution blocked by Astra lifecycle and seed review; source-only partial repairs do not close tests.",
+      "report_sha256": null
+    }
+  ],
+  "additional_explicit_missing_test_implementations": {
+    "R2-inspect-failure": "No safe daemon fault injector is available for a real inspect failure.",
+    "R2-daemon-query-failure": "No safe daemon fault injector is available for a real daemon-query failure.",
+    "R2-ownership-mismatch": "A foreign-container ownership mismatch cannot be induced without risking unrelated daemon state.",
+    "R4-filesystem-variants": "Owned installation, seed, lock, and declared-volume variants are not safely constructible in this fixed runner-only E2E.",
+    "R8-oversized-image-metadata": "A safely owned oversized image-metadata fixture is not available.",
+    "R8-filesystem-mutation-matrix": "Added/missing locks, changed seed metadata, missing probes, and writable protected targets are not safely generated as owned image variants.",
+    "R10-oversized-expectations-and-payloads": "Oversized manifest/payload rejection is bounded in code but has no separately owned real-Docker evidence case.",
+    "R11-source-mutation": "Concurrent source mutation cannot be induced safely while preserving the reviewed input snapshot.",
+    "E2E-08-fifo-and-escaping-paths": "FIFO reports, symlink escapes, and external report destinations are not safely fault-induced by this runner interface.",
+    "E2E-11-unrelated-syntax-diagnostic": "The exact syntax control is checked, but an unrelated compiler error mentioning syntax.ml is not independently induced.",
+    "E2E-12-independent-container-lifetime": "The runner enforces a deadline, but this harness has no independent daemon-side container lifetime observer.",
+    "E2E-05-retained-pipe-and-interruption": "The runner supervisor cannot be independently interrupted without an external owned-process harness.",
+    "E2E-07-build-cancellation": "This E2E does not build images; daemon-side build cancellation cannot be proven here.",
+    "E2E-13-integrity-canaries": "The runner does not expose fixed execution canaries for every integrity gate.",
+    "E2E-14-startup-failure": "No owned missing-entrypoint image variant is supplied by the fixed three-argument interface.",
+    "E2E-16-concurrent-same-id": "Concurrent same-ID reservation is not exercised by this bounded serial driver.",
+    "E2E-17-report-namespace": "Invalid-ID and complete namespace preservation controls are not exposed by the runner contract.",
+    "E2E-18-daemon-log-retention": "Build, remove, and absence-query daemon logs are not persisted as separate evidence artifacts by the runner.",
+    "E2E-19-full-input-snapshot": "Reviewed runner, Dockerfile, fixture, and E2E hashes are checked; a full original/candidate tree snapshot is not part of this fixed harness.",
+    "E2E-20-complete-fault-matrix": "The unavailable daemon faults and filesystem variants listed above have explicit missing rows, but full twenty-finding coverage is not evidenced."
+  },
+  "test_source_sha256": "08f55a4acdeba1a15024d358ac3fcc7c43a119f3afefe8346b96d7e22c931327",
+  "missing_case_reason_qualification": "Reasons were statically extracted from worker code. They identify unimplemented coverage; they are not proof that safe tests are impossible.",
+  "separate_diagnostics": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-001/receipt.json",
+      "bytes": 523,
+      "sha256": "9d501b1a47edfe84b6547cf7e159911aae1198b2b47692405fbb63e97aa49054"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-002/receipt.json",
+      "bytes": 556,
+      "sha256": "7b6b71e36d022c586538de6d50cb266a2b556ab869a4470f657fb5a4a284c135"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-003/receipt.json",
+      "bytes": 556,
+      "sha256": "ebb7050c9190a86f24ff0515ec7682e7ff08c2c3e62d15b520475dd59bb52c4f"
+    }
+  ],
+  "reporting_contract_only": {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/R01b-assertions-002.json",
+    "bytes": 754,
+    "sha256": "e20e6aefb859b0268f6e6d9b1b93dd718c263e7cd7823df1b1161cdede28869a"
+  },
+  "source_sha256": "1765a2eca5f9dea8b2a5eea5d4a59310cb364ac165669393f4d67370f18563f9"
+}
+LATEST REVIEW
+{
+  "scoped_source_correct": true,
+  "safe_to_run_real_cleanup_fixture": false,
+  "findings": [
+    {
+      "id": "R02a-021-S01",
+      "status": "SOURCE_CORRECT_WITHIN_CARD",
+      "location": "run_case(); ScenarioFailure; main()",
+      "assessment": "All four outcome fields are initialized before supervision. The protected supervisor invocation reaches the independent-cleanup finally path on return or exception. Supervision and cleanup exceptions are recorded separately; cleanup failure does not overwrite the recorded supervision failure. main preserves the structured payload in both the failed scenario row and failures list. A missing supervision result remains null; no runner exit code is invented. This establishes exception-safe cleanup invocation in ordinary Python control flow, not protection against repeated interruption or forced process death."
+    },
+    {
+      "id": "R02a-021-S02",
+      "status": "SOURCE_CORRECT_WITHIN_CARD",
+      "location": "select_scenario(); run_case(); main()",
+      "assessment": "The fixed public scenario selects exactly one positive runner invocation with timeout 120. Only that scenario creates the owned runner.stdout directory immediately before calling supervisor. If execution reaches the existing stdout_path.write_bytes call, the filesystem raises the intended directory-write error. Neither supervisor nor runner behavior is substituted. The structured failure keeps the scenario failed and the harness nonzero even when independent cleanup succeeds."
+    },
+    {
+      "id": "R02a-021-S03",
+      "status": "PRESERVED_BY_SUPPLIED_DIFF",
+      "location": "scenario selection, acceptance predicates, and early-failure reporting",
+      "assessment": "The default seven runs and their parameters remain unchanged. cleanup-results still selects no runs and the three R01 missing-evidence rows. Ordinary successful supervision and cleanup still reach existing report parsing and acceptance checks. R01b early-failure backfilling and existing missing-evidence declarations remain intact. The supplied diff is confined to the allowed harness; no regression tests were executed."
+    },
+    {
+      "id": "C17-02",
+      "status": "PARTIAL_SOURCE_REPAIR_ONLY",
+      "assessment": "The bounded cleanup-invocation and dual-outcome-retention prerequisite is implemented. Full closure remains unavailable. The injected exception exits run_case before runner-report parsing, so a failed manifest containing IsADirectoryError alone cannot establish successful container execution or the required positive evidence.",
+      "prerequisites": [
+        "Approve a bounded evidence-review procedure for the persisted runner report and ownership record despite the unavailable supervisor result.",
+        "Require authentic positive compilation, execution, expected output, matching identities and hashes, runner cleanup evidence, and subsequent independent cleanup queries.",
+        "Treat preflight rejection, missing artifacts, a different exception, or missing independent queries as an incomplete failed test.",
+        "Retain separate requirements for supervision faults, repeated interruption, and active-client cancellation; this post-supervision fixture does not prove those cases."
+      ]
+    },
+    {
+      "id": "C17-01",
+      "status": "EXECUTION_BLOCKER",
+      "prerequisites": [
+        "Independently resolve or approve a concrete disposition for malformed create output and create completion after client cancellation.",
+        "Keep unvalidated create output separate from trusted container identity; recover through persisted exact name and owner until identity is corroborated.",
+        "Do not infer absence while an outstanding create operation can still materialize a container."
+      ]
+    },
+    {
+      "id": "C17-03",
+      "status": "EXECUTION_BLOCKER",
+      "prerequisites": [
+        "Approve bounded cancellation and containment covering Docker clients started in separate sessions, including runner SIGTERM and forced termination.",
+        "Provide identity-checked recovery and independent verification of client-group termination and container absence.",
+        "Stop further dispatcher execution when containment, ownership, or cleanup is uncertain."
+      ]
+    },
+    {
+      "id": "C17-05",
+      "status": "EXECUTION_BLOCKER",
+      "assessment": "suite_cleanup_owned still interprets retained query output without rejecting truncation. Its removal checks also omit immutable image identity.",
+      "prerequisites": [
+        "Reject incomplete inspect/list output using total and retained byte counts before interpreting ownership or absence.",
+        "Review removal against exact name, owner label, approved immutable image identity, and full CID, including recovery when the persisted CID is unavailable.",
+        "Approve bounded recovery that preserves uncertainty instead of asserting unsupported absence."
+      ]
+    },
+    {
+      "id": "C17-06",
+      "status": "EXECUTION_BLOCKER",
+      "prerequisites": [
+        "Define container lifetime boundary events and approve independent enforcement of the hard container deadline, including stalled or terminated runner cases.",
+        "Keep host preflight and report publication measurements distinct from container lifetime.",
+        "Do not treat timeout 120, supervisor timeout 150, or a proposed 210-second outer envelope as independent container-lifetime enforcement."
+      ]
+    },
+    {
+      "id": "N6-01",
+      "status": "SEED_APPROVAL_BLOCKER",
+      "prerequisites": [
+        "Establish exact original base-versus-derivative installation/cache comparisons.",
+        "Limit the root-mtime exception to authorized copied-seed/restored-cache comparisons."
+      ]
+    },
+    {
+      "id": "N6-02",
+      "status": "SEED_APPROVAL_BLOCKER",
+      "prerequisites": [
+        "Independently validate derivative seed inventories against the base installation and node-cache inventories, including all non-exempt metadata and content.",
+        "Approve immutable seed inputs and matching expectations without hand-editing hashes or relying on the current capture receipt, whose base-to-base seed checks are tautological."
+      ]
+    },
+    {
+      "id": "R02a-021-G01",
+      "status": "AUTHORIZATION_BLOCKER",
+      "prerequisites": [
+        "Freeze the exact reviewed diff and source hashes, interpreter, harness and runner argv, immutable image, expectations, fresh external output directory, fault location, and execution envelope.",
+        "Obtain separate approval for execution through the supervised dispatcher only; exclude the rejected controller.",
+        "Renew review after any execution-affecting correction. Permit no automatic retries."
+      ]
+    },
+    {
+      "id": "C17-04",
+      "status": "RUNTIME_EVIDENCE_OUTSTANDING",
+      "assessment": "The supplied runner contains the verified-cleanup preservation guard. Deterministic preservation and bounded-retry evidence remains missing; card21 does not close this finding."
+    },
+    {
+      "id": "C17-07",
+      "status": "RUNTIME_EVIDENCE_OUTSTANDING",
+      "assessment": "The supplied runner computes remaining time once per loop iteration before sleeping. Controlled deadline-crossing evidence remains missing; card21 does not close this finding."
+    },
+    {
+      "id": "N6-03",
+      "status": "OPEN_UNCHANGED",
+      "assessment": "The Docker OOM branch still lacks the durable compilation/execution evidence required by the harness. The positive-only fixture neither exercises nor resolves this defect."
+    }
+  ],
+  "missing_evidence": [
+    "Review used only the supplied text. No tools, imports, commands, tests, Docker operations, edits, or delegation occurred.",
+    "Source SHA256 1765a2eca5f9dea8b2a5eea5d4a59310cb364ac165669393f4d67370f18563f9, parent identity, scope verification, AST parsing, worker reaping, and authorization removal are supplied assertions, not independently verified here. AST parsing is not a test.",
+    "No authentic runtime evidence demonstrates the intended log-write failure, independent cleanup after that failure, simultaneous supervision/cleanup failure retention, or final persisted FAILED manifest and nonzero exit.",
+    "The concrete approved execution envelope, lifecycle protections, complete-query handling, removal identity checks, independent lifetime enforcement, and valid seed/expectations evidence remain absent.",
+    "All existing C17/N6 runtime requirements, default-suite evidence, ownership-record crash-durability evidence, declared missing scenarios, and prior orchestration/import evidence requirements remain outstanding unless separately established.",
+    "This review grants neither execution authorization, import acceptance, full C17-02 closure, nor full acceptance."
+  ]
+}
+SEPARATE FRONTIER RESPONSE / NEXT CARDS
+{
+  "status": "INCOMPLETE: containment and cleanup prerequisites block execution. Prior planning is preserved but incomplete. Three coding launches remain unspent. No tools, edits, imports, execution, or tests were performed for this plan.",
+  "next_action": {
+    "supervisor": "STOP NOW pending independently reviewed lifecycle supervision.",
+    "authorization": "Real execution remains explicitly rejected. The rejected controller must not be used. Original remains unchanged.",
+    "resumption": "Resolve and review the noncoding prerequisites below before allocating coding launches. Controller repairs belong in a separate queue and must not consume runner allocation. Subsequent execution requires separate explicit authorization.",
+    "loop": "For each authorized coding card: code within its frozen scope, review execution-affecting changes, obtain required execution authorization, run the proposed public-process E2E, then independently review artifacts. Any containment or cleanup prerequisite block leaves the card INCOMPLETE."
+  },
+  "cards": [
+    {
+      "id": "P1-lifecycle-disposition",
+      "findingIDs": ["C17-01", "C17-03", "C17-06"],
+      "allowed_path": "None; prerequisite review only.",
+      "prerequisites": ["Independent lifecycle-supervision review; execution rejection remains in force."],
+      "behavior": "Approve concrete handling of malformed create output and late create completion after cancellation; separate untrusted output from corroborated identity. Specify bounded cancellation of separate-session Docker clients, runner SIGTERM/forced-death recovery, independent client-group termination checks, and hard container-lifetime enforcement with explicit boundary events. Outstanding create operations preclude absence claims. Stop dispatcher activity on uncertainty.",
+      "proposed_public_process_E2E_expected_outcomes": "After separate authorization, exercise public entry points with create cancellation, runner termination, and stalled-runner cases. Independent evidence must establish client termination, settled create operations, identity-checked recovery, and container absence within the approved lifetime policy.",
+      "evidence": "Require independently reviewed supervision design and measurable acceptance criteria. No qualifying implementation or runtime evidence is supplied. Timeouts 120/150 and a proposed 210-second envelope are insufficient.",
+      "stopconditions": ["Unresolved lifecycle enforcement or cancellation ownership.", "Controller dependency: route repair to separate queue.", "Required runner changes exceed later bounded cards: replan before allocation."]
+    },
+    {
+      "id": "P2-seed-validation",
+      "findingIDs": ["N6-01", "N6-02"],
+      "allowed_path": "None; read-only evidence review, with no seed or expectation edits.",
+      "prerequisites": ["Independent inventory evidence and immutable input identities."],
+      "behavior": "Establish exact original-base versus derivative installation/cache comparisons. Restrict root-mtime exceptions to authorized copied-seed/restored-cache comparisons. Independently check all other metadata and content against base installation and node-cache inventories.",
+      "proposed_public_process_E2E_expected_outcomes": "Later authorized public runs use independently approved immutable seeds and matching expectations; unauthorized inventory differences fail approval.",
+      "evidence": "Require complete comparison records and approved identities. Current base-to-base capture checks are tautological and do not establish derivative validity.",
+      "stopconditions": ["Missing independent inventories.", "Hand-edited hashes, unjustified metadata exceptions, or mutable inputs."]
+    },
+    {
+      "id": "C1-create-identity",
+      "findingIDs": ["C17-01"],
+      "allowed_path": "Existing runner only; exact pathname must be established before launch.",
+      "prerequisites": ["P1 approved.", "Independent review determines a bounded runner correction is required.", "Freeze narrow scope; conditional coding launch 1 of 3."],
+      "behavior": "Keep malformed/unvalidated create output separate from trusted CID. Use persisted exact name and owner for recovery until full identity is corroborated. Preserve uncertainty while create can still complete.",
+      "proposed_public_process_E2E_expected_outcomes": "Under approved supervision, invoke the real runner through its public process for malformed create output and cancellation followed by late completion. Require correct recovery without premature absence claims or unsafe removal. A non-substituting fault method must first be approved.",
+      "evidence": "Persist authentic create/client outcomes, ownership records, complete identity queries, and independent final cleanup queries.",
+      "stopconditions": ["Fault method or supervision unapproved.", "Identity cannot be corroborated.", "Missing crash-durability evidence or unsettled create operation."]
+    },
+    {
+      "id": "C2-independent-cleanup",
+      "findingIDs": ["C17-05"],
+      "allowed_path": "Existing E2E file, suite_cleanup_owned only; exact pathname required before launch.",
+      "prerequisites": ["P1 approved.", "Reviewed recovery/removal identity contract.", "Conditional coding launch 2 of 3."],
+      "behavior": "Reject truncated inspect/list results using total and retained byte counts before interpreting ownership or absence. Require exact name, owner label, approved immutable image identity, and full CID before removal. Define bounded recovery when persisted CID is unavailable; retain uncertainty on incomplete evidence.",
+      "proposed_public_process_E2E_expected_outcomes": "Public harness scenarios cover complete queries, truncation, identity mismatch, and missing persisted CID. Incomplete or mismatched evidence prevents removal and absence claims; corroborated recovery produces independently verified absence.",
+      "evidence": "Require authentic query byte counts, identity comparisons, removal outcomes, and subsequent complete independent queries. Scenarios and fault methods are proposed, not established.",
+      "stopconditions": ["Incomplete query interpreted as authoritative.", "Identity mismatch or unresolved ownership.", "Recovery exceeds approved bounds."]
+    },
+    {
+      "id": "C3-failure-evidence",
+      "findingIDs": ["C17-02", "R02a-021-S01", "R02a-021-S02", "R02a-021-S03"],
+      "allowed_path": "Existing E2E file only; exact pathname required before launch.",
+      "prerequisites": ["P1/P2 approved and C1/C2 acceptance satisfied where required.", "Approve bounded persisted-report review despite null supervisor result.", "Conditional coding launch 3 only if a source change is needed."],
+      "behavior": "Preserve reviewed exception-safe cleanup invocation, separate failure fields, null missing supervision result, and fixed positive scenario timeout 120. Add only necessary bounded evidence assessment. Preserve default seven runs, cleanup-results selection, R01 missing-evidence rows, and R01b backfilling.",
+      "proposed_public_process_E2E_expected_outcomes": "After authorization, the public fixed scenario must reach the intended directory-write IsADirectoryError after authentic positive compilation/execution and expected output. Independent cleanup succeeds, yet persisted manifest remains FAILED and harness exits nonzero. Separately approved fault coverage must demonstrate simultaneous supervision/cleanup failure retention.",
+      "evidence": "Require persisted runner report and ownership record, matching identities/hashes, positive compilation/execution/output evidence, runner cleanup evidence, and subsequent independent cleanup queries. Exception text alone is insufficient.",
+      "stopconditions": ["Preflight rejection, missing artifacts, different exception, or missing independent queries: INCOMPLETE failed test.", "No inference that this fixture proves interruption or active-client cancellation safety."]
+    },
+    {
+      "id": "P3-execution-release",
+      "findingIDs": ["R02a-021-G01"],
+      "allowed_path": "None; authorization review only.",
+      "prerequisites": ["All applicable containment, cleanup, seed, and source-review gates satisfied."],
+      "behavior": "Freeze exact diff/source hashes, interpreter, runner/harness argv, immutable image, expectations, fresh external output directory, fault location, and execution envelope. Obtain separate execution approval through the supervised dispatcher only.",
+      "proposed_public_process_E2E_expected_outcomes": "Only the specifically approved public-process invocation may execute; independently review its persisted outcomes before further dispatch.",
+      "evidence": "Supplied SHA256 1765a2eca5f9dea8b2a5eea5d4a59310cb364ac165669393f4d67370f18563f9, parent identity, scope, AST parsing, worker reaping, and authorization removal remain unverified assertions.",
+      "stopconditions": ["Absent execution approval.", "Execution-affecting change requires renewed review.", "No automatic retries; uncertain containment stops dispatch."]
+    },
+    {
+      "id": "P4-retained-acceptance",
+      "findingIDs": ["C17-04", "C17-07", "N6-03"],
+      "allowed_path": "Existing runner and E2E file only; no additional coding launch allocated.",
+      "prerequisites": ["Separate bounded cards and authorization for outstanding work."],
+      "behavior": "Preserve C17-04/07 and partial C17-02 source-review correctness and the previously reported reporting-E2E pass without expanding their claims. Keep N6-03 open.",
+      "proposed_public_process_E2E_expected_outcomes": "Still require deterministic cleanup-preservation/bounded-retry evidence, controlled deadline-crossing evidence, and OOM durable compilation/execution evidence.",
+      "evidence": "These runtime gates, default-suite evidence, declared missing scenarios, ownership-record crash durability, and prior orchestration/import evidence remain outstanding.",
+      "stopconditions": ["Three launches exhausted with unresolved requirements: remain INCOMPLETE.", "No full acceptance inferred from source review or reporting-E2E."]
+    }
+  ],
+  "blockers": [
+    "Immediate stop: independently reviewed lifecycle supervision is absent; real execution and controller remain rejected.",
+    "Containment, complete-query cleanup, removal identity, independent lifetime enforcement, and seed approval remain unresolved.",
+    "Exact allowed filenames are absent from the supplied review and must be frozen before coding.",
+    "No full C17-02 closure, import acceptance, execution authorization, or full acceptance is granted."
+  ]
+}
+INDEXED MULTIPART COVERAGE
+[
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-000.txt",
+    "bytes": 1609,
+    "sha256": "63181bdb4116144ddf147c0f178eaaac08cf270726f8821a85f96905d27ce285"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-001.txt",
+    "bytes": 115341,
+    "sha256": "541781f55620033ad0a290329d5ea3fc1a344d584769b87bb67c859a4edd7619"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-002.txt",
+    "bytes": 70810,
+    "sha256": "078db94795f232934141cb1229bd3a16aecd0da08771f61ce4ab8fb31e45901d"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-003.txt",
+    "bytes": 1577,
+    "sha256": "c23a153690006740fa96ca39e2eb587227a2a8240483024b4b68ea0fcbcde080"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-004.txt",
+    "bytes": 3069,
+    "sha256": "4623fefeb07ef16c1d918d22cc296e5175e292718db83e60332137e7c7946e90"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-005.txt",
+    "bytes": 170982,
+    "sha256": "68239327204b6e3ef5dfe3e156879ba9dc601d0717d2cdb5e80040fd3f8c560f"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-006.txt",
+    "bytes": 1241,
+    "sha256": "d98fdf4478ca0da36c3ac07c2e3cc525822925ec84953e1c9d3660c27f195850"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/source-007.txt",
+    "bytes": 47237,
+    "sha256": "2c2851cf1f78dad78335aac347362f9264d3db54173015f5f911f43ee32758df"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/review-history.txt",
+    "bytes": 434726,
+    "sha256": "80d667033a2bc8e0413671b174ad47ccbc41ffd13516d60688dd88cec834b768"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-006/inline-orchestration.txt",
+    "bytes": 105604,
+    "sha256": "1aea2abcf914e3c38bd00f368a155db5d8946fb2f6be62b70e0a4cbc6b3c18e7"
+  }
+]
+REVIEW INSTRUCTIONS
+Read every indexed source/diff/orchestration/history part and verify artifact hashes. Source and all scripts are complete inline in their named parts; this explicit packet avoids silent truncation. If supported context cannot cover required parts, return BLOCKED with missing parts. Do not infer complete context from this cover prompt.
+Check every requirement, exact revision/image/evidence binding, false positives, missing scenarios, unsafe cleanup, budget accounting, control authority, provider identity, concurrency and guarded import. Recheck immutable inputs before any future dispatch. Unaccepted controller must not authorize itself.
+Return PASS only with zero findings and zero missing evidence. This packet currently has known missing evidence and execution blockers.
+RETURN STRICT JSON:
+{"revision_sha256":"c1a147a5d06e07eecca3ca3b06809b2a57d6d5b6e7264b613702d906bdf2f296","evidence_sha256":"9af90a216a0b86ff7f0a0cdc41147db7f9de5099df76a7ad485888f0567db844","verdict":"PASS | CHANGES_REQUIRED | BLOCKED","findings":[{"id":"stable identifier","severity":"severity","location":"file/scenario","problem":"concrete defect","required_change":"required behavior","required_e2e":"observable E2E acceptance"}],"missing_evidence":[]}
+
+FOLLOW-UP
+Send all findings to a fresh separate Codex gpt-6-astra planner. Produce bounded cards with exact inputs/hashes, allowed paths, prerequisites, behavior, forbidden changes, fixed public-process E2Es, expected outcomes and evidence. Smaller coding workers implement only authorized cards. Fresh Codex Astra reviews pre-execution and exact resulting evidence. Repeat until zero findings and missing evidence, or stop INCOMPLETE for genuine prerequisite/budget/context gates. No reviewer substitution, budget resets, unit tests, broad cleanup, weakened defaults or imported unaccepted changes. Three launches remain if ledger is still21; no request for another allocation is implied.
+This handoff is supervisor-generated because controller print-handoff is unaccepted. It does not pass that missing controller gate.

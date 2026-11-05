@@ -1,0 +1,147 @@
+Separate frontier planning addendum ONLY. No execution/code/delegation. Allocation13capture and14semantic inventory implemented,15immutable Dockerfile executing,16deadline/process groups and17ownership cleanup planned. Reallocate final18 from authoring broad proof driver to minimal pinned-base compatibility fixes so existing real runner can actually start; root can run current public capture/positive CLI under separate safety review instead of new test driver. Fresh root probes prove: Docker inspect after create has Mounts=[] and HostConfig.Tmpfs exact map. Existing validate_config erroneously requires tmpfs destinations in Mounts. Preserve strict rejection of bind/volume/unexpected mounts and require exact Tmpfs map; add other confinement checks from R3-13 as small bounded edit. Second probe finds both build-tree and installed ocamlopt; existing recursive unique global scan guaranteed fails. Use verified reference-command-env fixed PATH data /home/opam/esy-reference/_esy/default/cache/command-env? Actual known file is reference-command-env in project from prior baseprobe (need discover actual location if not supplied); alternatively fixed installed-store traversal restrict canonical /i/<pkg>/bin/ocamlopt and verify package5.5.1000, canonical path/hash. Do not hand-count underscores. Need plan smallcard18 scoped run_esy_reference.py only based actual evidence. Return JSON bounded behavior/prerequisites/required real E2E command/remaining findings. Do not waive other findings or authorize runtime.
+PROBES
+{
+  "container_id": "cdbfa62ce91525edc0d9deaf58971f943fb764550122b8436ba1563fb55efba7",
+  "started": false,
+  "command": [
+    "docker",
+    "create",
+    "--name",
+    "esy-config-probe-cfac04d395b076d8b868df2f",
+    "--label",
+    "esy-reference.owner=cfac04d395b076d8b868df2f",
+    "--platform",
+    "linux/amd64",
+    "--pull=never",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--pids-limit",
+    "128",
+    "--memory",
+    "2g",
+    "--cpus",
+    "2",
+    "--tmpfs",
+    "/work:rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700",
+    "--user",
+    "1000:1000",
+    "--entrypoint",
+    "/bin/true",
+    "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267"
+  ],
+  "inspect": "[]\n{\"/work\":\"rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700\"}\n{\"esy-reference.owner\":\"cfac04d395b076d8b868df2f\"}\n",
+  "cleanup_verified": true
+}
+{
+  "container_id": "7a931edcd4db00f5562da7bb6f4bd380c01630c2156d7d7400cb369d3dcf55df",
+  "command": [
+    "docker",
+    "create",
+    "--name",
+    "esy-store-probe-3bc7c5a92b986ad8d8b8e773",
+    "--label",
+    "esy-reference.owner=3bc7c5a92b986ad8d8b8e773",
+    "--platform",
+    "linux/amd64",
+    "--pull=never",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--pids-limit",
+    "32",
+    "--memory",
+    "256m",
+    "--cpus",
+    "1",
+    "--user",
+    "1000:1000",
+    "--entrypoint",
+    "/usr/bin/find",
+    "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+    "/home/opam/.esy",
+    "-name",
+    "ocamlopt",
+    "-print"
+  ],
+  "exit_code": 0,
+  "stdout": "/home/opam/.esy/4/b/ocaml-5.5.1000-cb879550/ocamlopt\n/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt\n",
+  "stderr": "",
+  "cleanup_verified": true
+}
+REFERENCE ENV
+96	_esy
+24	node_modules/.cache
+# Command environment
+# package:            esy-ocaml-reference-probe@link-dev:./package.json
+# depspec:            dependencies(self)+devDependencies(self)
+# mode:               buildDev
+# envspec:            dependencies(self)+devDependencies(self)
+# buildIsInProgress:  false
+# includeBuildEnv:    true
+# includeCurrentEnv:  true
+# includeNpmBin:      true
+
+
+#
+# Built-in
+#
+export ESY__ROOT_PACKAGE_CONFIG_PATH="/home/opam/esy-reference/package.json"
+export HOME='/home/opam'
+export OPAMCONFIRMLEVEL='unsafe-yes'
+export OPAMYES='1'
+export PATH='/home/opam/node/bin:/home/opam/esy/bin:/home/opam/.opam/5.5/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+export OPAMERRLOGLEN='0'
+export ESY__FETCH_CONCURRENCY='2'
+export OPAMPRECISETRACKING='1'
+export ESY__BUILD_CONCURRENCY='2'
+export PWD='/home/opam/esy-reference'
+export OPAMJOBS='2'
+export PATH="/home/opam/esy-reference/_esy/default/bin:$PATH"
+export cur__jobs="4"
+export cur__etc="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/etc"
+export cur__share="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/share"
+export cur__toplevel="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/toplevel"
+export cur__stublibs="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/stublibs"
+export cur__doc="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/doc"
+export cur__man="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/man"
+export cur__lib="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/lib"
+export cur__sbin="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/sbin"
+export cur__bin="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/bin"
+export cur__install="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1"
+export cur__target_dir="/home/opam/esy-reference/_esy/default/store/b/esy_ocaml_reference_probe-500774a1"
+export cur__original_root="/home/opam/esy-reference"
+export cur__root="/home/opam/esy-reference"
+export cur__dev="true"
+export cur__version="link-dev:./package.json"
+export cur__name="esy-ocaml-reference-probe"
+
+#
+# ocaml@5.5.1000@d41d8cd9
+#
+export CAML_LD_LIBRARY_PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml/stublibs:/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml:$CAML_LD_LIBRARY_PATH"
+export OCAMLLIB="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml"
+export OCAMLPATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml:$OCAMLPATH"
+export OCAML_TOPLEVEL_PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib/ocaml"
+export OCAMLPATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/lib:$OCAMLPATH"
+export MAN_PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/man:$MAN_PATH"
+export PATH="/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin:$PATH"
+
+#
+# Built-in
+#
+export OCAMLFIND_LDCONF="ignore"
+export OCAMLFIND_DESTDIR="/home/opam/esy-reference/_esy/default/store/i/esy_ocaml_reference_probe-500774a1/lib"
+export DUNE_BUILD_DIR="/home/opam/esy-reference/_esy/default/store/b/esy_ocaml_reference_probe-500774a1"
+export DUNE_STORE_ORIG_SOURCE_DIR="true"
+export SHELL="env -i /bin/bash --norc --noprofile"
+export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"db35d242767029ee595cbf23760fb3a902c72ad8c363108554b67e0289a6b44d  package.json
+e47b63f0a6caa6957d87c2f5e97d643b55e99ae933c249bc271fc808cda412b6  esy.lock/index.json

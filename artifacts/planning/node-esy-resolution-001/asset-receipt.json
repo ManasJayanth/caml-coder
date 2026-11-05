@@ -1,0 +1,20 @@
+{
+  "status": "VERIFIED",
+  "assets": [
+    {
+      "file": "artifacts/toolchain-assets/node-esy-001/node.tar.xz",
+      "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-x64.tar.xz",
+      "algorithm": "sha256",
+      "digest": "cc2f601cee82d9a5a233302fe307abc600727035fd7d2c3a3571755989e95008",
+      "bytes": 32015600
+    },
+    {
+      "file": "artifacts/toolchain-assets/node-esy-001/esy.tgz",
+      "url": "https://registry.npmjs.org/esy/-/esy-0.9.2.tgz",
+      "algorithm": "sha512",
+      "digest": "1ff1f8a831795b4737f0921897ee1abd245bce787133c8ecb5e98d6506e2d68356fc8556ed209e8f15db5519f3af74f34219b5974a9582362f657150278d322a",
+      "bytes": 115510571
+    }
+  ],
+  "scope": "source archive hashes only; no execution"
+}

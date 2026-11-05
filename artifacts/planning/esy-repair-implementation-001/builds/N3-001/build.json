@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "docker",
+    "build",
+    "--pull=false",
+    "--network=none",
+    "--no-cache",
+    "--rm=true",
+    "--force-rm=true",
+    "--iidfile",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-001/image-id",
+    "--file",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-001/context/Dockerfile.esy-runtime",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-001/context"
+  ],
+  "exit_code": 1,
+  "failure": null,
+  "logs": {
+    "stdout": {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-001/build.stdout",
+      "sha256": "7305e6934feb54a336e53abdd6c407f536ca940cd6ac793113b0bd73f90d6de3"
+    },
+    "stderr": {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/builds/N3-001/build.stderr",
+      "sha256": "b2418b9d452fe12f6f44d78ddc1f3d4d36aedadac75a5971c2ff920bf86a69f1"
+    }
+  }
+}

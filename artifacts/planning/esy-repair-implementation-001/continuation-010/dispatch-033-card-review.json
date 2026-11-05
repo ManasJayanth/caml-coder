@@ -1,0 +1,29 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 33,
+  "approved_card_id": "B1a-Routing-033",
+  "reviewed_plan_sha256": "19a2123bb25264cdbfbd5af86e9b8cc05df3bf7b22b4ed6e768e9af1e8c35032",
+  "reviewed_plan_section": "launch_033",
+  "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one routing recovery authoring attempt from reviewed frozen31. The card retains all five prior routing requirements and the two fixed negative controls; its mitigation is targeted edit patches under 3000 characters with no whole-file rewrite or source dump. It does not enlarge the 2 MiB output cap, relax acceptance or reuse partial32 as accepted source."
+    },
+    {
+      "severity": "info",
+      "message": "All eight planning input hashes match. Current candidate test matches frozen31. Unchanged dispatcher/guardian/profile hashes retain the previously reviewed controls. Ledger records 32/36. Coding32 receipt establishes output-cap termination with exit -9, worker reaping and credential removal; independent failure receipt records FAILED_UNACCEPTED, incomplete provider result and unchanged candidate. This is failed completion with recorded cleanup, not success."
+    },
+    {
+      "severity": "warning",
+      "message": "Only four launch slots remain. The plan explicitly leaves overall completion impossible within that allocation because the outer wrapper remains unimplemented and unreviewed. This authoring approval provides no allocation extension, completion promise, future dispatch authority or workaround for missing execution containment."
+    }
+  ],
+  "conditions": [
+    "Dispatch only launch_033, reserve slot33 from ledger32 and start a fresh isolated job from the full frozen31 manifest. Keep failed partial32 evidence unchanged and unaccepted; do not import its source.",
+    "Enforce the card's read-and-edit-only authoring protocol, targeted patches under 3000 characters, no full-file rewrite and no source dump. The unchanged launcher's exposure of write does not authorize its use under this narrower card. Preserve the 2 MiB cap and all supervision controls.",
+    "Retain exclusive-runtime, old-worker/credential-absence, full candidate binding and valid smoke gates. Reconcile actual active time against 32400 seconds and launches against 36, keeping the 660-second reserve and cumulative attempt/replan rules.",
+    "Only tests/e2e/test_review_adapter_e2e.py may change. No candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or delegation; no extra controls or unrelated repairs.",
+    "Validate complete provider/tool/scope/binding/cleanup evidence and freeze any completed result UNACCEPTED for independent exact-revision Astra review. Another capped/incomplete result remains failed regardless of source parseability. No import, execution, automatic follow-on launch or unallocated wrapper authoring is approved."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "status": "INCOMPLETE",
+  "scope": "export inventory consistency only; not offline rebuild proof",
+  "installed_packages": 30,
+  "exported_package_records": 29,
+  "missing_installed_ids": [],
+  "extra_installed_ids": [],
+  "missing_metadata_records": [
+    "ocaml-base-compiler"
+  ],
+  "export_sha256": "3e85204b693169154210581e41e39cfd15a577d9d097730e3e367dbe7663f34b",
+  "inventory_sha256": "507a8a75716dbd6a0b7a59618bcfb429aaf9016e5c9f4716dba377c687984e11",
+  "image": "sha256:f2d1ebf6c7772332639421090bfe83c848d028ccff688e6fed0a336a1ef68719"
+}

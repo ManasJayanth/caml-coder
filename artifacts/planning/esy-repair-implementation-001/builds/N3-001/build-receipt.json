@@ -1,0 +1,10 @@
+{
+  "status": "INCOMPLETE",
+  "started_epoch": 1792662613.6744058,
+  "dockerfile_sha256": "f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f",
+  "builder_environment": {
+    "DOCKER_BUILDKIT": "0"
+  },
+  "error": "build failed; daemon build cancellation is unverified if build began",
+  "finished_epoch": 1792662613.899122
+}

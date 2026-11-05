@@ -1,0 +1,14 @@
+[
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "sha256": "d97bec398914255fce137fea04d8b24cebb74f827650d6365d298fa45c4ab920"
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime",
+    "sha256": "f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f"
+  },
+  {
+    "path": "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py",
+    "sha256": "08f55a4acdeba1a15024d358ac3fcc7c43a119f3afefe8346b96d7e22c931327"
+  }
+]

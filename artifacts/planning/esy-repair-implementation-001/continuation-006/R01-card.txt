@@ -1,0 +1,239 @@
+You are the small coding worker for exactly this bounded card. Use only read/edit/write tools. Work in the supplied disposable copied repository. No code/test execution. Apply the small production corrections and scoped harness selection; do NOT construct elaborate test infrastructure or fix unrelated findings. Existing real E2E recipes lack reviewed deterministic fixtures: cleanup-results must honestly report all three missing rows and exit nonzero. This is implementation only, not acceptance. Preserve all default full-suite behavior.
+{
+  "card_id": "R01",
+  "finding_ids": [
+    "C17-04",
+    "C17-07"
+  ],
+  "parent_revision_sha256": "66624a94ef7b5f3cc7c4e9789d391202e5edc7561bb60f0328a9dab5dbda8d8e",
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "prerequisites": [
+    "This dispatch requires separate root confirmation of A6-coding-launch-review-001 approval.",
+    "Do not execute code/tests/Docker or change dependencies."
+  ],
+  "required_behavior": {
+    "C17-04": [
+      "In run() finally, call cleanup_owned only when report['cleanup'].get('verified_absent') is not True.",
+      "When early cleanup verified absence, preserve its entire cleanup dictionary, including reason and removal exit code. Do not make another cleanup attempt or replace the evidence because a later deadline expired.",
+      "Keep the existing cleanup exception handling inside the conditional attempt.",
+      "When absence remains unverified, retain the existing final retry using the original removal_deadline and ownership checks. Do not renew the deadline, introduce a retry loop, or assume that an unsuccessful query proves absence.",
+      "An exhausted deadline may leave unverified cleanup unsuccessful. Eligibility for retry is not a promise of success after the budget expires.",
+      "Preserve source rechecks, report publication, and lifetime checks. Verified container absence does not change a timeout, interruption, or other failed run into PASSED."
+    ],
+    "C17-07": [
+      "Replace the compact polling loop in bounded_process().stop_group() with an explicit loop.",
+      "For each iteration, compute remaining = deadline - time.monotonic() once. Break when remaining <= 0. Break when signal_group(0) reports no group. Otherwise call time.sleep(min(0.02, remaining)).",
+      "Use that same positive remaining value for the sleep calculation; never subtract a second clock reading inside sleep.",
+      "Preserve the existing final signal_group(0) uncertainty check and TERM, KILL, and wait behavior.",
+      "Do not claim this eliminates scheduler overshoot or repairs other process lifecycle defects."
+    ],
+    "harness": [
+      "Add optional --scenario with cleanup-results as the only explicit choice. Omission preserves the existing three-required-argument CLI and full-suite behavior.",
+      "Centralize scenario selection so both execution and missing-row completion use the selected requirements. The cleanup-results selection requires all three R01 evidence rows.",
+      "Keep existing full-suite runs and MISSING_REAL_CASES unchanged. A scoped success must identify its scope and must not imply full-suite acceptance or closure of other findings.",
+      "Unavailable fixtures, missed triggers, missing evidence, and Docker failures produce failed evidence rows and nonzero exit; never skips or successful substitutes.",
+      "Invoke the runner only through its public CLI in a subprocess. Do not import runner helpers, add unit tests, monkeypatch clocks, or count mocked Docker outcomes.",
+      "Do not add production fault switches or mutate production source during tests. Any explicit safe test input must be isolated to a separately reviewed harness fixture.",
+      "A forwarding Docker proxy may delay real traffic or delivery of real results, but must preserve Docker arguments, stdin, output bytes, and actual outcomes. A timeout caused by delayed delivery is recorded as a transport timeout, not fabricated Docker success.",
+      "Do not build an elaborate timing controller or proxy within the one small invocation. Without the prerequisite fixture, implement explicit missing-evidence reporting and leave acceptance blocked."
+    ]
+  },
+  "e2e_recipe_ids": [
+    "R01-verified-cleanup-preserved",
+    "R01-unverified-cleanup-retried",
+    "R01-stop-group-deadline-crossing"
+  ],
+  "expected_outcomes": {
+    "implementation": "A small diff limited to the cleanup guard, polling-loop calculation, and scoped harness selection/evidence handling.",
+    "acceptance": "All three required public-subprocess real-Docker recipes pass with proven triggers after separate safety approval.",
+    "current_disposition": "Implementation can be specified, but acceptance is blocked by missing deterministic timing fixtures and execution approval. A code-only patch must not close either finding.",
+    "remaining_findings": "All unrelated C17 findings and N6 seed bugs remain open. The controller remains deferred and supervisor launch safety remains separately reviewed."
+  },
+  "evidence_outputs": [
+    "Only the two allowlisted source files may change.",
+    "Final concise summary of changed behavior and explicitly unimplemented E2E fixtures."
+  ],
+  "forbidden_changes": [
+    "No controller, guardian, adapters, image, fixture, manifest, lockfile, requirements or other source edits.",
+    "No shell commands, package installs, model substitutions, independent delegation or claims of acceptance."
+  ],
+  "stop_conditions": [
+    "If more paths required stop with blocker.",
+    "Do not simulate passing E2Es: missing deterministic timing fixtures must remain explicit failures."
+  ]
+}
+SEPARATE FRONTIER PLAN
+{
+  "card_id": "R01",
+  "finding_ids": [
+    "C17-04",
+    "C17-07"
+  ],
+  "parent_revision_sha256": "f24d114d29196278067e87cdf921c0317fcc0e74e0b03725d0215cba246ea8dc",
+  "inputs": {
+    "basis": "Only the two supplied source listings and finding descriptions. Repository state, lockfiles, Docker availability, and executable test prerequisites have not been inspected or verified.",
+    "execution_status": "Planning only. No tools, execution, source changes, or delegation performed.",
+    "implementation_allocation": "One future small Luna invocation, within the stated remaining budget of 6. Do not launch additional invocations or silently absorb prerequisite work.",
+    "scope": "Preserve verified cleanup results, eliminate negative sleep in the runner stop_group loop, and add a narrowly selected cleanup-results E2E scenario.",
+    "excluded": [
+      "Existing deferred controller",
+      "Supervisor launch-safety changes",
+      "Remaining C17 lifecycle findings",
+      "N6 seed bugs",
+      "Image, fixture, dependency, or lockfile changes"
+    ]
+  },
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+  ],
+  "prerequisites": [
+    {
+      "id": "P1",
+      "requirement": "Verify the supplied parent revision and both source listings before editing. Identify the existing uv project and committed lockfile.",
+      "gate": "Use uv run --locked for eventual Python launches. Missing or incompatible lock state blocks execution; R01 must not create or repair dependencies."
+    },
+    {
+      "id": "P2",
+      "requirement": "Obtain a separate safety review of the exact scoped real-Docker test, including supervisor launch behavior, owned process containment, deadlines, proxy descendants, and emergency cleanup.",
+      "gate": "There is currently no permission to execute rejected code. This plan does not authorize a test run."
+    },
+    {
+      "id": "P3",
+      "requirement": "Provide a reviewed deterministic timing and observation fixture capable of proving the required internal event ordering through public subprocess execution.",
+      "gate": "This fixture is not supplied. If it needs a larger implementation, place it in a separate prerequisite card and leave R01 acceptance blocked."
+    },
+    {
+      "id": "P4",
+      "requirement": "Provide the real pinned Docker image and reviewed expectations matching the final runner source hash, with immutable evidence destinations outside the candidate tree.",
+      "gate": "Do not hand-edit expectation hashes to bypass capture. Capture itself requires the applicable safety review. Existing N6 or lifecycle failures that prevent setup remain blockers."
+    }
+  ],
+  "exact_behavior": {
+    "C17-04": [
+      "In run() finally, call cleanup_owned only when report['cleanup'].get('verified_absent') is not True.",
+      "When early cleanup verified absence, preserve its entire cleanup dictionary, including reason and removal exit code. Do not make another cleanup attempt or replace the evidence because a later deadline expired.",
+      "Keep the existing cleanup exception handling inside the conditional attempt.",
+      "When absence remains unverified, retain the existing final retry using the original removal_deadline and ownership checks. Do not renew the deadline, introduce a retry loop, or assume that an unsuccessful query proves absence.",
+      "An exhausted deadline may leave unverified cleanup unsuccessful. Eligibility for retry is not a promise of success after the budget expires.",
+      "Preserve source rechecks, report publication, and lifetime checks. Verified container absence does not change a timeout, interruption, or other failed run into PASSED."
+    ],
+    "C17-07": [
+      "Replace the compact polling loop in bounded_process().stop_group() with an explicit loop.",
+      "For each iteration, compute remaining = deadline - time.monotonic() once. Break when remaining <= 0. Break when signal_group(0) reports no group. Otherwise call time.sleep(min(0.02, remaining)).",
+      "Use that same positive remaining value for the sleep calculation; never subtract a second clock reading inside sleep.",
+      "Preserve the existing final signal_group(0) uncertainty check and TERM, KILL, and wait behavior.",
+      "Do not claim this eliminates scheduler overshoot or repairs other process lifecycle defects."
+    ],
+    "harness": [
+      "Add optional --scenario with cleanup-results as the only explicit choice. Omission preserves the existing three-required-argument CLI and full-suite behavior.",
+      "Centralize scenario selection so both execution and missing-row completion use the selected requirements. The cleanup-results selection requires all three R01 evidence rows.",
+      "Keep existing full-suite runs and MISSING_REAL_CASES unchanged. A scoped success must identify its scope and must not imply full-suite acceptance or closure of other findings.",
+      "Unavailable fixtures, missed triggers, missing evidence, and Docker failures produce failed evidence rows and nonzero exit; never skips or successful substitutes.",
+      "Invoke the runner only through its public CLI in a subprocess. Do not import runner helpers, add unit tests, monkeypatch clocks, or count mocked Docker outcomes.",
+      "Do not add production fault switches or mutate production source during tests. Any explicit safe test input must be isolated to a separately reviewed harness fixture.",
+      "A forwarding Docker proxy may delay real traffic or delivery of real results, but must preserve Docker arguments, stdin, output bytes, and actual outcomes. A timeout caused by delayed delivery is recorded as a transport timeout, not fabricated Docker success.",
+      "Do not build an elaborate timing controller or proxy within the one small invocation. Without the prerequisite fixture, implement explicit missing-evidence reporting and leave acceptance blocked."
+    ]
+  },
+  "e2e_recipes": [
+    {
+      "id": "R01-verified-cleanup-preserved",
+      "finding": "C17-04",
+      "status": "BLOCKED_PENDING_TIMING_FIXTURE_AND_SAFETY_REVIEW",
+      "launch": "After prerequisites, launch the harness using uv run --locked with its existing required arguments and --scenario cleanup-results. Exact executable command is withheld because lock root, image, expectations, and fixture are unverified.",
+      "procedure": [
+        "Launch the unchanged public runner interface against the real pinned image and establish exact owned-container identity.",
+        "Induce a reviewed termination path that reaches early cleanup.",
+        "Observe real removal and the runner's successful absence verification before removal_deadline.",
+        "Using the reviewed external timing fixture, hold execution after that verification is committed and before finally until removal_deadline has expired.",
+        "Release execution and collect the immutable runner report and independent real-daemon absence evidence."
+      ],
+      "acceptance": [
+        "Evidence proves early verified absence preceded deadline expiry and finally followed expiry.",
+        "The final cleanup dictionary equals the early verified dictionary and remains verified_absent=true.",
+        "No final cleanup invocation replaces that result.",
+        "The runner's overall status still reflects the actual termination or lifetime outcome."
+      ],
+      "limitation": "Delaying the successful absence-query response until after its subprocess deadline would prevent early verification. Delaying Docker traffic alone does not establish the necessary pause after verification; a suitable external observation/control mechanism is required."
+    },
+    {
+      "id": "R01-unverified-cleanup-retried",
+      "finding": "C17-04",
+      "status": "BLOCKED_PENDING_FORWARDING_FIXTURE_AND_SAFETY_REVIEW",
+      "procedure": [
+        "Launch the runner as a public subprocess with real Docker.",
+        "Trigger early termination and forward the actual removal operation to Docker.",
+        "Delay delivery sufficiently to make the first cleanup attempt genuinely uncertain while preserving time under the original removal_deadline.",
+        "Release subsequent real Docker traffic and allow finally to perform its bounded retry.",
+        "Collect actual Docker results, timing evidence, the final report, and independent absence verification."
+      ],
+      "acceptance": [
+        "The first cleanup result is demonstrably unverified.",
+        "A final retry occurs under the original deadline without a budget extension.",
+        "If the retry verifies absence in time, final cleanup records that real result.",
+        "If the fixture misses the required remaining-budget condition, the test fails as a missed trigger."
+      ],
+      "limitation": "The fixture must demonstrate that terminated proxy clients and descendants cannot continue uncontrolled operations. Independent rescue cleanup cannot substitute for runner retry evidence."
+    },
+    {
+      "id": "R01-stop-group-deadline-crossing",
+      "finding": "C17-07",
+      "status": "BLOCKED_PENDING_PRECISE_RACE_FIXTURE_AND_SAFETY_REVIEW",
+      "procedure": [
+        "Launch the runner publicly against real Docker with reviewed owned process-group behavior that reaches the polling loop.",
+        "Use a reviewed external scheduler or tracer to establish a live-group polling iteration and force a deadline crossing at the relevant boundary without replacing the runner clock or sleep function.",
+        "For regression discrimination, use separately reviewed immutable parent and candidate snapshots with matching expectations; never rewrite production source during a run.",
+        "Collect boundary observations, subprocess outputs, runner report, and independent process/container cleanup evidence."
+      ],
+      "acceptance": [
+        "The trigger is proven, rather than inferred from elapsed wall time.",
+        "The candidate returns its truthful cleanup or uncertainty result without negative sleep or ValueError.",
+        "The parent reproduces the negative-duration failure under the controlled boundary, or equally precise trace evidence establishes that its second subtraction would be negative.",
+        "No fabricated Docker response is accepted as evidence."
+      ],
+      "limitation": "Ordinary repeated timeouts or forwarding latency do not deterministically force the interval between the two parent clock reads. No runnable race recipe is claimed without this prerequisite."
+    }
+  ],
+  "expected_outcomes": {
+    "implementation": "A small diff limited to the cleanup guard, polling-loop calculation, and scoped harness selection/evidence handling.",
+    "acceptance": "All three required public-subprocess real-Docker recipes pass with proven triggers after separate safety approval.",
+    "current_disposition": "Implementation can be specified, but acceptance is blocked by missing deterministic timing fixtures and execution approval. A code-only patch must not close either finding.",
+    "remaining_findings": "All unrelated C17 findings and N6 seed bugs remain open. The controller remains deferred and supervisor launch safety remains separately reviewed."
+  },
+  "evidence_outputs": [
+    "Reviewed parent/candidate source hashes, exact diff, uv version, lockfile hash, and resolved launch arguments.",
+    "Separate safety-review decision tied to the exact test fixture and source revisions.",
+    "Immutable external scenario-manifest.json identifying cleanup-results scope and all three required rows, including explicit missing-evidence failures.",
+    "Bounded runner stdout/stderr, exit status, elapsed time, report bytes and hashes, and owned-invocation records.",
+    "Actual forwarding-proxy transcripts with command identity, real output hashes, exit outcomes, timing events, and owned descendant cleanup results.",
+    "Timing traces proving early-cleanup commitment, removal-deadline crossing, retry ordering, and the stop_group race boundary.",
+    "Independent real-Docker absence observations recorded before any rescue cleanup, with rescue actions reported separately.",
+    "Before/after hashes proving production source and reviewed fixtures were unchanged during execution."
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "description": "No supplied mechanism deterministically pauses after early absence verification and before finally. A larger timing/observation prerequisite may be necessary."
+    },
+    {
+      "id": "B2",
+      "description": "No supplied mechanism deterministically crosses the stop_group clock-read boundary with the process group still observable. Docker latency alone is insufficient."
+    },
+    {
+      "id": "B3",
+      "description": "A safe real forwarding proxy with bounded descendants and authenticated timing evidence is not available in the supplied inputs."
+    },
+    {
+      "id": "B4",
+      "description": "Scoped execution requires separate safety review; rejected code is not authorized to run."
+    },
+    {
+      "id": "B5",
+      "description": "Locked uv environment, exact revision, real image, and matching captured expectations are unverified. Remaining lifecycle or N6 failures must not be silently repaired to unblock R01."
+    }
+  ]
+}

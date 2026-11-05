@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "review_type": "Independent delegated factual review of report artifacts against saved evidence",
+  "verdict": "PASS",
+  "review_date": "2026-10-23",
+  "report_bindings": [
+    {
+      "path": "artifacts/reports/project-status-001/index.html",
+      "bytes": 39522,
+      "sha256": "f19fc364221960c5e2d39ec6edfc714c2916d9fdc0005111dfe96cd99f3618bd"
+    },
+    {
+      "path": "artifacts/reports/project-status-001/status.json",
+      "bytes": 30380,
+      "sha256": "02d796c1ac930f97c4aa951180fc40c56cf52543a57dba032d86669cab17991b"
+    }
+  ],
+  "findings": [],
+  "checks": [
+    "The HTML embedded report JSON equals the companion status.json after JSON normalization.",
+    "Review-worker adapters are explicitly distinguished from Qwen LoRA parameters; neither review-worker repair nor historical Metal smoke is presented as training progress.",
+    "Six of seven original source findings are closed, with result receipt/invocation inventory still open. Source closure is explicitly separated from runtime acceptance.",
+    "All 18 public adapter scenarios are NOT_RUN with missing evidence. The nine response and nine argument-rejection rows are correctly identified as 18 internal rows inside the single public matrix scenario.",
+    "Attempts 26 through 36 and their source-review outcomes match the saved evidence. Attempt 32 retains exit -9 and output-cap failure; review 33 binds its parent to revision 31.",
+    "Historical 36/36 accounting is preserved separately from the current-conversation overlay of cap 48 and 12 unexecuted launches 37 through 48.",
+    "Active time 24923.746 of 32400 seconds and 7476.254 remaining is labeled a handoff snapshot requiring later reconciliation, not a live countdown.",
+    "Qwen3.5-9B, M4 Max 128 GiB training host and M1 16 GiB deployment target match the cited historical project context. No training completion, quality gain, quantized export or actual M1 measurements are claimed.",
+    "The remaining dependency chain agrees with the saved frontier plan: complete receipts/inventory, reviewed outer runner, public acceptance, real Astra provider smoke and final review; broader lifecycle/controller/esy/import gates remain open.",
+    "All source SHA-256 values listed in the bound status.json source map were independently recomputed and matched."
+  ],
+  "covered_source_refs": {
+    "resolution": "Keys below resolve to exact paths and SHA-256 values in the sources object of the bound status.json; finalReview and review36 refer to the same saved file.",
+    "keys": [
+      "repair", "scenarios", "plan", "finalReview", "context", "readme", "harness",
+      "attempt26", "review26", "attempt27", "review27", "attempt28", "review28",
+      "attempt29", "review29", "attempt30", "review30", "attempt31", "review31",
+      "attempt32", "attempt33", "review33", "attempt34", "review34",
+      "attempt35", "review35", "attempt36", "review36"
+    ]
+  },
+  "authorization_basis": "The delegating task supplies the current human-approved report plan and additional 12-launch allocation. Saved handoff 010 independently establishes only the historical 36/36 cap. The report preserves this distinction.",
+  "limits": [
+    "This is a factual report review using read-only file inspection and hashing, not execution of candidate code, tests, training, or repair workers.",
+    "No browser or runtime UI checks were performed by this reviewer. Browser E2E results supplied by the parent were not used as independent factual evidence.",
+    "Static HTML inspection shows top-level parsing/validation errors hide the report and string fallbacks use UNKNOWN / MISSING; this is not exhaustive malformed-input or runtime UI verification.",
+    "PASS applies only to the bound report artifacts and does not accept repair code, the controller, runtime scenarios, provider availability, training readiness, or source import."
+  ]
+}

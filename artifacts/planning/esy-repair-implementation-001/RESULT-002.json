@@ -1,0 +1,52 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "Reviewer replacement authorized and implemented: Codex gpt-6-astra passed the isolated availability smoke check. Remaining implementation C0-C7 is not complete.",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "candidate_sha256": "45c8c8228da50949c346a35c487b60681ace296c3697eec6186f3609fd9f8bf5",
+  "original_files_verified": 72,
+  "original_files_changed": [],
+  "imported": false,
+  "coding_rounds_consumed": 0,
+  "active_seconds_consumed": 482.411,
+  "limits": {
+    "coding_rounds": 12,
+    "active_seconds": 21600
+  },
+  "completed": [
+    "Frozen 72 relevant current files, including dirty and untracked inputs",
+    "Prepared isolated candidate with three worker adapters",
+    "Passed 12 bootstrap containment probes",
+    "Preserved required reviewer smoke failure evidence",
+    "Removed temporary read-only credential reference",
+    "Post-timeout process inspection found no reviewer process",
+    "User-authorized replacement with Codex gpt-6-astra",
+    "Narrow macOS DNS socket exception verified; 12 containment probes passed again",
+    "Codex Astra availability smoke passed in 7.015 seconds",
+    "Temporary Codex auth reference removed"
+  ],
+  "incomplete": [
+    "C0: full lifecycle, detached-child cleanup and provider gates remain unproven",
+    "C1: controller, strict schemas and full provider parsing not implemented",
+    "C2: derivative cache image not built",
+    "C3-C4: runner unchanged",
+    "C5-C6: full repair/orchestration E2Es not implemented or run",
+    "C7: no acceptance review, import, or final verification"
+  ],
+  "resume": "Continue C0 lifecycle and provider configuration verification, then supervised C1. Review must use codex-worker.sh review with gpt-6-astra. Frontier planning must use a separate fresh process. Do not require Claude/Fable. Preserve budgets and all historical failures.",
+  "finished_at": "2026-10-22T05:54:01.344293+00:00",
+  "reviewer": {
+    "backend": "codex",
+    "model": "gpt-6-astra",
+    "role": "review",
+    "sandbox": "read-only",
+    "fresh_process": true
+  },
+  "planner": {
+    "backend": "codex",
+    "model": "gpt-6-astra",
+    "role": "plan",
+    "separate_fresh_process": true
+  },
+  "reviewer_smoke": "bootstrap/codex-astra-smoke-002.json",
+  "containment": "bootstrap/containment-002.json"
+}

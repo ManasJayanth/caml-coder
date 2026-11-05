@@ -1,0 +1,40 @@
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+  "parent_revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "source_sha256": "a38c78d34350178809f5135555d59dc5b53d0d7e5fded8be92af1d822f6a2565",
+  "input_hashes": {
+    "astra-plan-034.json": "3e46a2abdd958ae824179d48b3ad113264272a692977ae5d14271135fd7ec26a",
+    "astra-source-review-033.json": "457d873b4c291167fbc7d3340fc1cfd92a83d69e82da891279e23b99ad79eccb",
+    "coding-jobs/B1a-Routing-034/diff.patch": "4e5cb947cf0f5de69af0236940fff3b76c6feee89a8b4ffc0dd017aec6fdae46",
+    "coding-jobs/B1a-Routing-034/independent-validation.json": "f1a28cc06e053670125e80ce1eff079c6863e2a5abd2c3f3447e0705d21d2409",
+    "coding-jobs/B1a-Routing-034/guardian/receipt.json": "09f1ee7bd6ae74af38534d01ec21cf3c0af18e6f644f8c6c96d18706937b4908"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, both adapters, plan34, review33, review25, diff, validation and guardian receipt. Independently verified all 82 frozen entries by hash/size/mode, exact inventory, byte-identical parent manifest binding to revision33 and exact diff. Only the allowed test changed. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "R1": "Preserved: nine response rows at 536-579, valid-review at 583-590 and eight existing invalid-arity rows at 594-603 immediately collect/check the retained raw prefix and row delta. Snapshot advances only after match; mismatches prevent subsequent invocations.",
+    "R2": "Preserved: expected one exact argv/cwd/base64-stdin object for response/valid-review and zero raw bytes for invalid arities. Checker rejects prefix changes, blank/incomplete lines, wrong counts, malformed JSON and unequal objects. Row observations precede response checks; LF handling is unchanged.",
+    "R3": "Preserved: response fixtures, extra valid-review and existing arity coverage/comparisons remain. Exact diff leaves fake selector, collector, bounded_run, bounds, ownership, deadlines, cleanup, sandbox, other controls and adapters unchanged. The response callsite now retains invocation errors for receipt/checking and still fails before another launch.",
+    "R4": "Satisfied at source: line503 sends both fixed controls into the actual CASES loop at536. Only index0 selects literal missing/duplicate at540-541; response bytes/status remain unchanged. Both controls share the matrix bounded_run at550 and immediate collector/checker at555-556. The separate one-shot invocation branch is removed.",
+    "R5": "Satisfied at source for the two fixed controls: attempted starts at0 and increments at the shared callsite; unchanged bounded_run receives lifecycle state. Lines558-572 write routing.json before failing, with first row, expected/observed delta, reason, bounded record/response observations, actual attempt count, invocation failure and lifecycle. The fixed fake modes produce observed0/2 against expected1 and attempted1; all control paths stop before later launches. Receipt-write failure and unexpected matching completion fail. Response/cleanup errors cannot be reported as clean routing success. These are source conclusions, not runtime observations."
+  },
+  "findings": [],
+  "requiredchanges": [],
+  "closed_source_findings": [
+    "B1a-Routing-033-controls-bypass-matrix",
+    "B1a-E2E-025-per-case-routing"
+  ],
+  "other_open_findings": [
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime acceptance: after remaining blockers and separate execution approval, run the public matrix and both fixed routing controls. Establish actual first-row observed0/2, expected1, attempted1, nonzero status, bounded receipts, no later launches and independent cleanup/completion evidence.",
+    "Arity correction, diagnostic byte cap, complete result receipt/inventory and independently reviewed outer wrapper remain open; this source-card closure authorizes no execution or dispatch.",
+    "Fake routing cannot establish provider identity or real-provider availability."
+  ]
+}

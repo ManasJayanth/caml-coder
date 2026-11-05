@@ -1,0 +1,29 @@
+{
+ "acceptance_rows": [
+  "R1 In cmd_run_card, immediately after the e2e launch returns (pass or fail), recompute post = inv_hash(inventory(tree)); if post != tree_hash, re-run scope_verify on the fresh inventory against the parent inventory; any path outside allowed_paths sets cs['status']='FAILED' with reason 'E2E_TREE_MUTATED' recorded in cs and result-manifest.json and the card is not marked E2E_PASS; if only allowed paths changed, cs['tree_hash'] and result-manifest.json tree_hash are updated to post before status is finalized.",
+  "R2 cmd_review card branch recomputes inv_hash(inventory(tree)) and, if it differs from cs['tree_hash'], prints a single line starting with TREE_HASH_MISMATCH <card-id>, records no acceptance, changes no parent state, and exits nonzero; REVISION in the packet is always the recomputed hash.",
+  "R3 run_e2e.py gains scenario O43 with two parts: (a) a card whose e2e argv is python3 -c writing a file outside allowed_paths inside the tree; run-card must end FAILED with reason E2E_TREE_MUTATED and review --card must refuse (nonzero). (b) a card that passes e2e normally, then the scenario appends a byte to a file in the job tree before review; review --card must exit nonzero with TREE_HASH_MISMATCH and parent_hash must be unchanged.",
+  "R4 No change to e2e sandboxing, launch(), base_env, or any scenario other than O43."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [
+  "C1"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O43"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C2",
+ "objective": "Re-verify the job tree after the e2e command runs so a mutated tree is never stamped with a stale tree_hash or accepted (F2)",
+ "stop_condition": "print CARD_BLOCKED C2 if scenario id O43 already exists in e2e/run_e2e.py, or if cmd_run_card does not compute tree_hash via inv_hash before the e2e launch as described in the finding",
+ "timeout": 480
+}

@@ -1,0 +1,29 @@
+{
+ "acceptance_rows": [
+  "R1 In cmd_run_card, job dir creation, shutil.copytree of the parent, and assemble_prompt all execute before reserve_slot() and before cs['status']='RESERVED'; if any of them raises or calls sys.exit, the partially created jobs/<id>-<n> directory is removed, cs['status'] is left exactly as it was (PENDING or FAILED), launches_used is unchanged, and the command exits nonzero with the existing error code (INPUT_INVALID / INPUTS_TOO_LARGE or a new JOB_DIR_EXISTS).",
+  "R2 If jobs/<id>-<n> already exists, cmd_run_card picks the next free n instead of failing, so a prior crash cannot block reruns.",
+  "R3 validate_card rejects inputs_inline that is not the shape assemble_prompt consumes (same type checks assemble_prompt applies) or whose total size exceeds the INPUTS_TOO_LARGE limit, with the existing validate_card error path, both at init and in cmd_replan.",
+  "R4 run_e2e.py gains scenario O46: (a) init with a card whose inputs_inline is malformed must be rejected by validate_card; (b) a valid card where jobs/<id>-1 is pre-created by the scenario: run-card must still succeed using jobs/<id>-2, launches_used must increase by exactly one, and state after a forced pre-launch failure (oversized inputs_inline injected directly into cards/<id>.json after init) must show status PENDING and launches_used unchanged."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [
+  "C2"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O46"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C3",
+ "objective": "Remove the RESERVED dead end: consume the launch slot only after all pre-launch setup succeeds, and validate inputs_inline at card-load time (F4)",
+ "stop_condition": "print CARD_BLOCKED C3 if scenario id O46 already exists in e2e/run_e2e.py, or if reserve_slot() cannot be moved after assemble_prompt without changing Lock semantics",
+ "timeout": 480
+}

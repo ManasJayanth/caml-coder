@@ -1,0 +1,2 @@
+Exploratory toolchain build, not T15/T07F acceptance.
+The base image and direct package versions are pinned using offline metadata from that image; no opam update is permitted. The resolved full package inventory must be recorded after a successful build. Build-time fetching is allowed; subsequent reference-build validation must use network none. No host source, credentials or tools are mounted. This environment is not yet a frozen offline profile; no corpus records may be enabled from build success alone. No Node or esy capability is implied.

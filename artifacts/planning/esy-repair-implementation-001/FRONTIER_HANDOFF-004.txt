@@ -1,0 +1,855 @@
+You are the independent frontier reviewer of an esy reference-runner repair.
+Review this exact revision and evidence. Prior approvals, worker prose, and process exit zero are not proof of correctness.
+This is an explicit indexed multi-part packet; read every source/diff and review part. No source is silently truncated. The supervising agent generated this handoff because the public workflow controller remains unaccepted. It does not establish controller print-handoff acceptance.
+
+OBJECTIVE AND SCOPE
+Repair offline esy execution using disposable writable caches and read-only compiler/dependencies. No datasets, training, adapters or promotion. macOS; uv if needed; preserve lockfile. Do not import until complete acceptance.
+
+CURRENT REVIEW POLICY
+User replaced Claude Fable with fresh Codex gpt-6-astra. Coding gpt-6-luna; separate fresh Astra planning and review. Native worker containment; no worker Docker access. Reviewed host execution only. Coding launches18/18 (12 original plus6 explicitly authorized); six-hour cumulative active limit NOT reset. No more coding launches without explicit allocation. Historical Fable records are superseded only in policy, never deleted.
+
+RUNTIME INVARIANTS
+Pinned base sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267; esy0.9.2, npm compiler5.5.1000, compiler output5.5.1. Readonly root/compiler/dependencies, network none, uid:gid1000:1000, capdropALL/no-new-privileges, pids128/cpus2/memory2GiB, deadline120s maximum; /work128MiB executable and two32MiB cache tmpfs mounts at original project paths. Never esy install at runtime. Verify complete inventories before candidate and immutable inventories afterward. Remove only exact proven-owned containers; query errors are not absence.
+
+FINAL STATUS
+{
+  "status": "INCOMPLETE",
+  "reason": "All 18 allocated coding launches consumed; independent review requires fixes; full real E2E matrix and controller acceptance remain missing. No import.",
+  "imported": false,
+  "coding_launches_consumed": 18,
+  "limits": {
+    "coding_launches": 18,
+    "active_seconds": 21600
+  },
+  "active_seconds_consumed": 10367.532,
+  "reviewer": "fresh Codex gpt-6-astra",
+  "candidate_sha256": "66624a94ef7b5f3cc7c4e9789d391202e5edc7561bb60f0328a9dab5dbda8d8e",
+  "original_files_verified": 72,
+  "original_files_changed": [],
+  "derivative_image": "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+  "diagnostic_fresh_compile_runs_passed": 2,
+  "public_runner_acceptance": false,
+  "planning_limitations": [
+    "Broad final replanning timed out; preserved failed attempt.",
+    "Targeted three-card plan and earlier seven lifecycle cards are prospective, not acceptance.",
+    "Proposed E2E commands are not currently runnable; use uv with the existing locked project when implementing authorized cards."
+  ],
+  "controller": "DEFERRED_UNACCEPTED",
+  "final_review": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/N6-final-review-001/final.txt",
+  "final_review_result": {
+    "revision_sha256": "f24d114d29196278067e87cdf921c0317fcc0e74e0b03725d0215cba246ea8dc",
+    "verdict": "CHANGES_REQUIRED",
+    "scoped_N6_correct": false,
+    "findings": [
+      {
+        "id": "C17-01",
+        "severity": "high",
+        "location": "run_esy_reference.py: run(), capture_expectations(), cleanup_owned()",
+        "problem": "Unresolved. Raw create output is assigned to cid before validation and ownership corroboration. A malformed nonempty identifier bypasses recovery by name; confirming that identifier absent can leave the actual owned container behind.",
+        "required_change": "Keep raw create output separate. Until the returned identity is corroborated, recover through the persisted unique name and owner. Account for create completion after client cancellation before asserting absence.",
+        "required_e2e": [
+          "Malformed create output with a real owned container still present.",
+          "Delayed create completion after client cancellation.",
+          "Ownership mismatch prevents removal and unsupported cleanup success."
+        ]
+      },
+      {
+        "id": "C17-02",
+        "severity": "high",
+        "location": "tests/test_esy_reference_runtime_e2e.py: run_case()",
+        "problem": "Unresolved. Independent cleanup runs only after supervisor() returns normally. Supervision exceptions, log-write failures, or repeated interruption can skip it.",
+        "required_change": "Place independent owned-container cleanup in a finally path and retain supervision failure and cleanup outcome separately.",
+        "required_e2e": [
+          "Supervisor exception, log-write failure, and repeated interruption after container creation each trigger bounded independent cleanup and preserve both outcomes."
+        ]
+      },
+      {
+        "id": "C17-03",
+        "severity": "high",
+        "location": "run_esy_reference.py: bounded_process() and cancellation handling; tests/test_esy_reference_runtime_e2e.py: supervisor()",
+        "problem": "Unresolved. Docker clients start in separate sessions, while the runner has no SIGTERM cleanup handler. Suite cancellation can terminate the runner without executing finally and leave client groups outside suite containment.",
+        "required_change": "Route SIGTERM through bounded cancellation and provide independently verified containment or identity-checked recovery of Docker client groups after forced runner termination.",
+        "required_e2e": [
+          "Cooperative cancellation and forced termination while Docker clients remain alive.",
+          "Independent verification of container absence and client-group termination.",
+          "Recovery cannot signal an unrelated reused process identity."
+        ]
+      },
+      {
+        "id": "C17-04",
+        "severity": "medium",
+        "location": "run_esy_reference.py: run() termination handling and finally",
+        "problem": "Unresolved. Successful early cleanup is unconditionally repeated and its verified-absence evidence overwritten. An exhausted removal deadline can turn confirmed cleanup into cleanup-deadline-exhausted.",
+        "required_change": "Preserve successful verified-absence evidence. Retry only when absence remains unverified.",
+        "required_e2e": [
+          "Verified early cleanup remains successful when the removal deadline expires before finally.",
+          "Unverified cleanup remains eligible for a bounded retry."
+        ]
+      },
+      {
+        "id": "C17-05",
+        "severity": "high",
+        "location": "tests/test_esy_reference_runtime_e2e.py: suite_cleanup_owned()",
+        "problem": "Unresolved. Cleanup queries are interpreted without checking truncation. A successful name listing can omit the target beyond MAX_LOG and falsely establish absence.",
+        "required_change": "Reject truncated cleanup-query output before parsing or asserting absence, using total and retained byte counts.",
+        "required_e2e": [
+          "An oversized successful listing with the target beyond the retained prefix remains unverified.",
+          "Complete output permits valid absence verification."
+        ]
+      },
+      {
+        "id": "C17-06",
+        "severity": "high",
+        "location": "run_esy_reference.py: run() deadline/report handling; tests/test_esy_reference_runtime_e2e.py: run_case()",
+        "problem": "Unresolved under the corrected container-deadline requirement. Container lifetime depends on the runner continuing to make progress; the suite allows timeout plus 30 seconds before intervention. The lifetime check also precedes report publication and cannot substantiate a reporting-inclusive lifetime claim.",
+        "required_change": "Define container boundary events and independently enforce the hard container deadline. Label host preflight and publication separately; those phases need not fit the container budget. Include publication completion in any reporting-inclusive measurement.",
+        "required_e2e": [
+          "A stalled runner cannot extend container lifetime beyond the bound.",
+          "Slow preflight and blocked report writes/fsync do not extend container lifetime.",
+          "Recorded timing boundaries match the intervals claimed."
+        ]
+      },
+      {
+        "id": "C17-07",
+        "severity": "medium",
+        "location": "run_esy_reference.py: bounded_process().stop_group()",
+        "problem": "Unresolved. The deadline can expire between the while-condition clock read and the clock read inside time.sleep(min(...)), producing a negative sleep and ValueError.",
+        "required_change": "Compute remaining time once per iteration, stop when nonpositive, and pass only a nonnegative duration to sleep.",
+        "required_e2e": [
+          "A controlled deadline crossing produces the intended cleanup result without negative sleep or ValueError."
+        ]
+      },
+      {
+        "id": "N6-01",
+        "severity": "medium",
+        "location": "run_esy_reference.py: cache_inventory_equal(), NODE.cacheInventoryEqual(), capture_expectations()",
+        "problem": "The mtime exception is broader than the supplied seed-root-only requirement. In particular, capture compares base installation against derivative installation, and base node cache against derivative node cache, after dropping both original roots' mtimes. Neither side of those comparisons is a copied seed root.",
+        "required_change": "Apply the exception specifically to comparisons involving copied seed roots and their restored cache roots. Preserve exact original base-versus-derivative installation/cache comparisons. Continue retaining all root metadata in diagnostics and checking every non-exempt field.",
+        "required_e2e": [
+          "Only copied seed-root mtime differences are tolerated.",
+          "An original derivative installation/cache root mtime change is rejected.",
+          "Nested mtime, content, ownership, mode, missing-entry, and extra-entry changes are rejected."
+        ]
+      },
+      {
+        "id": "N6-02",
+        "severity": "high",
+        "location": "run_esy_reference.py: capture_expectations() final inventory predicate",
+        "problem": "Newly identified: capture never compares the derivative seed inventories with the base inventories. It compares bi.installation with bi.seed and bi.node_cache with bi.node_seed, but capture-base assigns those pairs the same inventories. These checks are tautologies. A derivative with corrupted seed contents can receive a PASSED capture receipt, although a later ordinary run may reject it.",
+        "required_change": "Compare base installation against di.seed and base node cache against di.node_seed, applying only the authorized seed-root mtime exception. Reject invalid derivative seeds during capture.",
+        "required_e2e": [
+          "Valid derivative seeds pass capture.",
+          "Changed seed bytes, modes, ownership, nested mtimes, added entries, and missing entries fail capture before a successful expectations artifact is published."
+        ]
+      },
+      {
+        "id": "N6-03",
+        "severity": "medium",
+        "location": "run_esy_reference.py: run() resource-oom-observed branch; tests/test_esy_reference_runtime_e2e.py: run_case() resource checks",
+        "problem": "Newly identified: the advertised Docker OOM acceptance path is internally unsatisfiable. The runner sets resource-oom-observed without populating report.results. The test accepts that reason, then unconditionally requires results.commands.compile-resource.exit_code == 0, which is absent. A genuine Docker OOM therefore fails this scenario even when OOMKilled is confirmed.",
+        "required_change": "Provide compilation and execution-start evidence that survives container OOM, and make the OOM branch validate that evidence alongside Docker OOM attribution. Preserve the requirement to prove the intended OCaml control compiled and ran.",
+        "required_e2e": [
+          "A real allocation exception satisfies its diagnostic predicate.",
+          "A real Docker OOM satisfies its separate predicate with durable compilation/execution evidence.",
+          "Unrelated SIGKILL and compiler failure cannot satisfy either resource predicate."
+        ]
+      }
+    ],
+    "missing_evidence": [
+      "Static review only: no execution, edits, tests, Docker operations, or delegation occurred. Supplied file and manifest hashes were not independently recomputed.",
+      "The controller remains unaccepted. The full plan and six N4 correction statements were not supplied, so complete acceptance mapping remains unavailable.",
+      "N6 statically accepts Mounts=[] with an exact HostConfig.Tmpfs map, checks the listed confinement fields and exact command, pins canonical installed compiler identity and digest, and sets and validates TMPDIR=/work. Public-runner evidence for these paths is absent; the mtime scope defect prevents scoped N6 acceptance.",
+      "The build receipt and semantic seed diagnostic do not establish successful public capture or runner execution. The two root diagnostic successes explicitly disclaim runner acceptance.",
+      "No complete public-runner evidence was supplied for positive, suite, wrong-result, exact syntax failure, timeout, output overflow, allocation failure, or Docker OOM.",
+      "All seven C17 findings remain open, including their real fault, cleanup, cancellation, deadline, and process-containment evidence requirements.",
+      "Persisted ownership-record crash durability remains unproven: creating owned-invocations does not fsync its parent, and record replacement does not fsync the containing directory.",
+      "Required real inspect failure, daemon-query failure, ownership mismatch, oversized image metadata, and oversized expectations/payload scenarios remain missing.",
+      "Required installation, seed, lock, declared-volume, protected-target, missing-probe, compiler-identity, and source-mutation variants remain missing.",
+      "Required FIFO and escaping-path cases, unrelated syntax diagnostics, independent container lifetime observation, retained-pipe/interruption cases, and build cancellation remain missing.",
+      "Required integrity canaries, startup failure, concurrent same-ID reservation, invalid IDs, and complete report-namespace preservation remain missing.",
+      "Required daemon-log retention and full original/candidate input snapshots remain missing.",
+      "All required orchestration and import E2Es remain required and unevidenced. The supplied fixed runner harness does not establish their coverage.",
+      "MISSING_REAL_CASES explicitly forces failed evidence rows; those declarations acknowledge missing coverage but do not satisfy it. Every scenario in the original plan remains required, including scenarios not enumerated by this harness.",
+      "No further coding allocation remains, and this review grants no execution authorization or runtime acceptance."
+    ]
+  },
+  "finished_at": "2026-10-22T10:36:23.826273+00:00"
+}
+REPOSITORY AND STARTING STATE
+{
+  "status": "BOOTSTRAP",
+  "started_at": "2026-10-22T05:44:19.756553+00:00",
+  "repo": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft",
+  "head": "70de30502cbaf450b2c0621091b82d34583709b2",
+  "git_status": " M README.md\n M config/cards.json\n M config/execution-policy.json\n M config/handoff-progress.json\n M config/sources.json\n M docs/PLAN.md\n M pyproject.toml\n M src/sft/cli.py\n M src/sft/corpus.py\n M src/sft/e2e.py\n M src/sft/handoff.py\n M src/sft/workflow.py\n M tests/e2e/test_control.py\n M tests/e2e/test_handoff.py\n M tests/e2e/test_sources.py\n M uv.lock\n?? config/chunks.json\n?? config/eligibility.json\n?? config/extraction.json\n?? config/model-assets.json\n?? config/models.json\n?? config/split-annotations.json\n?? config/splits.json\n?? scripts/check_ocaml_probe.py\n?? scripts/probe_qwen35.py\n?? scripts/probe_qwen35_adapters.py\n?? src/sft/chunks.py\n?? src/sft/conversion.py\n?? src/sft/eligibility.py\n?? src/sft/extract.py\n?? src/sft/ledger.py\n?? src/sft/model_assets.py\n?? src/sft/models.py\n?? src/sft/splits.py\n?? tests/e2e/test_bonito_conversion.py\n?? tests/e2e/test_chunks.py\n?? tests/e2e/test_eligibility.py\n?? tests/e2e/test_extraction.py\n?? tests/e2e/test_ledger.py\n?? tests/e2e/test_models.py\n?? tests/e2e/test_ocaml_checker.py\n?? tests/e2e/test_qwen35_probe.py\n?? tests/e2e/test_splits.py\n?? tests/e2e/test_tokenizer.py\n",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "max_rounds": 12,
+  "max_active_seconds": 21600,
+  "rounds": 0
+}
+FULL CANDIDATE REVISION SHA256 66624a94ef7b5f3cc7c4e9789d391202e5edc7561bb60f0328a9dab5dbda8d8e
+EVIDENCE INDEX SHA256 0c3760e211a87b9b73162deada609ff692d4dcbb8cfce55dfccb0e176cc93735
+BASELINE MANIFEST {"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/baseline-manifest.json", "bytes": 11524, "sha256": "4dcb93a0d9fd247c3e4df3967ff3bbf772127bae7c92e3ce035d5f93908ad6a8"}
+IMAGE AND COMPILER PROVENANCE
+{
+  "status": "BUILT_NOT_ACCEPTED",
+  "started_epoch": 1792662716.21014,
+  "dockerfile_sha256": "f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f",
+  "builder_environment": {
+    "DOCKER_BUILDKIT": "0"
+  },
+  "base_image": "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+  "derivative_image": "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+  "base_layer_prefix_verified": true,
+  "seed_inventory_verified": false,
+  "finished_epoch": 1792662755.981496
+}
+{
+  "container_id": "6005cef525dcd30e7db8bbe64cb6a808b358526d3676790cd2c27cacba8ffc74",
+  "image": "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+  "command": [
+    "docker",
+    "create",
+    "--name",
+    "esy-hash-probe-6dc36ef88ba236fc422d1a21",
+    "--label",
+    "esy-reference.owner=6dc36ef88ba236fc422d1a21",
+    "--platform",
+    "linux/amd64",
+    "--pull=never",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--pids-limit",
+    "32",
+    "--memory",
+    "256m",
+    "--cpus",
+    "1",
+    "--user",
+    "1000:1000",
+    "--entrypoint",
+    "/home/opam/node/bin/node",
+    "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+    "-e",
+    "const fs=require('fs'),c=require('crypto');const p=fs.realpathSync(process.argv[1]),s=fs.statSync(p);console.log(JSON.stringify({path:p,bytes:s.size,mode:s.mode&511,sha256:c.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}))",
+    "/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"path\":\"/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt\",\"bytes\":22451920,\"mode\":493,\"sha256\":\"361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24\"}\n",
+  "stderr": "",
+  "compiler": {
+    "path": "/home/opam/.esy/4____________________________________________________________________/i/ocaml-5.5.1000-cb879550/bin/ocamlopt.opt",
+    "bytes": 22451920,
+    "mode": 493,
+    "sha256": "361d667103077d597d0e9cfaecaa1db997ceaa03de4b7144ff823e9f77fa4f24"
+  },
+  "cleanup_verified": true
+}
+{
+  "status": "SEMANTIC_SEED_CONTENTS_MATCH",
+  "checks": {
+    "seed_project": true,
+    "seed_cache": true
+  },
+  "excluded_identity_field": "mtime_ms only for top-level seed-root directories; retained in full diagnostics",
+  "full_inventory_artifact": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/seed-inventory-probe-004.json",
+  "full_inventory_sha256": "d0a8c6e8f555af97f41c98ae2c65a38db1c51b1d0e481e9c672d2328cc4f41bb",
+  "planner_decision": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/N5-replan-001/final.txt",
+  "runtime_acceptance": false,
+  "original_inputs_unchanged": true
+}
+DIAGNOSTIC LIMITS
+Two fixed supervisor probes compiled and executed exact stdout in fresh restricted containers, with TMPDIR=/work and verified cleanup. The earlier probe without TMPDIR failed and is preserved. These are NOT public runner E2Es. Build receipt seed_inventory_verified=false reflects build-time status; the later full inventory probe/semantic comparison records separate seed evidence. No runtime esy install or package rebuild occurred.
+
+ORCHESTRATION SCENARIOS
+{
+  "status": "INCOMPLETE",
+  "controller_public_e2e": "FAILED at PLAN_RUNNING replay; see reviews/C01-public-cli-e2e-002/e2e-receipt.json",
+  "scenarios": [
+    {
+      "scenario": "valid coding to E2E to review completion",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "findings to separate frontier plan to fresh coding evidence and review",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "three failed attempts trigger frontier replanning",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "malformed duplicate-key truncated stale empty unsuccessful responses",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "PASS with findings or missing evidence rejected",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "wrong or unavailable model no silent fallback",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "output overflow timeout interruption descendant cleanup",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "concurrent launch live lock explicit resume",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "18 allocated launches and six active hours exhaustion without reset",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "out-of-scope edits symlinks special files oversized changes",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "dirty and untracked starting inputs preserved",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "concurrent destination edit refuses import",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "interrupted multi-file import recovery",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "complete printed handoff through controller",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "real authenticated CLI smoke",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "effective native containment",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "review and test evidence bound to exact revision",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    },
+    {
+      "scenario": "final imported hashes and post-import E2Es and fresh review",
+      "expected": "Complete end-to-end evidence satisfying approved plan",
+      "actual": "NOT_ACCEPTED",
+      "reason": "Controller remains independently rejected. Partial supervised bootstrap evidence does not establish public-controller behavior."
+    }
+  ]
+}
+
+SEPARATE FRONTIER REPAIR CARDS
+{
+  "status": "FUTURE_DEFERRED_UNRESOLVED",
+  "execution_authorized": false,
+  "budget_reset_authorized": false,
+  "final18": {
+    "scope": ["observed base compatibility", "compiler", "TMPDIR"],
+    "reallocation": false,
+    "coding_budget_after18": 0
+  },
+  "path_constraint": {
+    "allowed_scope": "runner/test only",
+    "exact_paths": null,
+    "reason": "Supplied review contains symbols but no filenames; available tools provide no repository file access. Exact paths require handoff completion; none are invented."
+  },
+  "cards": [
+    {
+      "id": "C17-01",
+      "status": "FUTURE",
+      "targets": ["run()", "capture_expectations()", "cleanup_owned()", "ownership recovery tests"],
+      "repair": "Separate raw create output from validated, ownership-corroborated cid. Until corroboration, recover using persisted name and owner; absence of an untrusted ID cannot establish invocation cleanup.",
+      "required_evidence": [
+        "Malformed nonempty create response leaves a real named container: cleanup recovers and removes only the owned container.",
+        "Create completes after client cancellation: bounded recovery accounts for late creation before asserting cleanup.",
+        "Owner mismatch prevents removal and prevents an unsupported cleanup-success claim."
+      ]
+    },
+    {
+      "id": "C17-02",
+      "status": "FUTURE",
+      "targets": ["run_case()", "supervisor()", "suite cleanup tests"],
+      "repair": "Run independent owned-container cleanup in a finally path around supervision. Preserve supervision failure and cleanup outcome separately, including log-write failures and repeated interruption.",
+      "required_evidence": [
+        "Inject supervisor exception, log-write failure, and repeated interruption after container creation.",
+        "Each scenario attempts bounded independent cleanup and retains both failure and cleanup evidence."
+      ]
+    },
+    {
+      "id": "C17-03",
+      "status": "FUTURE",
+      "targets": ["runner cancellation", "Docker client session lifecycle", "suite cancellation tests"],
+      "repair": "Route SIGTERM through bounded runner cancellation. Provide independent containment or identity-checked recovery and termination verification for separately sessioned Docker client groups after forced runner termination.",
+      "required_evidence": [
+        "Cancel while separately sessioned Docker clients remain alive.",
+        "Exercise cooperative SIGTERM and forced runner termination; independently verify container absence and client-group termination.",
+        "Verify recovery cannot signal an unrelated reused process identity."
+      ]
+    },
+    {
+      "id": "C17-04",
+      "status": "FUTURE",
+      "targets": ["run() termination/finally cleanup", "cleanup evidence tests"],
+      "repair": "Retain successful verified-absence evidence for the invocation. Skip redundant removal after verification; retry only when absence remains unverified.",
+      "required_evidence": [
+        "Early cleanup verifies absence, then removal deadline expires before finally: successful evidence remains unchanged.",
+        "Unverified cleanup remains eligible for a bounded retry."
+      ]
+    },
+    {
+      "id": "C17-05",
+      "status": "FUTURE",
+      "targets": ["suite_cleanup_owned()", "supervisor output metadata", "cleanup query tests"],
+      "repair": "Check total versus retained byte counts for every cleanup query before parsing. Truncated output must not establish absence.",
+      "required_evidence": [
+        "Successful name listing exceeds MAX_LOG with the target beyond the retained prefix: result remains unverified.",
+        "Complete output still permits valid absence verification."
+      ]
+    },
+    {
+      "id": "C17-06",
+      "status": "FUTURE",
+      "targets": ["run() deadline/report fields", "suite supervision", "deadline boundary tests"],
+      "repair": "Define and independently enforce the user's hard 120-second CONTAINER deadline with explicit boundary events. Label host preflight and report-publication timing separately. The suite's additional 30 seconds must not extend the container deadline. Remove misleading end-to-end lifetime claims; any retained reporting-inclusive measurement must include publication completion.",
+      "required_evidence": [
+        "Slow image inspection and blocked report write/fsync do not extend container lifetime beyond its deadline.",
+        "Independent supervision handles a stalled runner at the container deadline.",
+        "Report labels and measured intervals agree; host preflight/publication exceeding 120 seconds alone is not classified as violating the user's container bound."
+      ]
+    },
+    {
+      "id": "C17-07",
+      "status": "FUTURE",
+      "targets": ["bounded_process.stop_group()", "deadline race tests"],
+      "repair": "Compute remaining time once per loop iteration; exit when nonpositive and sleep only for a nonnegative bounded duration.",
+      "required_evidence": [
+        "Controlled clock crosses the deadline between iterations: no negative sleep or ValueError, and cleanup returns its intended result."
+      ]
+    }
+  ],
+  "evidence_limits": {
+    "all_seven": "Unresolved; required fault evidence above is prospective.",
+    "N4": "Six correction statements unavailable; individual acceptance mapping remains incomplete.",
+    "hashes": "Supplied SHA256 values not independently verified.",
+    "record_durability": "Unproven: owned-invocations creation lacks parent fsync; record replacement lacks containing-directory fsync. Carry as a separate runner/test durability evidence gap.",
+    "root_diagnostic": "Reported twice successful OCaml compilation in read-only, offline, ephemeral caches with TMPDIR work. This does not establish public-runner acceptance.",
+    "runtime_approval": false,
+    "actions_this_turn": "Tool/resource discovery only; no code execution, edits, tests, or delegation."
+  }
+}
+NEW FINDINGS TARGETED PLAN
+{
+  "status": "FUTURE_NOT_AUTHORIZED",
+  "revision_sha256": "f24d114d29196278067e87cdf921c0317fcc0e74e0b03725d0215cba246ea8dc",
+  "cards": [
+    {
+      "id": "N6-01",
+      "finding_ids": ["N6-01"],
+      "inputs": [
+        "Supplied N6-01 finding at the stated revision.",
+        "Existing Python and embedded Node inventory comparison logic, capture flow, and runtime E2E harness."
+      ],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": [
+        "Future Luna implementation requires separate explicit authorization; coding allocation remains exhausted at 18/18. This card authorizes no launch or budget reset.",
+        "Verify the supplied revision and inspect existing confinement and identity requirements before editing.",
+        "Implement the PROPOSED optional --scenario interface in the existing E2E CLI, initially supporting n6-01 and preserving existing --image, --expectations, --output-dir behavior. The proposed interface must exist before its command can be invoked.",
+        "Fresh Astra review must approve the implementation, concrete immutable disposable image identities, fixture construction, and fixed E2E commands before any host execution. Execute only those approved E2Es, then obtain fresh Astra evidence review."
+      ],
+      "exact_behavior": [
+        "Make root-mtime exemption explicit and specific to inventory comparisons involving a copied seed root or its restored cache root. Select eligibility from verified comparison roles and existing exact root identities; do not infer it merely from a root entry or matching contents.",
+        "Keep original base-versus-derivative installation and original node-cache comparisons exact, including root mtimes.",
+        "For eligible comparisons, ignore only the authorized root mtime field. Compare root ownership, mode, type, and every other non-exempt field exactly; compare all nested entries and metadata exactly.",
+        "Apply identical semantics in Python and embedded Node. Preserve complete root metadata in inventories, diagnostics, and evidence.",
+        "Implement n6-01 as an E2E matrix using real disposable Docker images and containers through actual capture and restore/run flows. Use independent fixture variants for seed-root-only and restored-root-only mtime changes, original derivative installation and node-cache root mtime changes, nested mtimes, content, ownership, mode, missing entries, and extra entries.",
+        "Prove each mutation occurred before evaluating its outcome. Preserve existing confinement, exact image/container/root identities, execution identity, and cleanup rules; do not broaden mounts, privileges, or accepted roots."
+      ],
+      "e2e_command": {
+        "status": "PROPOSED_NOT_EXECUTABLE_UNTIL_IMPLEMENTED_AND_REVIEWED",
+        "template": "python3 artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --image <reviewed-immutable-disposable-image> --expectations <reviewed-expectations-path> --output-dir <reviewed-confined-evidence-directory> --scenario n6-01",
+        "execution_rule": "Replace placeholders with concrete reviewed values and freeze the command before host execution. No automatic execution of model-generated commands."
+      },
+      "expected_outcomes": [
+        "Valid unchanged fixtures pass.",
+        "Authorized copied-seed/restored-root mtime-only differences pass.",
+        "Original derivative installation and node-cache root mtime changes fail.",
+        "Every nested-mtime, content, ownership, mode, missing-entry, extra-entry, and non-exempt root-metadata mutation fails.",
+        "Mocked inventories or simulated Docker outcomes do not count as acceptance."
+      ],
+      "evidence_outputs": [
+        "Complete before/after inventories with root metadata retained, fixture mutation proofs, and comparison diagnostics.",
+        "Actual image IDs, container IDs, execution identities, capture/run receipts, exit statuses, and per-case assertions.",
+        "Fixed executed command, implementation diff, and fresh Astra pre-execution and post-E2E review records."
+      ]
+    },
+    {
+      "id": "N6-02",
+      "finding_ids": ["N6-02"],
+      "inputs": [
+        "Supplied N6-02 finding at the stated revision.",
+        "N6-01 scoped comparison semantics and proposed E2E scenario interface."
+      ],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": [
+        "Future Luna implementation requires separate explicit authorization; 18/18 remains exhausted, with no launch authorization or budget reset.",
+        "N6-01 comparison semantics and --scenario interface must be implemented and reviewed before this dependent implementation is accepted.",
+        "Implement the PROPOSED n6-02 scenario value and its real-container fixture matrix before invoking its command.",
+        "Fresh Astra review must approve the implementation and concrete fixed E2E commands before host execution; fresh Astra evidence review must follow the E2Es."
+      ],
+      "exact_behavior": [
+        "Replace the tautological seed-integrity comparisons in capture's final predicate with base installation versus di.seed and base node cache versus di.node_seed.",
+        "Apply only N6-01's authorized seed-root mtime exemption to those seed comparisons. Retain exact original base-versus-derivative installation/cache checks and all unrelated capture requirements.",
+        "Fail capture when either derivative seed is invalid, before publishing a successful expectations artifact or PASSED capture receipt. Failure diagnostics must retain the compared inventories.",
+        "Implement n6-02 using real disposable derivative images whose original installation and cache remain valid while one seed is independently mutated. Exercise both installation seeds and node-cache seeds.",
+        "Cover changed bytes, modes, ownership, nested mtimes, added entries, and missing entries independently. Include an unchanged valid derivative and a seed-root-mtime-only positive control.",
+        "Use isolated output locations within existing confinement to prove failed captures publish no successful expectations artifact. Preserve exact identities and existing execution and cleanup constraints."
+      ],
+      "e2e_command": {
+        "status": "PROPOSED_NOT_EXECUTABLE_UNTIL_IMPLEMENTED_AND_REVIEWED",
+        "template": "python3 artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --image <reviewed-immutable-disposable-image> --expectations <reviewed-expectations-path> --output-dir <reviewed-confined-evidence-directory> --scenario n6-02",
+        "execution_rule": "The scenario must exercise actual capture, including failed publication checks. Freeze concrete arguments during fresh Astra review; do not automatically execute model-generated commands."
+      },
+      "expected_outcomes": [
+        "Valid derivative seeds pass capture and produce successful expectations.",
+        "Seed-root-mtime-only differences pass under the scoped exemption.",
+        "Every listed corruption in either derivative seed fails capture before successful expectations publication.",
+        "Real capture results establish acceptance; mocks and rejection only during a later ordinary run are insufficient."
+      ],
+      "evidence_outputs": [
+        "Base and derivative original/seed inventories, exact fixture identities, and mutation proofs.",
+        "Capture receipts, diagnostics, exit statuses, and output-directory observations demonstrating publication or its absence.",
+        "Per-case assertions, fixed executed command, implementation diff, and fresh Astra review records."
+      ]
+    },
+    {
+      "id": "N6-03",
+      "finding_ids": ["N6-03"],
+      "inputs": [
+        "Supplied N6-03 finding at the stated revision.",
+        "Existing resource-control compilation, execution, Docker inspection, reporting, and E2E assertions.",
+        "N6-01 proposed E2E scenario interface."
+      ],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": [
+        "Future Luna implementation requires separate explicit authorization; 18/18 remains exhausted, with no launch authorization or budget reset.",
+        "The proposed --scenario interface must be implemented. Implement its PROPOSED n6-03 value before invoking this command.",
+        "Establish a durable evidence channel inside the existing permitted evidence confinement. If existing confinement cannot support it, stop and report the blocker rather than expanding access.",
+        "Fresh Astra review must approve the evidence protocol, bounded real resource fixtures, and concrete fixed E2E commands before host execution. Fresh Astra evidence review must follow execution."
+      ],
+      "exact_behavior": [
+        "Persist compilation evidence immediately after the intended OCaml resource control actually compiles successfully. Record compiler command, exit status, source/executable identity, and a fresh run identifier.",
+        "Have the intended OCaml executable itself emit and flush a durable execution-start record before allocation pressure. A wrapper's intention to launch is insufficient. Bind both records to the same run, executable, and exact container identity; reject missing, stale, malformed, or mismatched evidence.",
+        "Keep these records accessible after container OOM and read them before cleanup. Populate report evidence consistently so the OOM branch no longer depends on an absent in-container results object.",
+        "Give allocation-exception and Docker-OOM outcomes separate predicates. Allocation-exception acceptance requires successful compilation, execution-start evidence, the actual expected allocation diagnostic, and absence of Docker OOM attribution. Docker-OOM acceptance requires successful compilation, execution-start evidence, and Docker inspection confirming OOMKilled for the exact tested container.",
+        "Reject exit-code-only or SIGKILL-only inference. Compiler failure and unrelated SIGKILL must satisfy neither predicate.",
+        "Implement n6-03 with real disposable Docker containers: a real OCaml allocation exception, a real cgroup-limited Docker OOM, an externally induced unrelated SIGKILL with OOMKilled false, and an actual compiler failure. Verify each fixture reached its intended condition; an unobserved OOM cannot pass or silently skip.",
+        "Preserve existing confinement, execution identity, exact resource/container associations, and cleanup rules. Limit changes to resource evidence, predicates, and their E2E coverage."
+      ],
+      "e2e_command": {
+        "status": "PROPOSED_NOT_EXECUTABLE_UNTIL_IMPLEMENTED_AND_REVIEWED",
+        "template": "python3 artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --image <reviewed-immutable-disposable-image> --expectations <reviewed-expectations-path> --output-dir <reviewed-confined-evidence-directory> --scenario n6-03",
+        "execution_rule": "Freeze concrete image identity, bounded resource settings, fixture actions, and command during fresh Astra review. No automatic execution of model-generated commands."
+      },
+      "expected_outcomes": [
+        "A real allocation exception passes only its diagnostic predicate with compilation and execution-start evidence.",
+        "A real Docker OOM passes only its Docker-attributed predicate with durable compilation and execution-start evidence.",
+        "Unrelated SIGKILL and compiler failure fail both predicates.",
+        "Missing or mismatched durable evidence prevents acceptance even when Docker reports OOMKilled.",
+        "Mocks, fabricated Docker state, and fabricated control evidence do not count as acceptance."
+      ],
+      "evidence_outputs": [
+        "Durable compile and OCaml execution-start records, executable identity, run identifier, and exact container association.",
+        "Docker inspection captured before cleanup, actual resource settings, process statuses, allocation diagnostics, and negative-control logs.",
+        "Runner reports, separate predicate assertions, fixed executed command, implementation diff, and fresh Astra review records."
+      ]
+    }
+  ],
+  "blockers": [
+    "Coding allocation is exhausted at 18/18. These three future Luna cards authorize no implementation, launches, host execution, or budget reset.",
+    "This plan uses only supplied findings. No tools, execution, delegation, or independent verification of the revision occurred.",
+    "The current CLI supports --image, --expectations, and --output-dir. Every --scenario invocation above is PROPOSED and unusable until its prerequisite implementation and review are complete.",
+    "Concrete disposable image identities, expectations paths, evidence directories, and fixture settings must be verified and fixed during fresh Astra review before host execution.",
+    "Required sequence: separately authorized implementation, fresh Astra review before host execution, fixed real-image/container E2Es, then fresh Astra evidence review. No imports before full acceptance.",
+    "The existing seven C17 findings and controller findings remain deferred and unresolved; these cards neither replan nor close them."
+  ]
+}
+BROAD PLANNING ATTEMPT FAILED: TIMEOUT. Preserved jobs/N6-final-plan-001; no completed plan inferred.
+
+FULL REQUIRED SCENARIO RESULTS
+{
+  "status": "INCOMPLETE",
+  "real_esy_acceptance_executed": false,
+  "required_scenarios": [
+    {
+      "scenario": "valid-source",
+      "expected": "compile and execution succeed with exact stdout",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-result",
+      "expected": "compiles then expected assertion failure",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "syntax-error",
+      "expected": "normal compiler failure with exact syntax diagnostic",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "writable-caches",
+      "expected": "both disposable cache writes succeed",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "readonly-dependencies",
+      "expected": "existing package/lock/compiler writes denied",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "missing-installation",
+      "expected": "explicit failure before candidate; no install",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "corrupt-missing-seed",
+      "expected": "explicit seed integrity gate",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "wrong-image-package-lock-compiler",
+      "expected": "identity failure before candidate",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "added-missing-lockfile",
+      "expected": "complete inventory mismatch",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "two-independent-runs",
+      "expected": "fresh containers/state both succeed",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "timeout",
+      "expected": "failure, deadline measured, owned container removed",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "output-overflow",
+      "expected": "bounded explicit overflow failure",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "resource-exhaustion",
+      "expected": "allocation/OOM evidence and cleanup",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "startup-failure",
+      "expected": "infrastructure failure not fixture success",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "invalid-duplicate-run-id",
+      "expected": "reject without report overwrite",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "concurrent-runs",
+      "expected": "unique owned containers and receipts",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    },
+    {
+      "scenario": "post-execution-integrity",
+      "expected": "immutable inventories unchanged",
+      "actual": "NOT_RUN_THROUGH_PUBLIC_RUNNER",
+      "reason": "Seeded image built and fixed diagnostic passed twice; public runner remains unaccepted with lifecycle findings.",
+      "report_sha256": null
+    }
+  ],
+  "additional_explicit_missing_test_implementations": {
+    "R2-inspect-failure": "No safe daemon fault injector is available for a real inspect failure.",
+    "R2-daemon-query-failure": "No safe daemon fault injector is available for a real daemon-query failure.",
+    "R2-ownership-mismatch": "A foreign-container ownership mismatch cannot be induced without risking unrelated daemon state.",
+    "R4-filesystem-variants": "Owned installation, seed, lock, and declared-volume variants are not safely constructible in this fixed runner-only E2E.",
+    "R8-oversized-image-metadata": "A safely owned oversized image-metadata fixture is not available.",
+    "R8-filesystem-mutation-matrix": "Added/missing locks, changed seed metadata, missing probes, and writable protected targets are not safely generated as owned image variants.",
+    "R10-oversized-expectations-and-payloads": "Oversized manifest/payload rejection is bounded in code but has no separately owned real-Docker evidence case.",
+    "R11-source-mutation": "Concurrent source mutation cannot be induced safely while preserving the reviewed input snapshot.",
+    "E2E-08-fifo-and-escaping-paths": "FIFO reports, symlink escapes, and external report destinations are not safely fault-induced by this runner interface.",
+    "E2E-11-unrelated-syntax-diagnostic": "The exact syntax control is checked, but an unrelated compiler error mentioning syntax.ml is not independently induced.",
+    "E2E-12-independent-container-lifetime": "The runner enforces a deadline, but this harness has no independent daemon-side container lifetime observer.",
+    "E2E-05-retained-pipe-and-interruption": "The runner supervisor cannot be independently interrupted without an external owned-process harness.",
+    "E2E-07-build-cancellation": "This E2E does not build images; daemon-side build cancellation cannot be proven here.",
+    "E2E-13-integrity-canaries": "The runner does not expose fixed execution canaries for every integrity gate.",
+    "E2E-14-startup-failure": "No owned missing-entrypoint image variant is supplied by the fixed three-argument interface.",
+    "E2E-16-concurrent-same-id": "Concurrent same-ID reservation is not exercised by this bounded serial driver.",
+    "E2E-17-report-namespace": "Invalid-ID and complete namespace preservation controls are not exposed by the runner contract.",
+    "E2E-18-daemon-log-retention": "Build, remove, and absence-query daemon logs are not persisted as separate evidence artifacts by the runner.",
+    "E2E-19-full-input-snapshot": "Reviewed runner, Dockerfile, fixture, and E2E hashes are checked; a full original/candidate tree snapshot is not part of this fixed harness.",
+    "E2E-20-complete-fault-matrix": "The unavailable daemon faults and filesystem variants listed above have explicit missing rows, but full twenty-finding coverage is not evidenced."
+  },
+  "test_source_sha256": "08f55a4acdeba1a15024d358ac3fcc7c43a119f3afefe8346b96d7e22c931327",
+  "missing_case_reason_qualification": "Reasons were statically extracted from worker code. They identify unimplemented coverage; they are not proof that safe tests are impossible.",
+  "separate_diagnostics": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-001/receipt.json",
+      "bytes": 523,
+      "sha256": "9d501b1a47edfe84b6547cf7e159911aae1198b2b47692405fbb63e97aa49054"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-002/receipt.json",
+      "bytes": 556,
+      "sha256": "7b6b71e36d022c586538de6d50cb266a2b556ab869a4470f657fb5a4a284c135"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-003/receipt.json",
+      "bytes": 556,
+      "sha256": "ebb7050c9190a86f24ff0515ec7682e7ff08c2c3e62d15b520475dd59bb52c4f"
+    }
+  ]
+}
+IMPLEMENTATION SOURCE/DIFF PARTS
+[
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-002.txt",
+    "bytes": 1792,
+    "sha256": "4548a2162ebf85d1ef0bff690d1b0fe29dfe0ec9119f45bc396da7dc82d419f3"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-020.txt",
+    "bytes": 115121,
+    "sha256": "e947115d635599328b3ee9a13c5ff58203c8cb0433aae01b148df317ba17a3c8"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-021.txt",
+    "bytes": 66059,
+    "sha256": "e93eb56bb0c3f3d8583c714dbda4297d52cbc09813e9294a14bd90ec4a58423b"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-037.txt",
+    "bytes": 1727,
+    "sha256": "d163f96ea4132ec477b669305ea9c510e3b464c267cd04ebfd32d9906510ac52"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-038.txt",
+    "bytes": 3219,
+    "sha256": "28c681888fcddee74778cc426ac030313ddee479412995304d98f7d403fe76c2"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-039.txt",
+    "bytes": 171131,
+    "sha256": "5a24a600b766b340d1ad1f8311a0e4309dbaf57c9d005b49d09602894b5ec470"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-040.txt",
+    "bytes": 1387,
+    "sha256": "28e7efe632b67bbfdd08d53f957b861a7c54d40d02ec9fa9b18c5b2185e65fe0"
+  },
+  {
+    "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/source-067.txt",
+    "bytes": 47393,
+    "sha256": "a4e200689e7e6ef403d7385e05a53a6bba4088db1c52c1d41850832ffdc8810e"
+  }
+]
+REVIEW HISTORY
+{"path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-004/review-history.txt", "bytes": 333168, "sha256": "57ebd43b867c6152fcfe9ab9b9f8e5607a951c155f3eed10a364eae58b6896b0"}
+ARTIFACT INDEX
+/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/artifact-index-004.json
+RESUME
+Read allocation-004, budget-014, RESULT-004 and latest Astra future cards. Retain18 consumed launches and recorded active time; do not reset budgets. Reconcile source identities and owned processes/containers before any continuation. Controller is not accepted: do not activate unattended operation. Never infer authorization from a model file. No import occurred; compare original manifests before any future guarded import.
+
+REVIEW INSTRUCTIONS
+1. Check every approved requirement, full source, exact diff, revision and evidence identity.
+2. Inspect actual raw artifacts; verify all index hashes. Check missing scenarios, false positives, unsafe cleanup and overwritten user edits.
+3. Review orchestration and import as well as runtime. Explicit MISSING rows are not test passes. Fault-test difficulty is not evidence of impossibility.
+4. Read the separate Astra future plan. Any remaining findings require fresh separate Astra planning into bounded small coding cards with inputs, allowed paths, prerequisites, exact behavior, real E2E commands/outcomes and evidence. Planning does not authorize exceeding coding allocation.
+5. Return PASS only with zero findings and zero missing evidence. If context is insufficient, return BLOCKED with missing context. Never waive gates because limits are reached.
+RETURN STRICT JSON
+{"revision_sha256":"reviewed full candidate hash","evidence_sha256":"reviewed evidence index hash","verdict":"PASS | CHANGES_REQUIRED | BLOCKED","findings":[{"id":"stable ID","severity":"severity","location":"file/scenario","problem":"concrete defect","required_change":"required behavior","required_e2e":"observable acceptance"}],"missing_evidence":[]}

@@ -1,0 +1,41 @@
+Fresh separate Astra planner. Read-only, no execution/tools/delegation. Return concise strict JSON (under3000 words): status FUTURE_NOT_AUTHORIZED, revision_sha256, cards, blockers. Exactly3 small future Luna cards for N6-01,N6-02,N6-03 below. Every card fields: id, finding_ids, inputs, allowed_paths, prerequisites, exact_behavior, e2e_command, expected_outcomes,evidence_outputs. Coding allocation18/18 exhausted; do not authorize launches. No budget reset. Existing seven C17 and controller findings remain deferred and unresolved. Allowed paths only artifacts/planning/esy-reference-proposal-001/run_esy_reference.py and artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py. E2E only. Current test CLI has --image --expectations --output-dir; any new scenario interface is PROPOSED and must explicitly be implemented within its prerequisite/card before invocation. No automatic execution of model commands. Fresh Astra review before host execution, then fixed E2Es, then fresh Astra evidence review. No imports before full acceptance. Preserve exact confinement/identities. Explain tests against real disposable images and containers, not mocks as acceptance. Need not replan earlier findings.
+{
+  "revision_sha256": "f24d114d29196278067e87cdf921c0317fcc0e74e0b03725d0215cba246ea8dc",
+  "findings": [
+    {
+      "id": "N6-01",
+      "severity": "medium",
+      "location": "run_esy_reference.py: cache_inventory_equal(), NODE.cacheInventoryEqual(), capture_expectations()",
+      "problem": "The mtime exception is broader than the supplied seed-root-only requirement. In particular, capture compares base installation against derivative installation, and base node cache against derivative node cache, after dropping both original roots' mtimes. Neither side of those comparisons is a copied seed root.",
+      "required_change": "Apply the exception specifically to comparisons involving copied seed roots and their restored cache roots. Preserve exact original base-versus-derivative installation/cache comparisons. Continue retaining all root metadata in diagnostics and checking every non-exempt field.",
+      "required_e2e": [
+        "Only copied seed-root mtime differences are tolerated.",
+        "An original derivative installation/cache root mtime change is rejected.",
+        "Nested mtime, content, ownership, mode, missing-entry, and extra-entry changes are rejected."
+      ]
+    },
+    {
+      "id": "N6-02",
+      "severity": "high",
+      "location": "run_esy_reference.py: capture_expectations() final inventory predicate",
+      "problem": "Newly identified: capture never compares the derivative seed inventories with the base inventories. It compares bi.installation with bi.seed and bi.node_cache with bi.node_seed, but capture-base assigns those pairs the same inventories. These checks are tautologies. A derivative with corrupted seed contents can receive a PASSED capture receipt, although a later ordinary run may reject it.",
+      "required_change": "Compare base installation against di.seed and base node cache against di.node_seed, applying only the authorized seed-root mtime exception. Reject invalid derivative seeds during capture.",
+      "required_e2e": [
+        "Valid derivative seeds pass capture.",
+        "Changed seed bytes, modes, ownership, nested mtimes, added entries, and missing entries fail capture before a successful expectations artifact is published."
+      ]
+    },
+    {
+      "id": "N6-03",
+      "severity": "medium",
+      "location": "run_esy_reference.py: run() resource-oom-observed branch; tests/test_esy_reference_runtime_e2e.py: run_case() resource checks",
+      "problem": "Newly identified: the advertised Docker OOM acceptance path is internally unsatisfiable. The runner sets resource-oom-observed without populating report.results. The test accepts that reason, then unconditionally requires results.commands.compile-resource.exit_code == 0, which is absent. A genuine Docker OOM therefore fails this scenario even when OOMKilled is confirmed.",
+      "required_change": "Provide compilation and execution-start evidence that survives container OOM, and make the OOM branch validate that evidence alongside Docker OOM attribution. Preserve the requirement to prove the intended OCaml control compiled and ran.",
+      "required_e2e": [
+        "A real allocation exception satisfies its diagnostic predicate.",
+        "A real Docker OOM satisfies its separate predicate with durable compilation/execution evidence.",
+        "Unrelated SIGKILL and compiler failure cannot satisfy either resource predicate."
+      ]
+    }
+  ]
+}

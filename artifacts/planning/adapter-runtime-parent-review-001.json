@@ -1,0 +1,31 @@
+{
+  "status": "SOURCE_REVIEW",
+  "scope": "Pinned runtime source inspection only; actual gradient and reload proof pending",
+  "source_sha256": {
+    "tuner/utils.py": "f59f3c027176a3975fe60e7fbd9f3f38723c27c3f888cf9e591c103f93f68588",
+    "tuner/lora.py": "4d3a8edab111d4ddba33398ba8700203db7b61621c39e9c348fdd50e57278b45",
+    "tuner/trainer.py": "0b6027fdb11803e951ceee52c83a81f82daa922ea8c6b7ca6888953461064e8e",
+    "models/qwen3_5.py": "851449fd9989d6bf4b3c4fed92ddc3be5f1e781eb2246f89c54d7eff2518d9c6"
+  },
+  "findings": [
+    {
+      "id": "adapter-incomplete-reload",
+      "source": "tuner/utils.py:150",
+      "observation": "load_adapters checks each supplied weight against allowed names and shapes, then load_weights(strict=False); it does not check expected adapter names minus supplied names.",
+      "required_probe_behavior": "Require exact expected 48 adapter tensor names, shapes and finite values before load; missing tensor must be rejected.",
+      "production_requirement": "Final training/export loader must fail closed on incomplete adapter checkpoints."
+    },
+    {
+      "id": "gradient-path",
+      "source": "models/qwen3_5.py:193",
+      "observation": "gated_delta_update receives use_kernel=not self.training; actual gradient probe must enable model.train().",
+      "limitation": "Source branch support is not executed gradient proof."
+    },
+    {
+      "id": "adapter-precision",
+      "source": "tuner/lora.py:101",
+      "observation": "LoRA arrays use default mx floating dtype at creation; record actual runtime dtype separately from BF16 base precision.",
+      "limitation": "Do not claim all parameters BF16 from base model precision."
+    }
+  ]
+}

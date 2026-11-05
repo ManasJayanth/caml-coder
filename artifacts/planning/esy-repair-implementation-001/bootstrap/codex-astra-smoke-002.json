@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/bin/bash",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/codex-worker.sh",
+    "review",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/work",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/prompt.txt",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/review-002.sb"
+  ],
+  "requested_model": "gpt-6-astra",
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 7.015,
+  "logs": {
+    "stdout": {
+      "bytes": 362,
+      "sha256": "72df6e61d86b844f49f70775546f1de21d5103c97277f210662dc0e12399d248"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "status": "PASSED"
+}

@@ -1,0 +1,58 @@
+{
+  "argv": [
+    "docker",
+    "create",
+    "--name",
+    "esy-compile-probe-8baa774b8712d7badb98031e",
+    "--label",
+    "esy-reference.owner=8baa774b8712d7badb98031e",
+    "--platform",
+    "linux/amd64",
+    "--pull=never",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--pids-limit",
+    "128",
+    "--memory",
+    "2g",
+    "--cpus",
+    "2",
+    "--user",
+    "1000:1000",
+    "--workdir",
+    "/home/opam/esy-reference",
+    "--entrypoint",
+    "/usr/bin/timeout",
+    "--tmpfs",
+    "/work:rw,nosuid,nodev,exec,size=128m,uid=1000,gid=1000,mode=700",
+    "--tmpfs",
+    "/home/opam/esy-reference/_esy:rw,nosuid,nodev,exec,size=32m,uid=1000,gid=1000,mode=700",
+    "--tmpfs",
+    "/home/opam/esy-reference/node_modules/.cache:rw,nosuid,nodev,exec,size=32m,uid=1000,gid=1000,mode=700",
+    "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+    "--signal=KILL",
+    "30",
+    "/bin/sh",
+    "-c",
+    "set -eu\ncp -a /home/opam/esy-cache-seed/_esy/. /home/opam/esy-reference/_esy/\ncp -a /home/opam/esy-cache-seed/node-cache/. /home/opam/esy-reference/node_modules/.cache/\nprintf '%s\\n' 'let () = print_endline \"esy-cache-probe:passed\"' > /work/main.ml\n/home/opam/esy/bin/esy ocamlopt -o /work/main.exe /work/main.ml\n/work/main.exe\n"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "logs": {
+    "stdout": {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-001/create.stdout",
+      "bytes": 65,
+      "sha256": "ce3ffef51d54c50bc82224a89ac20d79cc9a1f1af2f6a0c356bb9fecd74d9f48"
+    },
+    "stderr": {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/probes/seed-compile-001/create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

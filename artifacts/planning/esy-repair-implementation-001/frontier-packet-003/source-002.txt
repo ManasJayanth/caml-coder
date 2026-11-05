@@ -1,0 +1,30 @@
+FILE artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime
+MANIFEST {"path": "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime", "mode": 420, "bytes": 571, "sha256": "42418048ae6e5057c4890d7d536d26878b1dd5946b3f482dd48c744f2fa64c11"}
+COMPLETE FINAL SOURCE
+FROM ocaml-sft-esy-project-probe:001 AS installed
+
+FROM ocaml-sft-esy-project-probe:001
+USER 1000:1000
+ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
+WORKDIR /home/opam/esy-reference
+
+# Preserve the already installed esy state and Node cache as immutable seed
+# payloads. The runner copies these into bounded writable tmpfs mounts at start.
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache
+
+EXACT DIFF
+--- baseline/artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime
++++ candidate/artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime
+@@ -0,0 +1,11 @@
++FROM ocaml-sft-esy-project-probe:001 AS installed
++
++FROM ocaml-sft-esy-project-probe:001
++USER 1000:1000
++ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
++WORKDIR /home/opam/esy-reference
++
++# Preserve the already installed esy state and Node cache as immutable seed
++# payloads. The runner copies these into bounded writable tmpfs mounts at start.
++COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
++COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache

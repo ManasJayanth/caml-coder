@@ -1,0 +1,41 @@
+--- a/scripts/check_ocaml_probe.py
++++ b/scripts/check_ocaml_probe.py
+@@ -114,7 +114,7 @@
+ set -e
+ printf 'SFT_CANDIDATE_STATUS:%s\\n' "$candidate_status"
+ cat candidate.stdout candidate.stderr
+-""" + f"printf '%s\\n' '{marker}'\n" + """test "$candidate_status" -eq 0
++""" + """test "$candidate_status" -eq 0
+ """
+ 
+ 
+@@ -192,7 +192,7 @@
+     result_path = args.result.resolve()
+     report_path = result_path.parent / "ocaml-checks" / f"{args.run_id}.json"
+     started = time.time()
+-    name = f"sft-ocaml-probe-{args.run_id}-{secrets.token_hex(4)}".lower()[:63]
++    name = f"sft-ocaml-probe-{args.run_id[:38]}-{secrets.token_hex(4)}".lower()
+     report = {"schema_version": 1, "id": args.run_id, "kind": "ocaml_probe_check",
+               "status": "FAILED", "scope": "compile-and-fixed-example-smoke-only",
+               "benchmark": False, "robustness_claim": False, "image_id": IMAGE_ID,
+--- a/config/cards.json
++++ b/config/cards.json
+@@ -579,7 +579,7 @@
+     ],
+     "exclusions": [
+       "This is a selected-model runtime smoke only. It is not training, benchmark, dataset, export, deployment, or M1 readiness evidence.",
+-      "Run the pinned model locally in an isolated nonroot, network-disabled container; do not execute model repository code, permit remote code, access host tools, or use paid inference.",
++      "Run pinned MLX inference locally on macOS Metal using verified local weights and trust_remote_code=False. Execute generated OCaml only in the pinned nonroot, network-disabled container; no model repository code, generated host tool execution, or paid inference.",
+       "Do not use a fixture or scripted output as evidence of real-model readiness. Preserve the exact selected Qwen3.5-9B identity; no fallback or hidden retries.",
+       "At most three failed repairs, then NEEDS_REPLAN. Do not expand scope or manufacture passing evidence."
+     ],
+@@ -589,8 +589,8 @@
+       "The report explicitly identifies selected-model-probe-only scope unless a matching full T12B manifest is bound; it does not pass or alter any training, benchmark, approval, or M1 deployment gate."
+     ],
+     "commands": [
++      "./scripts/sft e2e --suite qwen35-probe --run-id <unique-run-id>",
+       "uv run --frozen --offline python scripts/probe_qwen35.py --config config/models.json --run-id <unique-run-id>",
+-      "./scripts/sft e2e --suite qwen35-probe --run-id <unique-run-id>",
+       "./scripts/sft work record SELECTED-MODEL-SMOKE PASSED --evidence <report-path>"
+     ],
+     "required_scenarios": [

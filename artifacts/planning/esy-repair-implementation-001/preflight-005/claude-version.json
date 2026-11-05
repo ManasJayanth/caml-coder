@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/bin/claude",
+    "--version"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "elapsed_seconds": 0.009,
+  "owned_group_absent": true,
+  "logs": {
+    "stdout": {
+      "size": 22,
+      "sha256": "d4986f1082ce2754694f97ceb54fb0c0dd3a49ec43a2031ea9c39648fabd5e1b"
+    },
+    "stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

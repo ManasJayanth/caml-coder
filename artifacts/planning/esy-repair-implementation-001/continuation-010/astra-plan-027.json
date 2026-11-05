@@ -1,0 +1,155 @@
+{
+  "plan_id": "B1a-ownership-correction-027-and-remaining-028-through-033",
+  "planner": "gpt-6-astra",
+  "status": "Source-authoring contract only; execution remains blocked pending independent approvals",
+  "scope": "Read frozen26, review26 and prior correction plan; computed input hashes with read-only utilities. No candidate execution, imports, compilation, tests, providers or delegation. This plan is the sole written artifact.",
+  "budget": {
+    "consumed_launches": 26,
+    "maximum_launches": 36,
+    "immediate_launches": 1,
+    "later_finding_cards": 6,
+    "reserve_if_all_seven_succeed": 3,
+    "active_checkpoint_seconds_approximate": 21500,
+    "active_limit_seconds": 32400,
+    "gate": "Root reconciles actual active time and cumulative launch count before each dispatch; the supplied checkpoint is approximate. No dispatch after either hard limit.",
+    "attempt_accounting": "26 was the first dedicated ownership correction. 25 was the broader original E2E implementation; 27 is the second dedicated ownership correction. Do not reset attempts by renaming the objective. After three failed attempts at the same objective, obtain a fresh Astra replan before any further attempt; conservatively count the original implementation if the controlling ledger already does. This plan itself is a fresh replan after review26, not permission for repeated identical dispatches."
+  },
+  "launch_027": {
+    "card_id": "B1a-Lifecycle-027",
+    "objective": "Close the existing owned-process lifecycle objective with interruption-safe handoff, bounded cooperative-signal cleanup, and truthful single finalization; restore the accidental payload change.",
+    "finding_ids": [
+      "B1a-E2E-025-owned-process-lifecycle",
+      "B1a-E2E-026-spawn-handoff",
+      "B1a-E2E-026-interrupted-cleanup",
+      "B1a-E2E-026-finalization-receipt"
+    ],
+    "parent_revision_sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3",
+    "inputs": [
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/result-manifest.json",
+        "sha256": "7ed9946d47cfcdb94e02bdca7db1d6bd3f36eab24319b3fd046943e68e5b77d3"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/frozen/tests/e2e/test_review_adapter_e2e.py",
+        "sha256": "e27c301dbcffa733ce5aa6f95207399ee0f4eb717f76f4b68a5799addc81ed43"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/frozen/scripts/esy-repair/claude-worker.sh",
+        "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/frozen/scripts/esy-repair/codex-worker.sh",
+        "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-source-review-026.json",
+        "sha256": "9e3ec357e239e2150062ec5981b80c9514b8e8460320f487e325b227acf72dfb"
+      },
+      {
+        "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/astra-correction-plan-026.json",
+        "sha256": "3cefd6a053e04cb61fc52acf3157aa307e177df7f148dff188d948f9c27c8758"
+      }
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": [
+      "Root verifies the entire frozen26 result manifest and exact candidate copy, all supplied input hashes, unchanged adapter hashes, and reconciled budgets. Start from frozen26, not the older continuation candidate.",
+      "Luna is an author only: read/edit/write tools, no shell, Python execution, imports, compilation, tests, project helper execution, subprocess or provider invocation. Root freezes output and requests independent Astra source review.",
+      "No runtime approval is implied. A complete exact-revision safety approval and separately approved outer wrapper are prerequisites to any later public execution. Claude review remains unavailable and disabled."
+    ],
+    "implementation_architecture": [
+      {
+        "step": "1. Cooperative signal scope and acquired child",
+        "instruction": "Before Popen, install temporary SIGINT/SIGTERM handlers that only record interruption in a fixed-size state (for example first signal and a boolean); they must not raise, exit, perform cleanup, append an unbounded log, or do I/O. Keep them active through bounded_run finalization, then restore previous handlers in guarded teardown. Restore a partially installed handler set if installation fails, before any spawn. Do not block these signals across Popen: that would pass blocked signals to the child. Thus a cooperative signal at the Popen return/assignment boundary records intent without discarding the returned proc. Immediately acquire phase=owned before fallible bookkeeping. On exception, a non-null proc in pre-owned/not-spawned phase is still acquired ownership unless a reap transition has begun; never call that successful no-child cleanup. At the first safe checkpoint after acquisition, and inside the existing bounded collection/wait loops, convert a recorded signal into the ordinary primary failure path. Scope the guarantee to these cooperative OS signals and the existing fixed deliberate exceptions; do not invent arbitrary Popen-internal failures or a new supervisor."
+      },
+      {
+        "step": "2. Preserve the no-signal reap boundary",
+        "instruction": "Every waitpid enters phase=reap-uncertain before calling the potentially reaping syscall. Only definite waited==0 restores owned; waited==proc.pid sets reaped and stores raw status before any fallible conversion. Unexpected return/exception remains uncertain and permanently forbids group signaling. Only owned/acquired-before-first-reap may call killpg, at most once. Cooperative handlers do not raise inside this transfer. The existing short waitpid mask may remain if correctly restored, but is unnecessary for the non-raising handlers; do not add blocking across spawn. Set proc.returncode from known raw status on both normal and cleanup reap paths, guarded so conversion failure never restores signal permission. No poll, wait, communicate or hidden second reap path."
+      },
+      {
+        "step": "3. One finalization path",
+        "instruction": "Replace return-inside-try plus duplicate selector closes with one finalizer that runs before returning a result or raising the recorded failure. Retain bounded output material and the first failure separately. Normal streaming may close a pipe at EOF or after stdin completion, using the same small close bookkeeping used by finalization; do not close it a second time. Record a successful close/already-observed closed state per stdin/stdout/stderr, and absent/closed/failed for the selector. Selector.close is called only once, in guarded finalization. For each remaining pipe, draining and closing are separate guarded operations so a failed set_blocking/read cannot skip the close. Guard each independent cleanup obligation against BaseException, record its error, and continue the other obligations. An attempted failed close is failed/uncertain, not closed; do not retry it through an unguarded finally or infer closure from reaching finally. A small local closure helper is fine; do not build a resource framework."
+      },
+      {
+        "step": "4. Bounded failure cleanup and interruptions",
+        "instruction": "For an owned failure, establish the existing one shared two-second cleanup deadline, attempt the single permitted SIGKILL, nonblockingly drain/discard stdout/stderr, close all pipes and selector independently, and reap with WNOHANG and positive bounded sleeps within that same allowance. With uncertain/reaped phase, never signal; uncertain ownership remains terminal failed. Non-raising signal handlers stay installed throughout all these obligations, including their bookkeeping. Use a separate fixed cleanup_interrupted flag, set by the handler when finalization is active, so a repeated signal during cleanup remains visible even if a signal was already recorded during collection. Continue obligations without resetting the deadline. An actual caught deliberate KeyboardInterrupt is also recorded without skipping later obligations. Mark interrupted or uncertain cleanup failed even when individual resources subsequently close/reap; preserve the primary failure plus cleanup errors separately. No unbounded wait, drain, retry or signal log."
+      },
+      {
+        "step": "5. Commit lifecycle outcome after observations",
+        "instruction": "Set aggregate cleanup success only after the finalizer, known leader reap (or no acquired child), all required pipe closes and selector close, and guarded handler restoration have succeeded without cleanup interruption. Keep per-resource outcomes separate from aggregate errors. Finalization error after normal collection becomes a primary failure; finalization error after an earlier failure is appended without replacing that first failure. Never return success before selector finalization. In the single-probe caller, set failure for response/probe-validation errors before writing lifecycle.json; persist through one guarded success/failure completion path when possible. Receipt-write failure remains nonzero. Retain current top-level diagnostic policy for its separate card; lifecycle persistence must not rely on a literal cleanup success field or swallow a failure."
+      },
+      {
+        "step": "6. Minimum source restoration and probe addition",
+        "instruction": "Restore pending stdin to the newline-terminated bytes b'review fixture\\n' rather than bytes containing a literal backslash and n. Keep the existing saved remaining-duration sleep calculation as an explicitly accepted inseparable safety improvement; do not reintroduce its negative-sleep race. Preserve all seven existing lifecycle controls. Add only lifecycle-cleanup-interrupt: after acquiring the one real adapter child, raise a fixed setup Failure, and at the first cleanup point send exactly one SIGINT to the harness itself while the deferred handler is active, before cleanup obligations. It must complete bounded cleanup, preserve the setup failure and signal observation, report cleanup failed due to interruption, persist resource/reap outcomes, and exit nonzero. No second signal mode or handoff-fault matrix is necessary; the handoff is primarily a source-proof obligation."
+      }
+    ],
+    "required_behavior": [
+      "Repair the three review26 findings as one ownership correction. Keep the existing fixed environment PATH=/usr/bin:/bin, private HOME, LANG=C; actual adapter and sibling; validated absolute interpreter; native sandbox-exec and no-network/no-fork/write-only-output sandbox. Retain 4096 stream caps, 16384 record cap, ten-second invocation, 180-second suite and two-second cleanup allowance.",
+      "Keep --adapter ABS, --output-dir ABS and the closed scenario enum with matrix default. Reject unknown scenarios before spawn. Every non-matrix lifecycle scenario runs at most one actual adapter invocation. No arbitrary command, expression, timeout, signal, fake program or runner input.",
+      "Keep lifecycle observations small and fixed: spawned PID, signal attempt phase and result, reap status, each pipe/selector close status, deferred interruption, first failure and bounded cleanup errors. Cleanup signal bookkeeping must distinguish intended/attempted/failed action; no success inferred from appending an attempt.",
+      "Every injected failure and uncertain cleanup is nonzero and stops the suite. Normal lifecycle exits zero only after original response validation and successful actual finalization. No post-reap signal under any normal, fixed-fault or cleanup path.",
+      "No claim of resistance to SIGKILL, interpreter crashes, arbitrary monkeypatched operations or an endless signal storm. Existing cooperative SIGINT/SIGTERM and designated faults are the finite contract. Resource I/O remains nonblocking and cleanup deadline remains fixed."
+    ],
+    "scope_dispositions": {
+      "payload": "Reviewer concern accepted: restore the original newline payload.",
+      "saved_duration": "Reviewer scope concern explicitly reconciled: retain saved remaining duration, now authorized as inseparable safety preservation. This does not close the deadline finding; immediately-before-spawn suite exhaustion and its evidence remain later work.",
+      "popen_returncode": "Reconcile bookkeeping after known cleanup reap within this ownership card; do not mislabel the old omission as a separately demonstrated stale-group signal bug.",
+      "other_findings": "All six non-ownership findings stay open. No edits to matrix records, arity, routing, full result receipts, suite deadline enforcement or diagnostic-byte policy."
+    },
+    "forbidden_changes": [
+      "No edits outside the single allowed test path; no adapter, controller, dispatcher, dependency, policy or historical artifact changes.",
+      "No Luna candidate/test execution, subprocess calls, shell tools, provider calls, Docker, Claude, network, imports for testing, helper/unit tests or replacement sandbox.",
+      "No general supervisor, resource framework, fault injection API, additional scenario matrix, PID-reuse experiments or investigation of theoretical arbitrary failures.",
+      "No successful cleanup receipt with unknown reap/close, no group signal after any possible reap, no broad fixes for the other six findings."
+    ],
+    "e2e_recipe_ids": [
+      "B1a-public-lifecycle-normal",
+      "B1a-public-lifecycle-setup-failure",
+      "B1a-public-lifecycle-post-reap-exception",
+      "B1a-public-lifecycle-post-reap-interrupt",
+      "B1a-public-lifecycle-timeout",
+      "B1a-public-lifecycle-stdout-overflow",
+      "B1a-public-lifecycle-stderr-overflow",
+      "B1a-public-lifecycle-cleanup-interrupt"
+    ],
+    "public_e2e_recipe": {
+      "executor": "Root only after exact-revision source and outer-wrapper approvals; never Luna.",
+      "invocation": ["VERIFIED_ABSOLUTE_PYTHON", "VERIFIED_ABSOLUTE_TEST", "--adapter", "VERIFIED_ACTUAL_CLAUDE_ADAPTER", "--output-dir", "FRESH_OWNED_EMPTY_0700_DIRECTORY", "--scenario", "ONE_FIXED_ENUM_VALUE"],
+      "mechanism": "Launch the complete public executable invoking actual adapters and native sandbox. No import-based bounded_run calls, monkeypatches, fake subprocess objects, unit/helper tests or synthetic success receipts.",
+      "observations": "Collect bounded raw process exit/stdout/stderr and lifecycle.json. Normal succeeds after all finalization. Setup/timeout/overflow fail and report actual owned cleanup. Post-reap faults fail with zero later signals and closed resources. Cleanup-interrupt fails, retains both primary failure and SIGINT, and shows subsequent independent close/reap outcomes. Evaluate lifecycle observations together with independently bounded outer completion; success literals alone are insufficient.",
+      "source_review_obligations": "Trace handler installation through Popen assignment, acquired-child fallback, every waitpid no-signal transition, every independent finalization obligation and handler restoration. Prove no double selector close, no false pipe-closed assignment, and no validation failure persisted as failure=null. No extra runtime handoff or arbitrary resource-failure matrix is required.",
+      "limit": "These eight fixed public scenarios supply finite real-path evidence; source review supplies transition reasoning. This plan does not approve the execution wrapper or imply any runtime evidence exists."
+    },
+    "expected_outcomes": [
+      "Independent Astra can close the original ownership objective and its three review26 subfindings on the exact frozen source, subject to later approved public evidence.",
+      "Scope is restored for stdin and expressly reconciled for saved duration. Six separate findings remain open.",
+      "Only the allowed test file changes; each lifecycle receipt records actual finalization outcomes and preserves failure."
+    ],
+    "evidence_outputs": [
+      "Luna: changed test source only. Root: frozen candidate, exact parent/result manifests and diff.",
+      "Independent Astra: source review bound to exact result and unchanged adapter hashes; explicit finding dispositions and safety verdict.",
+      "Later root only: bounded public-process observations and lifecycle.json per approved fixed scenario."
+    ],
+    "stop_conditions": [
+      "Binding mismatch, budget exhausted, need for additional allowed paths or any worker execution.",
+      "Implementation needs a new supervision framework, more fixed probes than the one specified, or cannot preserve no-signal-after-possible-reap; report the concrete limitation for a fresh plan.",
+      "Cooperative signal scope or independent resource outcomes cannot be justified on the native target: do not execute or substitute sandbox/platform behavior.",
+      "Unresolved safety blocker, missing full frozen source approval or missing outer-wrapper approval blocks execution regardless of partial finding closure.",
+      "Three failed same-objective attempts require fresh Astra replan before another coding launch."
+    ]
+  },
+  "remaining_cards": [
+    {"launch": 28, "card_id": "B1a-E2E-028-deadline-race", "finding_id": "B1a-E2E-025-deadline-race", "prior_template_launch": 27, "change": "Preserve saved-duration calculation; reject exhausted absolute suite budget immediately before every Popen, including probes/arity. Fixed deadline-boundary and suite-exhausted public scenarios only."},
+    {"launch": 29, "card_id": "B1a-E2E-029-record-bound", "finding_id": "B1a-E2E-025-record-bound", "prior_template_launch": 28, "change": "Replace every unbounded record read with RECORD_LIMIT+1 raw-byte bound, including separators, immediately per invocation. Fixed exact16384/overflow16385 valid-JSON-whitespace public cases."},
+    {"launch": 30, "card_id": "B1a-E2E-030-per-case-routing", "finding_id": "B1a-E2E-025-per-case-routing", "prior_template_launch": 29, "change": "Exactly one matching per-invocation record delta for response calls and zero for rejections, immediately checked. Fixed duplicate/missing first-record public cases fail early."},
+    {"launch": 31, "card_id": "B1a-E2E-031-arity-offset", "finding_id": "B1a-E2E-025-arity-offset", "prior_template_launch": 30, "change": "Nine rejection rows: empty argv; review totals1,2,3,4,6; code total5; unknown totals4,5. Total includes role, excludes bash and adapter. Remove redundant valid review call; keep nine response rows, never valid code total4."},
+    {"launch": 32, "card_id": "B1a-E2E-032-diagnostic-byte-cap", "finding_id": "B1a-E2E-025-diagnostic-byte-cap", "prior_template_launch": 31, "change": "Binary stderr encoding capped at4096 emitted bytes including newline, covering caught ordinary and deliberate interruption failures. Fixed ASCII/Unicode public scenarios."},
+    {"launch": 33, "card_id": "B1a-E2E-033-result-receipt", "finding_id": "B1a-E2E-025-result-receipt", "prior_template_launch": 32, "change": "Persist complete result.json with18 matrix rows, pass/fail/not-run, exact argv/count, bounded byte-safe streams/status, routing and actual cleanup. Preserve failures and later not-run rows; receipt-write failure cannot succeed. Reuse existing public success/early-failure/lifecycle/deadline scenarios."}
+  ],
+  "remaining_card_contract": {
+    "binding": "Future mapping is not dispatch-ready. Root materializes each full card with the immediately preceding accepted frozen manifest/test hashes and unchanged adapters, never invents future hashes or reuses frozen26 hash after edits.",
+    "template": "The hash-bound astra-correction-plan-026.json remaining_cards entries retain their detailed behavior/public E2E requirements under the mapping above. Every template inherits the corrected ownership semantics of27 and only its assigned finding. References to launch26 ownership now mean accepted27 (or its reviewed successor).",
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "inherited_gates": "Same Luna source-only authoring, independent Astra-only review, fixed sandbox/environment/real adapters, strict budgets, no helper/unit tests, and separate root execution approval. Concern-level approval never means whole-file approval while blockers remain.",
+    "required_dispatch_fields": ["inputs", "parent_revision_sha256", "allowed_paths", "prerequisites", "required_behavior", "forbidden_changes", "e2e_recipe_ids", "expected_outcomes", "evidence_outputs", "stop_conditions"]
+  }
+}

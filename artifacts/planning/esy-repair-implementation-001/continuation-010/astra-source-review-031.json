@@ -1,0 +1,35 @@
+{
+  "review_type": "independent source-only review",
+  "revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+  "parent_revision_sha256": "6ce4728ea70009e5a650cd86351d756cf093d085754b0696f041dcffc99782e0",
+  "source_sha256": "f2d5d17bf15b76181a4da149d42b9448702a5346fc3866a6f4b65b06743384fe",
+  "input_hashes": {
+    "astra-plan-031.json": "65f41883e836bf198f5f309975036e70d0f93f5cc2cdd74f13a151203dc6683e",
+    "astra-source-review-030.json": "e793a44012c7fe839a05c342cd424e69c3a25ff0d7c37e0e80b32e338670d647",
+    "coding-jobs/B1a-Newline-031/diff.patch": "5a43d2704e246a5ca42af95a4902ad599bd02a42b4715d11877ea3900208c2fa",
+    "coding-jobs/B1a-Newline-031/independent-validation.json": "78ae1dab99b828573906b3e4db6504ab4ccee67959dec6c51bf6e05e3c810954",
+    "claude-worker.sh": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+    "codex-worker.sh": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+  },
+  "source_card_closed": true,
+  "safe_for_execution": false,
+  "runtime_acceptance": false,
+  "scope": "Read complete frozen test, plan31, review30, diff and validation. Independently verified all 82 frozen manifest entries by hash, size and mode, exact file inventory, parent-manifest binding, exact diff and unchanged adapter hashes. Only the allowed test differs from frozen30, by exactly the two requested literal replacements. No candidate execution, imports, compilation, tests, Docker, providers or delegation; wrote only this review.",
+  "source_dispositions": {
+    "B1a-Records-030-boundary-newline-escaping": "Closed at source: executable-source lines 414 and 423 now use single-LF byte literals. The guard matches the fixture terminator; each padding repetition adds one byte and subtraction of each successful write reaches zero even with partial writes.",
+    "record-bound-source-card": "Closed at source with review30 collector/control dispositions preserved. The unchanged collector caps raw reads at 16385 bytes and rejects overflow before parsing. Exact-limit construction targets 16384 bytes; one-over targets 16385, retains the rejected outcome and raises record-overflow. Receipts retain protocol_evaluated=false and successful actual-adapter cleanup before boundary construction.",
+    "embedded-template-and-regressions": "Embedded fake_source newline escaping is unchanged and remains correctly doubled for generated Python. Exact two-replacement comparison proves no scope expansion or changes to collector, receipts, constants, ownership, deadlines, cleanup, adapters or other controls; no new source regression found."
+  },
+  "findings": [],
+  "other_open_findings": [
+    "B1a-E2E-025-per-case-routing",
+    "B1a-E2E-025-arity-offset",
+    "B1a-E2E-025-diagnostic-byte-cap",
+    "B1a-E2E-025-result-receipt"
+  ],
+  "missing_evidence": [
+    "No runtime acceptance. Record-bound and prior ownership/deadline lifecycle runtime obligations remain open.",
+    "After all remaining source/environment blockers and separate outer-wrapper approval, exact-revision public controls must establish exact-limit observed_bytes=16384 with accepted outcome and exit 0; one-over observed_bytes=16385 with record-overflow and nonzero exit; both preserve successful actual-adapter cleanup and protocol_evaluated=false. Collect bounded receipts and independent outer completion, plus lifecycle-normal evidence.",
+    "All four original routing, arity, diagnostic-byte-cap and result-receipt findings remain open; fake-routing evidence does not establish provider identity or availability."
+  ]
+}

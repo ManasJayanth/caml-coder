@@ -1,0 +1,16 @@
+{
+  "status": "INCOMPLETE",
+  "active_job": null,
+  "coding_launches_reserved": 12,
+  "coding_launch_limit": 12,
+  "reviewer": "Codex gpt-6-astra",
+  "planner": "fresh Codex gpt-6-astra",
+  "coder": "Codex gpt-6-luna",
+  "imported": false,
+  "original_source_preserved": true,
+  "controller": "UNACCEPTED: 10 review findings and failed public E2E",
+  "runner": "Rejected final revision:16 findings;no execution approval",
+  "runtime_tests": "Incomplete;required real acceptance not run",
+  "execution_gate": "Fresh Astra safety review before any candidate build/test execution",
+  "at_epoch": 1792657961.4971678
+}

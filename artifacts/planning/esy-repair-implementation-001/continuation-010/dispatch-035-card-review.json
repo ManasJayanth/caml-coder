@@ -1,0 +1,28 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 35,
+  "approved_card_id": "B1a-Arity-035",
+  "reviewed_plan_sha256": "518660c37018e34f1244555407a15d25a09e904832964ef91f388ff2b733dafb",
+  "reviewed_plan_section": "launch_035",
+  "parent_revision_sha256": "057e9e6e59b5b813b954dd9a078c6cefd68f18ba56faf797aecd659a1eac8fbb",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one arity-only source-authoring attempt. The complete card removes the redundant valid-review invocation and specifies exactly nine rejection rows using total adapter arguments: empty, review totals 1/2/3/4/6, code total 5 and unknown totals 4/5. It preserves immediate zero-record checks and requires exit64 with empty streams, explicit adapter/full argv and counts. It excludes valid code mode, new controls and unrelated repairs."
+    },
+    {
+      "severity": "info",
+      "message": "All four card input hashes match. Current candidate test matches frozen34 and bound review34 closes the routing source concern without execution approval. Dispatcher/guardian/profile hashes remain unchanged; ledger records 34/36. Coding34 guardian confirms reaping, exit zero, no failure and credential removal."
+    },
+    {
+      "severity": "warning",
+      "message": "Only one launch slot would remain after35. Diagnostic bounds, full result/invocation receipts and the outer wrapper remain open. Overall completion and runtime acceptance remain unavailable within this approval."
+    }
+  ],
+  "conditions": [
+    "Dispatch the complete hash-bound launch_035 contract once from the fully verified frozen34 parent, in a fresh isolated job with durable slot35 reservation from ledger34. Only tests/e2e/test_review_adapter_e2e.py may change.",
+    "Retain existing supervision, runtime exclusivity, worker/credential-absence, full candidate binding and valid smoke gates. Use root's corrected reconciled active-time accounting plus current elapsed work, not earlier rough estimates; enforce 32400 seconds, 36 launches, the 660-second reserve and cumulative attempt/replan rules.",
+    "Preserve patches under 3000 characters, no whole-file rewrite and unchanged 2 MiB output cap. Source authoring only with read/edit/write: no candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or delegation.",
+    "Validate complete provider/tool/scope/binding/cleanup evidence and freeze output UNACCEPTED for independent exact-revision Astra source review. No automatic launch36, import, execution or unallocated wrapper work is approved."
+  ]
+}

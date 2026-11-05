@@ -1,0 +1,821 @@
+FILE tests/e2e/test_esy_repair_controller.py
+COMPLETE SOURCE
+"""Standalone public CLI E2E for the supervisor-installed esy controller core.
+
+The fixture is an external installer: every authority artifact, the copied
+interpreter, provider, workspace, and state live below one temporary directory.
+No controller functions are imported.  The synthetic provider is a frozen
+executable selected only by this disposable installation manifest.
+"""
+import hashlib
+import json
+import os
+import shutil
+import socket
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+
+SOURCE = Path(__file__).resolve().parents[2] / "scripts/esy-repair/controller.py"
+WRAPPER_SOURCE = SOURCE.with_name("codex-worker.sh")
+CARD = {
+    "id": "C01-public-cli-e2e",
+    "allowed_paths": ["scripts/esy-repair/codex-worker.sh"],
+    "requirements": ["Exercise the installed wrapper and controller through public CLI subprocesses."],
+    "acceptance_e2e": ["The disposable provider emits a binding-checked final response."]
+}
+LIMITS = {"coding_launches": 12, "active_seconds": 21600, "output_bytes": 2 * 1024 * 1024,
+          "file_bytes": 2 * 1024 * 1024, "growth_bytes": 16 * 1024 * 1024,
+          "added_files": 1000, "cleanup_reserve_seconds": 10.0}
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def canonical(value):
+    return (json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+                       allow_nan=False) + "\n").encode("utf-8")
+
+
+def put(path, data, mode=0o600):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data if isinstance(data, bytes) else data.encode())
+    path.chmod(mode)
+    return path
+
+
+def tree_manifest(root):
+    rows = []
+    for base, dirs, files in os.walk(root):
+        base = Path(base)
+        for name in sorted(dirs):
+            p = base / name
+            rows.append({"path": p.relative_to(root).as_posix() + "/", "type": "directory",
+                         "mode": stat.S_IMODE(p.stat().st_mode)})
+        for name in sorted(files):
+            p = base / name
+            data = p.read_bytes()
+            rows.append({"path": p.relative_to(root).as_posix(), "type": "file",
+                         "mode": stat.S_IMODE(p.stat().st_mode), "size": len(data), "sha256": sha(data)})
+    return rows
+
+
+def frozen_copy(src, dst):
+    dst.mkdir(parents=True)
+    for row in tree_manifest(src):
+        rel = row["path"].rstrip("/")
+        target = dst / rel
+        if row["type"] == "directory":
+            target.mkdir(parents=True, exist_ok=True)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(src / rel, target)
+            target.chmod(row["mode"])
+    for row in reversed(tree_manifest(src)):
+        if row["type"] == "directory":
+            (dst / row["path"].rstrip("/")).chmod(row["mode"])
+    return tree_manifest(dst)
+
+
+def event_rule(fields, types, item=None):
+    out = {"fields": fields, "field_types": types, "nested_objects": {}}
+    if item is not None:
+        out["item"] = item
+    return out
+
+
+def provider_schema():
+    events = {
+        "thread.started": event_rule(["type", "thread_id"], {"type": "string", "thread_id": "string"}),
+        "turn.started": event_rule(["type"], {"type": "string"}),
+        "turn.completed": event_rule(["type"], {"type": "string"}),
+    }
+    for typ in ("command_execution", "file_change"):
+        item_fields = ["id", "type", "status", "detail"]
+        item_types = {"id": "string", "type": "string", "status": "string", "detail": "string"}
+        item_rule = {"fields": item_fields, "field_types": item_types}
+        for event_type in ("item.started", "item.updated", "item.completed"):
+            key = event_type + ":" + typ
+            events[key] = event_rule(["type", "item"], {"type": "string", "item": "object"}, item_rule)
+    message_item = {"fields": ["id", "type", "text"],
+                    "field_types": {"id": "string", "type": "string", "text": "string"}}
+    events["item.completed:agent_message"] = event_rule(
+        ["type", "item"], {"type": "string", "item": "object"}, message_item)
+    return {"schema_version": 1, "events": events,
+            "sequence": "thread-turn-items-terminal-v1", "final_response_item_type": "agent_message",
+            "final_response_detection": {"kind": "strict_json_schema", "schema_version": 1}}
+
+
+def provider_source(authority, candidate):
+    # Its own installation bytes are frozen and hash-pinned.  Network and
+    # protected-tree probes run only inside the actual outer native sandbox.
+    return f'''#!{authority / "python-interpreter"} -B
+import json, os, socket, sys
+from pathlib import Path
+prompt = sys.stdin.buffer.read().decode("utf-8", "strict")
+context = json.loads(prompt.split("\\n", 1)[1])
+b = context["bindings"]
+role = b["role"]
+denials = {{}}
+if role == "code":
+    for label, target in (("authority", {str(authority / "provider-write-probe")!r}),
+                          ("candidate", {str(candidate / "provider-write-probe")!r})):
+        try:
+            Path(target).write_text("must be denied")
+            denials[label] = False
+        except OSError:
+            denials[label] = True
+    try:
+        s = socket.socket(); s.settimeout(0.2); s.connect(("1.1.1.1", 443)); s.close()
+        denials["network"] = False
+    except OSError:
+        denials["network"] = True
+    target = Path.cwd() / "scripts/esy-repair/codex-worker.sh"
+    target.write_bytes(target.read_bytes() + b"\\n# disposable code-role delta\\n")
+if role == "plan":
+    final = {{"schema_version": 1, "run_id": b["run_id"], "role": role,
+             "revision_sha256": b["revision_sha256"], "evidence_sha256": b["evidence_sha256"],
+             "cards": [{json.dumps(CARD, separators=(",", ":"))}]}}
+elif role == "code":
+    final = {{"schema_version": 1, "run_id": b["run_id"], "role": role,
+             "revision_sha256": b["revision_sha256"], "evidence_sha256": b["evidence_sha256"],
+             "status": "complete", "summary": json.dumps(denials, sort_keys=True),
+             "changed_paths": ["scripts/esy-repair/codex-worker.sh"]}}
+else:
+    final = {{"schema_version": 1, "run_id": b["run_id"], "role": role,
+             "revision_sha256": b["revision_sha256"], "evidence_sha256": b["evidence_sha256"],
+             "verdict": "PASS", "findings": [], "missing_evidence": []}}
+def emit(event):
+    sys.stdout.write(json.dumps(event, separators=(",", ":"), ensure_ascii=False) + "\\n")
+emit({{"type":"thread.started","thread_id":"fixture-thread"}})
+emit({{"type":"turn.started"}})
+for item_type in ("command_execution", "file_change"):
+    for state in ("started", "updated", "completed"):
+        status = "completed" if state == "completed" else "in_progress"
+        emit({{"type":"item." + state,"item":{{"id":item_type,"type":item_type,
+              "status":status,"detail":"observed disposable fixture activity"}}}})
+emit({{"type":"item.completed","item":{{"id":"final-message","type":"agent_message",
+      "text":json.dumps(final,separators=(",", ":"),ensure_ascii=False)}}}})
+emit({{"type":"turn.completed"}})
+'''
+
+
+def make_fixture(base):
+    base = base.resolve()
+    candidate = base / "candidate"
+    authority = base / "controller-authority"
+    workspace = base / "worker-workspace"
+    workflow = base / "workflow-state"
+    scratch = base / "scratch"
+    for path in (candidate, authority, workspace, workflow, scratch):
+        path.mkdir(mode=0o700)
+
+    # Candidate adoption includes both controller/card artifacts and dirty /
+    # untracked starting bytes; the baseline is an independent earlier tree.
+    for src, root in ((SOURCE, candidate), (WRAPPER_SOURCE, candidate)):
+        rel = src.relative_to(SOURCE.parents[2])
+        put(root / rel, src.read_bytes(), 0o644)
+    put(candidate / "README.md", b"adopted dirty README bytes\n", 0o644)
+    put(candidate / "notes/untracked.txt", b"inherited untracked bytes\n", 0o644)
+    for directory, dirs, _ in os.walk(candidate, topdown=False):
+        if Path(directory) != candidate:
+            Path(directory).chmod(0o500)
+    baseline = base / "baseline-source"
+    baseline.mkdir()
+    put(baseline / "README.md", b"repository baseline bytes\n", 0o644)
+    adopted_rows = tree_manifest(candidate)
+    baseline_rows = tree_manifest(baseline)
+    frozen = authority / "frozen-inputs"
+    frozen.mkdir()
+    frozen_copy(baseline, frozen / "repository-baseline")
+    frozen_copy(candidate, frozen / "adopted-candidate")
+    (frozen / "repository-baseline").chmod(0o500)
+    (frozen / "adopted-candidate").chmod(0o500)
+    frozen.chmod(0o500)
+    for row in adopted_rows:
+        rel = row["path"].rstrip("/")
+        target = workspace / rel
+        if row["type"] == "directory":
+            target.mkdir(parents=True, exist_ok=True)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(candidate / rel, target); target.chmod(row["mode"])
+    for row in reversed(adopted_rows):
+        if row["type"] == "directory":
+            (workspace / row["path"].rstrip("/")).chmod(row["mode"])
+
+    # The system interpreter is copied privately and made executable without
+    # changing permissions on the shared installation.
+    interp = authority / "python-interpreter"
+    shutil.copyfile(Path(sys.executable).resolve(), interp)
+    interp.chmod(0o500)
+    controller = authority / "controller.py"
+    wrapper = authority / "codex-worker.sh"
+    shutil.copyfile(SOURCE, controller); controller.chmod(0o500)
+    shutil.copyfile(WRAPPER_SOURCE, wrapper); wrapper.chmod(0o500)
+    provider = authority / "fake-codex"
+    put(provider, provider_source(authority, candidate), 0o500)
+
+    # Restrict writes to the independent workspace and scratch, deny network
+    # other than resolver DNS, and retain a real macOS Seatbelt outer sandbox.
+    profile_text = f'''(version 1)
+(deny default)
+(allow process*)
+(allow file-read*)
+(allow file-write* (subpath "{workspace}"))
+(allow file-write* (subpath "{scratch}"))
+(allow network-outbound (literal "/private/var/run/mDNSResponder"))
+(allow network-outbound (remote udp "*:53"))
+(allow network-outbound (remote tcp "*:53"))
+'''
+    profile = put(authority / "sandbox-profile.sb", profile_text, 0o400)
+    schema_path = put(authority / "provider-schema.json", canonical(provider_schema()), 0o400)
+    policy = {"schema_version": 1, "models": {"plan": "gpt-6-astra", "code": "gpt-6-luna", "review": "gpt-6-astra"},
+              "argv_template": ["codex", "exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks",
+                                "--disable", "multi_agent", "--disable", "shell_snapshot", "{shell_flag}", "shell_tool",
+                                "--ignore-user-config", "--ephemeral", "--skip-git-repo-check", "--model", "{model}",
+                                "--sandbox", "{sandbox}", "--cd", "{workspace}", "--json", "-"],
+              "timeouts": {"plan": 30, "code": 30, "review": 30}, "limits": LIMITS,
+              "selected_card": CARD, "unsupported_unattended": True}
+    policy_path = put(authority / "policy.json", canonical(policy), 0o400)
+    baseline_path = put(authority / "repository-baseline.json", canonical(baseline_rows), 0o400)
+    adopted_path = put(authority / "adopted-candidate.json", canonical(adopted_rows), 0o400)
+    bootstrap_path = put(authority / "bootstrap-evidence.jsonl",
+                         canonical({"event": "fixture-import", "source": "supervisor", "result": "PASS"}), 0o400)
+
+    # Six readiness launches and the established seventh launch are imported
+    # as unique receipts with explicit elapsed anchors; resumed work is explicit.
+    anchor = time.time()
+    job_times = [60.0, 64.0, 68.0, 72.0, 76.0, 80.0, 48.411]
+    active = round(sum(job_times) + 14.0, 3)
+    jobs = [{"job_id": f"historical-code-{i + 1}", "role": "code",
+             "started_sha256": sha(f"started-anchor-{i + 1}".encode()),
+             "receipt_sha256": sha(f"receipt-anchor-{i + 1}".encode()), "elapsed_seconds": seconds}
+            for i, seconds in enumerate(job_times)]
+    accounting = {"schema_version": 1, "anchor_epoch": anchor, "coding_launches": 7,
+                  "active_seconds": active, "jobs": jobs,
+                  "resumed_intervals": [{"interval_id": "fixture-resume-1", "start_epoch": anchor - 18,
+                                         "end_epoch": anchor - 8, "seconds": 10,
+                                         "evidence_sha256": sha(b"resume-interval-1")},
+                                        {"interval_id": "fixture-resume-2", "start_epoch": anchor - 6,
+                                         "end_epoch": anchor - 2, "seconds": 4,
+                                         "evidence_sha256": sha(b"resume-interval-2")}],
+                  "additional_launches": 0}
+    accounting_path = put(authority / "accounting.json", canonical(accounting), 0o400)
+
+    # Real supervisor probes establish protected-tree write denial and direct
+    # network denial under this exact profile before recording fresh evidence.
+    if not sys.platform == "darwin" or not Path("/usr/bin/sandbox-exec").is_file():
+        raise RuntimeError("native macOS sandbox-exec is required; simulated coverage is not accepted")
+    probe_code = "import errno,socket,sys; p=sys.argv[1:]; out=[]\nfor x in p[:2]:\n try: open(x,'w').write('bad'); out.append(False)\n except OSError as e: out.append(e.errno in (errno.EPERM,errno.EACCES))\ntry:\n s=socket.socket(); s.settimeout(1); s.connect(('1.1.1.1',443)); out.append(False)\nexcept OSError as e: out.append(e.errno in (errno.EPERM,errno.EACCES))\ntry:\n d=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM); d.settimeout(1); d.connect('/var/run/mDNSResponder'); d.close(); out.append(True)\nexcept OSError: out.append(False)\nprint(out)\n"
+    denied = subprocess.run(["/usr/bin/sandbox-exec", "-f", str(profile), str(interp), "-B", "-c", probe_code,
+                             str(authority / "probe-denied"), str(candidate / "probe-denied")],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10, check=False)
+    if denied.returncode != 0 or denied.stdout.strip() != b"[True, True, True, True]":
+        raise RuntimeError("native sandbox probes did not prove protected write and network denial: " +
+                           denied.stderr.decode("utf-8", "replace")[-1000:])
+    probes = {"profile_sha256": sha(profile.read_bytes()), "result": "PASS", "write_denials": "PASS",
+              "network_dns": "PASS", "network_dns_exception": "VERIFIED",
+              "observed_epoch": time.time(), "expires_epoch": time.time() + 3600}
+    probes_path = put(authority / "sandbox-probes.json", canonical(probes), 0o400)
+
+    file_paths = {"controller": controller, "wrapper": wrapper, "python_interpreter": interp,
+                  "codex_executable": provider, "sandbox_profile": profile, "policy": policy_path,
+                  "provider_schema": schema_path, "sandbox_probes": probes_path, "accounting": accounting_path,
+                  "repository_baseline": baseline_path, "adopted_candidate": adopted_path,
+                  "bootstrap_evidence": bootstrap_path}
+    files = {}
+    for name, path in file_paths.items():
+        data = path.read_bytes()
+        files[name] = {"path": str(path), "type": "file", "mode": stat.S_IMODE(path.stat().st_mode),
+                       "size": len(data), "sha256": sha(data)}
+    frozen_path = authority / "frozen-inputs"
+    files["frozen_inputs"] = {"path": str(frozen_path), "type": "directory",
+                              "mode": stat.S_IMODE(frozen_path.stat().st_mode)}
+    paths = {"authority_dir": str(authority), "workflow_root": str(workflow), "candidate": str(candidate),
+             "workspace": str(workspace), "scratch": str(scratch)}
+    doc = {"schema_version": 1, "owner_uid": os.getuid(), "authority_dir": str(authority),
+           "workflow_root": str(workflow), "candidate": str(candidate), "worker_workspace": str(workspace),
+           "scratch": str(scratch), "controller": str(controller), "wrapper": str(wrapper),
+           "python_interpreter": str(interp), "codex_executable": str(provider),
+           "sandbox_profile": str(profile), "policy": str(policy_path), "provider_schema": str(schema_path),
+           "sandbox_probes": str(probes_path), "accounting": str(accounting_path),
+           "repository_baseline": str(baseline_path), "adopted_candidate": str(adopted_path),
+           "bootstrap_evidence": str(bootstrap_path), "frozen_inputs": str(frozen_path),
+           "files": files, "paths": paths}
+    doc["installation_sha256"] = sha(canonical(doc))
+    put(authority / "installation.json", canonical(doc), 0o400)
+    # All directory ancestors inside authority are now supervisor-owned and
+    # immutable; permission mode is included in the manifest for frozen_inputs.
+    authority.chmod(0o500)
+    return {"root": workflow, "candidate": candidate, "workspace": workspace,
+            "authority": authority, "controller": controller, "interpreter": interp,
+            "starting_candidate": {r["path"]: (candidate / r["path"].rstrip("/")).read_bytes()
+                                   for r in adopted_rows if r["type"] == "file"}}
+
+
+def cli(fixture, *args):
+    return subprocess.run([str(fixture["interpreter"]), "-B", str(fixture["controller"]), *args],
+                          text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=45)
+
+
+def main():
+    passed = []
+    failures = []
+    blocked = []
+    defect = None
+    try:
+        with tempfile.TemporaryDirectory(prefix="esy-controller-e2e-") as tmp:
+            fixture = make_fixture(Path(tmp))
+            root = str(fixture["root"])
+            r = cli(fixture, "init", "--root", root)
+            if r.returncode != 0 or json.loads(r.stdout).get("state") != "PLAN_REQUIRED":
+                raise AssertionError(f"valid supervisor installation failed init: {r.stdout} {r.stderr}")
+            passed.append("supervisor-installed schema, frozen adopted inputs, and PLAN_REQUIRED init")
+            handoff = cli(fixture, "print-handoff", "--root", root)
+            handoff_doc = json.loads(handoff.stdout)
+            if handoff.returncode != 0 or handoff_doc.get("next_command") != [
+                    "controller.py", "launch", "--root", root, "--role", "plan"]:
+                raise AssertionError(f"initial handoff lacks actionable plan command: {handoff.stdout} {handoff.stderr}")
+            if handoff_doc.get("coding_launches") != 7 or handoff_doc.get("active_seconds") != 482.411:
+                raise AssertionError(f"historical accounting import mismatch: {handoff.stdout}")
+            resumed = cli(fixture, "resume", "--root", root)
+            if resumed.returncode != 0 or json.loads(resumed.stdout).get("state") != "PLAN_REQUIRED":
+                raise AssertionError(f"resume did not preserve initialized state: {resumed.stdout} {resumed.stderr}")
+            passed.append("resume and handoff preserve state, seven-launch accounting, and next action")
+            for role in ("code", "review"):
+                missing = cli(fixture, "launch", "--root", root, "--role", role)
+                if missing.returncode == 0 or "--card is mandatory" not in missing.stderr:
+                    raise AssertionError(f"{role} launch accepted missing card: {missing.stdout} {missing.stderr}")
+            advance = cli(fixture, "advance", "--root", root)
+            if advance.returncode == 0 or "advance unsupported from PLAN_REQUIRED" not in advance.stderr:
+                raise AssertionError(f"advance accepted missing plan prerequisites: {advance.stdout} {advance.stderr}")
+            passed.append("missing card and plan prerequisites fail explicitly through public CLI")
+
+            # This is deliberately a failing acceptance assertion once the
+            # plan provider has run: the installed controller records a phase
+            # its own replay validator rejects.  Keep the valid launch attempt
+            # intact so a controller repair can turn this into full lifecycle.
+            launch = cli(fixture, "launch", "--root", root, "--role", "plan")
+            if launch.returncode != 0:
+                history_path = fixture["root"] / "history.jsonl"
+                history = [json.loads(line) for line in history_path.read_text().splitlines()]
+                jobs_root = fixture["root"] / "jobs"
+                job_dirs = list(jobs_root.iterdir()) if jobs_root.is_dir() else []
+                finished = json.loads((job_dirs[0] / "finished.json").read_text()) if job_dirs and (job_dirs[0] / "finished.json").exists() else {}
+                provider_completed = (finished.get("failure") is None and finished.get("exit_status") == 0 and
+                                      (job_dirs[0] / "stdout.jsonl").is_file() and
+                                      (job_dirs[0] / "stdout.jsonl").stat().st_size > 0)
+                if (provider_completed and len(history) >= 2 and history[1].get("phase") == "PLAN_RUNNING" and
+                        "malformed history event fields" in launch.stderr):
+                    defect = "controller writes PLAN_RUNNING, which replay rejects because PHASE omits it"
+                    failures.append("successful plan/code/review lifecycle (PLAN_RUNNING replay defect)")
+                else:
+                    defect = ("plan provider/supervisor did not complete cleanly: " +
+                              str(finished.get("failure") or launch.stderr.strip()))
+                    failures.append("native plan launch/provider fixture failed before lifecycle")
+            else:
+                started = json.loads(launch.stdout.splitlines()[0])
+                collect = cli(fixture, "collect", "--root", root, "--run-id", started["run_id"])
+                if collect.returncode != 0:
+                    defect = "plan launch returned success but public collect failed: " + collect.stderr.strip()
+                    failures.append("successful plan collection and remaining lifecycle")
+                else:
+                    blocked.append("full code/review lifecycle is outside this bounded fixture run")
+            print(json.dumps({"suite": "esy-repair public CLI E2E", "passed_supervised_core": passed,
+                              "failed": failures, "blocked": blocked,
+                              "controller_defect": defect,
+                              "full_lifecycle_and_C2-C7": "INCOMPLETE",
+                              "reviewed_source_hashes": {"controller.py": sha(SOURCE.read_bytes()),
+                                                          "codex-worker.sh": sha(WRAPPER_SOURCE.read_bytes()),
+                                                          "test_esy_repair_controller.py": sha(Path(__file__).read_bytes())}},
+                             sort_keys=True))
+            return 1 if failures else 0
+    except RuntimeError as exc:
+        blocked.append(str(exc))
+        print(json.dumps({"suite": "esy-repair public CLI E2E", "passed_supervised_core": passed,
+                          "failed": failures, "blocked": blocked,
+                          "full_lifecycle_and_C2-C7": "INCOMPLETE"}, sort_keys=True))
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+EXACT ACCUMULATED DIFF
+--- baseline/tests/e2e/test_esy_repair_controller.py
++++ candidate/tests/e2e/test_esy_repair_controller.py
+@@ -0,0 +1,407 @@
++"""Standalone public CLI E2E for the supervisor-installed esy controller core.
++
++The fixture is an external installer: every authority artifact, the copied
++interpreter, provider, workspace, and state live below one temporary directory.
++No controller functions are imported.  The synthetic provider is a frozen
++executable selected only by this disposable installation manifest.
++"""
++import hashlib
++import json
++import os
++import shutil
++import socket
++import stat
++import subprocess
++import sys
++import tempfile
++import time
++from pathlib import Path
++
++
++SOURCE = Path(__file__).resolve().parents[2] / "scripts/esy-repair/controller.py"
++WRAPPER_SOURCE = SOURCE.with_name("codex-worker.sh")
++CARD = {
++    "id": "C01-public-cli-e2e",
++    "allowed_paths": ["scripts/esy-repair/codex-worker.sh"],
++    "requirements": ["Exercise the installed wrapper and controller through public CLI subprocesses."],
++    "acceptance_e2e": ["The disposable provider emits a binding-checked final response."]
++}
++LIMITS = {"coding_launches": 12, "active_seconds": 21600, "output_bytes": 2 * 1024 * 1024,
++          "file_bytes": 2 * 1024 * 1024, "growth_bytes": 16 * 1024 * 1024,
++          "added_files": 1000, "cleanup_reserve_seconds": 10.0}
++
++
++def sha(data):
++    return hashlib.sha256(data).hexdigest()
++
++
++def canonical(value):
++    return (json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
++                       allow_nan=False) + "\n").encode("utf-8")
++
++
++def put(path, data, mode=0o600):
++    path = Path(path)
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_bytes(data if isinstance(data, bytes) else data.encode())
++    path.chmod(mode)
++    return path
++
++
++def tree_manifest(root):
++    rows = []
++    for base, dirs, files in os.walk(root):
++        base = Path(base)
++        for name in sorted(dirs):
++            p = base / name
++            rows.append({"path": p.relative_to(root).as_posix() + "/", "type": "directory",
++                         "mode": stat.S_IMODE(p.stat().st_mode)})
++        for name in sorted(files):
++            p = base / name
++            data = p.read_bytes()
++            rows.append({"path": p.relative_to(root).as_posix(), "type": "file",
++                         "mode": stat.S_IMODE(p.stat().st_mode), "size": len(data), "sha256": sha(data)})
++    return rows
++
++
++def frozen_copy(src, dst):
++    dst.mkdir(parents=True)
++    for row in tree_manifest(src):
++        rel = row["path"].rstrip("/")
++        target = dst / rel
++        if row["type"] == "directory":
++            target.mkdir(parents=True, exist_ok=True)
++        else:
++            target.parent.mkdir(parents=True, exist_ok=True)
++            shutil.copyfile(src / rel, target)
++            target.chmod(row["mode"])
++    for row in reversed(tree_manifest(src)):
++        if row["type"] == "directory":
++            (dst / row["path"].rstrip("/")).chmod(row["mode"])
++    return tree_manifest(dst)
++
++
++def event_rule(fields, types, item=None):
++    out = {"fields": fields, "field_types": types, "nested_objects": {}}
++    if item is not None:
++        out["item"] = item
++    return out
++
++
++def provider_schema():
++    events = {
++        "thread.started": event_rule(["type", "thread_id"], {"type": "string", "thread_id": "string"}),
++        "turn.started": event_rule(["type"], {"type": "string"}),
++        "turn.completed": event_rule(["type"], {"type": "string"}),
++    }
++    for typ in ("command_execution", "file_change"):
++        item_fields = ["id", "type", "status", "detail"]
++        item_types = {"id": "string", "type": "string", "status": "string", "detail": "string"}
++        item_rule = {"fields": item_fields, "field_types": item_types}
++        for event_type in ("item.started", "item.updated", "item.completed"):
++            key = event_type + ":" + typ
++            events[key] = event_rule(["type", "item"], {"type": "string", "item": "object"}, item_rule)
++    message_item = {"fields": ["id", "type", "text"],
++                    "field_types": {"id": "string", "type": "string", "text": "string"}}
++    events["item.completed:agent_message"] = event_rule(
++        ["type", "item"], {"type": "string", "item": "object"}, message_item)
++    return {"schema_version": 1, "events": events,
++            "sequence": "thread-turn-items-terminal-v1", "final_response_item_type": "agent_message",
++            "final_response_detection": {"kind": "strict_json_schema", "schema_version": 1}}
++
++
++def provider_source(authority, candidate):
++    # Its own installation bytes are frozen and hash-pinned.  Network and
++    # protected-tree probes run only inside the actual outer native sandbox.
++    return f'''#!{authority / "python-interpreter"} -B
++import json, os, socket, sys
++from pathlib import Path
++prompt = sys.stdin.buffer.read().decode("utf-8", "strict")
++context = json.loads(prompt.split("\\n", 1)[1])
++b = context["bindings"]
++role = b["role"]
++denials = {{}}
++if role == "code":
++    for label, target in (("authority", {str(authority / "provider-write-probe")!r}),
++                          ("candidate", {str(candidate / "provider-write-probe")!r})):
++        try:
++            Path(target).write_text("must be denied")
++            denials[label] = False
++        except OSError:
++            denials[label] = True
++    try:
++        s = socket.socket(); s.settimeout(0.2); s.connect(("1.1.1.1", 443)); s.close()
++        denials["network"] = False
++    except OSError:
++        denials["network"] = True
++    target = Path.cwd() / "scripts/esy-repair/codex-worker.sh"
++    target.write_bytes(target.read_bytes() + b"\\n# disposable code-role delta\\n")
++if role == "plan":
++    final = {{"schema_version": 1, "run_id": b["run_id"], "role": role,
++             "revision_sha256": b["revision_sha256"], "evidence_sha256": b["evidence_sha256"],
++             "cards": [{json.dumps(CARD, separators=(",", ":"))}]}}
++elif role == "code":
++    final = {{"schema_version": 1, "run_id": b["run_id"], "role": role,
++             "revision_sha256": b["revision_sha256"], "evidence_sha256": b["evidence_sha256"],
++             "status": "complete", "summary": json.dumps(denials, sort_keys=True),
++             "changed_paths": ["scripts/esy-repair/codex-worker.sh"]}}
++else:
++    final = {{"schema_version": 1, "run_id": b["run_id"], "role": role,
++             "revision_sha256": b["revision_sha256"], "evidence_sha256": b["evidence_sha256"],
++             "verdict": "PASS", "findings": [], "missing_evidence": []}}
++def emit(event):
++    sys.stdout.write(json.dumps(event, separators=(",", ":"), ensure_ascii=False) + "\\n")
++emit({{"type":"thread.started","thread_id":"fixture-thread"}})
++emit({{"type":"turn.started"}})
++for item_type in ("command_execution", "file_change"):
++    for state in ("started", "updated", "completed"):
++        status = "completed" if state == "completed" else "in_progress"
++        emit({{"type":"item." + state,"item":{{"id":item_type,"type":item_type,
++              "status":status,"detail":"observed disposable fixture activity"}}}})
++emit({{"type":"item.completed","item":{{"id":"final-message","type":"agent_message",
++      "text":json.dumps(final,separators=(",", ":"),ensure_ascii=False)}}}})
++emit({{"type":"turn.completed"}})
++'''
++
++
++def make_fixture(base):
++    base = base.resolve()
++    candidate = base / "candidate"
++    authority = base / "controller-authority"
++    workspace = base / "worker-workspace"
++    workflow = base / "workflow-state"
++    scratch = base / "scratch"
++    for path in (candidate, authority, workspace, workflow, scratch):
++        path.mkdir(mode=0o700)
++
++    # Candidate adoption includes both controller/card artifacts and dirty /
++    # untracked starting bytes; the baseline is an independent earlier tree.
++    for src, root in ((SOURCE, candidate), (WRAPPER_SOURCE, candidate)):
++        rel = src.relative_to(SOURCE.parents[2])
++        put(root / rel, src.read_bytes(), 0o644)
++    put(candidate / "README.md", b"adopted dirty README bytes\n", 0o644)
++    put(candidate / "notes/untracked.txt", b"inherited untracked bytes\n", 0o644)
++    for directory, dirs, _ in os.walk(candidate, topdown=False):
++        if Path(directory) != candidate:
++            Path(directory).chmod(0o500)
++    baseline = base / "baseline-source"
++    baseline.mkdir()
++    put(baseline / "README.md", b"repository baseline bytes\n", 0o644)
++    adopted_rows = tree_manifest(candidate)
++    baseline_rows = tree_manifest(baseline)
++    frozen = authority / "frozen-inputs"
++    frozen.mkdir()
++    frozen_copy(baseline, frozen / "repository-baseline")
++    frozen_copy(candidate, frozen / "adopted-candidate")
++    (frozen / "repository-baseline").chmod(0o500)
++    (frozen / "adopted-candidate").chmod(0o500)
++    frozen.chmod(0o500)
++    for row in adopted_rows:
++        rel = row["path"].rstrip("/")
++        target = workspace / rel
++        if row["type"] == "directory":
++            target.mkdir(parents=True, exist_ok=True)
++        else:
++            target.parent.mkdir(parents=True, exist_ok=True)
++            shutil.copyfile(candidate / rel, target); target.chmod(row["mode"])
++    for row in reversed(adopted_rows):
++        if row["type"] == "directory":
++            (workspace / row["path"].rstrip("/")).chmod(row["mode"])
++
++    # The system interpreter is copied privately and made executable without
++    # changing permissions on the shared installation.
++    interp = authority / "python-interpreter"
++    shutil.copyfile(Path(sys.executable).resolve(), interp)
++    interp.chmod(0o500)
++    controller = authority / "controller.py"
++    wrapper = authority / "codex-worker.sh"
++    shutil.copyfile(SOURCE, controller); controller.chmod(0o500)
++    shutil.copyfile(WRAPPER_SOURCE, wrapper); wrapper.chmod(0o500)
++    provider = authority / "fake-codex"
++    put(provider, provider_source(authority, candidate), 0o500)
++
++    # Restrict writes to the independent workspace and scratch, deny network
++    # other than resolver DNS, and retain a real macOS Seatbelt outer sandbox.
++    profile_text = f'''(version 1)
++(deny default)
++(allow process*)
++(allow file-read*)
++(allow file-write* (subpath "{workspace}"))
++(allow file-write* (subpath "{scratch}"))
++(allow network-outbound (literal "/private/var/run/mDNSResponder"))
++(allow network-outbound (remote udp "*:53"))
++(allow network-outbound (remote tcp "*:53"))
++'''
++    profile = put(authority / "sandbox-profile.sb", profile_text, 0o400)
++    schema_path = put(authority / "provider-schema.json", canonical(provider_schema()), 0o400)
++    policy = {"schema_version": 1, "models": {"plan": "gpt-6-astra", "code": "gpt-6-luna", "review": "gpt-6-astra"},
++              "argv_template": ["codex", "exec", "--disable", "apps", "--disable", "plugins", "--disable", "hooks",
++                                "--disable", "multi_agent", "--disable", "shell_snapshot", "{shell_flag}", "shell_tool",
++                                "--ignore-user-config", "--ephemeral", "--skip-git-repo-check", "--model", "{model}",
++                                "--sandbox", "{sandbox}", "--cd", "{workspace}", "--json", "-"],
++              "timeouts": {"plan": 30, "code": 30, "review": 30}, "limits": LIMITS,
++              "selected_card": CARD, "unsupported_unattended": True}
++    policy_path = put(authority / "policy.json", canonical(policy), 0o400)
++    baseline_path = put(authority / "repository-baseline.json", canonical(baseline_rows), 0o400)
++    adopted_path = put(authority / "adopted-candidate.json", canonical(adopted_rows), 0o400)
++    bootstrap_path = put(authority / "bootstrap-evidence.jsonl",
++                         canonical({"event": "fixture-import", "source": "supervisor", "result": "PASS"}), 0o400)
++
++    # Six readiness launches and the established seventh launch are imported
++    # as unique receipts with explicit elapsed anchors; resumed work is explicit.
++    anchor = time.time()
++    job_times = [60.0, 64.0, 68.0, 72.0, 76.0, 80.0, 48.411]
++    active = round(sum(job_times) + 14.0, 3)
++    jobs = [{"job_id": f"historical-code-{i + 1}", "role": "code",
++             "started_sha256": sha(f"started-anchor-{i + 1}".encode()),
++             "receipt_sha256": sha(f"receipt-anchor-{i + 1}".encode()), "elapsed_seconds": seconds}
++            for i, seconds in enumerate(job_times)]
++    accounting = {"schema_version": 1, "anchor_epoch": anchor, "coding_launches": 7,
++                  "active_seconds": active, "jobs": jobs,
++                  "resumed_intervals": [{"interval_id": "fixture-resume-1", "start_epoch": anchor - 18,
++                                         "end_epoch": anchor - 8, "seconds": 10,
++                                         "evidence_sha256": sha(b"resume-interval-1")},
++                                        {"interval_id": "fixture-resume-2", "start_epoch": anchor - 6,
++                                         "end_epoch": anchor - 2, "seconds": 4,
++                                         "evidence_sha256": sha(b"resume-interval-2")}],
++                  "additional_launches": 0}
++    accounting_path = put(authority / "accounting.json", canonical(accounting), 0o400)
++
++    # Real supervisor probes establish protected-tree write denial and direct
++    # network denial under this exact profile before recording fresh evidence.
++    if not sys.platform == "darwin" or not Path("/usr/bin/sandbox-exec").is_file():
++        raise RuntimeError("native macOS sandbox-exec is required; simulated coverage is not accepted")
++    probe_code = "import errno,socket,sys; p=sys.argv[1:]; out=[]\nfor x in p[:2]:\n try: open(x,'w').write('bad'); out.append(False)\n except OSError as e: out.append(e.errno in (errno.EPERM,errno.EACCES))\ntry:\n s=socket.socket(); s.settimeout(1); s.connect(('1.1.1.1',443)); out.append(False)\nexcept OSError as e: out.append(e.errno in (errno.EPERM,errno.EACCES))\ntry:\n d=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM); d.settimeout(1); d.connect('/var/run/mDNSResponder'); d.close(); out.append(True)\nexcept OSError: out.append(False)\nprint(out)\n"
++    denied = subprocess.run(["/usr/bin/sandbox-exec", "-f", str(profile), str(interp), "-B", "-c", probe_code,
++                             str(authority / "probe-denied"), str(candidate / "probe-denied")],
++                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10, check=False)
++    if denied.returncode != 0 or denied.stdout.strip() != b"[True, True, True, True]":
++        raise RuntimeError("native sandbox probes did not prove protected write and network denial: " +
++                           denied.stderr.decode("utf-8", "replace")[-1000:])
++    probes = {"profile_sha256": sha(profile.read_bytes()), "result": "PASS", "write_denials": "PASS",
++              "network_dns": "PASS", "network_dns_exception": "VERIFIED",
++              "observed_epoch": time.time(), "expires_epoch": time.time() + 3600}
++    probes_path = put(authority / "sandbox-probes.json", canonical(probes), 0o400)
++
++    file_paths = {"controller": controller, "wrapper": wrapper, "python_interpreter": interp,
++                  "codex_executable": provider, "sandbox_profile": profile, "policy": policy_path,
++                  "provider_schema": schema_path, "sandbox_probes": probes_path, "accounting": accounting_path,
++                  "repository_baseline": baseline_path, "adopted_candidate": adopted_path,
++                  "bootstrap_evidence": bootstrap_path}
++    files = {}
++    for name, path in file_paths.items():
++        data = path.read_bytes()
++        files[name] = {"path": str(path), "type": "file", "mode": stat.S_IMODE(path.stat().st_mode),
++                       "size": len(data), "sha256": sha(data)}
++    frozen_path = authority / "frozen-inputs"
++    files["frozen_inputs"] = {"path": str(frozen_path), "type": "directory",
++                              "mode": stat.S_IMODE(frozen_path.stat().st_mode)}
++    paths = {"authority_dir": str(authority), "workflow_root": str(workflow), "candidate": str(candidate),
++             "workspace": str(workspace), "scratch": str(scratch)}
++    doc = {"schema_version": 1, "owner_uid": os.getuid(), "authority_dir": str(authority),
++           "workflow_root": str(workflow), "candidate": str(candidate), "worker_workspace": str(workspace),
++           "scratch": str(scratch), "controller": str(controller), "wrapper": str(wrapper),
++           "python_interpreter": str(interp), "codex_executable": str(provider),
++           "sandbox_profile": str(profile), "policy": str(policy_path), "provider_schema": str(schema_path),
++           "sandbox_probes": str(probes_path), "accounting": str(accounting_path),
++           "repository_baseline": str(baseline_path), "adopted_candidate": str(adopted_path),
++           "bootstrap_evidence": str(bootstrap_path), "frozen_inputs": str(frozen_path),
++           "files": files, "paths": paths}
++    doc["installation_sha256"] = sha(canonical(doc))
++    put(authority / "installation.json", canonical(doc), 0o400)
++    # All directory ancestors inside authority are now supervisor-owned and
++    # immutable; permission mode is included in the manifest for frozen_inputs.
++    authority.chmod(0o500)
++    return {"root": workflow, "candidate": candidate, "workspace": workspace,
++            "authority": authority, "controller": controller, "interpreter": interp,
++            "starting_candidate": {r["path"]: (candidate / r["path"].rstrip("/")).read_bytes()
++                                   for r in adopted_rows if r["type"] == "file"}}
++
++
++def cli(fixture, *args):
++    return subprocess.run([str(fixture["interpreter"]), "-B", str(fixture["controller"]), *args],
++                          text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=45)
++
++
++def main():
++    passed = []
++    failures = []
++    blocked = []
++    defect = None
++    try:
++        with tempfile.TemporaryDirectory(prefix="esy-controller-e2e-") as tmp:
++            fixture = make_fixture(Path(tmp))
++            root = str(fixture["root"])
++            r = cli(fixture, "init", "--root", root)
++            if r.returncode != 0 or json.loads(r.stdout).get("state") != "PLAN_REQUIRED":
++                raise AssertionError(f"valid supervisor installation failed init: {r.stdout} {r.stderr}")
++            passed.append("supervisor-installed schema, frozen adopted inputs, and PLAN_REQUIRED init")
++            handoff = cli(fixture, "print-handoff", "--root", root)
++            handoff_doc = json.loads(handoff.stdout)
++            if handoff.returncode != 0 or handoff_doc.get("next_command") != [
++                    "controller.py", "launch", "--root", root, "--role", "plan"]:
++                raise AssertionError(f"initial handoff lacks actionable plan command: {handoff.stdout} {handoff.stderr}")
++            if handoff_doc.get("coding_launches") != 7 or handoff_doc.get("active_seconds") != 482.411:
++                raise AssertionError(f"historical accounting import mismatch: {handoff.stdout}")
++            resumed = cli(fixture, "resume", "--root", root)
++            if resumed.returncode != 0 or json.loads(resumed.stdout).get("state") != "PLAN_REQUIRED":
++                raise AssertionError(f"resume did not preserve initialized state: {resumed.stdout} {resumed.stderr}")
++            passed.append("resume and handoff preserve state, seven-launch accounting, and next action")
++            for role in ("code", "review"):
++                missing = cli(fixture, "launch", "--root", root, "--role", role)
++                if missing.returncode == 0 or "--card is mandatory" not in missing.stderr:
++                    raise AssertionError(f"{role} launch accepted missing card: {missing.stdout} {missing.stderr}")
++            advance = cli(fixture, "advance", "--root", root)
++            if advance.returncode == 0 or "advance unsupported from PLAN_REQUIRED" not in advance.stderr:
++                raise AssertionError(f"advance accepted missing plan prerequisites: {advance.stdout} {advance.stderr}")
++            passed.append("missing card and plan prerequisites fail explicitly through public CLI")
++
++            # This is deliberately a failing acceptance assertion once the
++            # plan provider has run: the installed controller records a phase
++            # its own replay validator rejects.  Keep the valid launch attempt
++            # intact so a controller repair can turn this into full lifecycle.
++            launch = cli(fixture, "launch", "--root", root, "--role", "plan")
++            if launch.returncode != 0:
++                history_path = fixture["root"] / "history.jsonl"
++                history = [json.loads(line) for line in history_path.read_text().splitlines()]
++                jobs_root = fixture["root"] / "jobs"
++                job_dirs = list(jobs_root.iterdir()) if jobs_root.is_dir() else []
++                finished = json.loads((job_dirs[0] / "finished.json").read_text()) if job_dirs and (job_dirs[0] / "finished.json").exists() else {}
++                provider_completed = (finished.get("failure") is None and finished.get("exit_status") == 0 and
++                                      (job_dirs[0] / "stdout.jsonl").is_file() and
++                                      (job_dirs[0] / "stdout.jsonl").stat().st_size > 0)
++                if (provider_completed and len(history) >= 2 and history[1].get("phase") == "PLAN_RUNNING" and
++                        "malformed history event fields" in launch.stderr):
++                    defect = "controller writes PLAN_RUNNING, which replay rejects because PHASE omits it"
++                    failures.append("successful plan/code/review lifecycle (PLAN_RUNNING replay defect)")
++                else:
++                    defect = ("plan provider/supervisor did not complete cleanly: " +
++                              str(finished.get("failure") or launch.stderr.strip()))
++                    failures.append("native plan launch/provider fixture failed before lifecycle")
++            else:
++                started = json.loads(launch.stdout.splitlines()[0])
++                collect = cli(fixture, "collect", "--root", root, "--run-id", started["run_id"])
++                if collect.returncode != 0:
++                    defect = "plan launch returned success but public collect failed: " + collect.stderr.strip()
++                    failures.append("successful plan collection and remaining lifecycle")
++                else:
++                    blocked.append("full code/review lifecycle is outside this bounded fixture run")
++            print(json.dumps({"suite": "esy-repair public CLI E2E", "passed_supervised_core": passed,
++                              "failed": failures, "blocked": blocked,
++                              "controller_defect": defect,
++                              "full_lifecycle_and_C2-C7": "INCOMPLETE",
++                              "reviewed_source_hashes": {"controller.py": sha(SOURCE.read_bytes()),
++                                                          "codex-worker.sh": sha(WRAPPER_SOURCE.read_bytes()),
++                                                          "test_esy_repair_controller.py": sha(Path(__file__).read_bytes())}},
++                             sort_keys=True))
++            return 1 if failures else 0
++    except RuntimeError as exc:
++        blocked.append(str(exc))
++        print(json.dumps({"suite": "esy-repair public CLI E2E", "passed_supervised_core": passed,
++                          "failed": failures, "blocked": blocked,
++                          "full_lifecycle_and_C2-C7": "INCOMPLETE"}, sort_keys=True))
++        return 2
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())

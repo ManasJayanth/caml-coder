@@ -1,0 +1,58 @@
+Implement the actual esy repair in this isolated candidate. This is a CODE-ONLY card. Edit ONLY the two allowed paths. DO NOT build Docker images, run containers, run new code/tests, call/wait for agents, or claim any reviewer approval. The supervising parent alone invokes the separate reviewer and tests after your final response. There is no reviewer in this worker. Prior coding worker hallucinated an Astra approval after an empty agent wait; such claims are rejected. Use only supplied context and existing files. End after code and syntax inspection; no acceptance claims.
+
+The separate frontier planner authorized supervised esy work while controller defects stay explicit/unimported. No unattended controller is used. This is coding launch10 of12; remaining two reserved for E2E authoring and review-driven correction. Aim for a straightforward runnable repair, not another framework. Python stdlib host + existing Node stdlib in image; no packages. You may rewrite the runner cleanly while retaining existing main.ml/package inputs unchanged.
+
+PUBLIC INTERFACE REQUIRED (document in module docstring):
+1. Existing --image sha256:<hex> and --run-id remain normal run inputs; add --expectations FILE and --output-dir DIRECTORY (explicit protected supervisor output location).
+2. Add --capture-expectations FILE --image IMAGE to capture validated baseline/derivative identities before acceptance runs, mutually exclusive with run-id. Validate base image constant and derivative base-layer prefix; compare immutable compiler/package/locks and seed payloads to the base installation so the expectation file cannot merely bless corrupt derivative contents. Publish expectations immutably. Supervisor builds Dockerfile separately using fixed reviewed commands.
+3. Add --case choice suite(default), positive, wrong-result, syntax, timeout, output, resource. These are fixed controls, not arbitrary source execution. Normal suite includes positive/wrong/syntax and integrity/isolation checks. Failure-control invocations return nonzero with accurate reason; E2Es will assert expected failure.
+4. Optional --timeout integer 1..120 lowers the default120s solely for bounded E2Es, never raises it. Keep all other specified limits.
+5. Report JSON status PASSED/FAILED, distinct reason codes, fixture/expectation/runner/image hashes, actual Docker configuration, per-command exits/signals/bounded output, pre/post immutable inventories, seed checks, timeout/output/resource flags, cleanup verification. Never pass absent/skipped negative controls.
+
+Dockerfile.esy-runtime: use existing local tag ocaml-sft-esy-project-probe:001 (supervisor verifies exact ID before/after and derivative base-layer prefix), copies project _esy and node_modules/.cache into /home/opam/esy-cache-seed/_esy and /home/opam/esy-cache-seed/node-cache. No install/compiler rebuild/network. Preserve file metadata. Source base ID constant remains sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267.
+
+Suggested simple implementation: fixed Node harness passed via docker --entrypoint /home/opam/node/bin/node -e SCRIPT, JSON stdin bounded by host. Node stdlib fs/crypto inventory, child_process.spawnSync with maxBuffer and timeout/killSignal for fixed esy/compiler/program commands. This avoids fragile shell-marker parsing and unbounded per-command disk logs. Host must stream-cap Docker stdout/stderr and deadline it, not unbounded communicate. Fixed small payload can be sent with nonblocking/selectors or a bounded writer. Keep all commands argv arrays; never execute expected-manifest strings as commands. Reject unsafe seed types/escaping links (current seeds have no symlinks); compare full inventory before esy. Find compiler through existing fixed store/environment and validate canonical path/hash/version; don't count underscores or use substring checks. No runtime esy install. Post-check immutable package/locks/compiler. Include intended cache write probes and readonly package/lock/compiler open-for-write denial probes without modifying protected bytes.
+
+Container name random unique + exact ownership label. Retain container for post-exit inspect so actual configuration and OOM state can be captured; cleanup only exact owned container after label verification. Verify absence with successful daemon query; do not call an inspect error proof of cleanup. Docker run --pull=never, readonly root, networknone, user1000, capdropALL/nnp, pids128/cpus2/memory2g, work128MiB exec, both cache32MiB exec, original project absolute path. Never mount host paths or .esy writable. Reserve run IDs atomically before launch so concurrent reuse cannot both start; keep failures/receipts immutable and detect source modification.
+
+Manifest capture can inspect base installed caches and derivative seed inventories via read-only offline containers. Keep expectations outside candidate and bind run to exact image ID and protected expectation hash. E2E variants may provide deliberately altered expectation copies or derivative fixture images; no production bypass switch is needed. Missing installation must be a clear failure before compilation; unexpected added/missing lock or seed file must fail. Ensure compiler command-path check actually goes through esy after seeds initialize, not only direct compiler invocation.
+
+Fixed fixture requirements: positive stdout esy-ocaml-reference:passed newline; wrong result compiles then Assert_failure; invalid exactly let broken =; timeout true loop; output infinite printing; resource bounded-to-container allocation pressure. Do not falsely call signal9 OOM without Docker evidence, or generic nonzero a syntax failure.
+
+FRONTIER CARD
+{
+  "id": "R1_IMAGE_RUNTIME_REPAIR",
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+    "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime"
+  ],
+  "requirements": [
+    "Use one Codex Luna coding launch in an isolated copy; the Dockerfile path is a narrowly proposed addition requiring Astra review.",
+    "Repair only the derivative image and existing esy runner. Do not modify controller code or introduce unattended dispatch.",
+    "Pin the base image to sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267.",
+    "Seed _esy and node_modules/.cache from the derivative image at the original absolute paths. Do not invoke esy install.",
+    "Preserve readonly dependencies, network none, nonroot execution, 128MiB work storage, 32MiB caches, 2GiB memory, and the 120-second limit.",
+    "Preserve required exact identities and bounded immutable reports; record the derivative image identity.",
+    "Obtain separate Astra diff review before executing changed implementation or building its image. Root supervises reviewed fixed commands.",
+    "Keep all changes isolated until independent acceptance authorizes guarded import."
+  ],
+  "e2e": [
+    "Run a real Docker smoke test using the pinned derivative image and original runtime entry point.",
+    "Demonstrate that seeded dependencies and caches support the intended esy operation without installation or network access.",
+    "Verify actual container identity, mounts, paths, limits, and report behavior."
+  ]
+}
+SUPERVISOR FACTS
+Supervisor-discovered facts and implementation guidance (not acceptance):
+- Pinned base image exists, linux/amd64; base-image-inspect-001.json contains exact layers. No new image built.
+- Fresh readonly offline probe confirms _esy96KiB and node_modules/.cache24KiB, no symlinks printed. See base-readonly-probe-001.txt for reference-command-env and package/lock hashes.
+- Existing runner ROOT=parents[3] resolves correctly in candidate; original source stays unchanged. Results should accept explicit supervisor output directory outside candidate so later code workers cannot modify accepted evidence.
+- Build derivative with verified local base tag, no reinstall/compiler rebuild, --network none, validate base tag ID before/after and base layer prefix. Avoid assuming FROM local-name@digest works with BuildKit; previous use attempted remote resolution. Use immutable resulting image ID at runtime.
+- Container has Node/esy plus shell/coreutils, don't assume Python. Node stdlib can emit canonical file inventories. Capture canonical compiler path from existing reference environment/store, not hand-counted underscores. Capture executable hash/version and complete package+lock inventories. Seeds must include both _esy and node_modules/.cache.
+- Keep readonly root, networknone, nonroot1000, caps dropped/nnp, pids128, cpus2, 2GiB, work128MiB/caches32MiB. Original /home/opam/esy-reference paths unchanged. Remove runtime esy install.
+- Runtime requires pre-candidate identity/seed checks and post immutable inventory checks. Expected identity comes from supervisor-protected build receipt/manifest bound to image ID, not blindly observed runtime values.
+- Keep valid stdout esy-ocaml-reference:passed newline; wrong assertion independently compiles; syntax fixture exactly let broken =. Timeout/output/resource controls separate fixed fixtures.
+- Streaming host cap must apply before accumulating unlimited bytes. Inner per-command output files also need limits so flood cannot fill work filesystem before host sees data. Bounded logs and predictable overflow failure, no arbitrary truncation counted as pass.
+- For OOM classification retain owned container until State.OOMKilled inspected, then exact-label/name cleanup; --rm prevents post-exit inspect. Do not broad-delete names.
+- Test-only lower timeout/memory may only lower production limits if needed; never broaden privileges/network/writable roots or change defaults. Real E2Es never mocked Docker.
+- Existing image execution is amd64 emulated on Apple Silicon; no model weights/train/data generation in scope.

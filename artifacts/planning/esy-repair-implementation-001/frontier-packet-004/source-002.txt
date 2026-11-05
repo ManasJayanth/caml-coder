@@ -1,0 +1,30 @@
+FILE artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime
+MANIFEST {"path": "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime", "mode": 420, "bytes": 651, "sha256": "f2492497df33f58ad951e83a136b31f36f4ed8e47c0f2aac32265373d54a314f"}
+COMPLETE SOURCE
+FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267 AS installed
+
+FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267
+USER 1000:1000
+ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
+WORKDIR /home/opam/esy-reference
+
+# Preserve the already installed esy state and Node cache as immutable seed
+# payloads. The runner copies these into bounded writable tmpfs mounts at start.
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache
+
+EXACT DIFF
+--- baseline/artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime
++++ candidate/artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime
+@@ -0,0 +1,11 @@
++FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267 AS installed
++
++FROM sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267
++USER 1000:1000
++ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
++WORKDIR /home/opam/esy-reference
++
++# Preserve the already installed esy state and Node cache as immutable seed
++# payloads. The runner copies these into bounded writable tmpfs mounts at start.
++COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
++COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache

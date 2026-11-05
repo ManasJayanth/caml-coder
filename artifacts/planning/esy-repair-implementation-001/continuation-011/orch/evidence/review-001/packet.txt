@@ -1,0 +1,32 @@
+ROLE: REVIEWER
+SCOPE: smoke:codex-smoke
+REVISION: 97c2d53787f73caec6dc9a8f274993d31626a91e128208ad4cbaa30f47246c2f
+You are an independent reviewer. Do not edit or execute. Return exactly ONE fenced json block with keys revision, findings[{id,severity,location,evidence}], missing_evidence[], coverage{complete,truncated}, cleanup, verdict (ACCEPTED|INCOMPLETE|BLOCKED). ACCEPTED requires zero findings and zero missing evidence.
+ACCOUNTING: launches_used=36/48 active_seconds=26112.3/32400
+INVENTORY:
+  hello.py 0o644 379 c1000152ed4279d11e077da06a8e2554aa2520a36afafdddcbe27d33dff34abc
+--- FILE hello.py ---
+"""Smoke subject: a 20-line file for provider transport verification. Not production code."""
+def add(a, b):
+    return a + b
+
+
+def sub(a, b):
+    return a - b
+
+
+def mul(a, b):
+    return a * b
+
+
+def div(a, b):
+    if b == 0:
+        raise ZeroDivisionError('b must be nonzero')
+    return a / b
+
+
+if __name__ == '__main__':
+    print(add(1, 2), sub(5, 3), mul(2, 4), div(8, 2))
+
+--- END FILE ---
+SMOKE: this is a transport smoke. In the "cleanup" field write the string "MODEL=<your model name>" so provenance can be checked. Keep the response under 2000 characters.

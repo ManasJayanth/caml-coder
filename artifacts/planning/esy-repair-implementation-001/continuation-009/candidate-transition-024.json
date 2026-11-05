@@ -1,0 +1,10 @@
+{
+  "status": "IMPLEMENTED_UNACCEPTED",
+  "changed_paths": [
+    "scripts/esy-repair/claude-worker.sh"
+  ],
+  "source_review": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/A9-B1a-source-review-001/final.txt",
+  "source_sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6",
+  "public_e2e": "PENDING",
+  "original_imported": false
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "PASSED",
+  "scope": "compiler version probe only; not locked four-domain toolchain readiness",
+  "image": "ocaml/opam@sha256:52ae74f2f384d509b9c001aaec682ad390202836b5c655358290f49d97934a9a",
+  "platform": "linux/amd64 (emulated on arm64 host)",
+  "compiler": "/home/opam/.opam/5.5/bin/ocamlc",
+  "version": "5.5.1",
+  "user": "1000:1000",
+  "network": "none",
+  "root_filesystem": "read-only",
+  "host_mounts": [],
+  "observed_exit_code": 0
+}

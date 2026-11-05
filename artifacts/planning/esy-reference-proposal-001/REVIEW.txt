@@ -1,0 +1,9 @@
+Esy reference probe: NEEDS_REPLAN
+
+Image build passed; isolated runtime acceptance did not. Immutable reports esy-results/esy-reference-run-001 through -004 preserve one Docker permission denial and three actual failed E2Es. The third real run confirms compiler version 5.5.1, positive execution and an Assert_failure for the wrong-result control. It does not establish the compiler store path, because esy sh exits before command execution.
+
+Failures: the initial readonly project cache could not be written. A blank tmpfs hid installation state. Offline esy install then populated project state but failed writing /home/opam/.esy/projects.json; esy sh failed writing node_modules/.cache/_esy/build/bin/command-env. The intended syntax-error fixture is valid syntax with a type mismatch. Preserve that negative result without renaming it a syntax success.
+
+Bounded next proposal: inspect installed cache layout read-only; design disposable seeded writable state for esy without hiding immutable dependency store or enabling network. Verify the exact compiler path and original lock identity before and after execution. Replace malformed syntax fixture with unambiguously incomplete OCaml syntax, retaining the separate wrong-result runtime assertion. Run fresh positive/negative E2E only after restart authorization. No relaxed isolation, no full T15/T07F pass, no model quality claim.
+
+No restart authorization is asserted by this worker-authored document.

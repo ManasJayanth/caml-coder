@@ -1,0 +1,16 @@
+export CLAUDE_BIN=/opt/homebrew/Caskroom/claude-code@latest/2.1.310/claude
+export CLAUDE_FABLE_MODEL=claude-fable-5-1
+export CLAUDE_CODING_MODEL=
+export CODEX_BIN=/opt/homebrew/Caskroom/codex/0.164.0/bin/codex
+export CODEX_WORKER=/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate/scripts/esy-repair/codex-worker.sh
+export PI_BIN=/opt/homebrew/Cellar/pi-coding-agent/1.4.0/bin/pi
+export PI_PROVIDER=openai-codex
+export PI_CODING_MODEL=gpt-6-luna
+export SANDBOX_EXEC=/usr/bin/sandbox-exec
+export PI_PROFILE=/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-nofork-v3.sb
+export REVIEW_PROFILE=/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-011/review-readonly.sb
+export PI_RUNTIME=/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2
+export PI_GUARDIAN=/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/guardian-v2.py
+export BOOT_PYTHON=/usr/bin/python3
+export AUTH_DIR=/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/pi-runtime-v2/private-pi
+export CLAUDE_REAL_CONFIG=1

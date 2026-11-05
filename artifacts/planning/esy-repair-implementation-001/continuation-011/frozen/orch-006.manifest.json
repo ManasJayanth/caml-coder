@@ -1,0 +1,69 @@
+{
+ "frozen_wall": 1792765423.07007,
+ "inventory": [
+  [
+   "e2e/fake_engine.py",
+   "0o755",
+   6147,
+   "a8d0f0fbaf2acc83526a7fb0ed25bc0159511b657dcc3096e7f651b51e1a2843"
+  ],
+  [
+   "e2e/run_e2e.py",
+   "0o755",
+   30262,
+   "35a6d0f30b63b1e85f45b9ae5cc159ad5d8f884d7e858492276922eb00711ad3"
+  ],
+  [
+   "env.sh.example",
+   "0o644",
+   637,
+   "1c738240b3d3b927089d434d3768daf1a07baeb3f8520ae559ea49361b91194d"
+  ],
+  [
+   "loop.py",
+   "0o644",
+   46186,
+   "0b43e6d92181c7e95764ee020bf7ed900c73f134894051e2266deae6a8081e82"
+  ],
+  [
+   "review-readonly.sb",
+   "0o644",
+   661,
+   "5de083549af36aa541d86c9d9aef82600dc93df1c0b3ee0e23f40e59905bb861"
+  ],
+  [
+   "run_bounded.py",
+   "0o755",
+   4874,
+   "630de1f3501367a2e91a70e60ed012dd0db35ef15d30f4f10ccb0f8eb4e94134"
+  ],
+  [
+   "worker-claude.sh",
+   "0o755",
+   1507,
+   "38ef74e29ebef801152c47bff28bf35810bf994b0b6645ba50e6919a590ea35c"
+  ],
+  [
+   "worker-codex.sh",
+   "0o755",
+   359,
+   "95d84e148bf07d7388fa68845d32c4f75b1a235c9d20e903fc124cf0ec0c7142"
+  ],
+  [
+   "worker-common.sh",
+   "0o755",
+   363,
+   "eaeb222c7222de1948386864f2e6e5b2c1017c442f2fcf33904b79be4274250c"
+  ],
+  [
+   "worker-pi.sh",
+   "0o755",
+   726,
+   "2b6b3a65582bce07667e679a7a6ebe16105adc1d724cb40a9635bf6146f1ebc3"
+  ]
+ ],
+ "inventory_hash": "2dd81ad348f1c57076b48e9c74a59f4327ab1db80e8fd19f31f385fb443fc14c",
+ "note": "loop mechanics only (backfill-review, NO TOOLS prompt lines, example card); findings F1-F10 untouched",
+ "snapshot": "orch-006",
+ "supersedes": "orch-005"
+}

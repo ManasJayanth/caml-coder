@@ -1,0 +1,8 @@
+{
+  "observed_unix": 1792186851.774414,
+  "verified_cache_bytes": 78734732405,
+  "partial_bytes": 1134559232,
+  "acquisition_session": 41457,
+  "toolchain_build_session": 46851,
+  "scope": "Live handles separately polled; byte counts are inventory, not a full acquisition manifest"
+}

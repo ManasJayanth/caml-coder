@@ -1,0 +1,763 @@
+{
+  "kind": "read-only seed inventory probe",
+  "images": {
+    "base": {
+      "image": "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+      "container_id": "6a8790901399099a91802214b16896b20a5d5d06ca57c2618ec9303fc9577702",
+      "command": [
+        "docker",
+        "create",
+        "--name",
+        "esy-inventory-1cd6179cc1fdb74742f79cb4",
+        "--label",
+        "esy-reference.owner=1cd6179cc1fdb74742f79cb4",
+        "--platform",
+        "linux/amd64",
+        "--pull=never",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "--pids-limit",
+        "32",
+        "--memory",
+        "256m",
+        "--cpus",
+        "1",
+        "--user",
+        "1000:1000",
+        "--entrypoint",
+        "/home/opam/node/bin/node",
+        "sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267",
+        "-e",
+        "const fs=require('fs'),p=require('path'),c=require('crypto');let count=0,total=0;function inv(root){let a=[];function walk(f,r){let s=fs.lstatSync(f);if(++count>2000)throw Error('entries');let x={path:r,type:s.isDirectory()?'dir':'file',mode:s.mode&511,uid:s.uid,gid:s.gid,mtime_ms:Math.floor(s.mtimeMs)};if(s.isSymbolicLink()||(!s.isDirectory()&&!s.isFile()))throw Error('unsupported');if(s.isFile()){total+=s.size;if(total>16777216)throw Error('bytes');x.bytes=s.size;x.sha256=c.createHash('sha256').update(fs.readFileSync(f)).digest('hex')}a.push(x);if(s.isDirectory())for(let n of fs.readdirSync(f).sort())walk(p.join(f,n),r==='.'?n:r+'/'+n)}walk(root,'.');return a}let roots={project:'/home/opam/esy-reference/_esy',cache:'/home/opam/esy-reference/node_modules/.cache',package:'/home/opam/esy-reference/package.json',lock:'/home/opam/esy-reference/esy.lock'};if(process.argv[1]==='derivative'){roots.seed_project='/home/opam/esy-cache-seed/_esy';roots.seed_cache='/home/opam/esy-cache-seed/node-cache'}let v={};for(let[k,r]of Object.entries(roots))v[k]=inv(r);let out=JSON.stringify(v);if(Buffer.byteLength(out)>524288)throw Error('output');console.log(out)",
+        "base"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "inventory": {
+        "project": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "default/bin",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "default/bin/command-env",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3600,
+            "sha256": "5f4a71ec9481ed78b2ccafa109a394a64496f37f56fb475f0ced81420ccc6f98"
+          },
+          {
+            "path": "default/bin/command-exec",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3622,
+            "sha256": "60c1461cbd341f933312c618ff45c2d60c1d7fb528955f02d9df0e943c1c48ef"
+          },
+          {
+            "path": "default/bin/node",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 181,
+            "sha256": "8ef6a1502b3a0a66344f7ca10300d90ca808c4ffcbe5ec8d504b5b740183543e"
+          },
+          {
+            "path": "default/cache",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/cache/project-b86829af2e3c88fcdf0aa5913f218e1b",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 8720,
+            "sha256": "8f7d120994e49609a42c6972799b560e41ac52b6d3a66a1af01b539fc81439a0"
+          },
+          {
+            "path": "default/installation.json",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 170,
+            "sha256": "6d53c54eebf9cd9781d3982f9e19ccd68b297b1835078f3d9b7120d533d5681a"
+          },
+          {
+            "path": "default/pnp.js",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 32308,
+            "sha256": "302a4b2b7233719264d45a15956ba496c5201d8c5bdddb6b4fa22035b8e0d7f6"
+          },
+          {
+            "path": "default/store",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/b",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/i",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/s",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/tmp",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          }
+        ],
+        "cache": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build/bin",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build/bin/command-env",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3600,
+            "sha256": "5f4a71ec9481ed78b2ccafa109a394a64496f37f56fb475f0ced81420ccc6f98"
+          },
+          {
+            "path": "_esy/build/bin/command-exec",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3622,
+            "sha256": "60c1461cbd341f933312c618ff45c2d60c1d7fb528955f02d9df0e943c1c48ef"
+          }
+        ],
+        "package": [
+          {
+            "path": ".",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187806000,
+            "bytes": 132,
+            "sha256": "db35d242767029ee595cbf23760fb3a902c72ad8c363108554b67e0289a6b44d"
+          }
+        ],
+        "lock": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": ".gitattributes",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000,
+            "bytes": 100,
+            "sha256": "aa5c35bcac038bcf6d8e85cd349c56f28a6dfd328ec4651b7a7807ffa2daa02e"
+          },
+          {
+            "path": ".gitignore",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000,
+            "bytes": 76,
+            "sha256": "bc6f11c62802aac8697615192b89a379d6d316301f1adf2594861a2a23b8e0d2"
+          },
+          {
+            "path": "index.json",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000,
+            "bytes": 1314,
+            "sha256": "e47b63f0a6caa6957d87c2f5e97d643b55e99ae933c249bc271fc808cda412b6"
+          }
+        ]
+      },
+      "cleanup_verified": true
+    },
+    "derivative": {
+      "image": "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+      "container_id": "594e7af39d8cb7348cf27db88658a64f893b823bcbe196f6916145dbf1c11112",
+      "command": [
+        "docker",
+        "create",
+        "--name",
+        "esy-inventory-33697a5e85152dca5a5253bb",
+        "--label",
+        "esy-reference.owner=33697a5e85152dca5a5253bb",
+        "--platform",
+        "linux/amd64",
+        "--pull=never",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "--pids-limit",
+        "32",
+        "--memory",
+        "256m",
+        "--cpus",
+        "1",
+        "--user",
+        "1000:1000",
+        "--entrypoint",
+        "/home/opam/node/bin/node",
+        "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+        "-e",
+        "const fs=require('fs'),p=require('path'),c=require('crypto');let count=0,total=0;function inv(root){let a=[];function walk(f,r){let s=fs.lstatSync(f);if(++count>2000)throw Error('entries');let x={path:r,type:s.isDirectory()?'dir':'file',mode:s.mode&511,uid:s.uid,gid:s.gid,mtime_ms:Math.floor(s.mtimeMs)};if(s.isSymbolicLink()||(!s.isDirectory()&&!s.isFile()))throw Error('unsupported');if(s.isFile()){total+=s.size;if(total>16777216)throw Error('bytes');x.bytes=s.size;x.sha256=c.createHash('sha256').update(fs.readFileSync(f)).digest('hex')}a.push(x);if(s.isDirectory())for(let n of fs.readdirSync(f).sort())walk(p.join(f,n),r==='.'?n:r+'/'+n)}walk(root,'.');return a}let roots={project:'/home/opam/esy-reference/_esy',cache:'/home/opam/esy-reference/node_modules/.cache',package:'/home/opam/esy-reference/package.json',lock:'/home/opam/esy-reference/esy.lock'};if(process.argv[1]==='derivative'){roots.seed_project='/home/opam/esy-cache-seed/_esy';roots.seed_cache='/home/opam/esy-cache-seed/node-cache'}let v={};for(let[k,r]of Object.entries(roots))v[k]=inv(r);let out=JSON.stringify(v);if(Buffer.byteLength(out)>524288)throw Error('output');console.log(out)",
+        "derivative"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "inventory": {
+        "project": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "default/bin",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "default/bin/command-env",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3600,
+            "sha256": "5f4a71ec9481ed78b2ccafa109a394a64496f37f56fb475f0ced81420ccc6f98"
+          },
+          {
+            "path": "default/bin/command-exec",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3622,
+            "sha256": "60c1461cbd341f933312c618ff45c2d60c1d7fb528955f02d9df0e943c1c48ef"
+          },
+          {
+            "path": "default/bin/node",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 181,
+            "sha256": "8ef6a1502b3a0a66344f7ca10300d90ca808c4ffcbe5ec8d504b5b740183543e"
+          },
+          {
+            "path": "default/cache",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/cache/project-b86829af2e3c88fcdf0aa5913f218e1b",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 8720,
+            "sha256": "8f7d120994e49609a42c6972799b560e41ac52b6d3a66a1af01b539fc81439a0"
+          },
+          {
+            "path": "default/installation.json",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 170,
+            "sha256": "6d53c54eebf9cd9781d3982f9e19ccd68b297b1835078f3d9b7120d533d5681a"
+          },
+          {
+            "path": "default/pnp.js",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 32308,
+            "sha256": "302a4b2b7233719264d45a15956ba496c5201d8c5bdddb6b4fa22035b8e0d7f6"
+          },
+          {
+            "path": "default/store",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/b",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/i",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/s",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/tmp",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          }
+        ],
+        "cache": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build/bin",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build/bin/command-env",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3600,
+            "sha256": "5f4a71ec9481ed78b2ccafa109a394a64496f37f56fb475f0ced81420ccc6f98"
+          },
+          {
+            "path": "_esy/build/bin/command-exec",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3622,
+            "sha256": "60c1461cbd341f933312c618ff45c2d60c1d7fb528955f02d9df0e943c1c48ef"
+          }
+        ],
+        "package": [
+          {
+            "path": ".",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187806000,
+            "bytes": 132,
+            "sha256": "db35d242767029ee595cbf23760fb3a902c72ad8c363108554b67e0289a6b44d"
+          }
+        ],
+        "lock": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": ".gitattributes",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000,
+            "bytes": 100,
+            "sha256": "aa5c35bcac038bcf6d8e85cd349c56f28a6dfd328ec4651b7a7807ffa2daa02e"
+          },
+          {
+            "path": ".gitignore",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000,
+            "bytes": 76,
+            "sha256": "bc6f11c62802aac8697615192b89a379d6d316301f1adf2594861a2a23b8e0d2"
+          },
+          {
+            "path": "index.json",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000,
+            "bytes": 1314,
+            "sha256": "e47b63f0a6caa6957d87c2f5e97d643b55e99ae933c249bc271fc808cda412b6"
+          }
+        ],
+        "seed_project": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792662744000
+          },
+          {
+            "path": "default",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "default/bin",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "default/bin/command-env",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3600,
+            "sha256": "5f4a71ec9481ed78b2ccafa109a394a64496f37f56fb475f0ced81420ccc6f98"
+          },
+          {
+            "path": "default/bin/command-exec",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3622,
+            "sha256": "60c1461cbd341f933312c618ff45c2d60c1d7fb528955f02d9df0e943c1c48ef"
+          },
+          {
+            "path": "default/bin/node",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 181,
+            "sha256": "8ef6a1502b3a0a66344f7ca10300d90ca808c4ffcbe5ec8d504b5b740183543e"
+          },
+          {
+            "path": "default/cache",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/cache/project-b86829af2e3c88fcdf0aa5913f218e1b",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 8720,
+            "sha256": "8f7d120994e49609a42c6972799b560e41ac52b6d3a66a1af01b539fc81439a0"
+          },
+          {
+            "path": "default/installation.json",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 170,
+            "sha256": "6d53c54eebf9cd9781d3982f9e19ccd68b297b1835078f3d9b7120d533d5681a"
+          },
+          {
+            "path": "default/pnp.js",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 32308,
+            "sha256": "302a4b2b7233719264d45a15956ba496c5201d8c5bdddb6b4fa22035b8e0d7f6"
+          },
+          {
+            "path": "default/store",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/b",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/i",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/store/s",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187810000
+          },
+          {
+            "path": "default/tmp",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          }
+        ],
+        "seed_cache": [
+          {
+            "path": ".",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792662750000
+          },
+          {
+            "path": "_esy",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build/bin",
+            "type": "dir",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000
+          },
+          {
+            "path": "_esy/build/bin/command-env",
+            "type": "file",
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3600,
+            "sha256": "5f4a71ec9481ed78b2ccafa109a394a64496f37f56fb475f0ced81420ccc6f98"
+          },
+          {
+            "path": "_esy/build/bin/command-exec",
+            "type": "file",
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "mtime_ms": 1792187813000,
+            "bytes": 3622,
+            "sha256": "60c1461cbd341f933312c618ff45c2d60c1d7fb528955f02d9df0e943c1c48ef"
+          }
+        ]
+      },
+      "cleanup_verified": true
+    }
+  },
+  "checks": {
+    "project": true,
+    "cache": true,
+    "package": true,
+    "lock": true,
+    "seed_project": false,
+    "seed_cache": false
+  }
+}

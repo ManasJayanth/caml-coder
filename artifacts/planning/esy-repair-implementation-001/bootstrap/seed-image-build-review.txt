@@ -1,0 +1,18 @@
+You are independent Astra reviewer. Review ONLY the frozen Dockerfile below and fixed ROOT-supervised build procedure. No runner/test execution is requested or authorized by this review. Return strict JSON safe_to_build boolean, findings array, limitations. Do not execute or delegate. Procedure: verify local tag ocaml-sft-esy-project-probe:001 resolves to pinned sha256:c41892ac54ffae381d3629618f07134e8191a609baec19a77584f45c5345c267 immediately before/after; use new exclusive build context with only this exact Dockerfile; docker build --network none --pull=false --platform linux/amd64 --iidfile context/image-id context. Stream stdout/stderr with hard cap1MiB/time120s; if timeout/uncertain build preserve and no retries/claims. No automatic image deletion; record immutable ID and full inspection with base-layer prefix verification. No source edits/import. Frozen Dockerfile SHA in manifest attached. Build image only; does not accept runner/C2 full inventory.
+MANIFEST
+{
+  "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py": "6051c9054244106c77eeeb838a7f8094102e918d827613fb9ab7895c2c31cc52",
+  "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime": "42418048ae6e5057c4890d7d536d26878b1dd5946b3f482dd48c744f2fa64c11"
+}
+DOCKERFILE
+FROM ocaml-sft-esy-project-probe:001 AS installed
+
+FROM ocaml-sft-esy-project-probe:001
+USER 1000:1000
+ENV ESY__BUILD_CONCURRENCY=2 ESY__FETCH_CONCURRENCY=2
+WORKDIR /home/opam/esy-reference
+
+# Preserve the already installed esy state and Node cache as immutable seed
+# payloads. The runner copies these into bounded writable tmpfs mounts at start.
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/_esy /home/opam/esy-cache-seed/_esy
+COPY --from=installed --chown=1000:1000 /home/opam/esy-reference/node_modules/.cache /home/opam/esy-cache-seed/node-cache

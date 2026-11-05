@@ -1,0 +1,29 @@
+{
+  "safe_to_dispatch_one_card": true,
+  "approved_coding_launch": 34,
+  "approved_card_id": "B1a-Routing-034",
+  "reviewed_plan_sha256": "3e46a2abdd958ae824179d48b3ad113264272a692977ae5d14271135fd7ec26a",
+  "reviewed_plan_section": "launch_034",
+  "parent_revision_sha256": "530df99ad63c25e65ef699717c38dfaa06a1bcacb07f547376332adcd13c66e0",
+  "findings": [
+    {
+      "severity": "info",
+      "message": "Approve one source-authoring correction for the review33 shared-matrix control-path defect. The complete mandatory card fields are present. Both existing controls must enter the actual response loop, select their fixed first-row fixture mode, use the existing shared checks, persist bounded observations and abort at the first mismatch. No arity fix, new control, execution mechanism or broader refactor is authorized."
+    },
+    {
+      "severity": "info",
+      "message": "All four card input hashes match. Current candidate test matches frozen33, whose source review leaves only R4/R5 control-path coverage unresolved within the routing card. Dispatcher/guardian/profile hashes remain unchanged. Ledger is 33/36; coding33 guardian confirms reaping, exit zero, no failure and credential removal. Source33 remains an unaccepted correction base."
+    },
+    {
+      "severity": "warning",
+      "message": "Two launch slots would remain after34. Arity, diagnostics, full receipt/inventory and the outer wrapper still remain open; this correction cannot establish overall completion or runtime acceptance and authorizes no future work automatically."
+    }
+  ],
+  "conditions": [
+    "Dispatch the complete hash-bound launch_034 card once, reserving slot34 from ledger33 in a fresh isolated job with verified full frozen33 parent. Only tests/e2e/test_review_adapter_e2e.py may change.",
+    "Preserve targeted patches under 3000 characters, no whole-file rewrite and the unchanged 2 MiB output cap. Keep accepted normal routing checks, collector, bounded_run, ownership/deadline/cleanup semantics, adapters and existing controls intact.",
+    "Maintain prior exclusive-runtime, old-worker/credential-absence, full-manifest binding, unchanged-control and valid smoke gates. Enforce reconciled active time below 32400 seconds, the 36-launch cap, 660-second reserve and cumulative same-objective attempt/replan rules.",
+    "Source authoring only with read/edit/write tools: no candidate execution, imports, tests, subprocess tools, Docker, Claude, provider calls or delegation. No arity, diagnostics, general receipt or wrapper work.",
+    "Independently validate complete provider/tool/scope/binding/cleanup evidence, preserve frozen output as UNACCEPTED and obtain fresh exact-revision Astra source review. No import or execution approval is granted."
+  ]
+}

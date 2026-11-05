@@ -1,0 +1,6 @@
+{
+  "exit_code": 0,
+  "stdout": "{\"realpath\":true,\"original_denied\":true,\"auth_denied\":true,\"private_write\":true,\"spawn_denied\":true,\"docker_socket_denied\":true}\n",
+  "stderr": "",
+  "invocation": "node -e, unchanged reviewed probe code"
+}

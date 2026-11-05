@@ -1,0 +1,1 @@
+Readiness check only. Execute this one fixed command using the shell tool; do not edit files or invoke other tools. Report verbatim command JSON stdout and exit. Command: /Users/psac/development/prometheansacrifice/ocaml-rl-sft/.venv/bin/python -B /Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/probe_worker.py

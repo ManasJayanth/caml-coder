@@ -1,0 +1,8 @@
+--- a/tests/e2e/test_bonito_conversion.py
++++ b/tests/e2e/test_bonito_conversion.py
+@@
+-    hidden, kv, intermediate, vocab = 8, 4, 16, 18
++    hidden, kv, intermediate, vocab = 8, 4, 16, 9
+@@
+-SCENARIOS = {"bonito_conversion": test_bonito_conversion, "bonito_conversion_rejects": test_bonito_conversion_rejects_unsafe_and_invalid_inputs}
++SCENARIOS = {"bonito-conversion": test_bonito_conversion, "bonito_conversion_rejects": test_bonito_conversion_rejects_unsafe_and_invalid_inputs}

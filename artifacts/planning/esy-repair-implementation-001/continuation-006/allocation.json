@@ -1,0 +1,65 @@
+{
+  "status": "RECONCILED_FROM_THIS_THREAD_TURN_BOUNDARIES",
+  "checkpoint": 1792665383.826273,
+  "previous_checkpoint_seconds": 10367.532,
+  "closed_intervals": [
+    {
+      "start": 1792665383.826273,
+      "end": 1792665394.155,
+      "seconds": 10.328727006912231,
+      "turn_id": "01a162fb-0b5b-72a3-8e61-c2cf41e3b205"
+    },
+    {
+      "start": 1792677056.485,
+      "end": 1792677064.575,
+      "seconds": 8.09000015258789,
+      "turn_id": "01a163e1-0fdf-7ef1-b569-9162d75b9d2f"
+    },
+    {
+      "start": 1792677081.701,
+      "end": 1792677085.549,
+      "seconds": 3.8480000495910645,
+      "turn_id": "01a163e1-7260-7690-b399-e5f1f811fbf0"
+    },
+    {
+      "start": 1792677090.462,
+      "end": 1792677153.73,
+      "seconds": 63.26800012588501,
+      "turn_id": "01a163e1-9499-76d1-8a2f-49a27d828b6c"
+    },
+    {
+      "start": 1792677177.801,
+      "end": 1792677488.909,
+      "seconds": 311.10799980163574,
+      "turn_id": "01a163e2-e9c4-75e3-81d2-2422b637911a"
+    },
+    {
+      "start": 1792677866.817,
+      "end": 1792677909.908,
+      "seconds": 43.09100008010864,
+      "turn_id": "01a163ed-6d3c-7f02-a870-8d44bd1d86db"
+    },
+    {
+      "start": 1792677920.112,
+      "end": 1792678252.702,
+      "seconds": 332.5899999141693,
+      "turn_id": "01a163ee-3d6b-7cc1-b61c-12257b2820b2"
+    },
+    {
+      "start": 1792678340.301,
+      "end": 1792678346.856,
+      "seconds": 6.554999828338623,
+      "turn_id": "01a163f4-a6c8-7e61-8178-1d1e7b42a69d"
+    }
+  ],
+  "prior_active_seconds": 11146.411,
+  "current_turn_started_epoch": 1792678455.854,
+  "active_limit_seconds": 21600,
+  "coding_consumed": 18,
+  "coding_cap": 24,
+  "new_allocation": 6,
+  "reviewer": "fresh Codex gpt-6-astra",
+  "planner": "separate fresh Codex gpt-6-astra",
+  "authorization": "User explicitly replaced Fable with Codex Astra, then instructed go. Six coding launches previously authorized.",
+  "note": "Uses RESULT004 checkpoint plus nonoverlapping subsequent task intervals; RESULT005 preflight is included in its parent turn, not counted twice. Idle gaps excluded."
+}

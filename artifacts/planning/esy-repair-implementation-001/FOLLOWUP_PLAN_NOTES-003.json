@@ -1,0 +1,13 @@
+{
+  "status": "PROPOSED_FOLLOWUP_NOT_EXECUTABLE_NOW",
+  "card_count": 31,
+  "unmapped_final_esy_findings": [],
+  "constraints": [
+    "The model-generated plan is a proposal, not acceptance or a budget allocation.",
+    "Per-card human permission is not required by the user plan: a new coding allocation is required because this allocation is exhausted; once allocated, existing authorized repair scope remains valid.",
+    "Preserve actual cumulative active time. Do not require or assume a wall-time reset when time remains.",
+    "Proposed --case/--run-id/--output test-driver interfaces do not exist yet. Implement and independently review them before executing the listed future commands.",
+    "Original complete approved requirements remain in the conversation and saved prompts; do not treat planner context omission as a reason to ask the user to repeat available information.",
+    "Only separate independent safety reviews and real E2E evidence can authorize execution/import; worker plans cannot."
+  ]
+}

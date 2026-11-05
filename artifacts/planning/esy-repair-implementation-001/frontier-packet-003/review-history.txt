@@ -1,0 +1,1282 @@
+
+C01-supervised-review-001
+{
+  "revision_sha256": "e34ce3cbe5274d3e2da43f3ba6a9c2b54e76ec2e9614e6062eab614598b23ed9",
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "C01-R01",
+      "severity": "blocking",
+      "problem": "PHASE omits PLAN_RUNNING and PLAN_FINISHED. Launching the planner appends PLAN_RUNNING, but finish_job then calls emit_event, whose load_events rejects that persisted phase. Subsequent public commands also reject the history, preventing the first supervised transition from completing.",
+      "required_change": "Include every supported running and finished phase in history validation and ensure all emitted transitions can replay.",
+      "required_e2e": "Complete public init, plan launch, plan collection, resume and advance to CODE_READY, checking history replay after each step."
+    },
+    {
+      "id": "C01-R02",
+      "severity": "blocking",
+      "problem": "Shell-disabled planning and review receive no source contents. The planning prompt contains bindings and the selected card; the review prompt adds a collection report containing paths, hashes and the worker's summary, but no original bytes, resulting bytes or diff. Bootstrap evidence is also supplied only as a digest. A syntactically valid PASS can therefore complete a unit whose code the reviewer could not examine.",
+      "required_change": "Provide bounded, immutable source and evidence context directly to these workers. Review must receive the complete accumulated change, including original and resulting contents, deletions and relevant surrounding source. Fail closed when required context cannot be supplied.",
+      "required_e2e": "Use shell-disabled fixture workers to verify that planning receives source context and review receives actual modifications and deleted-file contents. Demonstrate that a change omitted from the review context cannot reach UNIT_COMPLETE."
+    },
+    {
+      "id": "C01-R03",
+      "severity": "blocking",
+      "problem": "Workspace changes are checked only against each launch's immediate input manifest. A failed code run can modify an out-of-card file, return to CODE_READY, and have that modification adopted silently as the next run's baseline. Review launch also does not require its input revision to equal the collected code revision, and advance does not require the current workspace to equal the reviewed revision. These paths can accept unexamined changes.",
+      "required_change": "Maintain an authoritative unit baseline and collect the complete accumulated delta against it. Reject or explicitly reconcile workspace mutations left by failed attempts. Bind review input to the collected output and verify that exact revision again before UNIT_COMPLETE.",
+      "required_e2e": "Cover an out-of-card write during a failed attempt followed by a successful retry, changes between code collection and review launch, and changes after review collection. None may be silently accepted."
+    },
+    {
+      "id": "C01-R04",
+      "severity": "high",
+      "problem": "execute replaces the provider environment with PATH, HOME and TMPDIR, pointing HOME at scratch. Existing provider credential locations and authentication environment variables are consequently unavailable. The installation schema supplies no explicit authentication/runtime configuration, and launch does not validate a replacement. An otherwise authenticated host installation can therefore launch an unauthenticated provider.",
+      "required_change": "Define and validate a supervisor-selected authentication and runtime arrangement, then construct the required bounded environment explicitly. Preserve existing user files and deny worker writes to protected authentication inputs.",
+      "required_e2e": "Use fixture credentials and a provider that checks its environment and readable credential location. Verify successful configured startup, explicit missing-authentication rejection, protected credential write denial and unchanged existing user files."
+    },
+    {
+      "id": "C01-R05",
+      "severity": "high",
+      "problem": "Accounting validates the seven-launch and 482.411-second floors but never reconciles active_seconds with job elapsed times or resumed_intervals. Interval seconds need not match their bounds, evidence hashes are not resolved, and reconstruct_budget ignores resumed intervals. Imported/local job overlap checks only started_sha256 and skips receipt, elapsed and cleanup reconciliation. Local elapsed time also stops before evidence validation and durable completion.",
+      "required_change": "Reconcile imported jobs, receipts and resumed intervals against authoritative evidence without double counting. Reject inconsistent totals or gaps, preserve all consumed time beyond the required floor, reconcile overlapping local records completely, and charge the full defined active interval.",
+      "required_e2e": "Reject totals below evidenced job/resume consumption, inconsistent interval durations and conflicting overlapping receipts. Verify launch eight preserves seven prior launches, 482.411 seconds plus all resumed consumption, and subsequent completed or interrupted work."
+    },
+    {
+      "id": "C01-R06",
+      "severity": "high",
+      "problem": "History replay verifies artifact hashes internally but never compares init's accounting, baseline, adopted-input or bootstrap bindings with the current installation. Recorded installation, policy and provider-schema hashes in started records are likewise not reconciled. Non-init commands also omit the workflow_root equality check. A different or refreshed installation can therefore replay old state using incompatible inputs or reset imported accounting.",
+      "required_change": "Require the selected workflow root on every command and validate historical authority/input bindings against the installed snapshot. Permit necessary probe refresh or supervisor reconciliation through an explicit compatible transition that preserves prior accounting and evidence.",
+      "required_e2e": "Reject a foreign workflow root and incompatible accounting, policy, schema or frozen-input replacements. Verify that an authorized probe refresh preserves history and all accumulated consumption."
+    },
+    {
+      "id": "C01-R07",
+      "severity": "high",
+      "problem": "After a FAIL review, advance emits CODE_READY with only retry_review. Both execute and next_command select the latest CODE_READY advance and read its card, which is now absent, so the advertised retry cannot launch. The code prompt also has no mechanism to supply the failed review's findings.",
+      "required_change": "Preserve the selected card through the retry transition and bind the failed review report into the next code attempt's evidence and prompt.",
+      "required_e2e": "Exercise review FAIL, advance, corrective code launch, collection and a second review through public commands. Verify the corrective worker receives the findings and accumulated change context."
+    },
+    {
+      "id": "C01-R08",
+      "severity": "high",
+      "problem": "Timeout/overflow cleanup stops escalating when the parent exits. A child in the allocated process group can ignore SIGTERM, close its streams and remain alive while cleanup_uncertainty stays false, allowing another launch. This concerns the known process group, not unsupported complete descendant tracking. Additionally, reconstruct_budget raises on recorded cleanup uncertainty before print-handoff can report the affected identities and budgets.",
+      "required_change": "Bound cleanup of the allocated process group and persist uncertainty whenever its termination cannot be established; parent reaping alone must not authorize retry. Keep accounting reconstruction available for handoff while enforcing cleanup blockers separately.",
+      "required_e2e": "Use a parent that exits on SIGTERM while a same-group child ignores it and closes its pipes. Verify cleanup or a persistent dispatch block. Exercise timeout, overflow and inherited-pipe cases, and require an informative handoff for every uncertain result."
+    },
+    {
+      "id": "C01-R09",
+      "severity": "medium",
+      "problem": "verify_frozen advertises and initially performs legacy bytes/kind normalization, but its final verification loop rereads the original rows and accesses type and size directly. A legacy manifest accepted by the preceding validation consequently fails with KeyError.",
+      "required_change": "Normalize manifest rows once and use the normalized representation throughout verification, initialization and snapshot comparison, or reject legacy input consistently at the schema boundary.",
+      "required_e2e": "Exercise a valid legacy manifest through public initialization and frozen verification, or verify an explicit schema rejection if legacy support is removed."
+    },
+    {
+      "id": "C01-R10",
+      "severity": "medium",
+      "problem": "next_command returns a bare controller.py invocation even though launch requires the running interpreter to equal the supervisor-pinned Python executable. That command neither identifies the installed controller nor selects its validated interpreter, so it can fail lookup or invoke the shebang's different Python.",
+      "required_change": "Construct handoff commands using the absolute installed Python interpreter and controller paths.",
+      "required_e2e": "Install the validated private Python copy outside PATH and verify that the emitted next command invokes the correct controller and passes interpreter identity validation."
+    }
+  ],
+  "missing_evidence": []
+}
+
+R1-review-001
+{
+  "safe_to_build_and_smoke": false,
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "R1",
+      "location": "run_esy_reference.py: run(), NODE main()",
+      "problem": "The host base64-encodes the configuration argument, but Node calls JSON.parse(arg) without decoding it. Every normal run fails before seed initialization or compilation.",
+      "required_change": "Use one consistent bounded payload transport and encoding. Prefer the specified bounded JSON stdin transport.",
+      "required_e2e": "Run the actual entry point and demonstrate that the positive and suite cases reach OCaml compilation."
+    },
+    {
+      "id": "R2",
+      "location": "run_esy_reference.py: docker_container_inspect(), cleanup_owned(), run(), capture_expectations()",
+      "problem": "Cleanup treats any failed inspect as proof of absence after removal, including daemon failure. Exceptions bypass cleanup because the finally block is empty. A timed-out or interrupted Docker client can therefore leave its container running. Removal also uses a mutable name after checking ownership rather than the inspected container ID.",
+      "required_change": "Put cleanup in an effective finally path for both capture and execution. Verify ownership, remove the exact inspected container ID, and prove absence using a successful daemon query. Preserve cleanup failures in the immutable receipt.",
+      "required_e2e": "Exercise host timeout, inspect failure, daemon-query failure, and an ownership mismatch. Verify that no foreign container is removed and that cleanup is never reported successful solely because inspect failed."
+    },
+    {
+      "id": "R3",
+      "location": "run_esy_reference.py: bounded_process(), run(), NODE runCmd()",
+      "problem": "The production container deadline is timeout + 15, allowing 135 seconds before killing only the Docker client. Subsequent inspection can extend container execution further. Each inner command independently receives the full timeout, rather than consuming one shared execution budget.",
+      "required_change": "Enforce a single monotonic execution deadline of at most 120 seconds, lowered by --timeout. Use the remaining budget for commands and arrange bounded termination of the owned container when the deadline expires.",
+      "required_e2e": "Measure container lifetime for a real infinite-loop control with a lowered timeout and verify prompt termination and confirmed cleanup."
+    },
+    {
+      "id": "R4",
+      "location": "run_esy_reference.py: NODE main(), compiler(), capture_expectations()",
+      "problem": "Integrity comparisons are retrospective. The runner invokes esy, executes the discovered compiler with -version, and compiles fixtures before rejecting seed, package, lock, or compiler identity mismatches. Capture also executes derivative compiler code before checking the derivative layer prefix and compiler hash.",
+      "required_change": "Validate image ancestry before launching capture containers. Compare complete seed and installation inventories before invoking esy. After the required esy command-path lookup, validate the canonical compiler path and hash before executing that compiler or compiling fixtures.",
+      "required_e2e": "Use altered seed, package, lock, and compiler variants and demonstrate that each fails at its integrity gate before the affected compiler or fixture executes."
+    },
+    {
+      "id": "R5",
+      "location": "run_esy_reference.py: NODE compiler(storeOnly=true)",
+      "problem": "Capture searches only /home/opam/esy-reference/_esy and skips symlinks. It does not discover the compiler through the existing esy environment or external store. The supplied 96 KiB _esy measurement provides no evidence that this directory contains exactly one executable ocamlopt, so capture depends on an unsupported installation-layout assumption.",
+      "required_change": "Discover the compiler using the known fixed reference environment/store, canonicalize its path, and record its hash and version. Retain the separate runtime lookup through esy after seed initialization and compare that result with the captured identity.",
+      "required_e2e": "Capture expectations from the real pinned base and derivative, then verify that runtime esy resolves the same canonical compiler and hash."
+    },
+    {
+      "id": "R6",
+      "location": "run_esy_reference.py: source_files(), NODE timeout/output/resource branches",
+      "problem": "The timeout, output, and resource controls are shell, yes, and Node commands rather than compiled OCaml fixtures. Buffer.alloc may reserve zero-filled virtual memory without creating the intended resident-memory pressure. Any resource-command failure is classified as resource pressure, while output truncation at the reporting threshold is treated as proof that the command output limit fired. The result-level timeout/output flags remain false.",
+      "required_change": "Implement fixed OCaml loop, printing, and allocation-pressure fixtures and compile them through esy. Distinguish command timeout, actual output-buffer overflow, allocation failure, and Docker-confirmed OOM. Populate flags from observed outcomes and reject unrelated failures.",
+      "required_e2e": "Run each real OCaml control, require a nonzero runner result with the precise expected reason, and verify that generic command failure or ordinary report truncation cannot satisfy a control."
+    },
+    {
+      "id": "R7",
+      "location": "run_esy_reference.py: evaluate() syntax branch",
+      "problem": "A syntax control is accepted when any nonzero compilation output contains 'syntax' or 'expected'. An unrelated error mentioning /work/syntax.ml satisfies this check, so the suite can falsely count a compiler or environment failure as a syntax diagnostic.",
+      "required_change": "Require a normal failing compiler exit, exclude timeout/output/resource failures, and recognize the actual OCaml syntax diagnostic rather than a filename or generic word.",
+      "required_e2e": "Verify that exactly 'let broken =' produces the accepted syntax failure, while an unrelated compiler error mentioning syntax.ml is rejected."
+    },
+    {
+      "id": "R8",
+      "location": "run_esy_reference.py: NODE inventory(), immutable(), write_probes; evaluate()",
+      "problem": "Inventories omit directories and their metadata, inspect only package.json and esy.lock, and do not detect other added lockfiles. Only the Node cache receives a write probe. Readonly probes accept every open failure, including ENOENT, as a successful denial, and the lock probe assumes index.json exists. Missing probe entries can pass vacuous all() checks.",
+      "required_change": "Inventory the complete defined package/lock set and relevant seed entries, including directories and required metadata. Probe both writable caches. Require every expected readonly probe to target an inventoried existing file and fail specifically because writing is prohibited. Validate required result fields explicitly.",
+      "required_e2e": "Test added/missing lockfiles, changed seed entries and metadata, both cache writes, missing probe targets, and writable protected files. Each integrity or isolation defect must fail."
+    },
+    {
+      "id": "R9",
+      "location": "run_esy_reference.py: docker_argv(), run() actual_config handling",
+      "problem": "Actual Docker configuration is recorded but never validated. A missing initial inspection can have its failure reason overwritten by evaluate(). Image-declared volumes or unexpected mounts are not rejected, so the runner does not establish that the actual writable locations and confinement match the requested configuration.",
+      "required_change": "Require successful inspection and validate exact image identity, ownership, user, workdir, networking, readonly root, capabilities, security options, resource limits, and the complete allowed mount set. Reject inherited volumes and unexpected writable mounts. Preserve inspection failures as failures.",
+      "required_e2e": "Verify the real container configuration and demonstrate rejection of a derivative with an unexpected declared volume or other configuration mismatch."
+    },
+    {
+      "id": "R10",
+      "location": "run_esy_reference.py: docker_image(), docker_container_inspect(), cleanup_owned(), run()",
+      "problem": "Only docker run output is stream-capped. Image inspection, container inspection, and removal accumulate stdout/stderr through unbounded subprocess.PIPE reads. Expectations are read without a size bound, configuration is passed as an unbounded command-line argument, and reports embed that argument and the full inspection object.",
+      "required_change": "Apply bounded collection to every Docker subprocess, bound expectation and payload sizes before parsing or launching, and publish a bounded report containing the required inspected fields rather than duplicating the full payload and arbitrary image metadata.",
+      "required_e2e": "Exercise oversized manifests and image metadata and verify bounded memory/report size, explicit rejection, and cleanup without launching an oversized payload."
+    },
+    {
+      "id": "R11",
+      "location": "run_esy_reference.py: run(), capture_expectations(), atomic_json()",
+      "problem": "Several failures after reservation, including runner-hash mismatch, fixture derivation failure, launch failure, and inspection exceptions, leave only an empty reservation instead of an immutable failure report. Source modification detection covers only the runner after execution; the Dockerfile and main.ml are not bound into captured expectations or checked for modification.",
+      "required_change": "Ensure every reserved run publishes an exclusive failure receipt even when setup or cleanup raises. Bind the reviewed runner, Dockerfile, and fixture inputs into expectations and receipts, and detect relevant source changes before execution and before final publication.",
+      "required_e2e": "Exercise setup and inspection failures, concurrent run-ID reuse, and source changes. Require one immutable receipt per reserved attempt, no report overwrite, and explicit source-mismatch failures."
+    }
+  ],
+  "missing_evidence": [
+    "This review used only the supplied source text; no code, tests, Docker commands, or agents were executed.",
+    "The stated file hashes, unchanged main.ml/package inputs, compiler location/version, and complete base inventories were not independently verified.",
+    "The Dockerfile uses the prescribed local tag and performs no installation, but fixed supervised build commands, before/after base-tag identity checks, derivative layer-prefix evidence, and seed metadata preservation remain unverified.",
+    "Real Docker evidence is still needed for expectation capture, successful seeded esy compilation, all negative controls, actual confinement, bounded output/deadlines, and verified cleanup.",
+    "Missing future tests alone would not prevent a safe bounded build. The false safety decision here reflects the lifecycle, deadline, and integrity-gate defects; it is not an acceptance decision."
+  ]
+}
+
+R2-review-001
+{
+  "safe_to_execute": false,
+  "findings": [
+    {
+      "id": "E2E-01",
+      "location": "validate_expectations(), run_scenario(), run_one()",
+      "problem": "Scenario names do not establish their required setups. Wrong package/lock/compiler expectations are never constructed or installed. Missing installation, seed mutations, and lockfile mutations have no mandatory setup. Timeout/output/resource controls depend on optional runner_extra_args. Multiple named scenarios can therefore execute the same ordinary invocation. The suite expectations document is not connected to the runner's expectation input.",
+      "required_change": "Implement a fixed setup and CLI mapping for every scenario. Create isolated runner expectation copies and apply exactly the intended mutation. Require and record the before/after expectation hashes, selected control, actual image, and mutation evidence. Reject missing or contradictory setup before launching.",
+      "required_e2e": "Demonstrate that every required scenario has its distinct intended trigger, and that omitting a control or mutation fails suite validation rather than executing an ordinary run."
+    },
+    {
+      "id": "E2E-02",
+      "location": "run_scenario(): runner_extra_args and selected_image",
+      "problem": "Unvalidated runner_extra_args are appended after the generated --image and --run-id. They can supply those options again and undermine the inspected image, unique run ID, and recorded invocation contract. Other accepted runner options are unrestricted.",
+      "required_change": "Generate arguments internally from fixed scenario definitions. Allow only explicitly supported control parameters with fixed bounds, and reject duplicate identity, output, capture, or configuration options.",
+      "required_e2e": "Reject expectation documents attempting to override the image, run ID, output destination, or unrelated runner modes before any subprocess starts."
+    },
+    {
+      "id": "E2E-03",
+      "location": "run_scenario(): source_mode; POSITIVE_SOURCE, WRONG_ASSERTION_SOURCE, SYNTAX_INVALID_SOURCE",
+      "problem": "The suite replaces the copied main.ml to select controls instead of using the runner's fixed controls. This can change the reference positive fixture or break fixture derivation, producing setup failures unrelated to the intended assertion or syntax case. The syntax fixture is also a larger program rather than exactly 'let broken ='.",
+      "required_change": "Preserve the reference main.ml and select the documented fixed runner controls. Bind the actual generated fixture bytes and hashes to each scenario, including the exact required malformed source.",
+      "required_e2e": "Show that the reference positive source remains unchanged, the wrong assertion compiles before failing at runtime, and the syntax control compiles exactly the prescribed malformed input."
+    },
+    {
+      "id": "E2E-04",
+      "location": "run_scenario(), inspect_image_variant(), build_startup_failure_variant()",
+      "problem": "Only the startup variant is built by the suite. Other variants may be arbitrary pre-existing images supplied in expectations. Their layer lists are compared with caller-provided lists, but their ancestry, suite ownership, and intended filesystem mutations are not established. A variant name alone also does not select its image except for startup_failure.",
+      "required_change": "Build all required filesystem variants in new owned contexts from the inspected immutable parent using network-none and pull-false builds. Verify parent layer prefixes and exact mutation inventories. Adjust only the necessary expectation fields so unrelated image identity failures cannot satisfy a seed, installation, or lockfile scenario.",
+      "required_e2e": "Produce owned variants for missing installation state, corrupt/missing seed entries, and added/missing locks; demonstrate each reaches and fails its intended gate. Reject unrelated or externally supplied variant images."
+    },
+    {
+      "id": "E2E-05",
+      "location": "bounded_process()",
+      "problem": "The process supervisor is not reliably bounded. After a direct child exits, descendants may retain stdout/stderr; closing a buffered pipe while its drain thread is blocked can itself block. A post-SIGKILL wait has no timeout. Exceptions or interruption bypass process-group termination. A drain thread that remains alive is not necessarily recorded as an error. Non-POSIX cleanup terminates only the direct child.",
+      "required_change": "Use a supervisor with bounded stream collection, a single monotonic deadline, and effective finally-based cleanup. Bound every wait, handle retained pipes without blocking close calls, verify owned descendants terminate, and fail explicitly on drain or termination uncertainty. Restrict supported platforms if equivalent containment is unavailable.",
+      "required_e2e": "Exercise a real child retaining pipes, an interrupted supervisor, and a timeout. Verify bounded supervisor return, explicit failure evidence, and no surviving owned processes."
+    },
+    {
+      "id": "E2E-06",
+      "location": "run_one(), run_scenario(), main()",
+      "problem": "There is no suite-level container ownership tracking, cleanup, or absence verification. Killing the runner/Docker client process group does not terminate Docker daemon-managed containers. The suite can proceed through further scenarios after leaving a container alive, and it never requires successful cleanup evidence even on ordinary runs.",
+      "required_change": "Track each owned container using its exact returned or successfully inspected ID and corroborating ownership labels. Add an effective finally path that performs bounded cleanup and proves absence through a successful daemon query. Preserve ownership mismatches and daemon uncertainty as failures without removing foreign containers.",
+      "required_e2e": "Force a host runner timeout and interruption; verify the owned container terminates and is confirmed absent. Exercise inspect/query failure and ownership mismatch without treating errors as absence or deleting foreign containers."
+    },
+    {
+      "id": "E2E-07",
+      "location": "build_startup_failure_variant(), cleanup_owned_image(), main(): variant lifecycle",
+      "problem": "Image ownership is registered only after all build validation succeeds. A successful build followed by truncated output, malformed evidence, or an inspection failure can leave an image/tag that main cannot clean because variant remains null. Timing out the Docker build client does not establish that daemon-side build work stopped. Cleanup is outside a finally block and image removal is not followed by a successful absence query.",
+      "required_change": "Track build lifecycle evidence immediately, including any returned image ID before subsequent validation. Provide bounded cancellation of owned build work and finally-based cleanup of exact proven-owned image IDs. Confirm removal with a successful daemon query and retain build/cleanup evidence when any intermediate step fails.",
+      "required_e2e": "Exercise build timeout and failure after image creation. Demonstrate no continuing owned build or residual owned image, and no deletion based only on a tag or failed inspection."
+    },
+    {
+      "id": "E2E-08",
+      "location": "main(): expectation_raw; save_report_copy(); run_one(): CLI report path; copy_proposal()",
+      "problem": "Host input bounds are checked after complete read_bytes calls. A large expectations file or report can exhaust memory before rejection. Runner-provided report paths are not confined to the owned report directory and need not be regular files, permitting unrelated host-file reads or blocking on a FIFO. copy_proposal follows symlinks and recursively copies the entire proposal without a size bound, potentially reading unrelated host files.",
+      "required_change": "Perform bounded reads of verified regular files, including an overflow sentinel. Confine report paths to the expected owned report root and reject symlink traversal. Copy only the required reviewed inputs, with explicit symlink and size policies, into owned destinations.",
+      "required_e2e": "Verify prompt rejection of oversized files, a FIFO report, report paths outside the owned tree, and proposal symlinks escaping the allowed input root. Confirm no unrelated host contents enter evidence."
+    },
+    {
+      "id": "E2E-09",
+      "location": "assert_exact_resource_argv(), image_evidence(), validate_expectations(): resources",
+      "problem": "Resource checks inspect intended argv rather than actual Docker configuration. They permit additional tmpfs mounts, allow an empty expected tmpfs list, and miss alternate option spellings such as --privileged=true or --mount=.... They do not verify actual image identity, workdir, ownership, inherited volumes, or the complete effective mount set.",
+      "required_change": "Validate successful real container inspection against the full fixed configuration, including exact allowed tmpfs destinations/options, mounts, ownership, image, user, workdir, networking, capabilities, security options, and resource limits. Treat argv validation as supplementary. Reject inherited volumes and unexpected writable locations.",
+      "required_e2e": "Record and verify actual configuration for normal runs, and demonstrate rejection of a derivative declaring an unexpected volume and of a configuration mismatch."
+    },
+    {
+      "id": "E2E-10",
+      "location": "validate_expectations(): identity; assert_required_outcome(): cache/readonly/immutable scenarios",
+      "problem": "The identity object is largely unused after validation and does not require a compiler hash or complete seed inventory. Cache, readonly, and immutable scenarios primarily trust named passed checks. They do not verify complete pre/post inventories, directory metadata, canonical compiler identity, successful writes to both caches, or existing readonly targets failing specifically because writing is prohibited.",
+      "required_change": "Require and compare complete identity and inventory evidence, including compiler path/hash/version and relevant directory metadata. Validate concrete probe records for both caches and every protected target, including existence, attempted operation, and the precise denial reason.",
+      "required_e2e": "Exercise changed seed metadata, missing probe targets, writable protected files, both writable caches, compiler identity mismatch, and pre/post immutable changes. None may pass through a missing record or generic open failure."
+    },
+    {
+      "id": "E2E-11",
+      "location": "assert_required_outcome(): syntax_invalid_let_broken and compilable_wrong_assertion",
+      "problem": "The syntax assertion repeats the known false-positive pattern: any nonzero result containing 'syntax', including a filename such as syntax.ml, is accepted. Neither compiler-control assertion excludes timeout, output overflow, signals, or unrelated infrastructure failures. The assertion case searches for a substring without establishing a normal execution of the intended compiled binary.",
+      "required_change": "Require normal compiler/process completion with the specific expected OCaml diagnostic or exception and exclude infrastructure failures. Bind the diagnostic and execution to the exact fixture and compiled artifact.",
+      "required_e2e": "Accept the actual syntax diagnostic for the exact malformed fixture and reject an unrelated error mentioning syntax.ml. Accept the compiled assertion failure and reject timeout, signal termination, and unrelated compiler failures."
+    },
+    {
+      "id": "E2E-12",
+      "location": "assert_required_outcome(): timeout, excessive_output_bounded_logs, resource_exhaustion_evidence",
+      "problem": "Control evidence is insufficient. Timeout trusts a self-reported elapsed value with a caller-adjustable default ceiling of 150 seconds and does not require a lowered runner timeout or measure container lifetime. Output accepts bounded excerpts without proving overflow occurred, and can iterate over no results. Resource exhaustion accepts any truthy caller-selected top-level field, including status='FAILED'. None requires compiled OCaml control evidence.",
+      "required_change": "Fix control selection and acceptance criteria in the suite. Require successful compilation of each prescribed OCaml fixture, precise observed termination reasons, the required nonzero runner outcome, and independent deadline/cleanup evidence. Separate total produced output from retained bytes and distinguish allocation failure or inspected OOM from generic command failure.",
+      "required_e2e": "Measure a real OCaml infinite loop under a lowered shared deadline; trigger real output overflow with bounded retained logs; trigger allocation pressure with concrete allocation/OOM evidence. Verify ordinary truncation and generic failures cannot satisfy these controls."
+    },
+    {
+      "id": "E2E-13",
+      "location": "assert_required_outcome(): wrong identity scenarios and installation/seed/lock failures",
+      "problem": "Negative identity non-execution is inferred solely from the absence of result keys beginning compile- or run-. That does not prove commands were not executed before an early failure or omitted from the report, and it ignores compiler-version and esy execution. Seed, installation, and lock mutation cases do not enforce pre-execution rejection at all.",
+      "required_change": "Require positive evidence identifying the rejected integrity gate and the execution stages reached. Add fixed variant canaries or equivalent observable evidence for affected compiler/fixture execution. Apply the required ordering checks to all relevant integrity-negative scenarios.",
+      "required_e2e": "Demonstrate that each altered expectation or image state fails its intended gate before the affected compiler or fixture runs, and that empty results from an unrelated startup/configuration failure cannot satisfy the scenario."
+    },
+    {
+      "id": "E2E-14",
+      "location": "build_startup_failure_variant(); assert_required_outcome(): container_startup_failure",
+      "problem": "The startup scenario only requires FAILED, a nonzero report exit_code, and a named check. It does not establish that Docker attempted the intended missing entrypoint or distinguish OCI startup failure from image identity rejection, configuration parsing failure, or another runner error.",
+      "required_change": "Keep the normal effective confinement configuration, ensure the variant passes all prerequisite identity checks, and require Docker startup evidence identifying the deliberately missing entrypoint binary.",
+      "required_e2e": "Show an actual Docker startup attempt failing specifically because the configured entrypoint binary is absent. Demonstrate that a wrong image expectation or unrelated runner failure does not satisfy this case."
+    },
+    {
+      "id": "E2E-15",
+      "location": "run_scenario(), run_duplicate_case(), run_invalid_id_case(), run_concurrent_case()",
+      "problem": "There is no common invocation acceptance contract. Ordinary positive scenarios can pass despite a nonzero runner exit if the report says PASSED. Special-case functions bypass the normal expected-outcome, resource, drain, truncation, and timeout checks. Their expected objects are mostly recorded rather than enforced.",
+      "required_change": "Apply common process, report, identity, resource, and cleanup validation to every invocation, including baseline and concurrent children. Fix the expected exit/status relationship for each control and reject contradictory or unsupported expectation fields.",
+      "required_e2e": "Verify that a nonzero positive runner exit, an incomplete drain, a child timeout, a missing cleanup receipt, or a special-case expectation mismatch always fails the suite."
+    },
+    {
+      "id": "E2E-16",
+      "location": "run_concurrent_case(); independent_fresh_run_a/b",
+      "problem": "Concurrent runs use separate proposal/report directories, so they do not test concurrent unique IDs sharing the runner's report store. Freshness is inferred from names and PASSED reports without verifying distinct containers and independent writable state. Concurrent reuse of the same run ID is absent.",
+      "required_change": "Run concurrent unique IDs against one owned proposal/report store and add a concurrent same-ID reservation test. Verify independent container IDs and fresh writable state for the two fresh runs while retaining identical immutable identities.",
+      "required_e2e": "Require two valid immutable receipts for concurrent unique IDs, exactly one reserved receipt for simultaneous same-ID attempts, and observable isolation between fresh writable states."
+    },
+    {
+      "id": "E2E-17",
+      "location": "run_duplicate_case(), run_invalid_id_case()",
+      "problem": "Preservation checks cover only one existing report. The invalid-ID escape check targets runner.parent.parent/escape.json, whereas traversal from runner.parent/esy-results/../escape.json would land at runner.parent/escape.json. Duplicate rejection is also incorrectly treated as replacement whenever the CLI returns a pointer to the unchanged existing report.",
+      "required_change": "Snapshot and compare the complete owned report namespace and relevant surrounding paths. Check the actual potential traversal destinations. Distinguish referencing an unchanged receipt from creating or overwriting one.",
+      "required_e2e": "Verify invalid IDs create no escaped files and preserve all existing receipts. Verify a rejected duplicate may reference the original unchanged receipt without being falsely classified as an overwrite."
+    },
+    {
+      "id": "E2E-18",
+      "location": "BoundedCapture.drain(), docker_json(), cleanup_owned_image(), run_one(), main(): manifest",
+      "problem": "Recorded stream SHA256 values hash all drained bytes, while the named log files contain only retained prefixes; hashes therefore do not identify those files when truncation occurs. Docker inspection/removal logs are deleted with temporary directories. Exceptions after execution can discard process/report details, and setup-failure rows use expected=null even when expectations were already loaded. The manifest is consequently incomplete as durable evidence.",
+      "required_change": "Record separate full-stream and retained-file hashes and byte counts. Preserve bounded Docker inspection, build, removal, and absence-query logs under the owned evidence directory. Retain partial execution records on failure and populate every scenario's fixed expected outcome before setup begins.",
+      "required_e2e": "Recompute every evidence-file hash from its recorded path, including truncated logs. Inject setup, inspection, report-parsing, and cleanup failures and verify each yields a complete immutable manifest with surviving bounded evidence."
+    },
+    {
+      "id": "E2E-19",
+      "location": "main(): source_runner fallback and integrity snapshots; copy_proposal()",
+      "problem": "The fallback may execute a runner outside the candidate tree. Only that runner file is hashed; the original proposal's main.ml, Dockerfile, and other copied inputs are not covered by the candidate snapshot. There is no required binding between the actual copied runner/input set and reviewed expected hashes.",
+      "required_change": "Resolve the intended runner/input root explicitly and bind its required files to reviewed expectations before copying. Snapshot and compare all protected original and candidate inputs after execution, including failure paths, and record exactly which bytes each invocation used.",
+      "required_e2e": "Verify unchanged original and candidate inputs, reject a runner or fixture hash mismatch before execution, and demonstrate detection of a protected-input change before receipt publication."
+    },
+    {
+      "id": "E2E-20",
+      "location": "SCENARIOS and suite-wide coverage",
+      "problem": "The suite has no explicit coverage for several required regression cases identified in R1: failed inspect versus confirmed absence, daemon-query failure, ownership mismatch, oversized manifests/image metadata, unrelated syntax diagnostics, unexpected declared volumes, early reserved-attempt failure receipts, and source-change rejection. These are absent scenarios, distinct from valid tests failing against the rejected runner.",
+      "required_change": "Add explicit bounded real-E2E coverage for these cases, with exact ownership and no fake Docker or host-wide daemon disruption. Where safe real fault induction cannot be provided, record the requirement as an explicit failed limitation rather than claiming complete coverage.",
+      "required_e2e": "Provide one reviewable evidence record per requirement showing the intended trigger, actual outcome, immutable receipt behavior, bounded execution, and confirmed owned-resource cleanup."
+    }
+  ],
+  "missing_evidence": [
+    "This is a static review of the supplied test text and R1 findings. No code, tests, Docker commands, or agents were executed.",
+    "The supplied test SHA256 was not independently verified against a local file.",
+    "The full current runner source, its exact public CLI/report schema, the original approved plan, and an actual suite expectations document were not supplied here; compatibility with those artifacts remains unverified.",
+    "No real evidence establishes successful expectation capture, positive OCaml compilation, distinct negative triggers, exact effective confinement, control termination reasons, bounded container/build lifetimes, or confirmed cleanup.",
+    "No pre/post evidence establishes preservation of all original and candidate inputs.",
+    "The unsafe verdict includes defects in the test supervisor, build/container lifecycle, and evidence handling. Expected failures exposing the separately rejected runner's bugs are not themselves test defects."
+  ]
+}
+
+seed-image-build-review-001
+{
+  "safe_to_build": false,
+  "findings": [
+    {
+      "severity": "medium",
+      "issue": "Both FROM instructions use a mutable tag.",
+      "detail": "Before/after tag checks do not guarantee which image each stage resolved if the tag changes during the build. Final-image base-layer verification does not establish the provenance of files copied from the installed stage.",
+      "required_change": "Bind both stages to the pinned immutable image, or enforce exclusive control of the tag throughout resolution and build."
+    },
+    {
+      "severity": "medium",
+      "issue": "Inherited build instructions are not checked before building.",
+      "detail": "The supplied procedure does not establish that the pinned base has no ONBUILD triggers. Such triggers could execute in both stages, before the explicit USER instruction. Network isolation does not prevent execution.",
+      "required_change": "Inspect the pinned base before building and require an empty ONBUILD configuration for this COPY-only scope."
+    }
+  ],
+  "limitations": [
+    "Static review only; no tools, execution, or delegation.",
+    "The supplied Dockerfile contains no explicit RUN instruction or build-context COPY.",
+    "The manifest hash, local image identity, image configuration, and base layers were not independently verified.",
+    "This review does not approve runner execution, tests, or the C2 full inventory."
+  ]
+}
+
+R3-final-review-001
+{
+  "revision_sha256": "10b838c61bcfe3c0d299f64cf956f29a30b0b838c11a264830097439a00c6211",
+  "safe_to_build_and_smoke": false,
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "R3-01",
+      "severity": "high",
+      "location": "Dockerfile.esy-runtime: both FROM instructions; supplied supervisor build procedure",
+      "problem": "Both stages still resolve a mutable tag. Before/after tag checks do not establish either stage's identity during resolution, and final layer ancestry cannot establish the provenance of copied seed files. The supplied OnBuild:null and Volumes:null observations concern the pinned image; they do not bind these mutable resolutions to it. The prior Dockerfile provenance rejection remains unresolved.",
+      "required_change": "Bind both stages to a verified immutable base reference, or establish exclusive control of tag resolution throughout the build. Require the actual resolved base to have no ONBUILD instructions. Preserve this work as INCOMPLETE while corrections are unavailable.",
+      "required_e2e": "After a new safety review, perform a supervised bounded build and preserve both stages' immutable provenance, the prebuild configuration inspection, derivative ancestry, and seed metadata comparison."
+    },
+    {
+      "id": "R3-02",
+      "severity": "high",
+      "location": "run_esy_reference.py: docker_image(), capture_expectations()",
+      "problem": "Capture deterministically rejects its base inspection. capture_expectations() calls docker_image(BASE_TAG), but docker_image() requires the returned image Id to equal its argument. Docker returns a sha256 image ID, which cannot equal the tag string. Capture therefore fails before inspecting the derivative or producing expectations.",
+      "required_change": "Separate tag resolution from immutable-ID inspection. Resolve the prescribed tag, require BASE_ID, and inspect subsequent objects by that exact immutable ID.",
+      "required_e2e": "Run the actual capture entry point against the pinned base and reviewed derivative, demonstrating successful base resolution and expectation publication with confirmed cleanup."
+    },
+    {
+      "id": "R3-03",
+      "severity": "high",
+      "location": "run_esy_reference.py: NODE mode initialization; docker_create()",
+      "problem": "The Node invocation uses node -e SCRIPT MODE, for which MODE occupies process.argv[1]. NODE reads process.argv[2], leaving mode undefined. main() then calls mode.startsWith(), so both capture and ordinary execution fail before their intended work.",
+      "required_change": "Correct the fixed mode transport and explicitly validate the received mode before dispatch.",
+      "required_e2e": "Exercise the actual capture-base, capture-derivative, positive, and suite entry points and demonstrate that they reach their intended stages, including OCaml compilation."
+    },
+    {
+      "id": "R3-04",
+      "severity": "high",
+      "location": "run_esy_reference.py: canonical(), NODE main() inventory comparisons",
+      "problem": "Every normal integrity comparison is order-sensitive in a way incompatible with the payload serialization. Python canonical() recursively sorts object keys, while fresh JavaScript inventory rows are constructed in path/type/mode/uid/gid/mtime_ms order. JSON.stringify(start.project) therefore differs from JSON.stringify(expected.derivative.immutable.project) even for identical inventories. The other inventory comparisons have the same defect.",
+      "required_change": "Compare validated inventory structures semantically or apply the same recursive canonicalization to both sides. Preserve array ordering and reject missing, duplicate, or unexpected entries.",
+      "required_e2e": "Demonstrate that an unchanged captured inventory passes and that individual file, directory, metadata, and lockfile mutations fail before esy or the affected compiler executes."
+    },
+    {
+      "id": "R3-05",
+      "severity": "high",
+      "location": "run_esy_reference.py: run(), bounded_process(), NODE run() and main()",
+      "problem": "The lowered execution deadline is not enforced by the host. docker start always receives DEFAULT_TIMEOUT=120, regardless of --timeout. The Node budget starts only after payload reading, uses wall-clock Date.now(), and clamps expired command budgets to one millisecond, allowing subsequent commands to launch after expiry. When the host deadline fires, only the Docker client is terminated; a further container inspection occurs before cleanup, and cleanup itself performs another inspection before removal. Container execution can therefore exceed both a lowered timeout and the 120-second ceiling.",
+      "required_change": "Use one monotonic execution deadline lowered by --timeout, refuse new commands after expiry, and arrange prompt bounded termination of the exact owned container when that deadline expires. Do not place diagnostic inspections ahead of deadline termination.",
+      "required_e2e": "Independently measure real container lifetime for a compiled OCaml infinite loop under a lowered timeout. Include stalled inner processing and confirm termination and successful absence verification."
+    },
+    {
+      "id": "R3-06",
+      "severity": "high",
+      "location": "run_esy_reference.py: bounded_process(); test_esy_reference_runtime_e2e.py: supervisor()",
+      "problem": "Process-group cleanup still depends on whether the direct child is alive. In bounded_process(), if that child exits while a descendant retains a pipe, the loop reaches its deadline but both the termination branch and finally block skip killpg because proc.poll() is non-null. Descendants can survive. The E2E supervisor has a retained-pipe recovery branch, but exceptions or interruption after the leader exits likewise bypass unconditional group cleanup. Registration failures also occur before the effective try/finally paths.",
+      "required_change": "Establish cleanup immediately after process creation, track the owned process group independently of leader status, and perform bounded group termination on timeout, interruption, overflow, and supervisor failure. Record termination or drain uncertainty explicitly.",
+      "required_e2e": "Use real owned children that retain pipes or outlive their leader, plus interruption and early pipe-closure cases. Require bounded return and evidence that no owned descendants survive."
+    },
+    {
+      "id": "R3-07",
+      "severity": "high",
+      "location": "run_esy_reference.py: run() and capture_expectations() create paths; cleanup_owned(); docker_container_inspect()",
+      "problem": "Container ownership can be lost between daemon creation and receipt of a usable ID. A create timeout, interruption, output failure, or malformed response leaves cid unset or invalid; cleanup then cannot recover the container despite the known generated name and owner label. Absence is also inferred from a nonzero inspect result containing the substring 'no such container', without the successful daemon enumeration required by R2. Bounded inspect/removal diagnostics are discarded.",
+      "required_change": "Track the creation attempt before invoking Docker. Recover uncertain creates through bounded discovery using the generated name and owner label, then operate only on a corroborated exact ID. Confirm absence through a successful daemon query and preserve create, inspect, removal, and absence evidence.",
+      "required_e2e": "Exercise interruption or response loss after actual creation, inspect failure, daemon-query failure, and an ownership mismatch. Prove owned-container cleanup without deleting foreign containers or interpreting query failure as absence."
+    },
+    {
+      "id": "R3-08",
+      "severity": "high",
+      "location": "test_esy_reference_runtime_e2e.py: run_case(), main() scenario loop",
+      "problem": "The E2E driver still has no independent container ownership or cleanup path. Its timeout+30 supervisor can kill a runner whose Docker start operation is allowed 120 seconds. Killing that process group does not stop daemon-managed containers. run_case() then fails before obtaining a receipt, and main() catches the failure and proceeds to further scenarios. This can accumulate live containers.",
+      "required_change": "Expose and durably register each invocation's ownership identity before launch. Add suite-level finally cleanup using verified exact container IDs and successful absence queries. Stop launching further scenarios when owned-resource cleanup is uncertain.",
+      "required_e2e": "Force a real host runner timeout and interruption after container start. Verify independent suite cleanup, bounded container lifetime, retained evidence, and no subsequent launch while cleanup remains unverified."
+    },
+    {
+      "id": "R3-09",
+      "severity": "medium",
+      "location": "run_esy_reference.py: NODE findCompiler(), esy_lookup",
+      "problem": "Compiler discovery still assumes a recursively searchable /home/opam/.esy containing exactly one ocamlopt. It skips symlinked directories and does not derive the store from the established reference environment. Conversely, a matching file symlink may resolve outside that root. Runtime command -v output is compared as raw text rather than canonicalized, so a valid environment shim or symlink can be rejected even when it resolves to the captured compiler. R5 is not fully corrected.",
+      "required_change": "Establish the fixed reference environment/store from verified inputs, discover and canonicalize the intended compiler there, and canonicalize runtime lookup results before comparing path and hash. Define supported symlink handling explicitly.",
+      "required_e2e": "Capture the compiler from the real pinned base and derivative, then show runtime esy resolves the same canonical executable and hash after seed initialization."
+    },
+    {
+      "id": "R3-10",
+      "severity": "high",
+      "location": "run_esy_reference.py: NODE catch block; run() nonzero and post-execution inspection handling",
+      "problem": "Integrity-gate evidence is discarded. NODE emits gate/error JSON and exits 2, but run() parses stdout only when Docker exits zero, reducing an intended inventory or compiler rejection to container-nonzero. Commands already reached are also lost when NODE throws. Separately, a failed post-execution inspection is merely recorded and can be followed by evaluate() assigning PASSED; successful later cleanup does not restore the missing execution-state observation.",
+      "required_change": "Parse bounded structured results on nonzero container exits, preserve the rejected gate and stages reached, and retain partial command evidence. Make required inspection failures sticky failures. Add observable execution canaries for integrity-negative cases.",
+      "required_e2e": "Demonstrate that each wrong expectation and filesystem mutation fails its specific gate before affected execution. Show that unrelated startup failures, empty results, and failed state inspections cannot satisfy those cases or produce PASSED."
+    },
+    {
+      "id": "R3-11",
+      "severity": "medium",
+      "location": "run_esy_reference.py: evaluate() syntax branch; test_esy_reference_runtime_e2e.py: run_case() syntax checks",
+      "problem": "The filename false positive is improved, but syntax acceptance still does not require a normal nonzero compiler exit. A result with exit_code=null or another non-integer value and an execution error can pass if stderr contains the expected diagnostic and signal/timed_out are clear. The E2E check does not independently exclude command errors, overflow, or abnormal compiler completion.",
+      "required_change": "Require an integer nonzero exit code, no signal, no timeout, no spawn error, and no output overflow, alongside the specific diagnostic bound to the exact fixture.",
+      "required_e2e": "Accept the actual diagnostic for 'let broken =\\n' and reject unrelated errors mentioning syntax.ml, spawn failures, truncated diagnostic output, timeout, and signal termination."
+    },
+    {
+      "id": "R3-12",
+      "severity": "medium",
+      "location": "run_esy_reference.py: NODE resource classification and run() OOM branch; test_esy_reference_runtime_e2e.py: run_case() resource handling",
+      "problem": "Resource attribution remains inconsistent. A spawn-level ENOMEM is classified as an OCaml allocation failure, while any Docker OOMKilled state during a resource case selects resource-oom-observed before parsing command evidence, even if OOM occurred during setup or compilation. That branch discards available results, yet the E2E subsequently requires compile-resource evidence, so the runner's OOM report cannot satisfy the suite. Report-level timed_out and output_exceeded also describe only Docker-client collection and remain false for successfully observed inner timeout/output controls.",
+      "required_change": "Distinguish spawn failure, an observed OCaml allocation exception, and Docker-confirmed OOM during the compiled control. Preserve compilation and execution-stage evidence across OOM, reject generic failures, and expose separate accurate host and command termination flags.",
+      "required_e2e": "Run each real compiled OCaml control. Prove normal report truncation and generic/spawn failures cannot satisfy controls, and verify both allocation-exception and OOM attribution paths with durable compilation evidence."
+    },
+    {
+      "id": "R3-13",
+      "severity": "medium",
+      "location": "run_esy_reference.py: validate_config(), run() actual_config recording",
+      "problem": "Effective confinement validation is incomplete. It does not explicitly reject Privileged, CapAdd, devices/device requests, host PID/IPC modes, or extra security options such as an unconfined profile, and it does not verify the effective entrypoint/command. Mount destinations are compared as a set, which loses multiplicity. The report also embeds the entire HostConfig rather than a fixed evidence projection.",
+      "required_change": "Validate the complete fixed effective configuration, including privilege, capability additions, devices, namespace modes, exact security options, entrypoint/command, and mount cardinality. Record only the bounded fields needed to substantiate those checks.",
+      "required_e2e": "Verify actual configuration on a real normal container and reject owned cases with an unexpected declared volume, writable mount, privilege/security mismatch, or altered command."
+    },
+    {
+      "id": "R3-14",
+      "severity": "medium",
+      "location": "run_esy_reference.py: capture_expectations(), run() receipt publication; test_esy_reference_runtime_e2e.py: run_case(), main() failure paths",
+      "problem": "Failure evidence is still incomplete. Capture failure receipts omit container IDs and structured cleanup outcomes. run_case() returns process/report evidence only after every assertion succeeds, so failures become minimal rows that discard those details. Suite source rechecks are outside a finally path and can be bypassed by earlier failures. An oversized runner report is replaced with a minimal object losing identity and source evidence; an oversized suite manifest produces no durable manifest. Runner stream hashes labeled full do not establish complete streams when collection stops on overflow or timeout.",
+      "required_change": "Maintain partial invocation records throughout execution and preserve them on every failure. Put protected-input rechecks in effective finally paths, retain structured cleanup evidence, distinguish observed-stream hashes from confirmed complete streams, and publish a bounded failure receipt that preserves essential identity when evidence must be reduced.",
+      "required_e2e": "Inject setup, inspection, report-parsing, overflow, interruption, and cleanup failures. Require one immutable receipt per reserved attempt and a durable suite manifest with surviving process details, source checks, and recomputable retained-file hashes."
+    },
+    {
+      "id": "R3-15",
+      "severity": "medium",
+      "location": "run_esy_reference.py: capture_expectations() source inventory; test_esy_reference_runtime_e2e.py: check_expectations(), main()",
+      "problem": "The reviewed input set is not completely bound. Capture hashes optional package inputs only when they are files, omitting a directory-form esy.lock, and does not include the E2E source. Runtime enforcement covers only runner, Dockerfile, and main.ml. The E2E records its own current hash but does not compare it to a reviewed expected hash. Capture also lacks a before/after source snapshot, and preservation of all required original and candidate inputs remains unestablished.",
+      "required_change": "Define the complete protected input set, include directory-form package/lock inputs and the E2E source, bind it to the reviewed revision, and check it before execution and in all publication/failure paths.",
+      "required_e2e": "Reject mismatched reviewed inputs before execution and demonstrate detection of protected-input changes before publication while preserving the original and candidate input inventories."
+    },
+    {
+      "id": "R3-16",
+      "severity": "high",
+      "location": "test_esy_reference_runtime_e2e.py: REQUIRED_RUNS, MISSING_REAL_CASES, suite-wide coverage",
+      "problem": "The final harness implements only seven serial invocations and intentionally fails for missing coverage. It does not implement the prior required wrong package/lock/compiler expectation scenarios, owned installation/seed/lock variants, startup-failure variant, concurrent unique IDs, concurrent same-ID reservation, duplicate/invalid-ID namespace checks, independent fresh-state verification, or the full fault matrix. Several requirements are represented only by broad limitation rows. The fixed interface and explicit MISSING_FAILED rows are improvements, but they do not establish completeness or resolve the prior findings.",
+      "required_change": "Preserve all unimplemented requirements as INCOMPLETE with explicit per-requirement records, including requirements currently hidden inside broad rows. Do not convert limitations into acceptance. With coding launches exhausted, retain the rejected/incomplete state pending separately authorized corrective work and review.",
+      "required_e2e": "Provide distinct real evidence for every R1 and R2 regression requirement, including precise setup, intended gate/outcome, bounded execution, immutable receipts, unchanged protected inputs, and confirmed owned-resource cleanup."
+    }
+  ],
+  "missing_evidence": [
+    "INCOMPLETE: This review examined only the supplied source text. No code, imports, commands, tests, builds, Docker operations, or delegated agents were executed.",
+    "The revision and per-file SHA256 values are supplied identifiers; they were not independently recomputed.",
+    "No derivative has been built and no actual esy E2E has run. There is no runtime evidence of successful capture, seeded compilation, negative controls, confinement, bounded container lifetime, or confirmed cleanup.",
+    "The supplied saved pinned-base inspection reports OnBuild:null and Volumes:null. It does not resolve the mutable FROM provenance defect or establish a fresh build.",
+    "The actual reference main.ml, package/lock contents, complete installation and seed inventories, and fixed compiler-store layout were not supplied for independent verification.",
+    "The worker's declared missing tests remain INCOMPLETE. Explicit MISSING_FAILED rows prevent a false suite PASS but do not fulfill those requirements.",
+    "No prior finding is marked fully resolved: several source mechanisms improved, but concrete defects remain and their required real evidence is absent.",
+    "The independently rejected controller is outside this source review and receives no approval here.",
+    "The false safety decision reflects concrete provenance, lifecycle, deadline, and execution defects, not merely missing acceptance tests. Even a future static safety PASS would not imply acceptance."
+  ],
+  "resolved_prior_finding_ids": []
+}
+
+remaining-work-plan-001
+{
+  "status": "INCOMPLETE",
+  "planning_only": true,
+  "execution_authorized": false,
+  "coding_budget": {
+    "consumed": 12,
+    "allocated": 12,
+    "remaining": 0,
+    "reset": false,
+    "requirement": "Explicit user allocation of new coding launches and wall-active time is required before any execution. These cards neither allocate launches nor authorize retries."
+  },
+  "scope": "Esy repair and supervised orchestration only; no training.",
+  "review_state": {
+    "esy_revision": "10b838c61bcfe3c0d299f64cf956f29a30b0b838c11a264830097439a00c6211",
+    "controller_revision": "e34ce3cbe5274d3e2da43f3ba6a9c2b54e76ec2e9614e6062eab614598b23ed9",
+    "safe_to_build_and_smoke": false,
+    "controller": "REJECTED_UNIMPORTED",
+    "resolved_findings": [],
+    "identity_note": "Revision identifiers and review conclusions are supplied evidence, not independently verified here. No commands, imports, builds, tests or delegation were performed.",
+    "required_future_roles": {
+      "planner": "Separate fresh Astra process",
+      "coder": "gpt-6-luna",
+      "reviewer": "Fresh independent Codex gpt-6-astra",
+      "verification": "Preserve actual process and model identities; this plan does not establish those invocations."
+    }
+  },
+  "shared_contract": {
+    "root": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate",
+    "path_rules": [
+      "Each card's allowed_paths lists exact repository-relative mutation paths. No directory wildcard or implicit adapter permission is granted.",
+      "Existing controller adapters may be inspected. If an adapter must change, bind its actual filename and obtain an explicit card/path amendment first.",
+      "Generated fixtures and evidence belong only in separately allocated isolated run directories. Freeze their exact paths in the reviewed execution manifest.",
+      "Preserve original and candidate bytes, tracked and untracked checkout state, package inputs, directory-form locks, metadata and prior evidence."
+    ],
+    "authorization_and_review": [
+      "Every card requires a new explicit user allocation; chronological position or satisfied dependencies grants no execution permission.",
+      "A protected supervisor must obtain independent safety review of the exact accumulated source, tests, Dockerfile, commands, fixtures and environment before executing changed code, imports, builds or tests.",
+      "Approvals bind source manifests, parent revisions, evidence and allowed paths. Concurrent changes invalidate affected approvals.",
+      "Keep controller execution in an isolated acceptance environment under direct supervision. Do not use the rejected controller to supervise these repairs.",
+      "Do not import either candidate into the protected checkout before independent exact-candidate acceptance and guarded import.",
+      "If a card exceeds a small Luna change, split it with explicit scope and allocation approval; do not broaden it automatically."
+    ],
+    "inputs": {
+      "S": "Supplied final esy review, exact reviewed runner/Dockerfile/E2E bytes and original/candidate reference inputs.",
+      "C": "Supplied controller review, exact reviewed controller/adapters/tests, original controller plan and deferred-card requirements.",
+      "P": "Supervisor-frozen original R1/R2 requirements and complete C6 requirement inventory. These documents were not supplied in full here.",
+      "E": "Immutable prerequisite receipts, complete retained artifacts and independently verified manifests."
+    },
+    "inventory_gate": [
+      "Before implementation, bind exact original/candidate reference paths and contents, main.ml, package files, file- or directory-form esy.lock, runner, Dockerfile, artifact E2E, public suite module, relevant dispatcher/CLI source, controller/adapters/tests, installation schema, policy, provider schema, bootstrap and accounting evidence.",
+      "Record complete installation, seed, project and compiler-store inventories with ordered paths, types, modes, ownership, timestamps, symlink targets, canonical targets, sizes and applicable content hashes.",
+      "Freeze exact base and derivative identities, mount cardinalities and destinations, UID/GID, command, entrypoint, environment allowlist, capability/security/namespace settings, CPU, memory, swap, PID, tmpfs, stream, report and cleanup bounds.",
+      "Missing original requirements or exact resource values remain unresolved prerequisites. Do not invent them or treat worker impossibility assertions as evidence."
+    ],
+    "e2e_command_contract": {
+      "status": "Proposed future executable interfaces; not verified or authorized now.",
+      "setup": "A supervisor reserves unique RUN_ID and EVIDENCE_DIR values and supplies a preprovisioned locked uv environment. Set UV_NO_SYNC=1 and UV_OFFLINE=1. Missing dependencies fail closed; no runtime installation.",
+      "artifact_driver": "The existing artifact E2E file shall expose --case, --run-id and --output for the named cases below.",
+      "controller_driver": "The existing controller E2E file shall expose --case, --run-id and --output, invoking real public controller commands with isolated fixture workers.",
+      "public_entry": "The public sft command retains its existing --suite, --run-id and --output interface.",
+      "restrictions": "E2E only. No unit tests, monkeypatched acceptance, fabricated command results or mocked Docker acceptance. Controller fixture workers are allowed through public commands and are not independent acceptance reviewers."
+    },
+    "evidence_contract": [
+      "Reserve attempts exclusively before launch. Publish exactly one immutable terminal receipt per reservation, including interrupted attempts; never overwrite prior evidence.",
+      "Retain exact commands, source identities, configuration projections, timestamps, measured lifetimes, process groups, container ownership identities, stages reached, exit/signal/error flags and structured cleanup results.",
+      "Hash retained bytes reproducibly. Label incomplete streams as observed prefixes and record completeness separately.",
+      "Preserve partial records and protected-input before/after checks in effective finally paths. Publish bounded failure receipts and a durable manifest even when detailed evidence overflows.",
+      "No subsequent launch while owned-resource cleanup, source identity or authority reconciliation remains uncertain."
+    ]
+  },
+  "cards": [
+    {
+      "id": "E01",
+      "title": "Bind protected inputs",
+      "findings": ["R3-15"],
+      "inputs": ["S", "P", "inventory_gate"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["shared_contract authorization and inventory gates"],
+      "behavior": [
+        "Bind complete original/candidate inputs and the E2E source to the reviewed revision, including recursive directory-form locks.",
+        "Check immutable snapshots before execution and again in every success/failure publication path; retain concurrent-change evidence."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case protected-inputs --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Preexisting mismatches prevent launch; controlled mid-run protected-input changes prevent successful publication.",
+        "evidence": ["Complete original/candidate inventories", "Before/after hashes", "Launch canaries", "Immutable failure receipts"]
+      }
+    },
+    {
+      "id": "E02",
+      "title": "Bind both build stages",
+      "findings": ["R3-01"],
+      "inputs": ["S", "E01 evidence", "Verified immutable base reference and prescribed BASE_ID"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/Dockerfile.esy-runtime",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E01", "Independent review of exact Docker build command and context"],
+      "behavior": [
+        "Use a verified immutable reference in both FROM instructions and require the actual resolved base to have no ONBUILD instructions.",
+        "Bind copied seed provenance independently of final-layer ancestry; preserve exact build context and resource limits."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case immutable-build --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "A supervised bounded real build resolves both stages to the approved immutable base and preserves seed metadata.",
+        "evidence": ["Prebuild configuration inspection", "Both-stage provenance", "Derivative ancestry and image identity", "Seed metadata comparison", "Build and cleanup receipts"]
+      }
+    },
+    {
+      "id": "E03",
+      "title": "Repair capture and mode dispatch",
+      "findings": ["R3-02", "R3-03"],
+      "inputs": ["S", "E02 derivative evidence"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E02", "Direct supervisor owns independent cleanup during focused validation"],
+      "behavior": [
+        "Resolve the prescribed base tag, require BASE_ID, then inspect using exact immutable IDs.",
+        "Read and validate the actual node -e mode argument; reject unsupported or absent modes before dispatch."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case capture-dispatch --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Actual capture-base and capture-derivative paths reach their intended stages and publish expectations; positive and suite modes reach their intended dispatch. Compilation is additionally required after E04/E05.",
+        "evidence": ["Resolved base ID", "Dispatch stage records", "Published expectations", "Exact owned-container cleanup and absence evidence"]
+      }
+    },
+    {
+      "id": "E04",
+      "title": "Compare inventories correctly",
+      "findings": ["R3-04"],
+      "inputs": ["S", "E03 captured inventories"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E03"],
+      "behavior": [
+        "Use equivalent recursive canonicalization or validated semantic comparison on both sides.",
+        "Preserve array ordering and reject missing, duplicate or unexpected entries."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case inventory-comparison --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Unchanged captured inventories pass; separate file, directory, metadata and lock changes reject before the affected execution.",
+        "evidence": ["Exact compared inventories", "Per-mutation gate receipts", "Execution canaries"]
+      }
+    },
+    {
+      "id": "E05",
+      "title": "Resolve the reference compiler",
+      "findings": ["R3-09"],
+      "inputs": ["S", "Verified reference environment/store inventory", "E03 expectations"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E04"],
+      "behavior": [
+        "Derive the intended compiler from verified reference environment/store inputs instead of assuming one recursive ocamlopt match.",
+        "Define directory/file symlink policy, permitted canonical targets and cycle handling; compare canonical runtime lookup and executable hash."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case compiler-resolution --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real base and derivative capture identify the intended compiler; seeded esy resolves that canonical executable and successfully compiles main.ml.",
+        "evidence": ["Environment/store derivation", "Symlink and canonical-path records", "Compiler hashes", "OCaml compilation and execution output"]
+      }
+    },
+    {
+      "id": "E06",
+      "title": "Validate effective confinement",
+      "findings": ["R3-13"],
+      "inputs": ["S", "Frozen exact confinement/resource specification"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E05"],
+      "behavior": [
+        "Validate privilege, capability additions, devices, namespace modes, exact security options, entrypoint/command and mount multiplicity alongside all existing limits.",
+        "Publish a bounded fixed configuration projection. Inspect and reject unsafe created configurations before start."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case confinement --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "The normal real container passes; independently created owned variants with declared volumes, writable mounts, privilege/security mismatch or changed command reject before start.",
+        "evidence": ["Actual configuration projections", "Per-field gate outcomes", "Never-started state and cleanup evidence for rejected variants"]
+      }
+    },
+    {
+      "id": "E07",
+      "title": "Own process groups through cleanup",
+      "findings": ["R3-06"],
+      "inputs": ["S", "Reviewed bounded real-child fixtures"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E01"],
+      "behavior": [
+        "Install cleanup immediately after spawn, including registration failure paths.",
+        "Track group ownership independently of leader liveness; bound TERM/KILL/drain on timeout, interruption, overflow and supervisor error.",
+        "Record unresolved group termination or stream drain explicitly."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case process-group-lifecycle --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real children retaining pipes or surviving their leader are cleaned after interruption, overflow and early pipe closure; otherwise a durable blocker prevents continuation.",
+        "evidence": ["Owned PID/PGID records", "Independent survivor observations", "Bounded elapsed times", "Cleanup receipts"]
+      }
+    },
+    {
+      "id": "E08",
+      "title": "Recover uncertain Docker creates",
+      "findings": ["R3-07"],
+      "inputs": ["S", "E07 evidence"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E06", "E07"],
+      "behavior": [
+        "Persist creation intent, unique name and ownership label before invoking Docker.",
+        "Recover uncertain creates by bounded real-daemon discovery; corroborate exact IDs before inspection or removal.",
+        "Require a successful daemon enumeration for absence and retain all bounded diagnostics."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case uncertain-create --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Interruption or lost response after real creation still permits owned cleanup; inspect/query failures remain uncertainty; a foreign ownership mismatch is never deleted.",
+        "evidence": ["Pre-create reservation", "Discovery and ownership corroboration", "Real daemon failure observations", "Removal and successful absence-query results", "Foreign-container preservation"]
+      }
+    },
+    {
+      "id": "E09",
+      "title": "Enforce one execution deadline",
+      "findings": ["R3-05"],
+      "inputs": ["S", "E07/E08 lifecycle evidence"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E08"],
+      "behavior": [
+        "Apply one host monotonic execution deadline lowered by --timeout, covering attached execution and stalled payload/inner processing.",
+        "Pass only remaining budgets inward and refuse new commands after expiry.",
+        "Terminate the corroborated owned container promptly at expiry, before diagnostic inspections; measure cleanup separately."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case lowered-deadline --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "A real compiled OCaml infinite loop and separately stalled inner processing terminate within the lowered deadline plus the explicitly reviewed termination tolerance; no later command starts.",
+        "evidence": ["Independent monotonic container-lifetime measurement", "Deadline and stage timestamps", "Termination latency", "Successful absence verification"]
+      }
+    },
+    {
+      "id": "E10",
+      "title": "Preserve gate and stage outcomes",
+      "findings": ["R3-10"],
+      "inputs": ["S", "E04/E05 gate definitions"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E09"],
+      "behavior": [
+        "Parse bounded structured results on nonzero exit and preserve partial command/stage evidence.",
+        "Make required post-execution inspection failures sticky.",
+        "Require specific integrity gates and execution canaries; generic startup failure or empty output cannot satisfy a negative case."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case gate-evidence --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Wrong expectations and mutations reject at their intended gates before affected execution; unrelated startup, empty result and real inspection failure cannot pass.",
+        "evidence": ["Structured nonzero results", "Partial commands", "Canary records", "Sticky inspection-failure receipts"]
+      }
+    },
+    {
+      "id": "E11",
+      "title": "Require normal syntax rejection",
+      "findings": ["R3-11"],
+      "inputs": ["S", "Exact fixture bytes: let broken =\\n"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E10"],
+      "behavior": [
+        "Require an integer nonzero compiler exit, exact fixture diagnostic, no signal, timeout, spawn error or overflow.",
+        "Independently verify those conditions in the E2E driver."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case syntax-classification --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "The real fixture diagnostic passes its negative control. Real unrelated filename errors, spawn failure, truncated collection, timeout and signalled compilation do not.",
+        "evidence": ["Fixture hash", "Actual compiler diagnostics", "Per-command completion flags", "Per-case rejection receipts"]
+      }
+    },
+    {
+      "id": "E12",
+      "title": "Attribute compiled resource controls",
+      "findings": ["R3-12"],
+      "inputs": ["S", "Frozen resource limits and compiled-control fixtures"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E10"],
+      "behavior": [
+        "Separate spawn failure, observed OCaml allocation exception and Docker-confirmed OOM during the compiled control.",
+        "Durably retain successful compilation and execution-stage markers before possible OOM.",
+        "Expose separate accurate host and inner command timeout/output flags."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case resource-attribution --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real compiled timeout/output/memory controls demonstrate their specific outcomes, including separately evidenced allocation-exception and OOM paths. Setup/compile OOM, spawn failure, generic failure and report truncation cannot satisfy them.",
+        "evidence": ["Compilation receipts", "Durable stage markers", "Actual allocation diagnostic", "Docker OOM state", "Host/command flags", "Cleanup evidence"]
+      }
+    },
+    {
+      "id": "E13",
+      "title": "Publish durable partial receipts",
+      "findings": ["R3-14", "R3-15"],
+      "inputs": ["S", "E01 protected manifest", "E08 ownership records"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E10", "E11", "E12"],
+      "behavior": [
+        "Maintain partial capture/run/suite records from reservation onward, including IDs and structured cleanup.",
+        "Use effective finally paths for source rechecks and bounded failure publication.",
+        "Preserve essential identity on report/manifest overflow and distinguish observed hashes from complete-stream hashes."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case failure-receipts --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real setup, inspection, parsing, overflow, interruption and cleanup failures each leave one terminal receipt and a durable suite manifest with surviving details.",
+        "evidence": ["Reservation-to-receipt reconciliation", "Retained process details", "Finally-path source checks", "Recomputed artifact hashes", "Overflow reduction records"]
+      }
+    },
+    {
+      "id": "E14",
+      "title": "Give the suite independent cleanup",
+      "findings": ["R3-08"],
+      "inputs": ["S", "E08 ownership protocol", "E13 receipt format"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/run_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E13"],
+      "behavior": [
+        "Durably expose invocation ownership before runner launch.",
+        "Add suite-level finally recovery and cleanup using corroborated exact container IDs.",
+        "Stop scenario dispatch when cleanup is unverified, even if runner collection fails."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case suite-independent-cleanup --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real runner timeout and interruption after container start trigger independent bounded suite cleanup. Unverified cleanup prevents the next scenario.",
+        "evidence": ["Ownership registration before spawn", "Independent lifetime observations", "Suite removal/absence receipts", "Next-launch canary"]
+      }
+    },
+    {
+      "id": "E15",
+      "title": "Complete integrity and startup variants",
+      "findings": ["R3-16", "R3-04", "R3-09", "R3-10"],
+      "inputs": ["P exact R1/R2 inventory", "E02 reviewed variant-build method", "E10 gates"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E14", "Every variant's exact generated build context independently reviewed"],
+      "behavior": [
+        "Add separate real cases for wrong package, lock and compiler expectations; owned installation, seed and lock mutations; and startup failure.",
+        "Bind each case to one intended gate, canary and cleanup result.",
+        "Create an explicit unresolved record for every original requirement not yet implemented."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case integrity-variants --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Each reviewed real variant reaches its specific rejection gate. Startup failure is distinguishable from integrity success. No runtime installation occurs.",
+        "evidence": ["Per-requirement cases", "Immutable variant provenance", "Gate/canary receipts", "Unchanged protected inputs", "Verified cleanup"]
+      }
+    },
+    {
+      "id": "E16",
+      "title": "Complete reservation and fresh-state cases",
+      "findings": ["R3-16"],
+      "inputs": ["P", "E14 suite ownership protocol"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E15"],
+      "behavior": [
+        "Exercise concurrent unique IDs, concurrent same-ID reservation, duplicate and invalid-ID namespace handling.",
+        "Verify fresh state independently across sequential and concurrent runs, including scratch, seed and receipt isolation."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case reservations-and-freshness --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Unique runs remain isolated; exactly one same-ID reservation wins; rejected IDs create no unauthorized namespace; subsequent real containers inherit no prior mutable state.",
+        "evidence": ["Concurrent reservation timeline", "Namespace inventories", "Independent fresh-state observations", "Per-container absence evidence"]
+      }
+    },
+    {
+      "id": "E17",
+      "title": "Close the explicit esy fault matrix",
+      "findings": ["R3-16"],
+      "inputs": ["P complete R1/R2 requirements", "E07-E16 evidence"],
+      "allowed_paths": [
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E16", "Original requirements decomposed into individual matrix rows"],
+      "behavior": [
+        "Replace broad limitation rows with individual setup, intended gate, outcome and evidence requirements.",
+        "Add only uncovered focused real faults; reuse immutable evidence where it proves the exact requirement.",
+        "Keep unavailable or failing requirements INCOMPLETE; reassess claimed impossibility against safe real fixtures."
+      ],
+      "e2e": {
+        "command": "uv run --locked python artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py --case remaining-faults --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Every original regression requirement has a distinct valid evidence record or an explicit failing unresolved row. No broad limitation or skipped case becomes acceptance.",
+        "evidence": ["Complete requirement-to-case ledger", "Actual fault commands", "Per-case immutable receipts", "Source and cleanup reconciliation"]
+      }
+    },
+    {
+      "id": "E18",
+      "title": "Register the public esy-reference suite",
+      "findings": ["R3-16", "OP-PUBLIC-SUITE"],
+      "inputs": [
+        "Existing src/sft/e2e.py execute(root,suite,run_id,output=None)",
+        "Existing src/sft/cli.py argument contract",
+        "E17 artifact suite"
+      ],
+      "allowed_paths": [
+        "src/sft/e2e.py",
+        "tests/e2e/test_esy_reference.py",
+        "artifacts/planning/esy-reference-proposal-001/tests/test_esy_reference_runtime_e2e.py"
+      ],
+      "prerequisites": ["E17"],
+      "behavior": [
+        "Register esy-reference through the existing allowed tests/e2e module mechanism with a narrow adapter.",
+        "Preserve public --suite/--run-id/--output semantics and propagate failures, immutable evidence and ownership cleanup.",
+        "Avoid import-time work, runtime installation and unrelated suite/CLI changes."
+      ],
+      "e2e": {
+        "command": "uv run --locked sft e2e --suite esy-reference --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "The public command runs actual Docker-backed esy acceptance, preserves the requested identity/output destination and returns failure for any missing, failed or cleanup-uncertain requirement.",
+        "evidence": ["Public CLI invocation and exit", "Dispatcher/module source hashes", "Suite manifest", "Actual compiled OCaml results", "Cleanup reconciliation"]
+      }
+    },
+    {
+      "id": "C01",
+      "title": "Normalize manifests and bind authority",
+      "findings": ["C01-R06", "C01-R09"],
+      "inputs": ["C", "Frozen installed authority and manifests"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["E18 evidence or explicit user sequencing amendment", "shared_contract controller isolation"],
+      "behavior": [
+        "Normalize supported legacy rows once, or reject them consistently at the schema boundary.",
+        "Require workflow-root identity on every command and reconcile all historical installation, accounting, policy, schema, baseline, adopted-input and bootstrap bindings.",
+        "Allow probe refresh only through an explicit evidenced compatible transition preserving history and consumption."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case authority-and-manifests --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Legacy input behaves consistently; foreign roots and incompatible replacements reject; authorized compatible refresh retains prior evidence and accounting.",
+        "evidence": ["Public command transcripts", "Resolved binding artifacts", "Before/after history and consumption", "Legacy schema outcome"]
+      }
+    },
+    {
+      "id": "C02",
+      "title": "Reconcile imported consumption",
+      "findings": ["C01-R05"],
+      "inputs": ["C", "Authoritative imported jobs, receipts and resumed intervals"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C01"],
+      "behavior": [
+        "Resolve and validate accounting evidence, interval bounds/durations and coverage.",
+        "Reconcile overlapping imported/local identity, receipts, elapsed time and cleanup before deduplication.",
+        "Preserve all consumption beyond historical floors; historical launch-eight fixtures cannot authorize actual launch thirteen."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case imported-accounting --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Understated totals, gaps, inconsistent intervals and conflicting overlaps reject. An isolated launch-eight fixture retains seven prior launches, 482.411 seconds and all additional evidenced consumption.",
+        "evidence": ["Resolved accounting evidence graph", "Reconstructed totals", "Overlap decisions", "Public rejection/acceptance receipts"]
+      }
+    },
+    {
+      "id": "C03",
+      "title": "Charge complete active intervals",
+      "findings": ["C01-R05"],
+      "inputs": ["C02 accounting model", "Real completed/interrupted fixture launches"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C02"],
+      "behavior": [
+        "Charge the defined interval from durable reservation through evidence validation and durable completion using auditable boundaries.",
+        "Reconcile interrupted work conservatively and prevent gaps or double counting.",
+        "Keep the actual exhausted twelve-launch ledger intact."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case active-accounting --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Completed, interrupted and resumed public launches retain all evidenced time, including validation/publication; unresolved intervals block dispatch.",
+        "evidence": ["Independent interval observations", "Durable boundary records", "Before/after budget reconstruction", "Interrupted-work blockers"]
+      }
+    },
+    {
+      "id": "C04",
+      "title": "Repair phase replay and review retries",
+      "findings": ["C01-R01", "C01-R07"],
+      "inputs": ["C", "Selected card and failed-review fixtures"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C03"],
+      "behavior": [
+        "Validate every supported emitted phase, including PLAN_RUNNING and PLAN_FINISHED, while rejecting illegal transitions.",
+        "Preserve selected-card identity through failed review and supply actual bound findings to corrective workers.",
+        "Preserve unit-baseline bindings for subsequent revision checks."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case replay-and-review-retry --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Public init, plan launch, collection, resume and advance reach CODE_READY with replay after each step; review FAIL supports corrective code, collection and second review.",
+        "evidence": ["Transition history", "Replayed public commands", "Corrective prompt contents", "Selected-card and review bindings"]
+      }
+    },
+    {
+      "id": "C05",
+      "title": "Keep an authoritative unit baseline",
+      "findings": ["C01-R03"],
+      "inputs": ["C", "C04 retry flow", "Immutable baseline fixture"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C04"],
+      "behavior": [
+        "Collect accumulated changes against one immutable unit baseline, including failed attempts and deletions.",
+        "Block retries carrying unauthorized mutations until explicit evidenced reconciliation.",
+        "Require collected revision at review launch and the exact reviewed revision again before UNIT_COMPLETE."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case accumulated-revision-gates --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Failed-attempt out-of-card changes cannot become a new baseline; mutations before review or after review collection block completion.",
+        "evidence": ["Baseline and accumulated deltas", "Failed-attempt mutation records", "Review/completion revision comparisons", "Public blockers"]
+      }
+    },
+    {
+      "id": "C06",
+      "title": "Supply complete immutable worker context",
+      "findings": ["C01-R02"],
+      "inputs": ["C05 accumulated delta", "Original/resulting source and bootstrap evidence bytes"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C05"],
+      "behavior": [
+        "Provide shell-disabled planning with source and bootstrap contents.",
+        "Provide review with complete accumulated originals/results, additions, deleted originals, relevant surrounding source and actual evidence.",
+        "Bind context items to manifests and fail closed for omitted, unreadable or oversized required content."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case immutable-worker-context --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Shell-disabled fixture workers observe actual required bytes; omission or overflow prevents UNIT_COMPLETE despite a syntactically valid PASS. Retry context includes all accumulated changes.",
+        "evidence": ["Exact bounded prompts", "Context coverage manifest", "Deleted-file originals", "Omission/overflow blockers", "Review revision binding"]
+      }
+    },
+    {
+      "id": "C07",
+      "title": "Configure protected provider authentication",
+      "findings": ["C01-R04"],
+      "inputs": ["C", "Supervisor-selected runtime/authentication arrangement", "Fixture credentials"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C06", "Confirm authoritative schema resides in allowed paths or obtain exact path amendment"],
+      "behavior": [
+        "Validate explicit runtime identities, credential locations and allowlisted environment before spawn.",
+        "Provide configured credential read access while enforcing write denial and preserving existing user files.",
+        "Record only nonsecret identity evidence; missing authentication rejects explicitly."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case provider-authentication --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "A real fixture provider starts with configured credentials, missing-auth startup rejects, credential writes are denied and existing tracked/untracked user files remain unchanged.",
+        "evidence": ["Redacted runtime validation", "Provider read/write outcomes", "Protected-file before/after inventories", "Public launch receipts"]
+      }
+    },
+    {
+      "id": "C08",
+      "title": "Retain controller group ownership",
+      "findings": ["C01-R08"],
+      "inputs": ["C", "C03 accounting", "Reviewed process-group fixtures"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C07"],
+      "behavior": [
+        "Continue bounded group escalation after parent exit, including closed-stream and retained-pipe cases.",
+        "Persist uncertainty and prevent dispatch until group cleanup is established.",
+        "Keep accounting reconstruction available for handoff independently of dispatch eligibility."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case controller-group-cleanup --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "A parent exiting on TERM cannot conceal its same-group TERM-ignoring child. Timeout, overflow and inherited pipes yield confirmed cleanup or a persistent block with informative handoff.",
+        "evidence": ["Independent group observations", "Escalation records", "Budget reconstruction under uncertainty", "Rejected next launch", "Printed handoff"]
+      }
+    },
+    {
+      "id": "C09",
+      "title": "Complete the six-command protocol and handoff",
+      "findings": ["C01-R10", "OP-SIX-COMMAND-PROTOCOL", "OP-COMPLETE-HANDOFF"],
+      "inputs": ["C original protocol", "Pinned private Python and installed controller paths", "C01-C08 evidence"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C08", "Bind exact original command grammar before editing"],
+      "behavior": [
+        "Complete init, launch, collect, resume, advance and print-handoff according to the original plan; explicitly reconcile original --state semantics with candidate --root instead of silently substituting them.",
+        "Emit shell-quoted absolute pinned-interpreter/controller commands with all required state/workflow arguments.",
+        "Print current phase, selected card, exact revisions, history/evidence locations, consumed and remaining budgets, active identities, cleanup/import blockers, next command and required approvals."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case six-command-protocol --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "All six public commands replay consistently through normal, failed and interrupted states. The emitted command runs with a private interpreter outside PATH. Exhausted budgets and blockers remain visible and enforced.",
+        "evidence": ["Original-to-final interface mapping", "Six-command transcripts", "Exact emitted/executed command", "Interpreter identity", "Complete handoffs for each terminal or blocked state"]
+      }
+    },
+    {
+      "id": "C10",
+      "title": "Recover interrupted guarded imports",
+      "findings": ["OP-INTERRUPTED-IMPORT-RECOVERY"],
+      "inputs": ["C", "Exact accepted-candidate fixture manifests", "Protected dirty-checkout snapshots"],
+      "allowed_paths": [
+        "scripts/esy-repair/controller.py",
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C09", "Independent review of the import transaction design"],
+      "behavior": [
+        "Journal intended source/destination identities and preimages before mutation; guard concurrent changes and accepted-source identity.",
+        "Recover interruptions at every publication boundary without silently overwriting unrelated changes or accepting partial imports.",
+        "Block dispatch on unresolved recovery and include exact recovery evidence in print-handoff."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case interrupted-import-recovery --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real isolated import interruptions recover to a verified coherent state or an explicit blocker. Concurrent edits and tracked/untracked protected state survive. No production candidate is imported by this test.",
+        "evidence": ["Transaction journals", "Before/after manifests", "Boundary interruption records", "Concurrent-change rejection", "Recovery handoffs"]
+      }
+    },
+    {
+      "id": "C11",
+      "title": "Complete the original C6 matrix",
+      "findings": [
+        "C01-R01",
+        "C01-R02",
+        "C01-R03",
+        "C01-R04",
+        "C01-R05",
+        "C01-R06",
+        "C01-R07",
+        "C01-R08",
+        "C01-R09",
+        "C01-R10",
+        "OP-FULL-C6-MATRIX"
+      ],
+      "inputs": ["P complete original C6 inventory", "C01-C10 immutable evidence"],
+      "allowed_paths": [
+        "tests/e2e/test_esy_repair_controller.py"
+      ],
+      "prerequisites": ["C10", "Every original C6 requirement separately enumerated"],
+      "behavior": [
+        "Map every original C6 requirement to a distinct public-CLI scenario and evidence obligation; do not redefine C6 as only the ten findings.",
+        "Add uncovered focused scenarios and cross-card retry/context/authority/accounting/cleanup/import combinations.",
+        "Preserve macOS NOTE_TRACK errno45 limitations and direct-supervision requirements."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case c6-complete --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "The exact final isolated controller satisfies every original C6 row and all ten findings through public CLI evidence; any missing row, uncertainty or stale binding fails acceptance.",
+        "evidence": ["Original C6 requirement ledger", "Combined public CLI receipts", "Accumulated diff/context identities", "Accounting reconciliation", "Final handoff"]
+      }
+    },
+    {
+      "id": "A01",
+      "title": "Independently accept esy",
+      "findings": [
+        "R3-01",
+        "R3-02",
+        "R3-03",
+        "R3-04",
+        "R3-05",
+        "R3-06",
+        "R3-07",
+        "R3-08",
+        "R3-09",
+        "R3-10",
+        "R3-11",
+        "R3-12",
+        "R3-13",
+        "R3-14",
+        "R3-15",
+        "R3-16",
+        "OP-PUBLIC-SUITE"
+      ],
+      "inputs": ["S", "P", "E01-E18 evidence", "Complete accumulated esy diff"],
+      "allowed_paths": [],
+      "prerequisites": ["E18", "Fresh protected independent Astra safety review of exact final candidate and command"],
+      "behavior": [
+        "Run the complete public suite only after objective-correctness and lifecycle cards pass their focused evidence gates.",
+        "Obtain independent final review of actual runtime evidence and reconcile every original and final finding.",
+        "Authorize no corrective coding from this acceptance card; failures require a separately allocated bounded correction."
+      ],
+      "e2e": {
+        "command": "uv run --locked sft e2e --suite esy-reference --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Real immutable-base build/capture, seeded OCaml execution, complete negatives and faults, exact confinement, bounded lifetime, unchanged protected inputs and confirmed cleanup all pass.",
+        "evidence": ["Fresh independent review identity and decision", "Exact final source manifest", "Public suite receipts", "Complete requirement reconciliation", "Guarded-import eligibility record"]
+      }
+    },
+    {
+      "id": "A02",
+      "title": "Independently accept bootstrap and controller",
+      "findings": ["OP-INDEPENDENT-BOOTSTRAP-ACCEPTANCE", "OP-GUARDED-IMPORT", "OP-COMPLETE-HANDOFF"],
+      "inputs": [
+        "C11 full C6 evidence",
+        "A01 accepted esy evidence",
+        "Actual bootstrap bytes and installation manifest",
+        "Complete accumulated controller diff and authoritative twelve-launch ledger"
+      ],
+      "allowed_paths": [],
+      "prerequisites": [
+        "A01",
+        "C11",
+        "Fresh independent protected Astra review of bootstrap, installation, controller and exact validation commands",
+        "Explicit supervised import authorization when acceptance is established"
+      ],
+      "behavior": [
+        "Validate bootstrap from an isolated clean installation using preprovisioned locked dependencies, configured authentication and the pinned private interpreter.",
+        "Require independent acceptance based on source and real evidence; fixture PASS outputs cannot approve the controller or bootstrap.",
+        "Only after acceptance and authorization, perform a guarded import with source rechecks, concurrent-change guards and interrupted-import recovery, then print the complete handoff. Keep unattended dispatch disabled."
+      ],
+      "e2e": {
+        "command": "uv run --locked python tests/e2e/test_esy_repair_controller.py --case independent-bootstrap-acceptance --run-id \"$RUN_ID\" --output \"$EVIDENCE_DIR\"",
+        "expected": "Fresh installation completes the six-command supervised protocol, preserves all accounting and protected checkout state, emits executable pinned commands and passes the complete acceptance matrix. Any failure leaves the controller rejected and unimported.",
+        "evidence": [
+          "Bootstrap contents and installed identities",
+          "Independent acceptance review",
+          "Complete public CLI evidence",
+          "Pre/post import manifests and transaction record if import is authorized",
+          "Final print-handoff with exhausted historical budget and separately allocated future budget"
+        ]
+      }
+    }
+  ],
+  "additional_requirement_mapping": {
+    "derivative_immutable_provenance": ["E02", "A01"],
+    "exact_inventories_and_resources": ["E01", "E02", "E05", "E06"],
+    "no_runtime_install": ["shared_contract", "E18", "A02"],
+    "public_suite_registration": ["E18", "A01"],
+    "six_command_state_root_compatibility": ["C09"],
+    "full_C6_matrix": ["C11"],
+    "interrupted_import_recovery": ["C10", "A02"],
+    "complete_handoff": ["C08", "C09", "C10", "C11", "A02"],
+    "independent_bootstrap_acceptance": ["A02"],
+    "guard_imports_and_concurrent_changes": ["E01", "C05", "C10", "A02"],
+    "immutable_failure_evidence": ["E13", "C02", "C03", "C10"],
+    "original_R1_R2_complete_coverage": ["E15", "E16", "E17", "A01"]
+  },
+  "unresolved_prerequisites": [
+    "Explicit new user coding and wall-active allocation.",
+    "Complete original R1/R2 and C6 documents; their full contents cannot be reconstructed from the supplied review.",
+    "Independently verified source revisions, protected original/candidate inventories, reference store layout and exact resource specification.",
+    "Pre-execution safety approval for each exact candidate and command.",
+    "Actual real-Docker and public-controller evidence; none exists in this planning response.",
+    "Independent final acceptance and guarded-import authorization."
+  ],
+  "final_state": "INCOMPLETE. All findings remain unresolved pending separately authorized corrective work, real E2E evidence and independent acceptance. Controller remains rejected and unimported; direct supervision only."
+}

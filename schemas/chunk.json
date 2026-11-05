@@ -1,0 +1,39 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "source_ids",
+    "domain",
+    "spans",
+    "text",
+    "raw_hash",
+    "normalized_hash",
+    "version_profile",
+    "split_group",
+    "split"
+  ],
+  "optional": [],
+  "enums": {
+    "split": [
+      "train",
+      "valid"
+    ]
+  },
+  "hashes": [
+    "raw_hash",
+    "normalized_hash"
+  ],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "source_ids": "array",
+    "domain": "string",
+    "spans": "array",
+    "text": "string",
+    "raw_hash": "string",
+    "normalized_hash": "string",
+    "version_profile": "object",
+    "split_group": "string",
+    "split": "string"
+  }
+}

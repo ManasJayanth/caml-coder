@@ -1,0 +1,10 @@
+{
+  "scope": "exploratory esy compiler reference; not T15/T07F readiness",
+  "expected_base": "sha256:151b2159b984cf476d85d4df1f2d4239cdac22b5a1c0612ba0da8f65703b4b14",
+  "inputs": {
+    "Dockerfile": "4f0fd63f93dde9c9edd8423345562fea8f2b7a478e270f88d5937efb084940ab",
+    "package.json": "db35d242767029ee595cbf23760fb3a902c72ad8c363108554b67e0289a6b44d",
+    "main.ml": "984b9a5b9d105315ef8d6e549a2b6b0537ebdf682d5a4a8e40f76d515af7acb6"
+  },
+  "network_policy": "esy install fetches pinned dependency; compiler/reference build RUN instructions have network none"
+}

@@ -1,0 +1,41 @@
+{
+  "required": [
+    "id",
+    "schema_version",
+    "domain",
+    "revision",
+    "path",
+    "url",
+    "license",
+    "version_profile",
+    "raw_hash",
+    "normalized_hash",
+    "split_group"
+  ],
+  "optional": [],
+  "enums": {
+    "domain": [
+      "esy",
+      "ocaml",
+      "melange",
+      "reason"
+    ]
+  },
+  "hashes": [
+    "raw_hash",
+    "normalized_hash"
+  ],
+  "types": {
+    "id": "string",
+    "schema_version": "integer",
+    "domain": "string",
+    "revision": "string",
+    "path": "string",
+    "url": "string",
+    "license": "object",
+    "version_profile": "object",
+    "raw_hash": "string",
+    "normalized_hash": "string",
+    "split_group": "string"
+  }
+}

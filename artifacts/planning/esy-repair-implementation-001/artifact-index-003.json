@@ -1,0 +1,1530 @@
+{
+  "evidence_sha256": "c2b24e0e0c5a3ab24a1f0dfacc886caaa3f7e53e6b810319368bd149c0c5b659",
+  "files": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/C01-deferred-cards.json",
+      "bytes": 19673,
+      "sha256": "9a49a890ed5164c8120bf6f0ee03ebed70d42ad97de3a45843e9f3cfde20d662"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/FOLLOWUP_PLAN_NOTES-003.json",
+      "bytes": 1016,
+      "sha256": "db98dd4b2f393b2be5fc9fe5c21fd298fc4cf8104f760475bef41bde41c8ab6e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/RESULT-003.json",
+      "bytes": 23675,
+      "sha256": "feff1b9af7bb927577df5e2a8d2e858d4737483f00c7ea440a03b0021ad6b5a5"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/base-image-inspect-001.json",
+      "bytes": 7568,
+      "sha256": "18f36b202d2cc75de44783f119f6bd3da6d82821a2f1045f6988c74a6b58930c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/base-readonly-probe-001.txt",
+      "bytes": 4135,
+      "sha256": "42a8d7b2a21c93f2eec98288a944e79f71311f3ffa95525cd0f8ee58c4a396d2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/baseline-manifest.json",
+      "bytes": 11524,
+      "sha256": "4dcb93a0d9fd247c3e4df3967ff3bbf772127bae7c92e3ce035d5f93908ad6a8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/C01-worker-claim-rejection.json",
+      "bytes": 401,
+      "sha256": "8440533f3ea3cb1ea8676760b1927d691409adab3587fff5cba923b2b16d3835"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/codex-astra-smoke-002.json",
+      "bytes": 999,
+      "sha256": "2dc5c19ec76125045e07e249203d9670b22c01f0faf4b246d69c6a53787e6577"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/containment-002.json",
+      "bytes": 1659,
+      "sha256": "e296d9bd9c3cc4c10991f0cdfd7bf90c3c36e8d7e8e4c7d5aa745268cd0e995f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/kqueue-probe-001.json",
+      "bytes": 346,
+      "sha256": "72a86a0918c59b467bbe0191215cbc35cbc3c88aca6cfae9254ae81da7a19bca"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/launch_worker.py",
+      "bytes": 4119,
+      "sha256": "92964745d10cc262468b75850d5e36ae9646726aeb49607bce0fdfb97c5421ba"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap/trusted-codex-worker-003.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/bootstrap.json",
+      "bytes": 1553,
+      "sha256": "c8fce7af361e82f361157b55b58ba8f5494b681dff6dbfde35036c09a6c5d073"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/budget-003.json",
+      "bytes": 255,
+      "sha256": "5705d39026e1e41fa4619442141a93e27bf6e4cdd32d29bd4a8227183ceb014f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/budget-004.json",
+      "bytes": 118,
+      "sha256": "9bec74c51992c903ac103b98000c1f05a2e528a36eb3eb4bb528192ec5921608"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/budget-005.json",
+      "bytes": 116,
+      "sha256": "ddb9e7087b609a2a7a25c204e2b089809418298d564d29b882c2bca88e906801"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/budget-006.json",
+      "bytes": 116,
+      "sha256": "2d91561b8834fe9be938221ae75b3e02784a65d79467f681a1a698eea9c17e7a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/budget-007.json",
+      "bytes": 109,
+      "sha256": "612e3cffb7769563a85034105c77a17fa432dbd5bd222b3888b2169b2a1f6379"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/budget-008.json",
+      "bytes": 117,
+      "sha256": "c0d5c18752b94e38f2254f1dfe143e52f1996fe823005ba1cd00841b398d9586"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/candidate-manifest-003.json",
+      "bytes": 13995,
+      "sha256": "9b52bdeaa467307d7b9c1930444a934736895648cc4e9c0e4cac94a04e07b08e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/events.jsonl",
+      "bytes": 5255,
+      "sha256": "390fcd8411902d0327e725d4dafb9dbfc7d890cd3dc467285574c8cdccc81a06"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/final.txt",
+      "bytes": 651,
+      "sha256": "66a6e8c9f936f7a7bfbd565638d6988675363dff938e967295853e64fb6b3445"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/prompt.txt",
+      "bytes": 7455,
+      "sha256": "0fbd26a298f2b926d074f0565bb6c4e9788844e6b19f1bded55e3e5b0f82417e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/receipt.json",
+      "bytes": 753,
+      "sha256": "c97014679ef83454328bfa75ae451918c43009c945119998896eb094e29a2571"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/sandbox.sb",
+      "bytes": 645,
+      "sha256": "9c202726a656b26a5416186e9b35315dbdf339db968c0804195d3aecafa78c0a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/started.json",
+      "bytes": 649,
+      "sha256": "1902d01ad32c17e6210ef8d1057334b5661ca0ab11aae97e8bcc4e5cb107fe9c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/stdout",
+      "bytes": 160114,
+      "sha256": "7a3d11d0ef3fdf19a14322f36ad75b574f14c352e741b6ac589230f53961b87d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-001/worker.sh",
+      "bytes": 635,
+      "sha256": "f9244fdfbfc6789a326522dbf1fcdf732da544956aae40236436577de6ef28bb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/final.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/prompt.txt",
+      "bytes": 36145,
+      "sha256": "a4d2aee03062cf04ff744c58bdbc0298a9024eaf29120d918608908cde37318c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/receipt.json",
+      "bytes": 767,
+      "sha256": "b1ec074c84c893c48b0c37c56f3aa398b131c5b68bc3f40cec79571221f974b2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/sandbox.sb",
+      "bytes": 504,
+      "sha256": "dcc9c9272f0fa4e5868e301849ec7e67ff325598e4e11f2401101bd7b71ba1bf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/started.json",
+      "bytes": 671,
+      "sha256": "7060e9769ce12e4d9eb52d63af0e90e679fb30c54f717ff5253478381bd4c116"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/stderr",
+      "bytes": 196,
+      "sha256": "c814e90e6c1b9c6058305cd792cda66594c341b724e354dee34751ef5b517cb0"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-001/worker.sh",
+      "bytes": 1255,
+      "sha256": "d3c690f9771725d14bc07ccc7af12803563026641ae50c0b8d5d4883e8a584da"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/final.txt",
+      "bytes": 7358,
+      "sha256": "262fbb86a4a253978b5b2d196e943e74594241ecdb563cc1d12816a58375aadb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/prompt.txt",
+      "bytes": 36410,
+      "sha256": "5df898fd81596a1cd34391c8186abe23fb3bfc0c253b094a7401813243f7f2dd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/receipt.json",
+      "bytes": 778,
+      "sha256": "2955ab9f6ca764615cd1035d1f93c3b0fdf1059d17682d64f559add6c7c228b6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/sandbox.sb",
+      "bytes": 504,
+      "sha256": "a4f75dc0030f732a100effc2022181903c597bd9315ac6d1ba28eaff53714c9c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/started.json",
+      "bytes": 670,
+      "sha256": "328e246908e33079c62da4155a8068ba74547d2450810e12fb8ec8b3956b7165"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/stdout",
+      "bytes": 7942,
+      "sha256": "0c2de924965973c313a9d2b29d2bcb937eef1d4bd5c6a9220c250bfe3300bce2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-core-review-002/worker.sh",
+      "bytes": 635,
+      "sha256": "f9244fdfbfc6789a326522dbf1fcdf732da544956aae40236436577de6ef28bb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/final.txt",
+      "bytes": 17636,
+      "sha256": "b93161bdef3e28586dc440284107cca9b3094e74cfcec8cd0f7677df7aaea04a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/prompt.txt",
+      "bytes": 17138,
+      "sha256": "b69059d160858c0bd83b823e7ea47c5f42236c23c338990268951cf7a9494ff9"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/receipt.json",
+      "bytes": 787,
+      "sha256": "0cce0deeef3e9ba1557cfdfe4421115fce6c9418f41f6a762609df032907c083"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/sandbox.sb",
+      "bytes": 508,
+      "sha256": "5ee38ffc540b9123b1d3ed7ce4ec3c6d5ddfc7fefc8db0a8ec06f3746aa2fa0c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/started.json",
+      "bytes": 680,
+      "sha256": "8b2521ad63ca05872ceaca10d7052862b06143d84715794f7f89c4795375094b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/stdout",
+      "bytes": 18507,
+      "sha256": "8f667299bfaa518712ae0dd29baaeece898d1eb25a0634c17b89aee197647ce2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-deferred-replan-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/final.txt",
+      "bytes": 476,
+      "sha256": "512d03e7d2f929c66cfcccf2a3eac63ff520b4d66d523c75ffd8f56c3d48a2a6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/prompt.txt",
+      "bytes": 111205,
+      "sha256": "9a9779d7bc31092b695a93610b5837dcee284676acb4d5aa21d42adb83f26863"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/receipt.json",
+      "bytes": 775,
+      "sha256": "c40fe4a73fef200813634c564d258ea9dc842471b1342b5ce7f170b7e5c17c01"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/sandbox.sb",
+      "bytes": 503,
+      "sha256": "06b881e3d74d6bf927f6ce0f41d097d2519d0e3e453857888ffad162aab19509"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/started.json",
+      "bytes": 668,
+      "sha256": "664c0bf60b3472c371f92fa15460e0ffae17775425f3616c5fe828fd4df7f81c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/stdout",
+      "bytes": 836,
+      "sha256": "af043a821f2347c22a15fd48a44876f746ea5e485be741a094b22b92ec7e4182"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/final.txt",
+      "bytes": 130,
+      "sha256": "716045b9354e08b103d2e22aacf83288830756685584f11ecfbbb2c7a9a0c65a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/prompt.txt",
+      "bytes": 25221,
+      "sha256": "9aa075525812abebe8d25d3eb4a5211fd487d9bdf108cfb6c721360d564f7ad8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/receipt.json",
+      "bytes": 775,
+      "sha256": "fbc78e57c662422175e63e740d63bcf4671774417b00d5ce51c3f6216ff8736e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/sandbox.sb",
+      "bytes": 503,
+      "sha256": "9f181ce963b5f686e3504c888e73e496fff02967e791787318eeab11364bfa72"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/started.json",
+      "bytes": 668,
+      "sha256": "4826ffef73184d2834cc768a011626bdf14166ce97e8397069803a0f78102744"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/stdout",
+      "bytes": 484,
+      "sha256": "0965f8acb1798afcae0f681a072e2dbdf9eacb3757b3b18eb4dbf550107b4e0e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-e2e-safety-002/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/final.txt",
+      "bytes": 1654,
+      "sha256": "a454f091aecee680f77a6bcaa2e9ab6efd66a86ca146aa4b720074ff0a06b13b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/prompt.txt",
+      "bytes": 8206,
+      "sha256": "54d017462b4e6e9d9ee2fc6b7429a3f3234b153a1087d2e30455d3afaae0f9a1"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/receipt.json",
+      "bytes": 783,
+      "sha256": "ae2a5ce673431b51c581770c40fe9b108d4cf079c1d954e1c5fb77dae58822c8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/sandbox.sb",
+      "bytes": 655,
+      "sha256": "b638eb18503cae05dd3d95442d4b6d7e67e4236c7eff017da008a2c8e57dd8a0"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/started.json",
+      "bytes": 677,
+      "sha256": "592e187ae9cdd23710af6bfcaa4741f1a32e3ebf2e7d96ffe8828700293137ce"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/stderr",
+      "bytes": 616,
+      "sha256": "41b99e23ee43d55cbeb8eb4f4442b8ffe7877e7d83398b6b735fb49f4a299b36"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/stdout",
+      "bytes": 243621,
+      "sha256": "f24eea1d8158e0921fe3bc5b285a426e67008301182c747569a248a4311061e5"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-public-cli-e2e-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/final.txt",
+      "bytes": 17372,
+      "sha256": "e4de66cc427840076a940407a0d5022418bdb863ee937fc62c72c1881aef1644"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/prompt.txt",
+      "bytes": 34688,
+      "sha256": "d93ef48cb3f8b9eb084bf1bb3881aec750cc37a5435c073ebd0d6ceea5901434"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/receipt.json",
+      "bytes": 760,
+      "sha256": "40787139c3acdc4d440b3d426fc7d03ff180c7866f9d381e3e73ddefc2e64a3c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/sandbox.sb",
+      "bytes": 499,
+      "sha256": "006861d38a76e28c9f32143b9fa4d10bebac3364a119c20535961d6409420a13"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/started.json",
+      "bytes": 652,
+      "sha256": "b38837cd4d9e0b0085c0b0e0e1c5cff3d58fac0e6af15c6ccf98d0e34fc2b506"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/stdout",
+      "bytes": 17858,
+      "sha256": "d58378501f6dd402b26af8b7feefef97a4ec747e318c31b08627a6defa31b317"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-replan-001/worker.sh",
+      "bytes": 635,
+      "sha256": "f9244fdfbfc6789a326522dbf1fcdf732da544956aae40236436577de6ef28bb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/final.txt",
+      "bytes": 972,
+      "sha256": "882a51190a8bb9d49887a6818cd690cb8be8f4b783ad38f3603b93ccc38d0fe7"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/prompt.txt",
+      "bytes": 16081,
+      "sha256": "e1183c7395f279f903c578ddbe112bbabfbf721338299f5c5f4b0f60359ff21e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/receipt.json",
+      "bytes": 786,
+      "sha256": "7be5216fc4109496071b3a39a3d64e73b62c86336c4639cafd89a327c61d58fd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/sandbox.sb",
+      "bytes": 656,
+      "sha256": "aabf387dcfaa7dea36622cf95765e1db6cf704cf636f5a7da5c1223f966f314e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/started.json",
+      "bytes": 679,
+      "sha256": "4a3ec2a27b0f5ab54595c75e00e34fe4b936d42eb070dda7d8df32989e2d664c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/stderr",
+      "bytes": 4789,
+      "sha256": "fb0dd947a8df3a9d4797f626d5b3df0f557001f57660db6e1f2fe5eb90e2bdab"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/stdout",
+      "bytes": 251741,
+      "sha256": "c5ef57399da8c44031e6b5f0e1d05cd250f10d4f87deaad543ade4ea7bf3ff05"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-core-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/final.txt",
+      "bytes": 9575,
+      "sha256": "2760edfb4435f9805734b145839e777f17b2552204c96726c83d1bc9ed821aae"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/prompt.txt",
+      "bytes": 95494,
+      "sha256": "44be2fe1bdc9d64938397c83dd5da852f4c380446c69567690c5790669dc91e3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/receipt.json",
+      "bytes": 797,
+      "sha256": "d43a91c6904e0d61de75b7d1c5deacbed8fc712b03a23bd55f52613a82e8bfd2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/sandbox.sb",
+      "bytes": 510,
+      "sha256": "f486bd9c87645c7b1c9d2bcc58c15aea27586dcfb92e339fe86f35df821cf97c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/started.json",
+      "bytes": 688,
+      "sha256": "8b49f85ad54fbf39e2343e50a5d411a95d4f9838299e031c2e79c2888e733f57"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/stdout",
+      "bytes": 10212,
+      "sha256": "111d385f997b50cca83135bf009993cacbac1576e129143ef1b02e4635806ac1"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/C01-supervised-review-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/final.txt",
+      "bytes": 359,
+      "sha256": "414641c3e361cc6ef80c53b907003d329358c90e7181561687bb749f2b6b7ea7"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/prompt.txt",
+      "bytes": 9822,
+      "sha256": "7f153ab785853177006e26459140bf8aec8d80302804c1b45ed58d9d09bb9c82"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/receipt.json",
+      "bytes": 777,
+      "sha256": "fbf4170c292554825a8c95f80be28fa62a48e138c1205bfd271ed60e013c6d6a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/sandbox.sb",
+      "bytes": 653,
+      "sha256": "0ca4d3a8a0a33c3c948c84f041fae31765be7981b145391d5fb3bc16c8d0fe7e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/started.json",
+      "bytes": 670,
+      "sha256": "06587adefc09ed3737a80a672e8413664cbd81b1cd6bf5345194590d0a7534e7"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/stderr",
+      "bytes": 1094,
+      "sha256": "e03cb67e816daa66577af43cbb672a1615992f73154605b8be59cd9a14e1b949"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/stdout",
+      "bytes": 108105,
+      "sha256": "f2812f2dfa65d9d71f5083d2a3e458569b8f8d7332f6c0f4b1d41a4de1d74efa"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-image-runtime-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/final.txt",
+      "bytes": 11146,
+      "sha256": "e8033bf73b89d7eea0cbe3b4802353600f236acfd325f1fbf5fb0cc0cedbf201"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/prompt.txt",
+      "bytes": 37534,
+      "sha256": "c1844cb5a86ab8abae16a1fe23f868bd64db88ae2e19785379cfaf4ecfc78d7f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/receipt.json",
+      "bytes": 761,
+      "sha256": "1c5834e6c33f5a440b920eead8f96740b3a32220805a6998b0e8d63c25d7538b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/sandbox.sb",
+      "bytes": 498,
+      "sha256": "0fe15ef832f7dc368e45f18c78e89ac41329274af9c9424837b53e9d70e0826d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/started.json",
+      "bytes": 653,
+      "sha256": "90fe795903a5e77bb9f0226512634680f8d484b12a5491a18844fc4df168f7ff"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/stdout",
+      "bytes": 11824,
+      "sha256": "1e3e7e7de5cc1ade1f4545a8491df68501830e0d3d7ac46741df674361cadd63"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R1-review-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/final.txt",
+      "bytes": 458,
+      "sha256": "4809975ae0fea96e12790515099c52509b4974fcfe48a85c9155bf923eb38e50"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/prompt.txt",
+      "bytes": 3063,
+      "sha256": "358273963966563c15b09463a3c13b27e5e23f426b3fd98f6c690e4ee6e7b23a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/receipt.json",
+      "bytes": 762,
+      "sha256": "cefbf9625a59e26b12584bcde91b15d74903f53b8c85a603f087a46653c32826"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/sandbox.sb",
+      "bytes": 648,
+      "sha256": "10d80233e2ea59dc6d4c2629e810ceaa7907401a7b5d659041b90386f11f1ce4"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/started.json",
+      "bytes": 656,
+      "sha256": "a64bca3779d4eb61d9479bf82c6e47cfd4baa20bec0ccbfc693580f4738a6496"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/stdout",
+      "bytes": 68242,
+      "sha256": "77ae97b1176c4b27c30995c9ad981bf9e28e59bc6b65cb2ca1790b0dc1d5b05e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-real-e2e-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/final.txt",
+      "bytes": 22101,
+      "sha256": "2f91ef1c5cd0dd6947daf2dfe61c6383bb1062affb6560179bfe8b5ea6d98035"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/prompt.txt",
+      "bytes": 63854,
+      "sha256": "ba9cc1363ab1b5f110d0fa31801ed3cd2234124d245a5a7a51a75bfef93fa877"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/receipt.json",
+      "bytes": 761,
+      "sha256": "316273b993976616d9576be218a9ccf4f8e6b49cea3c90ba7f52864747dcf95b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/sandbox.sb",
+      "bytes": 498,
+      "sha256": "5cbf6643bde0e287dd37ab7e3234028029fb9fff598327873125ec91e85a29ee"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/started.json",
+      "bytes": 654,
+      "sha256": "ab8b50090d5cf8bc2d6609b4e06f8630b098bcc4b679270f639d70c899322336"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/stdout",
+      "bytes": 23020,
+      "sha256": "cc6cd6afe3e1234e8cf51c9c5a4a5175dcb612fe5b38986f5d1ebd1634c7706d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R2-review-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/final.txt",
+      "bytes": 2641,
+      "sha256": "a7a5f85c2f3ff84444ff59b48d20a8cbdb4b1edf9f3bbec7bc6a15ac1a4b9fd3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/prompt.txt",
+      "bytes": 72816,
+      "sha256": "cebbd08bd4d1ed06cc98d744cdfa00853ea6b506fde8d7be3132a5427152ee9c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/receipt.json",
+      "bytes": 789,
+      "sha256": "a4825e5dba5c081d3a684780e78a34d0ac7b65a0954951c8b05850d2570e6adb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/sandbox.sb",
+      "bytes": 657,
+      "sha256": "b058756b27d3d9b813cb6a9d8d4d8eaeb4ce15e44d229a5b68a182f988fbac75"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/started.json",
+      "bytes": 683,
+      "sha256": "d061f812116f5dc83b69f043aef8ae6952efbdc0cb06724131e0040c69ef033d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/stderr",
+      "bytes": 898,
+      "sha256": "c3aaf5f199c054b62789aa679b747c52234973e27826993def95c2f450d2357e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/stdout",
+      "bytes": 210192,
+      "sha256": "2452a45f6b89320123f70c8cd6c94e93ed81588ebaebdcd8f52d1c470bf894b7"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-corrections-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/final.txt",
+      "bytes": 20193,
+      "sha256": "f44f93ab412a0526db96f63815b624d66b5d3febc6469237212a0e8280004f82"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/prompt.txt",
+      "bytes": 97891,
+      "sha256": "af444aa4cd4a6e0d9236b8a79aba12cfac704eba70f7370aebce7bcd5a2ca7ac"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/receipt.json",
+      "bytes": 779,
+      "sha256": "863b28733749c641516fdbb6ad1165822b3095c23e69bc450174843190f6d9b2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/sandbox.sb",
+      "bytes": 504,
+      "sha256": "705261272b769e8b6ea0e1cd9b7756dbdc8a446041b8be7aed6db65ffd788436"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/started.json",
+      "bytes": 671,
+      "sha256": "423772ee90e699bd7dfc6bd55088d90dec2be74edc85e2a61d4ea93d706dcadd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/stdout",
+      "bytes": 21108,
+      "sha256": "5c938af801a72cadadb2767cb79e4f47edc612920c4a97b9a6badabf93defe4b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-final-review-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/final.txt",
+      "bytes": 22569,
+      "sha256": "35603f3c05ec1e66b5e1b26e89b9065ea090190482c70f1a22f20e5c5b2a57ce"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/prompt.txt",
+      "bytes": 38787,
+      "sha256": "7346e20f0bca245f879cc42afd0eddf901c75605a7293b4ba65f483a959a2617"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/receipt.json",
+      "bytes": 751,
+      "sha256": "5113dd7807fb42635ffce7fae99fc76a7aa0e2cc9c2c3d9dd80cb4a3393027ec"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/sandbox.sb",
+      "bytes": 496,
+      "sha256": "fba5f4ff243bc02694a32798370b351ced8a37ebd67405899ce100d8769b5c2c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/started.json",
+      "bytes": 644,
+      "sha256": "9966f8494a8ce08a91cc7d8655b935b653e9c43f53423b031f4b97190e373136"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/stdout",
+      "bytes": 23937,
+      "sha256": "e0c620f79d890f0508f7cd31ef7d7b7c7093a1b5ca1aa700e4fa6ca82436f6df"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-plan-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/final.txt",
+      "bytes": 14094,
+      "sha256": "a6bf27d3c13d14383522096f34717170a876b2ca81f5e42428f3933af37053a6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/prompt.txt",
+      "bytes": 23127,
+      "sha256": "39148f4d7701eab1bcec98beb6e7bfd813693f8a89f05d0b227cc6d77a327659"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/receipt.json",
+      "bytes": 793,
+      "sha256": "fb0d0fcb8e979655fc1e6c151cae16158dde754d943f3e3e9dd594496565f8ab"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/sandbox.sb",
+      "bytes": 510,
+      "sha256": "db7d9711353fd25844bbad28cbb17a0e9ecbf7ca57cc494266bf9b698458bc59"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/started.json",
+      "bytes": 685,
+      "sha256": "7ad67def9fcba3ef912af5efbb9a58b34fff730bdd3eddb9b1efd3c33cfc0a85"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/stdout",
+      "bytes": 15125,
+      "sha256": "61d008300ac28929244ddbe3f3b6190613ac85ccd6172a1692f852e1c0a85bb5"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-reviewed-test-plan-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/final.txt",
+      "bytes": 19538,
+      "sha256": "45187e3197ffa0b29ede885ed19931892065521ace6eed7f27a7952f61b3baae"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/prompt.txt",
+      "bytes": 72878,
+      "sha256": "f532f87c369ab7c2c04657baece842f1482aa9a8358af65bb8d6da963249f42a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/receipt.json",
+      "bytes": 766,
+      "sha256": "4880358bdccddad8e3c59f3e8dd734aac6282b6192e88590110f245071ca5b50"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/sandbox.sb",
+      "bytes": 501,
+      "sha256": "8309f9fde0b768f975c7ac7d1bd45ac9439a7a3bf472ac3eef6b26892a2295b9"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/started.json",
+      "bytes": 658,
+      "sha256": "e574cb52b70a2684d39165d6b1a36c42993e178c066b816be90eeeab2aaa68a3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/stdout",
+      "bytes": 20659,
+      "sha256": "c684bdd0234aadccaa10452a7314e29534b99e6bdc6883153dd1eec828e137f0"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/R3-test-plan-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/final.txt",
+      "bytes": 24236,
+      "sha256": "21ab7985afa003eb01e2c73a1fd3cfa036b5bcef0e4640a3213af1d0c04b1dcc"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/prompt.txt",
+      "bytes": 58506,
+      "sha256": "59cd28f03ca9ea99dbcbbe0772abfabc0cde9e4c9657d7859d4f48f04dca2d29"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/receipt.json",
+      "bytes": 770,
+      "sha256": "689cec3e3e3227576d1dc3c0e79665c7a40573785b22b639df89604d18019927"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/sandbox.sb",
+      "bytes": 503,
+      "sha256": "a0ef8d6e8de0bee776df330eb46a64e22cfede20cf8203f82b57cbd66dd9eb28"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/started.json",
+      "bytes": 666,
+      "sha256": "3fb254f9224a4f666dc9d980b137dc2b884e101650804117ac44ccfc11a690dc"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/stdout",
+      "bytes": 25142,
+      "sha256": "0a603127f5f2d2db3bfcd96a27e3ea2ae5e7e6f8be9135a988b46e52c06b720f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/frontier-cards-001/worker.sh",
+      "bytes": 632,
+      "sha256": "ce171f250958b678ad187f7456779a17fd7f8997f6bd5d6aa5d46cf891b2a8c6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/final.txt",
+      "bytes": 600,
+      "sha256": "b6564b9dd8c62f44efbcb34e32255138f656a10725eaed1c1bcae208a889028f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/prompt.txt",
+      "bytes": 379,
+      "sha256": "fb39a91e70554158abf14c22f3cee36ef22d13f965326fc1a8ae2d79519962ba"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/receipt.json",
+      "bytes": 794,
+      "sha256": "3f52956269f9bde94f5ddafc507932097db6e024eef8846fb9239e031efc98fc"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/sandbox.sb",
+      "bytes": 659,
+      "sha256": "1e8cb222b64d56719716d8fbe4b7f0e5ed17fc07965e23ebbe8fc056f15e9b13"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/started.json",
+      "bytes": 690,
+      "sha256": "3b6847aa755fbb689922f8b229307124f3fd2f2d99500d95eb1a1f0f7406347d"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/stdout",
+      "bytes": 2594,
+      "sha256": "0c3dd127143cce84d9933dca0a19168fd041d7ceb4193a6f2558ccc76591a695"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-containment-001/worker.sh",
+      "bytes": 635,
+      "sha256": "f9244fdfbfc6789a326522dbf1fcdf732da544956aae40236436577de6ef28bb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/final.txt",
+      "bytes": 201,
+      "sha256": "5b301fbd90689463979e02d1d4148eafa0e0b160f80f00c73e55cd966164f02e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/prompt.txt",
+      "bytes": 426,
+      "sha256": "1d7b8d68ca185bcfe3de622b85ce584040019b4ae2ce89e900aecd300690f2cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/receipt.json",
+      "bytes": 776,
+      "sha256": "3fab0cb9bc27fcb9014455e75c2a3d27f5ec731505facfe6937714ed1f3e94c0"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/sandbox.sb",
+      "bytes": 653,
+      "sha256": "1f24e5d00709abff17c9600cae26b19a3c7c2d283fd639f0effb9a1b495056aa"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/started.json",
+      "bytes": 671,
+      "sha256": "0404fa4f2e3094c5552828dcec5175791b1c31a67d4163c0648da5363ba17834"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/stdout",
+      "bytes": 1866,
+      "sha256": "fc05f0874ae44fae738297e5fe21eb3175077c12325513d63751721de934e972"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-outer-smoke-001/worker.sh",
+      "bytes": 635,
+      "sha256": "f9244fdfbfc6789a326522dbf1fcdf732da544956aae40236436577de6ef28bb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/final.txt",
+      "bytes": 172,
+      "sha256": "754856861b6d5f88bbc1a07c3df2c74c4496a1f63b4ba72286a216d0e5281948"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/prompt.txt",
+      "bytes": 299,
+      "sha256": "5f97fe6815e69e9175e897f4d3cda6d953b3d7b2cdaba87c0c4062ac309038bf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/receipt.json",
+      "bytes": 757,
+      "sha256": "2fd4334a075a8cf0cfdb6e999d417bf4c3cc463aec74187f67d1ce0969a99fff"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/sandbox.sb",
+      "bytes": 647,
+      "sha256": "30b8ebd6e39bfcce90e8777e3c98b032ca35c8bba0455518ff410ea7ee37842a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/started.json",
+      "bytes": 653,
+      "sha256": "8a9dd4ef8ba60081247c611b587e80dbd31ef6fd5dfa8901fe7585caa6c764aa"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/stdout",
+      "bytes": 678,
+      "sha256": "8f467d1065a590dfbdc9a40ea4590e6bf1d014872c7efa1c0125604010fdf96f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-shell-001/worker.sh",
+      "bytes": 632,
+      "sha256": "ce171f250958b678ad187f7456779a17fd7f8997f6bd5d6aa5d46cf891b2a8c6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/final.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/prompt.txt",
+      "bytes": 335,
+      "sha256": "4df2cc3e6bb644309a4db7eb266439593308874db15aad510107ca88e71eddac"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/receipt.json",
+      "bytes": 745,
+      "sha256": "2e45bf1ba0070bd1f09903ef0ed5110e5262114b2ea525d8e792d36491a0e2eb"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/sandbox.sb",
+      "bytes": 647,
+      "sha256": "83673e8aa7a8cdf6af6343226ff7edceb9dfe894218cb8abbb48b8d0005ce957"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/started.json",
+      "bytes": 651,
+      "sha256": "2a6694ffe6cc2dca11a6e4018b9f79f3b8ac7c6f654fbd440903e4ab98c01696"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/stderr",
+      "bytes": 185,
+      "sha256": "0127f21d1b1d4da394a3866b9a4e3967a8968efca6992a8b57b2a27c51620080"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-001/worker.sh",
+      "bytes": 722,
+      "sha256": "2da42f00ff5f950fb266bb092723499b21b2cf775d05c525a14ab62b0f1837e8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/final.txt",
+      "bytes": 14,
+      "sha256": "b393bc4d6714e11df27a6273f3d130b0f568292ebec526ce7de7a6e7db944e3b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/prompt.txt",
+      "bytes": 335,
+      "sha256": "4df2cc3e6bb644309a4db7eb266439593308874db15aad510107ca88e71eddac"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/receipt.json",
+      "bytes": 758,
+      "sha256": "b04e10019e6bd978b9d4587e56643f18b412d136c6f43db1ae1d1f8664e68bd2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/sandbox.sb",
+      "bytes": 647,
+      "sha256": "3e3330e486aa6af05d67911e3e1007428fc8561d8ba7b6ff05a0eb622597c730"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/started.json",
+      "bytes": 654,
+      "sha256": "fefbeb7ec8290a30e689628ba5b81d3e8834fd83fcd9b4e0d10b45b7e31d373f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/stderr",
+      "bytes": 283,
+      "sha256": "2ee3adf326aa133459d26f1f19eb55ada5f9be22959a606f79b9eb33a9782b4e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/stdout",
+      "bytes": 920,
+      "sha256": "34825d4bc4b678e94d1d588de66e81fc16eeede73353eeb4a1ef69d6a4699bb6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-002/worker.sh",
+      "bytes": 632,
+      "sha256": "ce171f250958b678ad187f7456779a17fd7f8997f6bd5d6aa5d46cf891b2a8c6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/final.txt",
+      "bytes": 199,
+      "sha256": "96dddcc046539c76d533b6943b652955b61d522f5f190c34a92635c9f9e0f842"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/prompt.txt",
+      "bytes": 480,
+      "sha256": "7dc5f8609ba49127019655c27a527128755da6f3af09e19ffcbaff6e55688190"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/receipt.json",
+      "bytes": 758,
+      "sha256": "36daf541b50e4bbf966f19fdefb7a19977407f9dceb5279f932b8c163473e6f3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/sandbox.sb",
+      "bytes": 647,
+      "sha256": "1970f76de48c1a9b9dc73915dea0bac7e8e2293b8ed3906b95b2b076826d4ef5"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/started.json",
+      "bytes": 653,
+      "sha256": "168aeeef257cb5045f3b9e4a8fb24a2c91cc8cf5920ce3856981e4d80c63d388"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/stderr",
+      "bytes": 283,
+      "sha256": "865ce2b8d4347f33d75c23bdc143a3c1d81e6138f5416374cb50961fcdac0dc9"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/stdout",
+      "bytes": 1321,
+      "sha256": "725c678122571379758684a284d4c76081f6c93e5e2497c539e83be82b4d4a74"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/luna-smoke-003/worker.sh",
+      "bytes": 632,
+      "sha256": "ce171f250958b678ad187f7456779a17fd7f8997f6bd5d6aa5d46cf891b2a8c6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/final.txt",
+      "bytes": 6278,
+      "sha256": "7900e307b8c1dddb3c65dcb3b1f4414aa475d06afda945e55b6740a1bdd91692"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/prompt.txt",
+      "bytes": 2816,
+      "sha256": "ff765b4a9077bc3d1ff178bdbf067107425a06e4bde76c1cb9552875a04cfce4"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/receipt.json",
+      "bytes": 792,
+      "sha256": "e481fa1fd553c9afb0843f778a1d6640292c4eaab65ea9e9ef6d0d448fa7ee6c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/sandbox.sb",
+      "bytes": 510,
+      "sha256": "77eabf9b4bc4dd0fac306eb77db656577cffd2d634ea62e6017d6e1b4221b00c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/started.json",
+      "bytes": 685,
+      "sha256": "83f9c924f09caa8959f7cd0a423534712818e00ea8ecd8ae1dfcb3c4b51a0142"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/stdout",
+      "bytes": 6834,
+      "sha256": "d63c8b76e868f8e2884164c4244730df7aebd66a5a57bb91f247110036003659"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-budget-plan-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/final.txt",
+      "bytes": 50392,
+      "sha256": "7eb3c7e74a8b3c0c53350253340119d1ed295f12ef7102e5fbff04536c6eee45"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/prompt.txt",
+      "bytes": 51759,
+      "sha256": "6ee361c1ddea227239d537792b3b97b83a23f801a59b8655f9254591493bbec3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/receipt.json",
+      "bytes": 787,
+      "sha256": "b063d85032b29b28b2ea7aedc1b81a19bdb58a4deaafdf954189403596b7b132"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/sandbox.sb",
+      "bytes": 508,
+      "sha256": "6725ba16576aba9c80ccad2134a2c8267ec1d1f160b9c0a119e25ec231c7b351"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/started.json",
+      "bytes": 679,
+      "sha256": "0db3e5e0d92f11003dbf2a70d6207168fe0d9011a8a2bee8780bc823a82d761c"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/stdout",
+      "bytes": 54227,
+      "sha256": "0e773cf73b67724b4330f6eff9da81f112e9655de47f0958d09024e7c383d9fe"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/remaining-work-plan-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/final.txt",
+      "bytes": 2782,
+      "sha256": "b1b30148df34c5735df13b542d9c76bce6b25aa44b513df90a303665889c3d59"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/prompt.txt",
+      "bytes": 1747,
+      "sha256": "010864b65ea548b68e6789be8f83cb28eb652b8b5470a0f175564b425e2d3d12"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/receipt.json",
+      "bytes": 786,
+      "sha256": "25edb615773a0652c88e010bda7acad586649eb51df15c0d8c423a59eaf528b8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/sandbox.sb",
+      "bytes": 508,
+      "sha256": "74d26677edd5eab6c6791a9b4af4504c0c96d1a1c4d1da0d3b7283cc9dec8513"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/started.json",
+      "bytes": 681,
+      "sha256": "3e616b4f1b9d12fb8f803a28770581d1d8cf06e56d99cb37a8cc463418241055"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/stdout",
+      "bytes": 3206,
+      "sha256": "8e762695c75552ff274d0c1132f213812c151fc7bafd118adf8c920d476f1697"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/sandbox-compat-plan-001/worker.sh",
+      "bytes": 632,
+      "sha256": "ce171f250958b678ad187f7456779a17fd7f8997f6bd5d6aa5d46cf891b2a8c6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/final.txt",
+      "bytes": 1412,
+      "sha256": "b95f697706517345885b6b32c024ff504d882b4dfc60a6211f779107479146d6"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/prompt.txt",
+      "bytes": 1846,
+      "sha256": "ec638f9355e19ca96e4be1e0c68ff64d230a603e7b02711f8c711ae598f6b2cc"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/receipt.json",
+      "bytes": 801,
+      "sha256": "8c3c4690069d58a069427ddb0d4b3818d5fa9aba9147255bc05dc57f3efb16fa"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/sandbox.sb",
+      "bytes": 512,
+      "sha256": "7fd5293fe0efdc8fec02cba2f99675caba3603052e649940772a76f5abb52f27"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/started.json",
+      "bytes": 695,
+      "sha256": "98f865895f3f93be77e37dd672f220f41c91006636581588dd3f5706580e84ef"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/stdout",
+      "bytes": 1827,
+      "sha256": "2176aff3500b3eed5653e0795f9f5349f28a7c74ea29b6fdfd4df66e574c7199"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/seed-image-build-review-001/worker.sh",
+      "bytes": 670,
+      "sha256": "184f3f8aebc4e244092591555da6dcb050c6ffd7f4e741b444199257fef383cf"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/original-preservation-003.json",
+      "bytes": 100,
+      "sha256": "5acf0c454387d65ca452d2f235983b2cb55575512dfbef3116337202e4b83ec8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/original-preservation-004.json",
+      "bytes": 121,
+      "sha256": "a34d5220d73e503b886134057ec90ee501595526371c22936c824e80cf9800ab"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/required-esy-scenario-status-003.json",
+      "bytes": 7618,
+      "sha256": "d88d0730b29cbd9e2f0c1ebb6cd3f9228acc61eed4010035fce70e5b10eed2a3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/e2e-receipt.json",
+      "bytes": 1507,
+      "sha256": "0908215f6a780737240e50a6b89f7185ac1785e78c5686e3e80ac3b4b54e7d8b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/e2e.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/e2e.stdout",
+      "bytes": 33,
+      "sha256": "961f28ff341a4a39024cc85e140217549830e767eab88ebb0c72ca0818f4163b"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/manifest.json",
+      "bytes": 613,
+      "sha256": "3d8d25b2b05ad08273f13a827932283a8e094a4aab8a6e96ccc23c4cf3d0b46a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/prompt.txt",
+      "bytes": 36410,
+      "sha256": "5df898fd81596a1cd34391c8186abe23fb3bfc0c253b094a7401813243f7f2dd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/scripts/esy-repair/codex-worker.sh",
+      "bytes": 1255,
+      "sha256": "d3c690f9771725d14bc07ccc7af12803563026641ae50c0b8d5d4883e8a584da"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/scripts/esy-repair/controller.py",
+      "bytes": 19946,
+      "sha256": "c3173994deb44fa48a8181b82c19b51286e41242fcd5fefd9b5655f51acb653a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-core-001/tests/e2e/test_esy_repair_controller.py",
+      "bytes": 5685,
+      "sha256": "22b54ef3f2281dd4510786a4eec6c64b76ca5085d972d96e701e4074c3d3022e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-001/manifest.json",
+      "bytes": 556,
+      "sha256": "16370122f64b1cefb931e75609f593c08b97cd94bc7d4c7d7c111935d39ab0ba"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-001/prompt.txt",
+      "bytes": 111205,
+      "sha256": "9a9779d7bc31092b695a93610b5837dcee284676acb4d5aa21d42adb83f26863"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-001/scripts/esy-repair/codex-worker.sh",
+      "bytes": 1425,
+      "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-001/scripts/esy-repair/controller.py",
+      "bytes": 84776,
+      "sha256": "63db0b93671ac0af9f3099c6338775b319555350c7cf20bfb3045b0511dbba0f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-001/tests/e2e/test_esy_repair_controller.py",
+      "bytes": 23304,
+      "sha256": "24e9afde3fe2df2e8d9fcefae4cdaa4c2ea8200ce62a2825db50db40d2bb9355"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-002/e2e-receipt.json",
+      "bytes": 940,
+      "sha256": "0d0e0a0a23ef17d34d0a33de6d1fdd1bae9ffe865a86c0851cc18ecfd65ec251"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-002/e2e.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-002/e2e.stdout",
+      "bytes": 838,
+      "sha256": "4b9d7a283aa3d41d9e63d76fc3774d21852464647239919024dd03200845992f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-002/prompt.txt",
+      "bytes": 25221,
+      "sha256": "9aa075525812abebe8d25d3eb4a5211fd487d9bdf108cfb6c721360d564f7ad8"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-public-cli-e2e-002/test.py",
+      "bytes": 23310,
+      "sha256": "7dbd8fc9c780794e163dcf6bc02be242c35042b255e40c975739b8499cb46222"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-supervised-core-001/manifest.json",
+      "bytes": 403,
+      "sha256": "2053df2b75b4368395e9804632b0b1532248f5d6d4dcc2d6dc81dc10b2e42688"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-supervised-core-001/prompt.txt",
+      "bytes": 95494,
+      "sha256": "44be2fe1bdc9d64938397c83dd5da852f4c380446c69567690c5790669dc91e3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-supervised-core-001/scripts/esy-repair/codex-worker.sh",
+      "bytes": 1425,
+      "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/C01-supervised-core-001/scripts/esy-repair/controller.py",
+      "bytes": 84776,
+      "sha256": "63db0b93671ac0af9f3099c6338775b319555350c7cf20bfb3045b0511dbba0f"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R1-image-runtime-001/Dockerfile.esy-runtime",
+      "bytes": 571,
+      "sha256": "42418048ae6e5057c4890d7d536d26878b1dd5946b3f482dd48c744f2fa64c11"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R1-image-runtime-001/manifest.json",
+      "bytes": 284,
+      "sha256": "d718b9b22b286b6c22c70048eb2551487c591fc468753ed0ff24b89756410f73"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R1-image-runtime-001/run_esy_reference.py",
+      "bytes": 26248,
+      "sha256": "6051c9054244106c77eeeb838a7f8094102e918d827613fb9ab7895c2c31cc52"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R2-real-e2e-001/manifest.json",
+      "bytes": 157,
+      "sha256": "d304302730bb12cad82343817696f0cb6805b0cb43a327b2fdb8a6dc7a86d7f4"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R2-real-e2e-001/test_esy_reference_runtime_e2e.py",
+      "bytes": 48874,
+      "sha256": "4b525e9b0c1eab9e46872fd41d3bf77e6de1ae8b49383812c0ab8b8bd8f1c5d3"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R3-final-001/Dockerfile.esy-runtime",
+      "bytes": 571,
+      "sha256": "42418048ae6e5057c4890d7d536d26878b1dd5946b3f482dd48c744f2fa64c11"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R3-final-001/manifest.json",
+      "bytes": 748,
+      "sha256": "5a16d0f760c53e3a7bf820f48408505e04d2a1e917c2c3cbbd9bdde59bd75569"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R3-final-001/run_esy_reference.py",
+      "bytes": 34178,
+      "sha256": "7f04749a9e3b2b284bdeee5788b1b27a9773019bd455cf48a8886795ba36c6a1"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R3-final-001/test_esy_reference_runtime_e2e.py",
+      "bytes": 24059,
+      "sha256": "601338dcae650c87eced4ccbb2d8be98b130475edd7c416869c1454e01c48f21"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R3-final-static-syntax.json",
+      "bytes": 664,
+      "sha256": "ddffe09e69a31153295d59a23e875224c53a060bc918b583eaefb49f38242d89"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/reviews/R3-parent-manifest.json",
+      "bytes": 443,
+      "sha256": "0eca9ec73d64a75f481f882de77e4ffcbcccbb83b2962577777b4eb34978b8ba"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-002.txt",
+      "bytes": 1638,
+      "sha256": "d3ad29fd48431dd1879c0e0da8020a43206239036d960d9a10e42b4505d0c5ef"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-020.txt",
+      "bytes": 86200,
+      "sha256": "ce9a1d2a8036ee5cb7209c2f080b4362c3c92307728ae1e51ec835c4027678fd"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-021.txt",
+      "bytes": 49063,
+      "sha256": "63bb9800245fe779feb5a45ae27ad26a63bc87a82460a79eef077ed95e9d1dfc"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-037.txt",
+      "bytes": 1733,
+      "sha256": "a4c683d65f3287e70b56d94516487dcfb34e985cd9cf78975741ac3faceec0ce"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-038.txt",
+      "bytes": 3225,
+      "sha256": "c272b2f9b84968557c76585d2a66028b45f578716b6febb3d8973a56f7e52360"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-039.txt",
+      "bytes": 171137,
+      "sha256": "f40973f4c9316c9c9952c09412d36a7e91a075b18ce512099d5e80a5a203ab6e"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-040.txt",
+      "bytes": 1393,
+      "sha256": "5076c9724031726d8f83e534f002262f960c16e0ebdc43bfb6015bbd544edd6a"
+    },
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/frontier-packet-003/source-067.txt",
+      "bytes": 47399,
+      "sha256": "62af8f8c5bbb9cc6a1565ef52056f73dc51fcd436554e48e26442f37b3bd9461"
+    }
+  ]
+}

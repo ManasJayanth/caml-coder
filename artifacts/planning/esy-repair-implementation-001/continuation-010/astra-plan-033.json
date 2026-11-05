@@ -1,0 +1,42 @@
+{
+  "plan_id": "B1a-per-invocation-routing-recovery-033",
+  "planner": "gpt-6-astra",
+  "status": "Source-authoring only; no execution approval. Overall INCOMPLETE.",
+  "basis": "Read full frozen32 source, manifests, failure receipts, plan32, review31, review025 and execution-envelope-plan. Computed hashes below. Partial32 is unaccepted planning input only: unused checker, incorrect two-byte newline checks, arbitrary routing_count, no matrix callsites/negative-control path/receipt. Truncated provider events and AST validity are not completion. Guardian confirms output-cap termination -9, reap and credential removal; this is a failed launch, not established cleanup uncertainty.",
+  "budget": {
+    "consumed_launches": 32,
+    "maximum_launches": 36,
+    "remaining_launches": 4,
+    "allocation": "33 routing,34 arity,35 diagnostics,36 result receipt/inventory. Zero reserve. Outer wrapper remains unimplemented and unreviewed: overall INCOMPLETE even if all four source cards pass. No allocation reset, launch-cap extension, or completion promise. Root rechecks cumulative time/failure gates."
+  },
+  "input_path_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/",
+  "input_hashes": {
+    "astra-plan-032.json": "71e074d2ec1cf3c8eb5d4ab30a1bc2cfa0e7d28479eefe37fc07f3af39e948ee",
+    "astra-source-review-031.json": "a00f29e03aeb3d178c354d63d3a7095823a857abff57f4b093ba99f58ac8ef64",
+    "coding-jobs/B1a-Newline-031/result-manifest.json": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+    "coding-jobs/B1a-Newline-031/frozen/tests/e2e/test_review_adapter_e2e.py": "f2d5d17bf15b76181a4da149d42b9448702a5346fc3866a6f4b65b06743384fe",
+    "coding-jobs/B1a-Routing-032/result-manifest.json": "adde31f5be023746ead75718cd72da8dc1b5465b75ca7a5b288400e949f6d13f",
+    "coding-jobs/B1a-Routing-032/frozen/tests/e2e/test_review_adapter_e2e.py": "59d9128d71ef5d304363f0c031e6a49b8fbb8999a66a41af7ccabfcfd37baeb7",
+    "coding-jobs/B1a-Routing-032/guardian/receipt.json": "d74c542e77002342b68809fec14469858410428acdb31994318ad3ddb8ffa913",
+    "coding-jobs/B1a-Routing-032/independent-failure.json": "df88261be20528b997546b99d61c2aaf73fa9968be42f1d84cf7434e1edb945d"
+  },
+  "launch_033": {
+    "card_id": "B1a-Routing-033",
+    "finding_ids": ["B1a-E2E-025-per-case-routing"],
+    "parent_revision_sha256": "12fd8d9dbc9e23285aecb81c3b011034e3669de9dbaff5202da4bbda27b5d6a0",
+    "parent_choice": "Restart approved source31. Partial32 is neither parent nor reusable accepted source. Candidate remains31; no partial32 import.",
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "authoring_protocol": "Read and edit only; no shell, imports, compilation, subprocesses, tests, provider calls or delegation. Small targeted edit-tool patches, each under 3000 characters; no full-file rewrite or printing entire source. Minimal shared delta checker plus callsites and two fixed controls. Keep existing 2MiB output cap and all guardian/protocol safeguards. Output-cap mitigation changes authoring granularity, never acceptance requirements.",
+    "prerequisites": "Root verifies exact source31 working parent, complete manifest inventory/modes/sizes/hashes, review31 binding, proven cleanup and remaining ledger/time/failure gates. Any mismatch requires rebinding before dispatch.",
+    "requirements_mapping_plan32": [
+      "R1 retained: keep last accepted bounded raw snapshot, initially empty. Immediately after each completed matrix response, valid-review or invalid-arity bounded_run, call unchanged collect_records; require exact prior prefix, validate only suffix. Never truncate/reset file or permit missing/extra records to cancel across calls.",
+      "R2 retained: one complete JSONL record per nine response rows and additional valid-review call, exact object equality for expected argv, workspace cwd and base64 review-fixture stdin; zero new raw bytes per existing invalid-arity call. Reject malformed JSON, blank/extra/incomplete lines and mismatches. Use bytes([10]) for new non-template LF checks/splitting; preserve embedded-template escaping. Record row identity, expected/observed delta and outcome before output/status comparison; accept only if both checks pass. Abort first mismatch before later bounded_run. Advance accepted snapshot only after successful routing validation.",
+      "R3 retained: preserve existing arity rows/counts and additional valid-review call for arity34. Remove aggregate-only acceptance. Preserve response bytes/status, collector/bounds controls, deadlines, ownership, cleanup, adapters and sandbox profile; no unrelated refactor.",
+      "R4 retained: add exactly routing-missing and routing-duplicate public choices, route both into actual matrix response path, bypassing lifecycle branch. First success response alone selects a literal missing/duplicate fixture mode: fake writes zero/two identical records while preserving stdout/stderr/status; normal writes one. No arbitrary count/config interface. Actual adapters/fake run through unchanged bounded_run; checker never fabricates delta or calls controls directly.",
+      "R5 retained: each control exits nonzero on first-row routing mismatch, attempted invocation count1, no later launch. Persist tiny routing.json even on expected failure: scenario, failing row, expected/observed delta, mismatch reason, attempted count, invocation lifecycle and bounded actual observation sufficient to distinguish zero/two. Pass lifecycle dict into existing bounded_run without changing it. Receipt-write failure fails. No general result.json/global inventory in this card."
+    ],
+    "review_and_acceptance": "Root freezes output and obtains fresh independent exact-revision source review, including all five mapped requirements and escaping. Source closure only; no runtime acceptance. Stop for scope expansion, extra-path need, hash mismatch, execution attempt or exhausted gate."
+  },
+  "deferred_public_e2e": "Execution remains blocked pending all source/environment findings and separately reviewed outer wrapper. Future fixed public matrix/routing-missing/routing-duplicate invocations must prove one/zero matching deltas and first-row control failures with observed0/2 versus expected1, count1 and independent cleanup. Bound receipt reads65537 and records16385; reject overflow. Fake routing proves neither provider identity nor availability.",
+  "remaining_obligations": "Arity34, diagnostic35, receipt/inventory36 remain open. Receipt36 must inventory every attempted bounded_run, including both controls and all matrix/valid-review/arity/lifecycle/deadline/boundary calls, acquired PID/PGID/session identity, no-child attempts, reaps and cleanup on failure exits. Execution-envelope completeness requirements remain unchanged; old slot numbers are superseded. Missing wrapper cannot be bypassed by root authoring outside the allocation."
+}

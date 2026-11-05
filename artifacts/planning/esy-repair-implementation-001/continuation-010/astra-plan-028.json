@@ -1,0 +1,76 @@
+{
+  "plan_id": "B1a-ownership-receipt-correction-028",
+  "planner": "gpt-6-astra",
+  "status": "Fresh source-only replan after original25 and corrections26/27; no execution approval",
+  "scope": "Read frozen27, review27 and plan27; independently hashed inputs. Only this plan is written. No candidate execution, imports, compilation, tests, providers or delegation.",
+  "budget": {
+    "consumed_launches": 27,
+    "maximum_launches": 36,
+    "active_checkpoint_seconds_approximate": 22500,
+    "active_limit_seconds": 32400,
+    "allocation": "One card28 plus six later finding cards leaves two launch slots if all succeed. Root reconciles actual count/time before dispatch; neither limit may be exceeded.",
+    "attempt_gate": "This independent fresh replan satisfies the three-failed-attempt gate for the existing ownership objective after25/26/27. It authorizes only the proposed next source-authoring attempt; retain cumulative failure history and require fresh replanning after any subsequent controlling three-failure threshold."
+  },
+  "launch_028": {
+    "card_id": "B1a-Lifecycle-028",
+    "objective": "Correct only cleanup-outcome separation and bounded signal observations in the existing lifecycle receipt.",
+    "finding_ids": ["B1a-E2E-027-cleanup-outcome-conflation", "B1a-E2E-027-signal-observation-receipt"],
+    "parent_revision_sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76",
+    "input_path_base": "artifacts/planning/esy-repair-implementation-001/continuation-010/",
+    "inputs": [
+      {"path": "coding-jobs/B1a-Lifecycle-027/result-manifest.json", "sha256": "41122f8a73f5d82842e343e4bb1e1a6eb9048942a7edb9adb854b06259a28e76"},
+      {"path": "coding-jobs/B1a-Lifecycle-027/frozen/tests/e2e/test_review_adapter_e2e.py", "sha256": "dd9c4f8fbfab2657582ad36c204d5c8781ce990188b184100b476d5adc406689"},
+      {"path": "coding-jobs/B1a-Lifecycle-027/frozen/scripts/esy-repair/claude-worker.sh", "sha256": "7d2c269809486aaa9ba8b470c375623320ba897d5c13777c8ca4e6035d28d4e6"},
+      {"path": "coding-jobs/B1a-Lifecycle-027/frozen/scripts/esy-repair/codex-worker.sh", "sha256": "e036f5ced62399dda7e9c5e18063b148df9e89b8a3f146a0786703ab7e2579d2"},
+      {"path": "astra-source-review-027.json", "sha256": "20a80247c67b64381ebd23550a42e55cc5ff7977bfceddf91b13a51b576ae747"},
+      {"path": "astra-plan-027.json", "sha256": "0c03e22f4544e99b8b1298543f78a4a5bc17d7883180b94f175951273c72a420"}
+    ],
+    "allowed_paths": ["tests/e2e/test_review_adapter_e2e.py"],
+    "prerequisites": [
+      "Resolve input paths against input_path_base in the repository. Root verifies all hashes, complete frozen27 manifest and exact working copy, adapter identity and budgets before dispatch. Start from frozen27.",
+      "Luna authors source using read/edit/write only: no shell, execution, imports, compilation, tests, subprocess, helper or provider invocation. Root freezes output and obtains independent Astra review of the exact revision.",
+      "Complete source/environment approval and separate outer-wrapper approval remain prerequisites to later execution. Claude remains unavailable/disabled."
+    ],
+    "required_behavior": [
+      "At the existing final cleanup calculation, remove primary-is-None from the clean predicate. Require no cleanup errors, no cleanup interruption, all observed required pipe closures, known leader reap or no acquired child, selector closed/absent, and successful existing guarded handler restoration. Restoration failure already records a cleanup error. Preserve the first primary failure and existing re-raise path independently: cleanup=success must never convert injected failure into exit zero.",
+      "Initialize a fixed scalar first_signal=null in state. At existing receipt finalization after handler restoration, copy received.signal as its numeric signal identity, or null if none. Use the handler's actual observation, never the scenario name or intended signal. Preserve the existing first-only received.signal behavior and separate cleanup_interrupted flag. A deliberately raised KeyboardInterrupt is not an observed OS signal.",
+      "Add phase=null to the initial signal_attempt object. In the existing sole permitted killpg branch, capture the current phase into signal_attempt.phase immediately before the call, alongside unchanged intended/attempted/result semantics. Attempted group signals must record owned; no-attempt paths retain null. Do not infer the phase afterward from final reap state.",
+      "Keep all other lifecycle control flow, first-failure persistence, native sandbox, actual adapters, fixed environment, newline stdin, saved-duration waits, no-signal-after-possible-reap invariant, independent close/reap obligations and single two-second cleanup deadline unchanged. Retain all current stream/record/invocation/suite limits and the closed CLI enum."
+    ],
+    "forbidden_changes": [
+      "No edits outside the allowed test file; no adapters, controller, policy, dependencies or historical artifacts.",
+      "No architecture, ownership redesign, signal log, new control/probe, fault matrix, arbitrary command/timeout/signal input, helper/unit test, fake-process substitution or sandbox replacement.",
+      "No fixes for the six remaining findings; no diagnostic, matrix, routing, arity, record-bound, result-receipt or deadline changes. No candidate execution by Luna."
+    ],
+    "e2e_recipe_ids": [
+      "B1a-public-lifecycle-normal", "B1a-public-lifecycle-setup-failure",
+      "B1a-public-lifecycle-post-reap-exception", "B1a-public-lifecycle-post-reap-interrupt",
+      "B1a-public-lifecycle-timeout", "B1a-public-lifecycle-stdout-overflow",
+      "B1a-public-lifecycle-stderr-overflow", "B1a-public-lifecycle-cleanup-interrupt"
+    ],
+    "public_e2e_recipe": {
+      "executor": "Root only after both approvals; all eight existing controls suffice.",
+      "invocation": ["VERIFIED_ABSOLUTE_PYTHON", "VERIFIED_ABSOLUTE_TEST", "--adapter", "VERIFIED_ACTUAL_CLAUDE_ADAPTER", "--output-dir", "FRESH_OWNED_EMPTY_0700_DIRECTORY", "--scenario", "EXISTING_FIXED_SCENARIO"],
+      "evidence": "Run the complete public executable and actual adapter with native sandbox. Collect bounded exit/stdout/stderr and lifecycle.json plus independently bounded outer completion. No imports, monkeypatches or synthetic receipts.",
+      "assertions": "Normal exits zero with successful observed cleanup. Setup/timeout/both overflows/post-reap faults exit nonzero retaining their original failure; cleanup=success when independent obligations succeeded without cleanup interruption/errors. Owned-failure signals record attempted=true and phase=owned; both post-reap controls record no attempt and phase=null. Cleanup-interrupt preserves setup failure, first_signal=SIGINT's numeric value, cleanup_interrupted=true, cleanup=failed, and independent resource/reap outcomes. Without an observed OS signal first_signal remains null."
+    },
+    "expected_outcomes": ["Both review27 receipt gaps corrected without lifecycle regression; ownership closure remains subject to exact-revision review and later approved evidence."],
+    "evidence_outputs": ["Luna: changed test source only. Root: frozen candidate, parent/result manifests and diff. Astra: exact-revision source dispositions/safety verdict. Later approved root execution: eight bounded public receipts."],
+    "stop_conditions": ["Hash/manifest mismatch, exhausted budget, extra-path need, worker execution or expanded scope: stop dispatch and report.", "Any unresolved safety blocker or missing source/environment/outer-wrapper approval forbids execution. Failed receipt obligations remain open; do not claim closure from source literals."]
+  },
+  "plan_dispositions": {
+    "B1a-E2E-025-owned-process-lifecycle": "Open umbrella: card28 targets its remaining review27 receipt gaps; closure requires exact-revision review and approved evidence.",
+    "B1a-E2E-026-spawn-handoff": "Source concern addressed per review27 within finite cooperative-signal contract; preserve.",
+    "B1a-E2E-026-interrupted-cleanup": "Core source concern addressed per review27; observation gap assigned28.",
+    "B1a-E2E-026-finalization-receipt": "Partially addressed; remaining aggregate/signal receipt gaps assigned28.",
+    "B1a-E2E-027-cleanup-outcome-conflation": "Open; card28 cleanup predicate only.",
+    "B1a-E2E-027-signal-observation-receipt": "Open; card28 two fixed receipt fields only.",
+    "B1a-E2E-025-deadline-race": "Open; separate card29 after ownership closure.",
+    "B1a-E2E-025-record-bound": "Open; separate card30.",
+    "B1a-E2E-025-per-case-routing": "Open; separate card31.",
+    "B1a-E2E-025-arity-offset": "Open; separate card32.",
+    "B1a-E2E-025-diagnostic-byte-cap": "Open; separate card33.",
+    "B1a-E2E-025-result-receipt": "Open; separate card34."
+  },
+  "later_cards": "Plan27 remaining-card ordering shifts from28-33 to29-34. These are disposition placeholders, not dispatch-ready cards. Materialize each full mandatory contract against its immediately preceding accepted frozen revision and actual hashes, with inherited source-only gates and only its assigned finding. No invented future hashes or premature whole-file approval."
+}

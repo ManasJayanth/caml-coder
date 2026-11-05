@@ -1,0 +1,4 @@
+T12C bounded replan request
+Evidence: bonito-conversion-impl-001 through -003 in artifacts/e2e.
+Third run reached actual MLX conversion after two fixture receipt compatibility corrections. The synthetic source state hardcodes 18 vocabulary rows, while tokenizer and model config correctly agree on 9 IDs. Correct synthetic embeddings and lm_head to 9 rows. Align positive scenario ID to card-required bonito-conversion. This is a fixture repair, not a relaxation of production tensor compatibility. Keep the existing unsafe pickle, missing tensor, wrong dtype, and corruption tests. Run positive real-tensor MLX conversion and negative fixtures again after authorization; no claim that real Bonito weights are converted.
+No user authorization inferred; NEEDS_REPLAN is recorded.

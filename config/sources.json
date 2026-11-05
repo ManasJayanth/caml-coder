@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "official",
+  "sources": [
+    {
+      "domain": "esy",
+      "repository": "https://github.com/esy/esy.git",
+      "revision": "4afe7a5fba92ff1b7dc168bc63e6d06155ff1a7a",
+      "prefixes": [
+        "docs"
+      ]
+    },
+    {
+      "domain": "ocaml",
+      "repository": "https://github.com/ocaml/ocaml.org.git",
+      "revision": "9b36b51e0b0155c613f19c5b5177228ae5b0446c",
+      "prefixes": [
+        "data/tutorials"
+      ]
+    },
+    {
+      "domain": "melange",
+      "repository": "https://github.com/melange-re/melange-re.github.io.git",
+      "revision": "107c594b44d01f066e853efeda3e38b09fe1d687",
+      "prefixes": [
+        "docs"
+      ]
+    },
+    {
+      "domain": "reason",
+      "repository": "https://github.com/reasonml/reasonml.github.io.git",
+      "revision": "046babf98f91aad42cb015a9e98adad3f412325d",
+      "prefixes": [
+        "docs"
+      ]
+    }
+  ],
+  "expected_manifest_sha256": "34f156d8f5f60a42f4cc8a41184576eae10fe763c2b4735d433f1c03a7825c17"
+}

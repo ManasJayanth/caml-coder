@@ -1,0 +1,27 @@
+{
+ "acceptance_rows": [
+  "R1 cmd_run_card re-runs inventory() on the job tree after the e2e launch returns and its expect_status/expect_files checks pass, and stores inv_hash of that post-e2e inventory in manifest['tree_hash'] and cs['tree_hash'] (the pre-e2e hash is no longer persisted as tree_hash)",
+  "R2 cmd_review for scope --card and scope final computes inv_hash(inventory(tree)) before building the packet and exits non-zero printing REVISION_STALE when it differs from the stored revision (cs['tree_hash'] or st['parent_hash']), without launching the reviewer or consuming review_seq",
+  "R3 e2e/run_e2e.py gains scenario O55: a card whose e2e argv writes a new file inside the job tree, then review --card accept, then run-card of a dependent card succeeds with no PARENT_HASH_MISMATCH; a second half mutates the job tree after run-card and asserts review --card fails with REVISION_STALE",
+  "R4 Existing scenario functions and their ids are unchanged; O55 is added to the scenario registry only"
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O55"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C7",
+ "objective": "Fix F1: cmd_run_card must hash the tree after the e2e step, and cmd_review must refuse a stale revision",
+ "stop_condition": "print CARD_BLOCKED C7 if manifest['tree_hash'] is not computed in cmd_run_card before the e2e launch as the review describes, or if an O55 scenario already exists in e2e/run_e2e.py",
+ "timeout": 480
+}

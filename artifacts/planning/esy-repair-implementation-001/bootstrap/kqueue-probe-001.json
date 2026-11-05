@@ -1,0 +1,17 @@
+{
+  "status": "FAILED",
+  "expected_pids": [
+    99950,
+    99951,
+    99952
+  ],
+  "exit_events": [],
+  "missing_exit_events": [
+    99950,
+    99951,
+    99952
+  ],
+  "error": "OSError: [Errno 45] Operation not supported",
+  "events": [],
+  "scope": "kernel descendant tracking including setsid/double-fork; no acceptance claim beyond probe"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "Required sandboxed Claude fable reviewer availability gate did not pass: isolated runtime lacked authentication, then minimal existing-credential retry timed out after 120 seconds without output. Root cause of authenticated timeout is not established.",
+  "baseline_sha256": "648b9ca7b7edbceec228dffa3ccf672f64f26213962f2e87756c2a1c0349de0d",
+  "candidate_sha256": "b43a6caa652d8682d34f72e5c672a60cbe85ea4d7a112568c526f3f19245202d",
+  "original_files_verified": 72,
+  "original_files_changed": [],
+  "imported": false,
+  "coding_rounds_consumed": 0,
+  "active_seconds_consumed": 360.929,
+  "limits": {
+    "coding_rounds": 12,
+    "active_seconds": 21600
+  },
+  "completed": [
+    "Frozen 72 relevant current files, including dirty and untracked inputs",
+    "Prepared isolated candidate with three worker adapters",
+    "Passed 12 bootstrap containment probes",
+    "Preserved required reviewer smoke failure evidence",
+    "Removed temporary read-only credential reference",
+    "Post-timeout process inspection found no reviewer process"
+  ],
+  "incomplete": [
+    "C0: full lifecycle, detached-child cleanup and provider gates remain unproven",
+    "C1: controller, strict schemas and full provider parsing not implemented",
+    "C2: derivative cache image not built",
+    "C3-C4: runner unchanged",
+    "C5-C6: full repair/orchestration E2Es not implemented or run",
+    "C7: no acceptance review, import, or final verification"
+  ],
+  "resume": "Diagnose the sandboxed Fable timeout without weakening isolation or substituting models. Repeat a bounded smoke via candidate/scripts/esy-repair/claude-worker.sh review with exact --model fable. Preserve failures under new IDs. Then finish C0 and independently reviewed C1 before unattended work. Retain this baseline, consumed active time, and user work; no budget reset.",
+  "finished_at": "2026-10-22T05:50:20.685797+00:00"
+}

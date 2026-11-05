@@ -1,0 +1,19 @@
+{
+  "epoch": 1792724108.541732,
+  "prior_process_groups_absent": true,
+  "query_complete": true,
+  "recorded_pids": [
+    61700,
+    76946,
+    62759,
+    87573,
+    65429,
+    92527,
+    88700,
+    60758,
+    71354,
+    64743,
+    92078
+  ],
+  "current_planning_job": "A9-B1a-plan-001"
+}

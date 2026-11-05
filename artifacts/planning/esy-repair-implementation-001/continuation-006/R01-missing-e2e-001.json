@@ -1,0 +1,28 @@
+{
+  "expected": "nonzero exit with all three complete MISSING_FAILED scenario rows",
+  "actual_exit": 1,
+  "actual_stdout": {
+    "failures": [
+      {
+        "suite": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-006/intentionally-missing-expectations.json'"
+      },
+      {
+        "reason": "Missing reviewed deterministic timing fixture to prove verified cleanup is preserved.",
+        "scenario": "R01-verified-cleanup-preserved"
+      },
+      {
+        "reason": "Missing reviewed forwarding fixture to prove a real bounded cleanup retry.",
+        "scenario": "R01-unverified-cleanup-retried"
+      },
+      {
+        "reason": "Missing reviewed race fixture to prove stop_group deadline-boundary behavior.",
+        "scenario": "R01-stop-group-deadline-crossing"
+      }
+    ],
+    "manifest": null,
+    "status": "FAILED"
+  },
+  "complete_rows": false,
+  "acceptance": "HARNESS_REPORTING_CONTRACT_ONLY_NOT_OCAML",
+  "status": "FAILED"
+}

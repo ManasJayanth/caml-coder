@@ -1,0 +1,344 @@
+Implement this bounded supervisor-only correction. Use read/edit/write only. Do not execute code. Existing unaccepted source may be rewritten clearly to satisfy the card. Keep code simple and auditable. The harness is deliberately deferred to L1b; do not modify it. All source remains UNACCEPTED until independent review and paired public E2Es.
+CARD
+{
+  "card_id": "L1a-023",
+  "finding_ids": [
+    "L1-022-01",
+    "L1-022-02",
+    "L1-022-04",
+    "L1-022-05",
+    "L1-022-06",
+    "L1-022-07",
+    "L1-022-08",
+    "L1-022-13",
+    "L1-022-14"
+  ],
+  "parent_revision_sha256": "31820f1fce05ef4fbb39acf394b279c2f9813ebd2923abc3c4e92c251a7dc991",
+  "input_artifacts": [
+    {
+      "path": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-008/parent-023.json",
+      "sha256": "31820f1fce05ef4fbb39acf394b279c2f9813ebd2923abc3c4e92c251a7dc991"
+    }
+  ],
+  "allowed_paths": [
+    "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py"
+  ],
+  "prerequisites": [
+    "Exact parent copied by supervisor; native containment and explicit high smoke passed; separate Astra planner and dispatch review completed."
+  ],
+  "required_behavior": [
+    "Construct both sandbox commands as [SANDBOX, '-p', PROFILE.decode(), ...], preserving the exact fixed profile and remaining arguments. Preserve the fixed Docker server-metadata command, pinned socket, isolated environment, strict CLI, and private directories.",
+    "Replace fork-denial with one os.fork call. On success, immediately exit the child; the parent must reap that exact PID before emitting FORK_POLICY_FAILURE and exiting nonzero. Accept only complete stdout equal to FORK_DENIED:<EPERM integer> followed by newline or FORK_DENIED:<EACCES integer> followed by newline, with empty stderr and zero child exit. Unexpected fork success is containment failure; never weaken policy to exercise it.",
+    "Make the overflow fixture advance through its constant 65537-byte payload using actual write return values until all bytes are written. Handle interrupted and short writes without configurable input.",
+    "Initialize reportable state before socket/hash checks, including nullable readiness and launch identity. Register caller liveness before publishing readiness; registration failure is terminal, never silently ignored. Unregister channels after EOF and latch caller-eof once.",
+    "Use one lifecycle state machine and one explicit reaper for all post-launch paths, including exceptions. Track child ownership, successful reap, stdout EOF, stderr EOF, first terminal cause, and cleanup verification independently. Use only waitpid(owned_pid, WNOHANG); record returned PID and raw status, decode it, and immediately synchronize Popen.returncode. Never call Popen poll/wait/communicate or otherwise reap again. Never signal after successful reap.",
+    "Keep the three-second execution deadline. On a terminal cause, enter one nonrenewable five-second cleanup allowance; signal only the owned unreaped child, then interleave bounded nonblocking draining and WNOHANG checks. Exceptions enter or continue this same cleanup state, never restart its deadline. If reaped first, continue draining without signals or further waitpid calls. If streams finish first, continue bounded reap checks. Completion requires both EOFs and a verified reap; expiry records missing observations and cleanup-unverified separately from the original cause.",
+    "Apply identical stream accounting in execution and cleanup: count every observed byte, retain at most 65536 bytes independently per stream, hash retained bytes, and latch overflow whenever either observed count exceeds its cap. Reap is never an EOF substitute. Incomplete drains retain truthful counts and false EOF flags; zero exit cannot erase a terminal failure.",
+    "Before positive success, require complete bounded streams and zero decoded child exit. Docker stdout must parse as exactly one complete JSON object with nonempty string Version and ApiVersion; reject null, malformed, trailing records, client-only, and truncated output. Classify invalid metadata, policy failure, and child failure explicitly.",
+    "Finalize structured evidence for initialized states, including configuration, hash, launch, and supervisor failures. Attempt both post-run executable hashes independently even after another failure. Record before/after hashes, comparison status, first cause, and cleanup status separately; missing hashes or mismatch always invalidate the outcome. Record exact argv/environment, resolved executables, profile hash, pinned socket identity evidence, launch identity, readiness, timings, actual wait receipt, stream records, and existing retained artifacts. Preserve report mode 0400. If publication itself fails, exit unsuccessfully; the harness must treat missing evidence as a stop condition."
+  ],
+  "forbidden_changes": [
+    "No harness or other files; no commands, imports, tests, Docker, arbitrary subprocess framework, dependencies or lockfile changes."
+  ],
+  "e2e_recipe_ids": [
+    "lifecycle-client-primitive"
+  ],
+  "expected_outcomes": [
+    "Reap and EOF are independently demonstrated; normal and cleanup loops cannot stop merely because waitpid succeeds.",
+    "Overflow observes all 65537 stdout bytes, retains exactly 65536, reaches truthful EOFs, and preserves output-overflow after reap.",
+    "Every launched outcome has actual owned-child wait evidence or explicit cleanup-unverified; prelaunch failures identify cleanup as not required.",
+    "Integrity failures remain visible alongside timeout, caller-eof, overflow, or supervisor-error."
+  ],
+  "evidence_outputs": [
+    "Only supervisor source; root freezes/reviews; paired public E2E remains mandatory after L1b."
+  ],
+  "stop_conditions": [
+    "Need any other path or unclear safety requirement: report blocker without expanding scope."
+  ]
+}
+SEPARATE FRONTIER PLAN
+{
+  "id": "L1a",
+  "order": 1,
+  "correction": 23,
+  "title": "Repair supervisor lifecycle and evidence",
+  "dispatch": {
+    "model": "Luna",
+    "thinking": "high",
+    "parent_hash": "Root must bind the actual current parent hash immediately before dispatch."
+  },
+  "allowed_path": "artifacts/planning/esy-reference-proposal-001/esy_lifecycle.py",
+  "scope": "Modify only the existing unaccepted candidate supervisor. Preserve original sources and prior failure evidence. No harness edits, new features, or additional paths.",
+  "fix_strategy": [
+    "Construct both sandbox commands as [SANDBOX, '-p', PROFILE.decode(), ...], preserving the exact fixed profile and remaining arguments. Preserve the fixed Docker server-metadata command, pinned socket, isolated environment, strict CLI, and private directories.",
+    "Replace fork-denial with one os.fork call. On success, immediately exit the child; the parent must reap that exact PID before emitting FORK_POLICY_FAILURE and exiting nonzero. Accept only complete stdout equal to FORK_DENIED:<EPERM integer> followed by newline or FORK_DENIED:<EACCES integer> followed by newline, with empty stderr and zero child exit. Unexpected fork success is containment failure; never weaken policy to exercise it.",
+    "Make the overflow fixture advance through its constant 65537-byte payload using actual write return values until all bytes are written. Handle interrupted and short writes without configurable input.",
+    "Initialize reportable state before socket/hash checks, including nullable readiness and launch identity. Register caller liveness before publishing readiness; registration failure is terminal, never silently ignored. Unregister channels after EOF and latch caller-eof once.",
+    "Use one lifecycle state machine and one explicit reaper for all post-launch paths, including exceptions. Track child ownership, successful reap, stdout EOF, stderr EOF, first terminal cause, and cleanup verification independently. Use only waitpid(owned_pid, WNOHANG); record returned PID and raw status, decode it, and immediately synchronize Popen.returncode. Never call Popen poll/wait/communicate or otherwise reap again. Never signal after successful reap.",
+    "Keep the three-second execution deadline. On a terminal cause, enter one nonrenewable five-second cleanup allowance; signal only the owned unreaped child, then interleave bounded nonblocking draining and WNOHANG checks. Exceptions enter or continue this same cleanup state, never restart its deadline. If reaped first, continue draining without signals or further waitpid calls. If streams finish first, continue bounded reap checks. Completion requires both EOFs and a verified reap; expiry records missing observations and cleanup-unverified separately from the original cause.",
+    "Apply identical stream accounting in execution and cleanup: count every observed byte, retain at most 65536 bytes independently per stream, hash retained bytes, and latch overflow whenever either observed count exceeds its cap. Reap is never an EOF substitute. Incomplete drains retain truthful counts and false EOF flags; zero exit cannot erase a terminal failure.",
+    "Before positive success, require complete bounded streams and zero decoded child exit. Docker stdout must parse as exactly one complete JSON object with nonempty string Version and ApiVersion; reject null, malformed, trailing records, client-only, and truncated output. Classify invalid metadata, policy failure, and child failure explicitly.",
+    "Finalize structured evidence for initialized states, including configuration, hash, launch, and supervisor failures. Attempt both post-run executable hashes independently even after another failure. Record before/after hashes, comparison status, first cause, and cleanup status separately; missing hashes or mismatch always invalidate the outcome. Record exact argv/environment, resolved executables, profile hash, pinned socket identity evidence, launch identity, readiness, timings, actual wait receipt, stream records, and existing retained artifacts. Preserve report mode 0400. If publication itself fails, exit unsuccessfully; the harness must treat missing evidence as a stop condition."
+  ],
+  "required_observations": [
+    "Reap and EOF are independently demonstrated; normal and cleanup loops cannot stop merely because waitpid succeeds.",
+    "Overflow observes all 65537 stdout bytes, retains exactly 65536, reaches truthful EOFs, and preserves output-overflow after reap.",
+    "Every launched outcome has actual owned-child wait evidence or explicit cleanup-unverified; prelaunch failures identify cleanup as not required.",
+    "Integrity failures remain visible alongside timeout, caller-eof, overflow, or supervisor-error."
+  ],
+  "gate_and_handoff": "Perform source review only by default; freeze the new source binding and document the evidence schema for L1b. No script execution is authorized by this card. A direct public Docker-metadata probe may run only after fresh independent safety approval bound to these sources and required prerequisites. It cannot complete acceptance. If no intermediate probe is safe, retain the unit open and proceed to mandatory L1b. Correction 23 remains supervisor-only."
+}
+FULL SOURCE REVIEW (harness findings belong to L1b)
+{
+  "safe_to_execute": false,
+  "findings": [
+    {
+      "id": "L1-022-01",
+      "severity": "high",
+      "location": "esy_lifecycle.py: both sandbox-exec argv constructions",
+      "problem": "The literal profile is passed without -p, so sandbox-exec does not receive the required profile argument.",
+      "required_change": "Construct both commands as [SANDBOX, '-p', PROFILE.decode(), ...], preserving the exact fixed policy and executable arguments.",
+      "required_e2e": "Verify the exact recorded argv and profile hash in all five live scenarios. Unsupported native policy must halt subsequent launches."
+    },
+    {
+      "id": "L1-022-02",
+      "severity": "high",
+      "location": "esy_lifecycle.py: FIXTURES['fork-denial']",
+      "problem": "The fixture discards the fork return value. Unexpected parent and child both print policy failure, and the parent never reaps its child.",
+      "required_change": "Call os.fork exactly once, branch on its return value, immediately exit the child, and have the parent reap that exact child before emitting the fixed policy-failure record. Accept only the exact EPERM/EACCES denial record as success.",
+      "required_e2e": "Verify authentic denial under the fixed native policy. Any observed successful fork must fail the row and stop execution for containment review; do not weaken policy to exercise this branch."
+    },
+    {
+      "id": "L1-022-03",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: proc.stdin handling and proc.communicate",
+      "problem": "communicate closes stdin in every ordinary scenario, violating caller liveness. Calling it after explicitly closing stdin can raise ValueError. The caller-eof branch also accepts any truthy readiness object after the polling loop, even if validation never succeeded.",
+      "required_change": "Use bounded nonblocking output collection that keeps the caller-owned stdin writer open until ordinary supervisor termination. Track readiness validation explicitly and close the writer for caller-eof only after complete validation.",
+      "required_e2e": "Demonstrate that only caller-eof deliberately closes liveness, that it closes after valid readiness, and that other scenarios reach their intended outcomes without incidental caller-eof failures."
+    },
+    {
+      "id": "L1-022-04",
+      "severity": "high",
+      "location": "esy_lifecycle.py: normal and cleanup loops",
+      "problem": "Both loops stop immediately after successful waitpid, potentially leaving buffered output unread and EOF unobserved. This can miss overflow and permits successful probes with incomplete streams.",
+      "required_change": "Track reap and stream EOF independently. Continue bounded draining after reap without further signaling or reaping. Require complete streams before success, and preserve terminal failures even if the child exits zero.",
+      "required_e2e": "Verify complete metadata and denial streams, detection of all 65537 overflow bytes, independent retention caps, and truthful EOF flags and observed counts for incomplete drains."
+    },
+    {
+      "id": "L1-022-05",
+      "severity": "high",
+      "location": "esy_lifecycle.py: exception handler and child ownership",
+      "problem": "Exception cleanup uses blocking waitpid(pid, 0), outside any cleanup deadline. Direct waitpid also leaves Popen.returncode unset, allowing Popen lifecycle handling to attempt another reap.",
+      "required_change": "Use one cleanup state machine and one reaper for every post-launch failure, with WNOHANG, bounded draining, and a separate five-second allowance. Synchronize the Popen return code after successful reap, never signal afterward, and expose cleanup-unverified separately from the first terminal cause.",
+      "required_e2e": "Verify bounded termination and actual waitpid receipts on negative and supervisor-error paths. Unverified cleanup must stop subsequent launches; an outer timeout is not a cleanup receipt."
+    },
+    {
+      "id": "L1-022-06",
+      "severity": "high",
+      "location": "esy_lifecycle.py: exitcode and reason calculation",
+      "problem": "Supervisor success depends only on zero wait status and absence of a latched reason. It never validates Docker server metadata or the exact fork-denial record.",
+      "required_change": "Before reporting success, require complete bounded streams and scenario-specific parsing: one complete JSON object with nonempty string Version and ApiVersion, or the exact fixed denial record for an allowed errno. Explicitly classify policy failure and invalid metadata.",
+      "required_e2e": "Require authentic real Docker metadata and exact native fork denial. Null, malformed, client-only, truncated, wrong-marker, and nonzero-exit outcomes must never qualify as success."
+    },
+    {
+      "id": "L1-022-07",
+      "severity": "high",
+      "location": "esy_lifecycle.py: liveness registration",
+      "problem": "Failure to register stdin as the liveness channel is silently ignored, allowing a probe to succeed without monitoring its caller.",
+      "required_change": "Fail closed when liveness cannot be monitored and enter bounded cleanup if a child already exists. Unregister EOF channels after latching their terminal condition.",
+      "required_e2e": "Verify caller-eof handling and rejection of an unusable liveness channel, with no successful outcome when monitoring was unavailable."
+    },
+    {
+      "id": "L1-022-08",
+      "severity": "high",
+      "location": "esy_lifecycle.py: socket validation, executable hashing, and finalization",
+      "problem": "Socket and initial hash failures bypass reporting; post-run hash failures also bypass finalization. A hash mismatch is hidden by an earlier timeout/EOF/overflow reason, allowing an expected-negative E2E row to pass despite executable changes.",
+      "required_change": "Finalize structured failure evidence for initialized states, including launch failures. Record first terminal cause, hash comparison, and cleanup status independently. Any hash mismatch or unverifiable hash must invalidate the row and halt further execution even when another reason occurred first.",
+      "required_e2e": "Verify matching before/after hashes for both executables in every row and fail-closed handling of unavailable configuration or hashes. Expected-negative reasons must not mask integrity failures."
+    },
+    {
+      "id": "L1-022-09",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: supervisor collection and finally block",
+      "problem": "communicate buffers output without a byte cap; its timeout fallback calls communicate without a timeout. Canary cleanup also contains an unbounded wait. Exceptions can leave the active supervisor unmanaged, and killing the supervisor does not verify cleanup of its child.",
+      "required_change": "Bound E2E stdout/stderr observation and retention independently, bound every wait, and retain ownership of the active supervisor through finally cleanup. Treat forced supervisor termination or missing child cleanup receipts as containment failure. Clean the canary separately through its owned handle.",
+      "required_e2e": "Demonstrate bounded collection and cleanup on timeout, output excess, and exceptions. The proposed outer 90-second/64-KiB wrapper must not substitute for internal bounds or descendant cleanup verification."
+    },
+    {
+      "id": "L1-022-10",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: blocked assignment",
+      "problem": "Later children are blocked only for two exact reason strings. Unsupported native policy, unexpected fork success, unsupported Docker configuration, missing or inconsistent cleanup receipts, forced supervisor termination, and canary death can all be followed by additional launches.",
+      "required_change": "Centralize stop-condition evaluation using explicit evidence predicates, including failures that prevent report creation. Record remaining scenarios as failed/not-run with the blocking reason.",
+      "required_e2e": "Verify that every containment, configuration, integrity, and cleanup stop condition prevents subsequent launches while preserving exactly five result rows."
+    },
+    {
+      "id": "L1-022-11",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: readiness, report, and scenario predicates",
+      "problem": "Evidence checks omit executable/profile hashes, exact argv/environment, pinned socket consistency, artifact hashes and lengths, report permissions, full launch identity consistency, and decoded wait-status consistency. Stream checks can pass vacuously for missing streams; negative rows omit most stream checks. Fork denial uses an unsafe substring match.",
+      "required_change": "Require complete typed schemas and exactly stdout/stderr records. Cross-check readiness scenario, supervisor PID, positive child PID, and launch identity against the report and owned process. Validate exact command/environment policy, executable hashes, socket evidence, retained files, EOF/count relationships, read-only report mode, actual wait status, and exact scenario records. Emit explicit predicates and failure details.",
+      "required_e2e": "All five live rows must pass every common containment/evidence predicate plus their scenario predicates. Verify zero child exit for positive rows and correctly decoded wait receipts for negative rows."
+    },
+    {
+      "id": "L1-022-12",
+      "severity": "high",
+      "location": "test_esy_lifecycle.py: row loop and result publication",
+      "problem": "Launch, artifact-read, validation, or cleanup exceptions can abort the loop before result.json is written, leaving fewer than five rows. executed currently means readiness was truthy rather than recording whether the scenario was actually launched.",
+      "required_change": "Create all five rows deterministically, track launch and valid readiness separately, convert exceptions into explicit failures, perform bounded ownership cleanup, and publish the final result even when later rows must be marked not-run.",
+      "required_e2e": "Verify exactly one row per required scenario on success and failure paths, with no omissions or duplicates. Overall success must require all five scenarios to execute and pass."
+    },
+    {
+      "id": "L1-022-13",
+      "severity": "medium",
+      "location": "esy_lifecycle.py: FIXTURES['output-overflow']",
+      "problem": "One os.write call does not guarantee that all 65537 bytes were written; its return value is ignored.",
+      "required_change": "Use a fixed literal workload that advances through the constant payload until exactly 65537 bytes have been written, handling short writes without introducing configurable input.",
+      "required_e2e": "Verify observed stdout exceeds 65536, retained stdout never exceeds 65536, hashes match retained bytes, and the overflow reason remains latched after reap."
+    },
+    {
+      "id": "L1-022-14",
+      "severity": "high",
+      "location": "proposed execution gate and lifecycle-client-primitive evidence",
+      "problem": "These sources are not approved for execution. AST parsing and source review cannot establish native containment, authentic Docker metadata, or completion of the required E2Es.",
+      "required_change": "Correct only the two allowed files, preserve prior failure evidence, freeze new source bindings, and obtain independent execution-review approval with the required prerequisite evidence before launching either script.",
+      "required_e2e": "After approval, root must run the bounded fixed-argv recipe in a fresh private directory, using real local Docker metadata and no containers. Verify strict CLI/path rejection, private directories, readiness, terminal reports, bounded streams, canary survival and cleanup, and all five passing rows. Source-only review must leave the E2E requirement open."
+    }
+  ]
+}
+CURRENT SUPERVISOR
+#!/usr/bin/env python3
+"""Bounded, single-child Astra lifecycle probe supervisor."""
+import argparse
+import hashlib
+import json
+import os
+import selectors
+import signal
+import socket
+import stat
+import subprocess
+import sys
+import time
+
+LIMIT = 65536
+PROFILE = b'(version 1)\n(allow default)\n(deny process-fork)\n(deny file-write*)\n'
+DOCKER = '/usr/local/bin/docker'
+SANDBOX = '/usr/bin/sandbox-exec'
+SCENARIOS = ('docker-metadata', 'fork-denial', 'timeout', 'caller-eof', 'output-overflow')
+FIXTURES = {
+    'fork-denial': "import errno,os,sys\ntry:\n os.fork()\nexcept OSError as e:\n if e.errno in (errno.EPERM,errno.EACCES): print('FORK_DENIED:'+str(e.errno)); sys.exit(0)\n raise\nelse:\n if os.fork if False else False: pass\n print('FORK_POLICY_FAILURE'); sys.exit(71)\n",
+    'timeout': 'import time; time.sleep(30)',
+    'caller-eof': 'import time; time.sleep(30)',
+    'output-overflow': "import os; os.write(1,b'X'*65537)",
+}
+
+def digest(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for block in iter(lambda: f.read(131072), b''):
+            h.update(block)
+    return h.hexdigest()
+
+def main():
+    p = argparse.ArgumentParser(prog='esy_lifecycle.py', allow_abbrev=False)
+    sub = p.add_subparsers(dest='command', required=True)
+    q = sub.add_parser('probe', allow_abbrev=False)
+    q.add_argument('--scenario', required=True, choices=SCENARIOS)
+    q.add_argument('--state-directory', required=True)
+    a = p.parse_args()
+    if a.command != 'probe' or not os.path.isabs(a.state_directory) or os.path.lexists(a.state_directory):
+        p.error('state directory must be an unused absolute path')
+    parent = os.path.dirname(a.state_directory)
+    if not os.path.isdir(parent): p.error('state parent must exist')
+    os.mkdir(a.state_directory, 0o700)
+    os.chmod(a.state_directory, 0o700)
+    state = os.path.realpath(a.state_directory)
+    home, config = os.path.join(state, 'home'), os.path.join(state, 'docker-config')
+    os.mkdir(home, 0o700); os.mkdir(config, 0o700)
+    env = {'HOME': home, 'DOCKER_CONFIG': config, 'PATH': '/usr/bin:/bin', 'LANG': 'C'}
+    sock = None
+    if a.scenario == 'docker-metadata':
+        sock = os.path.realpath('/var/run/docker.sock')
+        if not os.path.isabs(sock) or not os.path.exists(sock) or not stat.S_ISSOCK(os.stat(sock).st_mode):
+            raise SystemExit('unsupported Docker socket')
+        argv = [SANDBOX, PROFILE.decode(), DOCKER, '--host', 'unix://' + sock, 'version', '--format', '{{json .Server}}']
+        exe = DOCKER
+    else:
+        interpreter = os.path.realpath(sys.executable)
+        argv = [SANDBOX, PROFILE.decode(), interpreter, '-c', FIXTURES[a.scenario]]
+        exe = interpreter
+    before = {'sandbox': digest(SANDBOX), 'command': digest(exe)}
+    start = time.monotonic(); deadline = start + 3.0
+    child = None; reason = None; wait_status = None; reaped = False; eof = {'stdout': False, 'stderr': False}
+    streams = {n: {'observed': 0, 'retained': bytearray()} for n in ('stdout', 'stderr')}
+    sel = selectors.DefaultSelector()
+    try:
+        child = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True, env=env)
+        ident = hashlib.sha256((str(os.getpid()) + ':' + str(child.pid) + ':' + str(start)).encode()).hexdigest()
+        ready = {'scenario': a.scenario, 'supervisor_pid': os.getpid(), 'child_pid': child.pid, 'launch_identity': ident}
+        with open(os.path.join(state, 'ready.json'), 'x') as f: json.dump(ready, f); f.flush(); os.fsync(f.fileno())
+        for name, pipe in (('stdout', child.stdout), ('stderr', child.stderr)):
+            os.set_blocking(pipe.fileno(), False); sel.register(pipe, selectors.EVENT_READ, name)
+        # The supervisor's stdin is the caller-liveness channel; it is never inherited by the child.
+        try: os.set_blocking(0, False); sel.register(0, selectors.EVENT_READ, 'liveness')
+        except (OSError, ValueError): pass
+        while True:
+            if time.monotonic() >= deadline: reason = reason or 'timeout'
+            for key, _ in sel.select(max(0, min(.05, deadline-time.monotonic()))):
+                if key.data == 'liveness':
+                    if not os.read(0, 1): reason = reason or 'caller-eof'
+                else:
+                    try: data = os.read(key.fd, 8192)
+                    except BlockingIOError: continue
+                    if not data:
+                        eof[key.data] = True; sel.unregister(key.fileobj); continue
+                    s = streams[key.data]; s['observed'] += len(data)
+                    remaining = max(0, LIMIT-len(s['retained'])); s['retained'].extend(data[:remaining])
+                    if s['observed'] > LIMIT: reason = reason or 'output-overflow'
+            if reason: break
+            got, status = os.waitpid(child.pid, os.WNOHANG)
+            if got: wait_status = status; reaped = True; break
+        if reason and not reaped:
+            try: os.kill(child.pid, signal.SIGKILL)
+            except ProcessLookupError: pass
+            end = time.monotonic()+5
+            while time.monotonic() < end:
+                for key, _ in sel.select(.05):
+                    if key.data == 'liveness':
+                        try: os.read(0, 4096)
+                        except OSError: pass
+                    else:
+                        try: data=os.read(key.fd,8192)
+                        except BlockingIOError: continue
+                        if not data: eof[key.data]=True; sel.unregister(key.fileobj)
+                        else:
+                            s=streams[key.data]; s['observed']+=len(data); s['retained'].extend(data[:max(0,LIMIT-len(s['retained']))])
+                got,status=os.waitpid(child.pid,os.WNOHANG)
+                if got: wait_status=status; reaped=True; break
+            if not reaped: reason='cleanup-unverified'
+    except Exception as e:
+        reason = reason or 'supervisor-error:'+type(e).__name__
+        if child is not None and not reaped:
+            try: os.kill(child.pid, signal.SIGKILL)
+            except OSError: pass
+            try: _, wait_status=os.waitpid(child.pid,0); reaped=True
+            except OSError: pass
+    finally:
+        sel.close()
+    after = {'sandbox': digest(SANDBOX), 'command': digest(exe)}
+    if before != after: reason = reason or 'executable-hash-mismatch'
+    exitcode = 0 if reason is None and reaped and wait_status == 0 else 1
+    if a.scenario in ('timeout','caller-eof','output-overflow'): exitcode = 1
+    results = {}
+    for name,s in streams.items():
+        raw=bytes(s['retained']); results[name]={'observed_bytes':s['observed'],'retained_bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'eof':eof[name]}
+        with open(os.path.join(state,name+'.bin'),'xb') as f: f.write(raw)
+    report={'scenario':a.scenario,'argv':argv,'environment':env,'resolved_executables':{'sandbox':os.path.realpath(SANDBOX),'command':os.path.realpath(exe)},'executable_sha256_before':before,'executable_sha256_after':after,'profile_sha256':hashlib.sha256(PROFILE).hexdigest(),'child_pid':child.pid if child else None,'wait_status':wait_status,'reason':reason or ('success' if exitcode==0 else 'child-failure'),'probe_exit':exitcode,'reaped':reaped,'streams':results,'started_monotonic':start,'finished_monotonic':time.monotonic(),'ready':ready if child else None,'socket':sock}
+    path=os.path.join(state,'report.json')
+    fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o400)
+    with os.fdopen(fd,'w') as f: json.dump(report,f,sort_keys=True); f.write('\n'); f.flush(); os.fsync(f.fileno())
+    os.chmod(path,0o400)
+    return exitcode
+
+if __name__ == '__main__': raise SystemExit(main())

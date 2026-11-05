@@ -1,0 +1,163 @@
+{
+  "status": "INCOMPLETE",
+  "reason": "All 18 allocated coding launches consumed; independent review requires fixes; full real E2E matrix and controller acceptance remain missing. No import.",
+  "imported": false,
+  "coding_launches_consumed": 18,
+  "limits": {
+    "coding_launches": 18,
+    "active_seconds": 21600
+  },
+  "active_seconds_consumed": 10367.532,
+  "reviewer": "fresh Codex gpt-6-astra",
+  "candidate_sha256": "66624a94ef7b5f3cc7c4e9789d391202e5edc7561bb60f0328a9dab5dbda8d8e",
+  "original_files_verified": 72,
+  "original_files_changed": [],
+  "derivative_image": "sha256:06095e22e6fb4cedaaff8fa57e7951338bb7a80e2ac8b6d1d4d6bcc0b9727459",
+  "diagnostic_fresh_compile_runs_passed": 2,
+  "public_runner_acceptance": false,
+  "planning_limitations": [
+    "Broad final replanning timed out; preserved failed attempt.",
+    "Targeted three-card plan and earlier seven lifecycle cards are prospective, not acceptance.",
+    "Proposed E2E commands are not currently runnable; use uv with the existing locked project when implementing authorized cards."
+  ],
+  "controller": "DEFERRED_UNACCEPTED",
+  "final_review": "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/jobs/N6-final-review-001/final.txt",
+  "final_review_result": {
+    "revision_sha256": "f24d114d29196278067e87cdf921c0317fcc0e74e0b03725d0215cba246ea8dc",
+    "verdict": "CHANGES_REQUIRED",
+    "scoped_N6_correct": false,
+    "findings": [
+      {
+        "id": "C17-01",
+        "severity": "high",
+        "location": "run_esy_reference.py: run(), capture_expectations(), cleanup_owned()",
+        "problem": "Unresolved. Raw create output is assigned to cid before validation and ownership corroboration. A malformed nonempty identifier bypasses recovery by name; confirming that identifier absent can leave the actual owned container behind.",
+        "required_change": "Keep raw create output separate. Until the returned identity is corroborated, recover through the persisted unique name and owner. Account for create completion after client cancellation before asserting absence.",
+        "required_e2e": [
+          "Malformed create output with a real owned container still present.",
+          "Delayed create completion after client cancellation.",
+          "Ownership mismatch prevents removal and unsupported cleanup success."
+        ]
+      },
+      {
+        "id": "C17-02",
+        "severity": "high",
+        "location": "tests/test_esy_reference_runtime_e2e.py: run_case()",
+        "problem": "Unresolved. Independent cleanup runs only after supervisor() returns normally. Supervision exceptions, log-write failures, or repeated interruption can skip it.",
+        "required_change": "Place independent owned-container cleanup in a finally path and retain supervision failure and cleanup outcome separately.",
+        "required_e2e": [
+          "Supervisor exception, log-write failure, and repeated interruption after container creation each trigger bounded independent cleanup and preserve both outcomes."
+        ]
+      },
+      {
+        "id": "C17-03",
+        "severity": "high",
+        "location": "run_esy_reference.py: bounded_process() and cancellation handling; tests/test_esy_reference_runtime_e2e.py: supervisor()",
+        "problem": "Unresolved. Docker clients start in separate sessions, while the runner has no SIGTERM cleanup handler. Suite cancellation can terminate the runner without executing finally and leave client groups outside suite containment.",
+        "required_change": "Route SIGTERM through bounded cancellation and provide independently verified containment or identity-checked recovery of Docker client groups after forced runner termination.",
+        "required_e2e": [
+          "Cooperative cancellation and forced termination while Docker clients remain alive.",
+          "Independent verification of container absence and client-group termination.",
+          "Recovery cannot signal an unrelated reused process identity."
+        ]
+      },
+      {
+        "id": "C17-04",
+        "severity": "medium",
+        "location": "run_esy_reference.py: run() termination handling and finally",
+        "problem": "Unresolved. Successful early cleanup is unconditionally repeated and its verified-absence evidence overwritten. An exhausted removal deadline can turn confirmed cleanup into cleanup-deadline-exhausted.",
+        "required_change": "Preserve successful verified-absence evidence. Retry only when absence remains unverified.",
+        "required_e2e": [
+          "Verified early cleanup remains successful when the removal deadline expires before finally.",
+          "Unverified cleanup remains eligible for a bounded retry."
+        ]
+      },
+      {
+        "id": "C17-05",
+        "severity": "high",
+        "location": "tests/test_esy_reference_runtime_e2e.py: suite_cleanup_owned()",
+        "problem": "Unresolved. Cleanup queries are interpreted without checking truncation. A successful name listing can omit the target beyond MAX_LOG and falsely establish absence.",
+        "required_change": "Reject truncated cleanup-query output before parsing or asserting absence, using total and retained byte counts.",
+        "required_e2e": [
+          "An oversized successful listing with the target beyond the retained prefix remains unverified.",
+          "Complete output permits valid absence verification."
+        ]
+      },
+      {
+        "id": "C17-06",
+        "severity": "high",
+        "location": "run_esy_reference.py: run() deadline/report handling; tests/test_esy_reference_runtime_e2e.py: run_case()",
+        "problem": "Unresolved under the corrected container-deadline requirement. Container lifetime depends on the runner continuing to make progress; the suite allows timeout plus 30 seconds before intervention. The lifetime check also precedes report publication and cannot substantiate a reporting-inclusive lifetime claim.",
+        "required_change": "Define container boundary events and independently enforce the hard container deadline. Label host preflight and publication separately; those phases need not fit the container budget. Include publication completion in any reporting-inclusive measurement.",
+        "required_e2e": [
+          "A stalled runner cannot extend container lifetime beyond the bound.",
+          "Slow preflight and blocked report writes/fsync do not extend container lifetime.",
+          "Recorded timing boundaries match the intervals claimed."
+        ]
+      },
+      {
+        "id": "C17-07",
+        "severity": "medium",
+        "location": "run_esy_reference.py: bounded_process().stop_group()",
+        "problem": "Unresolved. The deadline can expire between the while-condition clock read and the clock read inside time.sleep(min(...)), producing a negative sleep and ValueError.",
+        "required_change": "Compute remaining time once per iteration, stop when nonpositive, and pass only a nonnegative duration to sleep.",
+        "required_e2e": [
+          "A controlled deadline crossing produces the intended cleanup result without negative sleep or ValueError."
+        ]
+      },
+      {
+        "id": "N6-01",
+        "severity": "medium",
+        "location": "run_esy_reference.py: cache_inventory_equal(), NODE.cacheInventoryEqual(), capture_expectations()",
+        "problem": "The mtime exception is broader than the supplied seed-root-only requirement. In particular, capture compares base installation against derivative installation, and base node cache against derivative node cache, after dropping both original roots' mtimes. Neither side of those comparisons is a copied seed root.",
+        "required_change": "Apply the exception specifically to comparisons involving copied seed roots and their restored cache roots. Preserve exact original base-versus-derivative installation/cache comparisons. Continue retaining all root metadata in diagnostics and checking every non-exempt field.",
+        "required_e2e": [
+          "Only copied seed-root mtime differences are tolerated.",
+          "An original derivative installation/cache root mtime change is rejected.",
+          "Nested mtime, content, ownership, mode, missing-entry, and extra-entry changes are rejected."
+        ]
+      },
+      {
+        "id": "N6-02",
+        "severity": "high",
+        "location": "run_esy_reference.py: capture_expectations() final inventory predicate",
+        "problem": "Newly identified: capture never compares the derivative seed inventories with the base inventories. It compares bi.installation with bi.seed and bi.node_cache with bi.node_seed, but capture-base assigns those pairs the same inventories. These checks are tautologies. A derivative with corrupted seed contents can receive a PASSED capture receipt, although a later ordinary run may reject it.",
+        "required_change": "Compare base installation against di.seed and base node cache against di.node_seed, applying only the authorized seed-root mtime exception. Reject invalid derivative seeds during capture.",
+        "required_e2e": [
+          "Valid derivative seeds pass capture.",
+          "Changed seed bytes, modes, ownership, nested mtimes, added entries, and missing entries fail capture before a successful expectations artifact is published."
+        ]
+      },
+      {
+        "id": "N6-03",
+        "severity": "medium",
+        "location": "run_esy_reference.py: run() resource-oom-observed branch; tests/test_esy_reference_runtime_e2e.py: run_case() resource checks",
+        "problem": "Newly identified: the advertised Docker OOM acceptance path is internally unsatisfiable. The runner sets resource-oom-observed without populating report.results. The test accepts that reason, then unconditionally requires results.commands.compile-resource.exit_code == 0, which is absent. A genuine Docker OOM therefore fails this scenario even when OOMKilled is confirmed.",
+        "required_change": "Provide compilation and execution-start evidence that survives container OOM, and make the OOM branch validate that evidence alongside Docker OOM attribution. Preserve the requirement to prove the intended OCaml control compiled and ran.",
+        "required_e2e": [
+          "A real allocation exception satisfies its diagnostic predicate.",
+          "A real Docker OOM satisfies its separate predicate with durable compilation/execution evidence.",
+          "Unrelated SIGKILL and compiler failure cannot satisfy either resource predicate."
+        ]
+      }
+    ],
+    "missing_evidence": [
+      "Static review only: no execution, edits, tests, Docker operations, or delegation occurred. Supplied file and manifest hashes were not independently recomputed.",
+      "The controller remains unaccepted. The full plan and six N4 correction statements were not supplied, so complete acceptance mapping remains unavailable.",
+      "N6 statically accepts Mounts=[] with an exact HostConfig.Tmpfs map, checks the listed confinement fields and exact command, pins canonical installed compiler identity and digest, and sets and validates TMPDIR=/work. Public-runner evidence for these paths is absent; the mtime scope defect prevents scoped N6 acceptance.",
+      "The build receipt and semantic seed diagnostic do not establish successful public capture or runner execution. The two root diagnostic successes explicitly disclaim runner acceptance.",
+      "No complete public-runner evidence was supplied for positive, suite, wrong-result, exact syntax failure, timeout, output overflow, allocation failure, or Docker OOM.",
+      "All seven C17 findings remain open, including their real fault, cleanup, cancellation, deadline, and process-containment evidence requirements.",
+      "Persisted ownership-record crash durability remains unproven: creating owned-invocations does not fsync its parent, and record replacement does not fsync the containing directory.",
+      "Required real inspect failure, daemon-query failure, ownership mismatch, oversized image metadata, and oversized expectations/payload scenarios remain missing.",
+      "Required installation, seed, lock, declared-volume, protected-target, missing-probe, compiler-identity, and source-mutation variants remain missing.",
+      "Required FIFO and escaping-path cases, unrelated syntax diagnostics, independent container lifetime observation, retained-pipe/interruption cases, and build cancellation remain missing.",
+      "Required integrity canaries, startup failure, concurrent same-ID reservation, invalid IDs, and complete report-namespace preservation remain missing.",
+      "Required daemon-log retention and full original/candidate input snapshots remain missing.",
+      "All required orchestration and import E2Es remain required and unevidenced. The supplied fixed runner harness does not establish their coverage.",
+      "MISSING_REAL_CASES explicitly forces failed evidence rows; those declarations acknowledge missing coverage but do not satisfy it. Every scenario in the original plan remains required, including scenarios not enumerated by this harness.",
+      "No further coding allocation remains, and this review grants no execution authorization or runtime acceptance."
+    ]
+  },
+  "finished_at": "2026-10-22T10:36:23.826273+00:00"
+}

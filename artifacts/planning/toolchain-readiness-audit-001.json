@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "toolchain-readiness-audit-001",
+  "status": "AUDIT_ONLY",
+  "readiness": {
+    "T15": "BLOCKED: no four-profile configuration, offline caches, or reference-build evidence",
+    "T07F": "BLOCKED: exact source reviews and matching proven toolchain profiles are absent",
+    "generation_allowed": false
+  },
+  "source_snapshot": {
+    "id": "official-stable-sources-002",
+    "manifest": "artifacts/sources/official-stable-sources-002/manifest.json",
+    "manifest_sha256": "34f156d8f5f60a42f4cc8a41184576eae10fe763c2b4735d433f1c03a7825c17",
+    "config_hash": "38893689bb95ad288b71b1f41b186d376ad6d94d32a8e6f37639df110c24191a",
+    "repositories": {
+      "esy": {"url": "https://github.com/esy/esy.git", "revision": "4afe7a5fba92ff1b7dc168bc63e6d06155ff1a7a"},
+      "ocaml": {"url": "https://github.com/ocaml/ocaml.org.git", "revision": "9b36b51e0b0155c613f19c5b5177228ae5b0446c"},
+      "melange": {"url": "https://github.com/melange-re/melange-re.github.io.git", "revision": "107c594b44d01f066e853efeda3e38b09fe1d687"},
+      "reason": {"url": "https://github.com/reasonml/reasonml.github.io.git", "revision": "046babf98f91aad42cb015a9e98adad3f412325d"}
+    }
+  },
+  "profiles": [
+    {"domain": "ocaml", "planned_profile_id": "native-ocaml"},
+    {"domain": "reason", "planned_profile_id": "reason-native"},
+    {"domain": "melange", "planned_profile_id": "melange-native"},
+    {"domain": "esy", "planned_profile_id": "esy-native"}
+  ],
+  "installed_container_evidence": {
+    "scope": "one pinned compiler image inventory; no compatibility or reference-build proof",
+    "image": "ocaml/opam:debian-ocaml-5.5",
+    "image_digest": "sha256:52ae74f2f384d509b9c001aaec682ad390202836b5c655358290f49d97934a9a",
+    "compiler": "OCaml 5.5.1",
+    "opam_installed_packages": ["base-bigarray", "base-domains", "base-effects", "base-nnp", "base-threads", "base-unix", "compiler-cloning", "ocaml", "ocaml-base-compiler", "ocaml-compiler", "ocaml-options-vanilla", "opam-depext"],
+    "not_found_on_path": ["dune", "refmt", "melc", "esy", "node", "npm"],
+    "inventory_evidence": {
+      "path": "artifacts/planning/offline-toolchain-inventory-001.json",
+      "sha256": "ce1c59fd4d6c357fd58e0d164bf2b03ac7913734ab860a56b8dcc5d367e10cbb"
+    },
+    "compiler_preflight_evidence": {
+      "path": "artifacts/planning/ocaml-container-preflight-001.json",
+      "sha256": "ef1ba2a94ffe6a66124895dcbddbe166edf6bc6f36adf93f4f426b8aab8ae549",
+      "scope": "compiler version probe only; not locked four-domain toolchain readiness"
+    },
+    "scope_note": "PATH checks and opam list are evidence only for the recorded image invocation; they are not a full filesystem audit. No named Reason, Melange, or esy image was inventoried."
+  },
+  "host_preflight_context": {
+    "path": "artifacts/reviews/independent-progress-004/doctor-host.json",
+    "sha256": "3228589387ce9b5ebce2d61db69eb7575749f0a192207e05221212363eb69505",
+    "observed": {"platform": "macOS-27.0.1-arm64", "python": "3.12.15", "node": "26.11.1", "npm": "11.20.0", "git": "2.54.0", "docker_server": "29.8.2"},
+    "scope": "host-only; no compiler, package-manager, container, or reference-build readiness"
+  },
+  "existing_stage_state": {
+    "toolchains_config": {"path": "config/toolchains.json", "present": false},
+    "toolchain_implementation": {"path": "src/sft/toolchains.py", "present": false},
+    "toolchain_e2e": {"path": "tests/e2e/test_toolchains.py", "present": false},
+    "toolchain_reports": [],
+    "candidate_run": "artifacts/prepare/official-candidates-004/manifest.json",
+    "candidate_state": {"records": 166, "review_status": "PENDING", "generation_allowed": false, "counts": {"candidate_include": 105, "candidate_exclude": 31, "quarantine": 30}}
+  },
+  "version_ambiguities": [
+    "Pinned OCaml source includes examples needing OCaml 5.1 (Set.to_list), Dune language 3.7, and sample Dune 3.12 output. These are document-specific examples, not an exact corpus-wide profile lock.",
+    "Pinned Reason installation and Reason/Melange guides use OCaml 5.1.0; the Reason/Melange example uses Dune language 3.8 and Melange extension 0.1. The source gives no exact Reason or Melange package version.",
+    "Pinned Melange docs use OCaml 5.5.0, Dune language 3.21 and Melange extension 1.0; another page says Melange 7 is compatible with OCaml 5.5. Package release version and Dune extension version are separate identifiers and must not be conflated.",
+    "Pinned Melange esy example uses OCaml 5.1.x, @opam/dune >= 3.21.0 and @opam/melange *. Those ranges/wildcards do not freeze a build.",
+    "Pinned esy Getting Started uses Dune language 2.7 and shows esy 0.6.10 sample output. Esy documentation says its compiler is the NPM-packaged compiler, not the opam compiler. Neither text establishes a current exact esy, Node/npm, NPM OCaml compiler, or dependency lock.",
+    "The available ocaml/opam image proves OCaml 5.5.1 only; its recorded package inventory has no Dune, Reason/refmt, Melange/melc, or esy tool on PATH. It cannot prove the pinned tutorial builds or the compatibility of the four planned profiles."
+  ],
+  "source_span_evidence": [
+    {"path": "artifacts/sources/official-stable-sources-002/files/ocaml/data/tutorials/language/3ds_03_sets.md", "sha256": "a1adeeb9d8dc9e50be2408ffd1061d1d742d5dba8ba219611c7717eff09d68a9", "lines": "13-13", "finding": "Set.to_list examples require OCaml 5.1; earlier compilers need elements instead."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/ocaml/data/tutorials/language/1ms_03_dune.md", "sha256": "c0ce52846e312126792ac792f4d347e8f6d346a1e34bc0db4fc729060ad53b96", "lines": "36-40", "finding": "Tutorial dune-project specifies Dune language 3.7."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/ocaml/data/tutorials/getting-started/1_02_your_first_ocaml_program.md", "sha256": "c37b3f9966258cd54f60e8ab5354fb8b998b780c3f1dd53f1f9dbcad8cb788e4", "lines": "57-57", "finding": "Displayed output is for Dune 3.12; explicitly says output can vary with Dune version."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/reason/docs/installation.md", "sha256": "aa749cd87c16b292f78c15a54c0a9cb014242377dfb1f1655bd28cdcdf3b275a", "lines": "43-57", "finding": "Reason setup uses OCaml 5.1.0 and opam install reason without pinning the package version; expected tools include refmt and rtop."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/reason/docs/compiling-to-js-with-melange.md", "sha256": "9f0b4dfbf0ac135aaa64e8eebc35de57f63c077ed0acafbabbee18f7ecce9a44", "lines": "42-64", "finding": "Older Reason/Melange guide assumes OCaml 5.1.0, installs melange unpinned, and uses Dune language 3.8 with Melange extension 0.1."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/melange/docs/build-system.md", "sha256": "797aee7f352d59e8739c6c603d3427f2dab3a10462f3584ce7ba2d6bb61b47df", "lines": "68-100", "finding": "Pinned Melange guide uses OCaml 5.5.0, Dune language 3.21 and extension 1.0; states Melange Dune support begins at 3.8."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/melange/docs/getting-started.md", "sha256": "750d1af80790bec710b447a33f6573e7d3f96891175c18168e43620693c92b3b", "lines": "142-160", "finding": "Melange esy example leaves OCaml as 5.1.x and @opam/melange as wildcard, with Dune only lower-bounded at 3.21.0."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/melange/docs/melange-for-x-developers.md", "sha256": "3858fba2d57846cb8841119828fb0fe1d6750b265c56fdf1fb168bdb8fe667ab", "lines": "581-586", "finding": "States Melange 7 is compatible with OCaml 5.5; warns earlier Melange releases target earlier OCaml versions."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/esy/docs/getting-started.md", "sha256": "e3f80e88c61e48ab7ac7726eb80d4972935cc898c80a1425dcb0a3cfe9a078f7", "lines": "129-140, 269-276", "finding": "Sample project uses Dune language 2.7 and sample output reports esy 0.6.10; these are documentation examples, not a current lock."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/esy/docs/ocaml-compiler.md", "sha256": "9f49976f1d9f69d8999064ef825a6ae56e3717b6ea66649b375e59a9925f1f6c", "lines": "7-27", "finding": "Esy uses an NPM-packaged OCaml compiler and discusses semver ranges; it explicitly distinguishes that compiler from opam packages."},
+    {"path": "artifacts/sources/official-stable-sources-002/files/esy/docs/concepts.md", "sha256": "9a24f99d4d9d987ed3a94fe131e098279464e2c68d16c82c73f16429133e6e73", "lines": "138-140", "finding": "Esy dependency solving expects the compiler from NPM, not the opam compiler package."}
+  ],
+  "minimal_next_steps": [
+    "Select an exact compatible version matrix for OCaml, Dune, Reason/refmt, Melange, esy, Node/npm, the esy NPM compiler package and esy-managed @opam dependencies; record why the chosen versions cover the pinned examples and resolve old/new Melange guide differences.",
+    "Create the four planned profile definitions and separate immutable container digests, opam repository snapshot/lock data, npm package lock/integrity data, and offline package-cache inventories. Do not reuse the native opam compiler as proof for esy's independent NPM compiler.",
+    "Create one small corpus-linked reference build per profile: native OCaml using Set.to_list and a Dune 3.7 project; native Reason parsed by refmt and compiled; Reason/Melange output using the selected Dune extension; and an esy build using its pinned NPM compiler and fully locked dependencies.",
+    "Run those exact references inside their pinned containers with networking disabled, read-only root, nonroot user, no host tool mounts and no host fallback. Include wrong-version and missing-cache negative controls. Record commands, image/lock/cache digests, tool versions, build outputs and hashes in immutable receipts.",
+    "For T07F, attach human source-span dispositions to candidate hashes and require each included source to name an exact matching profile receipt. Keep the 166 candidate rows pending and generation-disabled until those reviews and T15 receipts pass."
+  ],
+  "card_requirements": {
+    "T15": "config/cards.json lines 723-750: pinned offline native OCaml, Reason, Melange and esy containers; offline reference builds; wrong toolchain or missing cache fails; no host fallback.",
+    "T07F": "config/cards.json lines 753-774: exact-hash source reviews and matching locked profile/reference-build evidence are required; synthetic receipts cannot prove real profile readiness.",
+    "plan": "docs/PLAN.md lines 52-58 and 100: commits and per-file hashes are pinned; separate toolchain profiles and current stable versions require offline build proof and exact locks; T07 candidate rows remain pending/unverified with generation disabled."
+  }
+}

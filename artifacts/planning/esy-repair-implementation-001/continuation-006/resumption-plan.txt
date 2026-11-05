@@ -1,0 +1,121 @@
+Fresh independent Astra planner. The previous broad planning attempt timed out; preserved, NOT a completed plan. Do not implement or execute. Based only on exact review below, return a CONCISE JSON plan (<1500words) for later safe resumption. Fields status, next_action, cards, blockers. No tools. Each card must be small with findingIDs, allowed path, prerequisites, behavior, proposed public-process E2E/expected outcomes, evidence, stopconditions. Three coding launches remain, but real execution is explicitly rejected, controller rejected, original unchanged. Do not waive that rejection or pretend tests exist. User requires code-E2E-review loop and INCOMPLETE for containment/cleanup prerequisite blocks. Tell supervisor whether to stop now pending independently reviewed lifecycle supervision. Scope ONLY existing runner and E2E file. Controller repairs require separate queue, not runner allocation. Prior partial sourcefixes C17-04/07 and C17-02 correctbysourcereview; reportingE2E passed. Preserve all unproven gates. You need not solve entire infrastructure architecture in this response; break it into concrete prerequisites.
+{
+  "scoped_source_correct": true,
+  "safe_to_run_real_cleanup_fixture": false,
+  "findings": [
+    {
+      "id": "R02a-021-S01",
+      "status": "SOURCE_CORRECT_WITHIN_CARD",
+      "location": "run_case(); ScenarioFailure; main()",
+      "assessment": "All four outcome fields are initialized before supervision. The protected supervisor invocation reaches the independent-cleanup finally path on return or exception. Supervision and cleanup exceptions are recorded separately; cleanup failure does not overwrite the recorded supervision failure. main preserves the structured payload in both the failed scenario row and failures list. A missing supervision result remains null; no runner exit code is invented. This establishes exception-safe cleanup invocation in ordinary Python control flow, not protection against repeated interruption or forced process death."
+    },
+    {
+      "id": "R02a-021-S02",
+      "status": "SOURCE_CORRECT_WITHIN_CARD",
+      "location": "select_scenario(); run_case(); main()",
+      "assessment": "The fixed public scenario selects exactly one positive runner invocation with timeout 120. Only that scenario creates the owned runner.stdout directory immediately before calling supervisor. If execution reaches the existing stdout_path.write_bytes call, the filesystem raises the intended directory-write error. Neither supervisor nor runner behavior is substituted. The structured failure keeps the scenario failed and the harness nonzero even when independent cleanup succeeds."
+    },
+    {
+      "id": "R02a-021-S03",
+      "status": "PRESERVED_BY_SUPPLIED_DIFF",
+      "location": "scenario selection, acceptance predicates, and early-failure reporting",
+      "assessment": "The default seven runs and their parameters remain unchanged. cleanup-results still selects no runs and the three R01 missing-evidence rows. Ordinary successful supervision and cleanup still reach existing report parsing and acceptance checks. R01b early-failure backfilling and existing missing-evidence declarations remain intact. The supplied diff is confined to the allowed harness; no regression tests were executed."
+    },
+    {
+      "id": "C17-02",
+      "status": "PARTIAL_SOURCE_REPAIR_ONLY",
+      "assessment": "The bounded cleanup-invocation and dual-outcome-retention prerequisite is implemented. Full closure remains unavailable. The injected exception exits run_case before runner-report parsing, so a failed manifest containing IsADirectoryError alone cannot establish successful container execution or the required positive evidence.",
+      "prerequisites": [
+        "Approve a bounded evidence-review procedure for the persisted runner report and ownership record despite the unavailable supervisor result.",
+        "Require authentic positive compilation, execution, expected output, matching identities and hashes, runner cleanup evidence, and subsequent independent cleanup queries.",
+        "Treat preflight rejection, missing artifacts, a different exception, or missing independent queries as an incomplete failed test.",
+        "Retain separate requirements for supervision faults, repeated interruption, and active-client cancellation; this post-supervision fixture does not prove those cases."
+      ]
+    },
+    {
+      "id": "C17-01",
+      "status": "EXECUTION_BLOCKER",
+      "prerequisites": [
+        "Independently resolve or approve a concrete disposition for malformed create output and create completion after client cancellation.",
+        "Keep unvalidated create output separate from trusted container identity; recover through persisted exact name and owner until identity is corroborated.",
+        "Do not infer absence while an outstanding create operation can still materialize a container."
+      ]
+    },
+    {
+      "id": "C17-03",
+      "status": "EXECUTION_BLOCKER",
+      "prerequisites": [
+        "Approve bounded cancellation and containment covering Docker clients started in separate sessions, including runner SIGTERM and forced termination.",
+        "Provide identity-checked recovery and independent verification of client-group termination and container absence.",
+        "Stop further dispatcher execution when containment, ownership, or cleanup is uncertain."
+      ]
+    },
+    {
+      "id": "C17-05",
+      "status": "EXECUTION_BLOCKER",
+      "assessment": "suite_cleanup_owned still interprets retained query output without rejecting truncation. Its removal checks also omit immutable image identity.",
+      "prerequisites": [
+        "Reject incomplete inspect/list output using total and retained byte counts before interpreting ownership or absence.",
+        "Review removal against exact name, owner label, approved immutable image identity, and full CID, including recovery when the persisted CID is unavailable.",
+        "Approve bounded recovery that preserves uncertainty instead of asserting unsupported absence."
+      ]
+    },
+    {
+      "id": "C17-06",
+      "status": "EXECUTION_BLOCKER",
+      "prerequisites": [
+        "Define container lifetime boundary events and approve independent enforcement of the hard container deadline, including stalled or terminated runner cases.",
+        "Keep host preflight and report publication measurements distinct from container lifetime.",
+        "Do not treat timeout 120, supervisor timeout 150, or a proposed 210-second outer envelope as independent container-lifetime enforcement."
+      ]
+    },
+    {
+      "id": "N6-01",
+      "status": "SEED_APPROVAL_BLOCKER",
+      "prerequisites": [
+        "Establish exact original base-versus-derivative installation/cache comparisons.",
+        "Limit the root-mtime exception to authorized copied-seed/restored-cache comparisons."
+      ]
+    },
+    {
+      "id": "N6-02",
+      "status": "SEED_APPROVAL_BLOCKER",
+      "prerequisites": [
+        "Independently validate derivative seed inventories against the base installation and node-cache inventories, including all non-exempt metadata and content.",
+        "Approve immutable seed inputs and matching expectations without hand-editing hashes or relying on the current capture receipt, whose base-to-base seed checks are tautological."
+      ]
+    },
+    {
+      "id": "R02a-021-G01",
+      "status": "AUTHORIZATION_BLOCKER",
+      "prerequisites": [
+        "Freeze the exact reviewed diff and source hashes, interpreter, harness and runner argv, immutable image, expectations, fresh external output directory, fault location, and execution envelope.",
+        "Obtain separate approval for execution through the supervised dispatcher only; exclude the rejected controller.",
+        "Renew review after any execution-affecting correction. Permit no automatic retries."
+      ]
+    },
+    {
+      "id": "C17-04",
+      "status": "RUNTIME_EVIDENCE_OUTSTANDING",
+      "assessment": "The supplied runner contains the verified-cleanup preservation guard. Deterministic preservation and bounded-retry evidence remains missing; card21 does not close this finding."
+    },
+    {
+      "id": "C17-07",
+      "status": "RUNTIME_EVIDENCE_OUTSTANDING",
+      "assessment": "The supplied runner computes remaining time once per loop iteration before sleeping. Controlled deadline-crossing evidence remains missing; card21 does not close this finding."
+    },
+    {
+      "id": "N6-03",
+      "status": "OPEN_UNCHANGED",
+      "assessment": "The Docker OOM branch still lacks the durable compilation/execution evidence required by the harness. The positive-only fixture neither exercises nor resolves this defect."
+    }
+  ],
+  "missing_evidence": [
+    "Review used only the supplied text. No tools, imports, commands, tests, Docker operations, edits, or delegation occurred.",
+    "Source SHA256 1765a2eca5f9dea8b2a5eea5d4a59310cb364ac165669393f4d67370f18563f9, parent identity, scope verification, AST parsing, worker reaping, and authorization removal are supplied assertions, not independently verified here. AST parsing is not a test.",
+    "No authentic runtime evidence demonstrates the intended log-write failure, independent cleanup after that failure, simultaneous supervision/cleanup failure retention, or final persisted FAILED manifest and nonzero exit.",
+    "The concrete approved execution envelope, lifecycle protections, complete-query handling, removal identity checks, independent lifetime enforcement, and valid seed/expectations evidence remain absent.",
+    "All existing C17/N6 runtime requirements, default-suite evidence, ownership-record crash-durability evidence, declared missing scenarios, and prior orchestration/import evidence requirements remain outstanding unless separately established.",
+    "This review grants neither execution authorization, import acceptance, full C17-02 closure, nor full acceptance."
+  ]
+}

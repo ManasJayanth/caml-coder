@@ -1,0 +1,9 @@
+{
+  "status": "TERMINATED",
+  "worker_pid": 36145,
+  "worker_reaped": true,
+  "exit_code": -9,
+  "reason": "launcher-eof",
+  "elapsed_seconds": 0.003,
+  "single_worker_assumption": "requires separately proven native process-fork denial"
+}

@@ -1,0 +1,33 @@
+{
+  "epoch": 1792733336.8305762,
+  "argv": [
+    "/bin/ps",
+    "-p",
+    "71052,61322,90330,65436,71514,75163,9175,80231,6746,11182,27032,44396",
+    "-o",
+    "pid=,pgid=,command="
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "",
+  "matching_processes": [],
+  "receipts": [
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/pi-smoke-high/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Arity-035/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Deadline-029/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Diagnostics-036/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-026/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Lifecycle-027/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Newline-031/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Receipt-028/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Records-030/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-032/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-033/guardian/receipt.json",
+    "/Users/psac/development/prometheansacrifice/ocaml-rl-sft/artifacts/planning/esy-repair-implementation-001/continuation-010/coding-jobs/B1a-Routing-034/guardian/receipt.json"
+  ],
+  "all_workers_reaped": true,
+  "credentials_absent": true,
+  "dispatch_lock_absent": true,
+  "containers_created": false,
+  "no_signals_sent": true
+}

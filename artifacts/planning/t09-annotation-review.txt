@@ -1,0 +1,109 @@
+T09 annotation and cross-split overlap review
+Review date: 2026-10-17
+
+Scope and source identity
+------------------------
+This is a bounded AI-agent review of the 103 eligible documents in
+artifacts/splits/official-splits-001. That run binds extraction
+official-extraction-002 and snapshot official-stable-sources-002. It reports
+166 documents / 1,015 sections overall, 103 eligible, and 63 unassigned. The
+original run had no link annotations, 166 singleton groups, and all-zero
+relation counts. The review does not claim exhaustive semantic discovery.
+
+The candidate shortlist used extracted source text normalized with the T09
+NFKC/casefold/heading/frontmatter rules. It checked cross-domain pairs across
+train/valid using five-token shingle overlap and longest exact token runs, then
+ranked remaining topical candidates with unigram/bigram TF-IDF for manual
+inspection. No cross-domain train/valid pair had a 15-token exact run or
+whole-document 5-gram Jaccard >= 0.03. The semantic shortlist below is for
+human disposition, not automatic linking.
+
+Explicit task-family links added
+-------------------------------
+1. `task-family-esy-resolution-workflows`
+
+   - `esy/docs/linking-workflow.md`, candidate
+     `dcacc7c6b7c79e3e2e11b83bb36ab6b41c9c58ab47d0b7828df615ccd9d09bea`,
+     revision `4afe7a5fba92ff1b7dc168bc63e6d06155ff1a7a`, source SHA256
+     `72a15522e116430d044b8f88d6b5506c222a9e354b26c80d0bd0442da2e5eebc`.
+     Relevant source section: lines 13-47; the copied explanation is lines
+     39-46. It explains why a `link:` package is enforced through
+     `resolutions`.
+   - `esy/docs/using-dev-sources-workflow.md`, candidate
+     `84031389d258ce00760220c97dfc73571bf93d7b58922204858d6eca3a444929`,
+     same revision, source SHA256
+     `fcde8c2328de4253cedeb96e05beed1eea7c67e80aeb6f62fc57110e5c7e0b8e`.
+     Relevant source section: lines 10-50; the copied explanation is lines
+     27-35. It explains why a development repository is enforced through
+     `resolutions`.
+
+   The documents share a 21-token explanatory passage. It diverges at
+   “certainly conflict with `link:` declaration” versus “probably conflict
+   with `facebook/reason` declaration,” but teaches the same resolution
+   workflow. The prior output placed linking-workflow in train and
+   using-dev-sources-workflow in valid; whole-document 5-gram Jaccard was
+   0.0875, below the 0.90 grouping cutoff. This is a justified task-family
+   link, not evidence of general semantic duplicate detection.
+
+2. `task-family-ocaml-reason-repl-guides`
+
+   - `reason/docs/rtop.md`, candidate
+     `ee8bc6258dba5a1ec438d115fe157ad1c9c52fbd2ddbe263ff0b248bbfe0d823`,
+     revision `046babf98f91aad42cb015a9e98adad3f412325d`, source SHA256
+     `48513209f86334df026795d215abc27542bca0d14006cd04da0d27324b1b155f`.
+     Source lines 5-9 define rtop as a Reason REPL and explicitly call it
+     inspired by UTop; lines 11-44 provide install and usage instructions.
+   - `ocaml/data/tutorials/getting-started/2_01_toplevel.md`, candidate
+     `082ca3352327c5a32bba56200de1a94273d56c0ff650885e9a6e626fe6fcb800`,
+     revision `9b36b51e0b0155c613f19c5b5177228ae5b0446c`, source SHA256
+     `7863138ef1a984b647ef41c1da17a81bd5e711a69caee6e99a8678a85cf5d7b1`.
+     Source lines 9-29 define the OCaml REPL/UTop and explain how to start,
+     interact with, and exit it.
+
+   These are direct cross-language REPL task counterparts. The old run put
+   rtop in valid and the UTop tutorial in train. They are linked as an AI-reviewed
+   task family; this relation does not assert byte-identical content.
+
+Unresolved cross-domain train/valid shortlist
+---------------------------------------------
+These pairs were not linked because their pages differ materially in scope or
+the topical match needs further human judgment. Their old-run assignments are
+shown; rerun T09 after the new annotations to obtain final assignments.
+
+- OCaml installation (`ocaml/data/tutorials/getting-started/1_00_install_OCaml.md`,
+  candidate `60e3c2adab7cf83cbd5f0c0b87f6a8aed4d339bdcc948012ef28ffcd736b8a03`,
+  valid) and Reason installation (`reason/docs/installation.md`, candidate
+  `ed62d95bbed039136dbdab2258b1ca37422e1b97cb484f9648d849d56c3a0ca9`, train).
+  Both guide opam/toolchain setup. OCaml's page covers platform-specific
+  compiler and platform-tool installation (lines 1-168); Reason's page covers
+  switches, installing Reason, a build system, and a hello-world flow (lines
+  1-117). TF-IDF similarity 0.124. Review whether toolchain setup is a shared
+  family despite the different target environments.
+- OCaml Arrays (`ocaml/data/tutorials/language/3ds_01_arrays.md`, candidate
+  `d86b4a7723dfd331f74dda8de685d47425f837b3059ece2004ede7e0f0b292c9`, valid)
+  and Reason Basic Structures (`reason/docs/basic-structures.md`, candidate
+  `4c1307ea66259694357e4b033335afa2212d4b9aac63d82589a58fde3a4c3c80`, train).
+  Both cover array access, mutation, map/fold, and length (OCaml lines 46-136;
+  Reason lines 110-177). TF-IDF similarity 0.090. The Reason page also covers
+  lists, tuples, and records, so a document-level task-family link would group
+  a broader page than the OCaml arrays tutorial.
+- OCaml dependency management (`ocaml/data/tutorials/platform/0_01_managing_deps.md`,
+  candidate `2a2b98ea77992b634a63ba7bca6b3c65c85909fc60b20835b5607b6ba6e27527`,
+  train) and Esy unreleased development sources
+  (`esy/docs/using-dev-sources-workflow.md`, candidate
+  `84031389d258ce00760220c97dfc73571bf93d7b58922204858d6eca3a444929`, old run
+  valid). Both discuss Git-hosted and unreleased dependencies; OCaml's page
+  gives Dune/opam configuration patterns (lines 124-181), while Esy's page
+  documents `opam pin`-like development-source resolution (lines 51-78).
+  TF-IDF similarity 0.083. They are adjacent workflows but not clearly the
+  same task; the Esy page is already linked to its direct Esy counterpart.
+
+Semantic translation and family review remains open
+----------------------------------------------------
+`config/split-annotations.json` records only the two reviewed task-family
+links above. The links do not claim automatic semantic translation detection.
+The previous official output had zero cross-domain linked groups because no
+annotations existed. Human review of cross-domain translations and task-family
+relationships remains required before generation is enabled. The T09 output
+continues to be pending and generation-forbidden until the parent reruns with
+the updated annotation hash and downstream review is complete.

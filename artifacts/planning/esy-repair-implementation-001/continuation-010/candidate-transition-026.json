@@ -1,0 +1,7 @@
+{
+  "parent_source_sha256": "93daceced21349abf8708ddd6c153ab2ec5029997261ea6bf1d1618f29ae62e9",
+  "source_sha256": "e27c301dbcffa733ce5aa6f95207399ee0f4eb717f76f4b68a5799addc81ed43",
+  "status": "IMPLEMENTED_UNACCEPTED",
+  "reason": "Retain frozen26 as correction base; review findings open",
+  "original_import": false
+}
