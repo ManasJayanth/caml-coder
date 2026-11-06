@@ -728,7 +728,7 @@
     "window_ist": "08:33\u201317:33",
     "coding_launches_used": 37,
     "coding_ceiling": 48,
-    "status": "No VM will be provisioned. Neither tested native sandbox configuration establishes safe cleanup for the fork-capable harness. Attempt 38 is on hold pending a verified non-VM approach; 11 coding launches remain.",
+    "status": "Training has not started. The base model runs; the latest LoRA probe installed adapters but recorded zero completed training steps. A verified update/save/reload, approved pilot data and a reliable OCaml checker are still needed. No training date is scheduled. The native audit-session probe did not create a separate session; no candidate ran.",
     "provider_reported_model": "gpt-6-astra"
   }
 }
