@@ -728,7 +728,7 @@
     "window_ist": "08:33\u201317:33",
     "coding_launches_used": 37,
     "coding_ceiling": 48,
-    "status": "Astra approved the isolated author-only launcher. Attempt 37 has started: Luna can return patch text, but has no tools to apply it or run tests. The proposal will receive independent review.",
+    "status": "Attempt 37 completed. Luna produced no patch: safe cleanup for detached children needs a stronger containment mechanism or a narrower command contract. Astra confirmed the blocker. No candidate tests ran; coverage card C10 still depends on C9.",
     "provider_reported_model": "gpt-6-astra"
   }
 }

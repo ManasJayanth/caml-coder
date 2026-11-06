@@ -1,0 +1,19 @@
+{
+  "attempt": 37,
+  "card": "C9",
+  "outcome": "BLOCKED_NO_PATCH",
+  "reason": "Safe bounded cleanup cannot be established within the allowed files: after the leader is reaped, the binding clarification forbids signaling its PID or PGID, while descendants may survive in that group or escape it with setsid. The runner cannot safely terminate and verify all such descendants.",
+  "provider": "openai-codex",
+  "model": "gpt-6-luna",
+  "candidate_tests_run": false,
+  "imported": false,
+  "auth_cleanup_verified": true,
+  "launches_remaining": 11,
+  "source_manifest_sha256": "b29c0769974448d4abc7b7aa261deaf0a9a7656213a2b88e82306e3bd81d36da",
+  "sha256": {
+    "luna-response.txt": "054b40c780be6d592b6eabdf2fcd81ea3d5f228fe9cb885cfec9c03d1b363aaa",
+    "guardian/receipt.json": "cfce977b384e1c1bde0acf450594838308370f4b97c62f560c9d714e373866fc",
+    "guardian/stdout": "1bcf4bb1e6b6aad7290f13f3bcf25b8232cb1c035523af79e7df34840e1551a6"
+  },
+  "astra_disposition": "Confirmed blocker. No patch or tests. A future card requires pre-spawn containment that covers escaped descendants, or an explicitly narrowed supported-command contract."
+}
