@@ -1,0 +1,115 @@
+{
+  "timestamp": "2026-11-06T03:47:52.944549+00:00",
+  "system": "macOS-27.2-arm64-arm-64bit",
+  "source_sha256": "58cc6028519833e1e3a573ed90ea632675dd4c85fc850e1ba0a8b48bb467e9ec",
+  "rows": [
+    {
+      "profile": "plain",
+      "case": "clean",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "plain",
+      "case": "fork",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "plain",
+      "case": "setsid",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "plain",
+      "case": "setpgid",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "plain",
+      "case": "spawn-group",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "plain",
+      "case": "nested-session",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "no-fork",
+      "case": "clean",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "no-fork",
+      "case": "fork",
+      "status": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nPermissionError: [Errno 1] Operation not permitted\n"
+    },
+    {
+      "profile": "no-fork",
+      "case": "setsid",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "no-fork",
+      "case": "setpgid",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "no-fork",
+      "case": "spawn-group",
+      "status": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nPermissionError: [Errno 1] Operation not permitted: '/usr/bin/true'\n"
+    },
+    {
+      "profile": "no-fork",
+      "case": "nested-session",
+      "status": 1,
+      "diagnostic": "args, **kwargs) as process:\n  File \"/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py\", line 951, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py\", line 1754, in _execute_child\n    self.pid = _posixsubprocess.fork_exec(\nPermissionError: [Errno 1] Operation not permitted\n"
+    },
+    {
+      "profile": "group-filter",
+      "case": "clean",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "group-filter",
+      "case": "fork",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "group-filter",
+      "case": "setsid",
+      "status": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nPermissionError: [Errno 1] Operation not permitted\n"
+    },
+    {
+      "profile": "group-filter",
+      "case": "setpgid",
+      "status": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nPermissionError: [Errno 1] Operation not permitted\n"
+    },
+    {
+      "profile": "group-filter",
+      "case": "spawn-group",
+      "status": 0,
+      "diagnostic": ""
+    },
+    {
+      "profile": "group-filter",
+      "case": "nested-session",
+      "status": 1,
+      "diagnostic": "cess:\n  File \"/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py\", line 951, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py\", line 1821, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nPermissionError: [Errno 1] Operation not permitted\n"
+    }
+  ]
+}

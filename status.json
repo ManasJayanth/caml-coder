@@ -728,7 +728,7 @@
     "window_ist": "08:33\u201317:33",
     "coding_launches_used": 37,
     "coding_ceiling": 48,
-    "status": "Attempt 37 completed. Luna produced no patch: safe cleanup for detached children needs a stronger containment mechanism or a narrower command contract. Astra confirmed the blocker. No candidate tests ran; coverage card C10 still depends on C9.",
+    "status": "Native preflight: no-fork blocks the test harness; blocking direct process-group changes still allows a spawn-created group. A disposable macOS guest is proposed, not yet provisioned. No candidate ran or coding launch was consumed.",
     "provider_reported_model": "gpt-6-astra"
   }
 }
