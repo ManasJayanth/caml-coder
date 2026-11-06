@@ -1,0 +1,29 @@
+{
+  "plan019": {
+    "F11": "C9/O70",
+    "F12": "C10/O71; base and dependency C9"
+  },
+  "plan013_only": {
+    "C9": "C21",
+    "C10": "C22",
+    "C11": "C23",
+    "C12": "C24",
+    "C13": "C25",
+    "C14": "C26",
+    "C15": "C27",
+    "C16": "C28",
+    "C17": "C29",
+    "C18": "C30",
+    "O70": "O81",
+    "O71": "O82",
+    "O72": "O83",
+    "O73": "O84",
+    "O74": "O85",
+    "O75": "O86",
+    "O76": "O87",
+    "O77": "O88",
+    "O78": "O89",
+    "O79": "O90"
+  },
+  "future_auto_ids": "C31+ / O91+; always inspect live registry and pending reservations first"
+}

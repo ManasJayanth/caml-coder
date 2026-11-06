@@ -726,9 +726,9 @@
   "latest_update": {
     "date": "2026-11-06",
     "window_ist": "08:33\u201317:33",
-    "coding_launches_used": 36,
+    "coding_launches_used": 37,
     "coding_ceiling": 48,
-    "status": "Card IDs reconciled: C9/O70 is cleanup and C10/O71 is suite coverage; the older plan now uses C21\u2013C30/O81\u2013O90. A patch-only Luna route is in independent Astra review. Tests remain on hold.",
+    "status": "Astra approved the isolated author-only launcher. Attempt 37 has started: Luna can return patch text, but has no tools to apply it or run tests. The proposal will receive independent review.",
     "provider_reported_model": "gpt-6-astra"
   }
 }
