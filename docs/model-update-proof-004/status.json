@@ -1,0 +1,26 @@
+{
+  "status": "NOT_RUN",
+  "reason": "Astra rejected combined candidate before execution.",
+  "review_verdict": "CHANGES_REQUIRED",
+  "findings": [
+    "F1 step-one evidence lost on step-two failure",
+    "F2 verifier confuses numerical reload parity with exact raw byte equality",
+    "F3 absent base digests compare equal"
+  ],
+  "diagnostic_launches": {
+    "used": 2,
+    "limit": 2
+  },
+  "runner_launches": {
+    "used": 37,
+    "limit": 48
+  },
+  "actual_gpu_runs": 0,
+  "negative_controls_run": 0,
+  "artifacts": {
+    "combined.diff": "cb17d7b5ac553ad0d3bede847477aa217ff18909e00447ae2ce85ccd826560a3",
+    "preflight.json": "546f73b11866888d0b702ae74a768105c8e1ee9aa970397daa5ef4e9a77dedc3",
+    "proposal-hashes.json": "173c42ccb92f81ece03f7e503a6abbf9c66d94eaa23517822ee452867764962d",
+    "HANDOFF.txt": "9b8aaec996dccfe0f33e24010e0c09fbe8d3f3f10aefd7a4255cbc93bf8b3a45"
+  }
+}
