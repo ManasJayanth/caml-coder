@@ -728,7 +728,7 @@
     "window_ist": "08:33\u201317:33",
     "coding_launches_used": 36,
     "coding_ceiling": 48,
-    "status": "Provider confirmed Astra. Its review found two defects: cleanup can miss a surviving child process, and a partial test run can count as a full suite. Attempt 37 is on hold.",
+    "status": "A fresh Astra planner assigned two fixes: C9 prevents false cleanup reports; C10 rejects incomplete test suites. Neither fix has run. Attempt 37 is held because the current launcher automatically executes worker-edited tests through the affected supervisor.",
     "provider_reported_model": "gpt-6-astra"
   }
 }

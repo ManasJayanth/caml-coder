@@ -1,0 +1,31 @@
+{
+ "acceptance_rows": [
+  "Derive the required scenario set from the authoritative harness registry for the current source tree, including newly registered scenarios; never trust the submitted summary to define required coverage.",
+  "Require results to contain every registered scenario exactly once, no unknown scenario IDs, and literal boolean true pass values; reject malformed records, missing scenarios, duplicate IDs, false values, and truthy nonboolean values.",
+  "Preserve current source-hash validation and reject selective-run summaries at the handoff gate even when all included results pass and source hashes match.",
+  "Add fresh scenario O71 exercising complete valid evidence and rejection of selective, missing, duplicate, unknown, malformed, false, nonboolean, and stale-source evidence through the actual summary checker.",
+  "Keep selective harness execution available for card validation; only complete suite evidence may satisfy the handoff coverage requirement."
+ ],
+ "allowed_paths": [
+  "loop.py",
+  "e2e/run_e2e.py"
+ ],
+ "base": "C9",
+ "depends_on": [
+  "C9"
+ ],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O71"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C10",
+ "objective": "Require complete, unique, strictly passing scenario coverage before accepting E2E handoff evidence.",
+ "stop_condition": "Print CARD_BLOCKED C10: <reason> and stop if an authoritative scenario registry cannot be consumed safely within the allowed files, or any instruction conflicts. Use only read/edit/write tools, create no other files, keep each edit below 3000 characters, and finish with exactly CARD_DONE C10.",
+ "timeout": 600
+}

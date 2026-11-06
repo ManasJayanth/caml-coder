@@ -1,0 +1,27 @@
+{
+ "acceptance_rows": [
+  "Leader reaping and an empty output selector alone never establish verified cleanup; check the owned process group independently, terminate surviving members, and verify cleanup within a bounded deadline.",
+  "Publish status=ok, reaped=true, and ownership_uncertain=false together only when command completion and cleanup verification both succeed; failed or unsupported ownership verification must fail closed.",
+  "Add fresh scenario O70 covering a successful leader that leaves a long-lived descendant with stdout and stderr redirected to DEVNULL; assert the descendant is gone before verified success, or the runner reports cleanup uncertainty and failure.",
+  "O70 also verifies bounded handling of a descendant that ignores graceful termination and preserves successful behavior for a command with no surviving descendants; fixtures clean up their processes even on assertion failure."
+ ],
+ "allowed_paths": [
+  "run_bounded.py",
+  "e2e/run_e2e.py"
+ ],
+ "depends_on": [],
+ "e2e": {
+  "argv": [
+   "/usr/bin/python3",
+   "-B",
+   "e2e/run_e2e.py",
+   "O70"
+  ],
+  "expect_files": [],
+  "expect_status": 0
+ },
+ "id": "C9",
+ "objective": "Verify descendant cleanup independently of leader exit and output-pipe closure.",
+ "stop_condition": "Print CARD_BLOCKED C9: <reason> and stop if reliable bounded ownership verification cannot be implemented within the allowed files, or any instruction conflicts. Use only read/edit/write tools, create no other files, keep each edit below 3000 characters, and finish with exactly CARD_DONE C9.",
+ "timeout": 600
+}
