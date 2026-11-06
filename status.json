@@ -728,7 +728,7 @@
     "window_ist": "08:33\u201317:33",
     "coding_launches_used": 37,
     "coding_ceiling": 48,
-    "status": "Native preflight: no-fork blocks the test harness; blocking direct process-group changes still allows a spawn-created group. A disposable macOS guest is proposed, not yet provisioned. No candidate ran or coding launch was consumed.",
+    "status": "No VM will be provisioned. Neither tested native sandbox configuration establishes safe cleanup for the fork-capable harness. Attempt 38 is on hold pending a verified non-VM approach; 11 coding launches remain.",
     "provider_reported_model": "gpt-6-astra"
   }
 }
